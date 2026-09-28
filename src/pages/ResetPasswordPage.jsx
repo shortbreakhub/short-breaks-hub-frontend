@@ -1,6 +1,7 @@
 import {useMemo, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {postRestPassword} from "../api.js";
+import {useTranslation} from "react-i18next";
 
 export default function ResetPasswordPage() {
     const [params] = useSearchParams();
@@ -14,6 +15,7 @@ export default function ResetPasswordPage() {
     const [touchedConfirmation,setTouchedConfirmation] = useState(false);
     const [showErrorResetModal, setShowErrorResetModal] = useState(null);
     const [showSuccessResetModal, setShowSuccessResetModal] = useState(null);
+    const { t } = useTranslation();
 
     const hasUpper = (s) => /[A-Z]/.test(s);
     const hasLower = (s) => /[a-z]/.test(s);
@@ -74,7 +76,7 @@ export default function ResetPasswordPage() {
                             tabIndex={-1}
                         >
                             {showPwd ? (
-                                // Eye-off
+
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor"
@@ -83,7 +85,7 @@ export default function ResetPasswordPage() {
                                           d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c1.598 0 3.111-.37 4.444-1.035M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.774 3.162 10.066 7.5a10.522 10.522 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228L21 21" />
                                 </svg>
                             ) : (
-                                // Eye
+
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                      fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor"

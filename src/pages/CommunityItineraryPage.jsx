@@ -1,8 +1,7 @@
 import { useParams,useNavigate } from "react-router-dom";
 import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
 import React, {useState, useMemo, useEffect} from "react";
-import StayOptions from "../components/StayOptions";
-import { staysByCity } from "../data/stays";
+
 import {
     deleteCommunityFavorite, getCommunityFavoritesCount,
     getCommunityFavoritesMe, getUserItineraryBySlug, postCommunityFavorite, getQuestionThreadSummary,
@@ -257,7 +256,6 @@ export default function CommunityItineraryPage() {
     }
 
     const city = data.city;
-    const stayOptions = city ? (staysByCity[city] || []) : [];
 
     return (
         <>
@@ -607,19 +605,12 @@ export default function CommunityItineraryPage() {
                                     <button
                                         type="button"
                                         className="mt-2 w-full text-xs font-medium border border-gray-200 rounded-lg py-2 hover:bg-gray-50 transition"
-                                        // TODO: later open a full converter modal here
                                     >
                                         Open full converter
                                     </button>
                                 </div>
                             </section>
                             <div className="mt-4">
-                                <StayOptions city={city || data.country}
-                                             options={stayOptions}
-                                             checkIn={checkIn}
-                                             checkOut={checkOut}
-                                             nights={nights}
-                                />
                             </div>
                         </div>
 

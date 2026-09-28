@@ -2,12 +2,14 @@ import React, {useEffect, useId, useState} from "react";
 import MapModal from "./MapModal";
 import GoogleMap from "./GoogleMap";
 import {loadSubFolderImages} from "../utils/loadImage.js";
+import { useTranslation } from "react-i18next";
 
 export default function FoodRecommendations({ mustTry,areas,places, defaultOpen = false }) {
     const [open, setOpen] = useState(defaultOpen);
     const contentId = useId();
     const [mapOpen, setMapOpen] = useState(false);
     const [mapPlace, setMapPlace] = useState(null);
+    const { t } = useTranslation();
 
     const openMapForPlace = (place) => {
         setMapPlace(place);
@@ -20,7 +22,7 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white">
-            {/* Header button */}
+
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
@@ -30,12 +32,11 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
             >
                 <div>
                     <h3 className="text-sm font-bold tracking-tight text-slate-900">
-                        Food Recommendations
+                        {t("foodRecommendations.foodRecommendations")}
                     </h3>
-                    <p className="text-xs text-slate-500">Must-try local dishes and where to find them</p>
+                    <p className="text-xs text-slate-500">{t("foodRecommendations.description")}</p>
                 </div>
 
-                {/* Toggle icon */}
                 <span
                     className={`shrink-0 grid place-items-center h-10 w-10 rounded-full border text-xl font-semibold transition
             ${
@@ -49,7 +50,6 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
         </span>
             </button>
 
-            {/* Collapsible content */}
             <div
                 id={contentId}
                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
@@ -58,12 +58,11 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
             >
                 <div className="overflow-hidden border-t border-slate-200">
                     <div className="p-4">
-                        {/* Must-try dishes */}
+
                         {mustTry?.length ? (
                             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                                <div className="text-xs font-semibold text-slate-800">Must-Try Dishes</div>
+                                <div className="text-xs font-semibold text-slate-800">{t("foodRecommendations.mustTry")}</div>
 
-                                {/* chips */}
                                 <div className="mt-2 flex flex-wrap gap-2">
                                     {mustTry.map((item) => (
                                         <span
@@ -77,10 +76,9 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                             </div>
                         ) : null}
 
-                        {/* Best areas to eat */}
                         {areas?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-                                <div className="text-xs font-semibold text-slate-800">Best areas to eat</div>
+                                <div className="text-xs font-semibold text-slate-800">{t("foodRecommendations.bestAreas")}</div>
 
                                 <ul className="mt-2 space-y-2 text-xs text-slate-600">
                                     {areas.map((a) => (
@@ -93,11 +91,10 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                             </div>
                         ) : null}
 
-                        {/* Recommended places (with images, can be empty) */}
                         {places?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Recommended places
+                                    {t("foodRecommendations.recommendedPlaces")}
                                 </div>
 
                                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -106,7 +103,7 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                                             key={p.name}
                                             className="rounded-lg border border-slate-200 bg-white overflow-hidden"
                                         >
-                                            {/* image placeholder */}
+
                                             <div className="h-40 w-full bg-slate-100">
                                                 {p.imageUrl ? (
                                                     <img
@@ -129,13 +126,12 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                                                     {p.reason}
                                                 </div>
 
-                                                {/* CTA placeholder for affiliate later */}
                                                 <button
                                                     type="button"
                                                     onClick={() => openMapForPlace(p)}
                                                     className="mt-3 inline-flex items-center justify-center rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
                                                 >
-                                                    View On Map
+                                                    {t("foodRecommendations.viewOnMap")}
                                                 </button>
 
                                             </div>
@@ -156,7 +152,7 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                     <GoogleMap center={{ lat: mapPlace.lat, lng: mapPlace.lng }} zoom={16} />
                 ) : (
                     <div className="h-full w-full grid place-items-center text-sm text-slate-600">
-                        This place has no coordinates yet.
+                        {t("foodRecommendations.noCoordinates")}
                     </div>
                 )}
             </MapModal>

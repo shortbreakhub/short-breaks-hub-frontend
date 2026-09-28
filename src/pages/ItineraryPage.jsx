@@ -1,8 +1,6 @@
 import { useParams,useNavigate } from "react-router-dom";
 import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
 import React, {useState, useMemo, useEffect} from "react";
-import StayOptions from "../components/StayOptions";
-import { staysByCity } from "../data/stays";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
 import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
@@ -16,8 +14,9 @@ import axios from "axios";
 import TravelTips from "../components/TravelTips.jsx";
 import FoodRecommendations from "../components/FoodRecommendations";
 import TransportTips from "../components/TransportTips.jsx"
-import CurrencyConvertor from "../components/CurrencyConvertor";
+import CurrencyConverter from "../components/CurrencyConverter.jsx";
 import TripPrepRail from "../components/TripPrepRail";
+import { useTranslation } from "react-i18next";
 
 
 export default function ItineraryPage() {
@@ -35,18 +34,28 @@ export default function ItineraryPage() {
         saving: false,
     });
     const [showSmartSuggestions, setShowSmartSuggestions] = React.useState(true);
-    const [prepDone, setPrepDone] = React.useState({
-        hotel: false,
-        flights: false,
-        insurance: false,
-        airport: false,
-        localTransport: false,
-        car: false,
-        docs: false,
+    const [prepDone, setPrepDone] = useState(() => {
+        const saved = localStorage.getItem("tripPrepStatus");
+        return saved
+            ? JSON.parse(saved)
+            : {
+                hotel: false,
+                flights: false,
+                insurance: false,
+                airport: false,
+                localTransport: false,
+                car: false,
+                docs: false,
+            };
     });
+
 
     const [planning, setPlanning] = useState(null)
     const [transport, setTransport] = useState(null)
+
+    const { i18n } = useTranslation();
+    const lang = i18n.resolvedLanguage ?? "en";
+    const { t } = useTranslation();
 
     function toLocalISO(d) {
         const t = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
@@ -92,6 +101,7 @@ export default function ItineraryPage() {
 
     function markPrepDone(id) {
         setPrepDone((prev) => ({ ...prev, [id]: true }));
+
     }
 
     function resetPrep() {
@@ -127,15 +137,8 @@ export default function ItineraryPage() {
     const [checkIn, setCheckIn]   = useState(toLocalISO(defaultIn));
     const [checkOut, setCheckOut] = useState(toLocalISO(defaultOut));
 
-    const nights = useMemo(() => {
-        const a = new Date(checkIn);
-        const b = new Date(checkOut);
-        const diff = (b - a) / 86400000;
-        return diff > 0 ? Math.round(diff) : 0;
-    }, [checkIn, checkOut]);
-
     useEffect(() => {
-        getItineraryBySlug(slug).then(
+        getItineraryBySlug(slug,lang).then(
             (data) => {
                 document.title = `${data.slug} • Short Breaks Hub`;
                 const descr =
@@ -193,7 +196,7 @@ export default function ItineraryPage() {
             }
         );
 
-    }, [slug]);
+    }, [slug,lang]);
 
     useEffect(() => {
         if (!data?.id) return
@@ -221,72 +224,78 @@ export default function ItineraryPage() {
         setUserCurrencyValue((convertRate * 100).toFixed(2));
     },[convertRate])
 
+    useEffect(() => {
+        localStorage.setItem(
+            "tripPrepStatus",
+            JSON.stringify(prepDone)
+        );
+    }, [prepDone]);
+
 
     const city = data.city;
-    const stayOptions = city ? (staysByCity[city] || []) : [];
 
     const tripPrepItems = React.useMemo(() => {
         return [
             {
                 id: "hotel",
-                title: "Hotel",
-                hint: "Confirm address, check-in policy, and cancellation.",
-                ctaLabel: "Find hotels",
+                title: t("itineraryPage.findHotels"),
+                hint: t("itineraryPage.hotelHint"),
+                ctaLabel: t("itineraryPage.findHotels"),
                 done: prepDone.hotel,
                 onFind: () => console.log("affiliate: hotels", { city, checkIn, checkOut }),
             },
             {
                 id: "flights",
-                title: "Flights",
-                hint: "Check routes, baggage rules, and seat selection.",
-                ctaLabel: "Find flights",
+                title: t("itineraryPage.findFlights"),
+                hint: t("itineraryPage.flightsHint"),
+                ctaLabel:  t("itineraryPage.findFlights"),
                 done: prepDone.flights,
                 onFind: () => console.log("affiliate: flights", { city, checkIn, checkOut }),
             },
             {
                 id: "insurance",
-                title: "Travel insurance",
-                hint: "Especially important for non-refundable bookings.",
-                ctaLabel: "Compare insurance",
+                title: t("itineraryPage.compareInsurance"),
+                hint:  t("itineraryPage.insuranceHint"),
+                ctaLabel:  t("itineraryPage.compareInsurance"),
                 done: prepDone.insurance,
                 onFind: () => console.log("affiliate: insurance", { city, checkIn, checkOut }),
             },
             {
                 id: "airport",
-                title: "Airport parking / transfer",
-                hint: "Parking, shuttle, or pickup — plan ahead.",
-                ctaLabel: "Find parking/transfer",
+                title: t("itineraryPage.findParking"),
+                hint:  t("itineraryPage.airportHint"),
+                ctaLabel:  t("itineraryPage.findParking"),
                 done: prepDone.airport,
                 onFind: () => console.log("affiliate: airport", { city, checkIn }),
             },
 
             {
                 id: "car",
-                title: "Car rental",
-                hint: "Pick-up location, dates, and transmission type.",
-                ctaLabel: "Find car rentals",
+                title: t("itineraryPage.findCarRentals"),
+                hint: t("itineraryPage.carHint"),
+                ctaLabel:  t("itineraryPage.findCarRentals"),
                 done: prepDone.car,
                 onFind: () => console.log("affiliate: car rental", { city, checkIn, checkOut }),
             },
 
             {
                 id: "localTransport",
-                title: "Local transport plan",
-                hint: "Metro passes, taxis, ride-hailing, or walking routes.",
-                ctaLabel: "Plan transport",
+                title:  t("itineraryPage.planTransport"),
+                hint:  t("itineraryPage.localTransportHint"),
+                ctaLabel:  t("itineraryPage.planTransport"),
                 done: prepDone.localTransport,
                 onFind: () => console.log("affiliate: local transport", { city }),
             },
             {
                 id: "docs",
-                title: "Documents ready",
-                hint: "Passport/ID, bookings, visas, and entry requirements.",
-                ctaLabel: "Check requirements",
+                title:  t("itineraryPage.checkRequirements"),
+                hint:  t("itineraryPage.docsHint"),
+                ctaLabel:  t("itineraryPage.checkRequirements"),
                 done: prepDone.docs,
                 onFind: () => console.log("affiliate: docs", { country: data?.country }),
             },
         ];
-    }, [prepDone, city, checkIn, checkOut, data?.country]);
+    }, [prepDone, city, checkIn, checkOut, data?.country,lang]);
 
 
     if (loading) {
@@ -326,7 +335,7 @@ export default function ItineraryPage() {
             </Helmet>
 
             <main className="min-h-screen bg-gray-50">
-                {/* Hero */}
+
                 <section
                     className="relative h-[42vh] md:h-[55vh] bg-center bg-cover"
                     style={{ backgroundImage: `url(${loadSubFolderImages(data.hero.split("/")[3] + "/"+data.hero.split("/")[4],data.hero.split("/")[5].split(".")[0])})` }}
@@ -338,11 +347,11 @@ export default function ItineraryPage() {
                                 {data.title}
                             </h1>
                             <p className="text-white/90 mt-8">
-                                {data.country} · {data.days} Days · From ${data.priceFrom} per person
+                                {data.country} · {data.days} {t("itineraryPage.days")} · {t("itineraryPage.from")} ${data.priceFrom} {t("itineraryPage.perPerson")}
                             </p>
 
                             <p className="text-white/70 text-sm mt-2">
-                                Excludes flights and accommodation
+                                {t("itineraryPage.excludes")}
                             </p>
 
                         </div>
@@ -351,10 +360,9 @@ export default function ItineraryPage() {
 
                 <section className="max-w-screen-xl mx-auto px-4 md:px-6 py-10 grid md:grid-cols-3 gap-8">
                     <article className="md:col-span-2">
-                        {/* Highlights */}
 
                         <div className="mt-2 flex items-center gap-3">
-                            <h2 className="text-xl font-bold mb-3">Trip Highlights</h2>
+                            <h2 className="text-xl font-bold mb-3">{t("itineraryPage.highlights")}</h2>
                             <button
                                 type="button"
                                 onClick={toggleLike}
@@ -370,7 +378,7 @@ export default function ItineraryPage() {
                                 <span>{likes.count}</span>
                             </button>
 
-                            <span className="text-xs text-slate-500 mb-3">People who liked this</span>
+                            <span className="text-xs text-slate-500 mb-3">{t("itineraryPage.like")}</span>
                         </div>
 
 
@@ -389,7 +397,7 @@ export default function ItineraryPage() {
                         </div>
 
                         <div className="mt-3">
-                            <CurrencyConvertor defaultOpen={false}
+                            <CurrencyConverter defaultOpen={false}
                                                data={data}
                                                fromAmount = {fromAmount}
                                                userCurrency = {userCurrency}
@@ -408,18 +416,14 @@ export default function ItineraryPage() {
                         </div>
 
 
-                        {/* Overview */}
-                        <h2 className="text-xl font-bold mt-8 mb-3">Overview</h2>
+                        <h2 className="text-xl font-bold mt-8 mb-3">{t("itineraryPage.overview")}</h2>
                         <p className="text-gray-700 leading-relaxed">
                             {data.summary}
                         </p>
 
-                        {/* Day-by-Day */}
-                        <h3 className="text-lg font-semibold mt-8 mb-3">Day by Day</h3>
+                        <h3 className="text-lg font-semibold mt-8 mb-3">{t("itineraryPage.dayByDay")}</h3>
                         <ItineraryDayAccordion schedule={data.schedule} />
                         <div className="space-y-8">
-                            {/* other parts like hero, info, likes, etc. */}
-
                             <CommentsSection itineraryId={data.id} />
                         </div>
                     </article>

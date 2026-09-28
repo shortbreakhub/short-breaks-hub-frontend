@@ -1,4 +1,7 @@
+import {useTranslation} from "react-i18next";
+
 export default function Header({currentWeatherData,isCelsius,setIsCelsius,handleBackToCurrentWeather,isFutureDateSelected}) {
+    const { t } = useTranslation();
     return (
         <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
             <div className="min-w-0">
@@ -6,7 +9,7 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                     {currentWeatherData?.region && (
                         currentWeatherData.region
                     )} <span className="text-slate-400">•</span> {currentWeatherData?.country && (
-                    currentWeatherData.country
+                    t(`itinerarySearchBar.countries.${currentWeatherData.country}`)
                 )}
                 </h2>
             </div>
@@ -15,9 +18,9 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                 <button
                     onClick={handleBackToCurrentWeather}
                     className="rounded-lg bg-slate-900 px-3 py-1 text-sm font-semibold text-white cursor-pointer"
-                    title="Back to Today's Weather"
+                    title={t("weatherHeader.liveTitle")}
                 >
-                    ⟳ Live
+                    ⟳ {t("weatherHeader.live")}
                 </button>
             )}
 
@@ -28,7 +31,7 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                     data-active={isCelsius}
                     onClick={()=>setIsCelsius(true)}
                     className="px-3 py-1 text-sm font-medium data-[active=true]:bg-slate-900 data-[active=true]:text-white"
-                    title="Switch Between Celsius and Fahrenheit"
+                    title={t("weatherHeader.switcher")}
                 >
                     °C
                 </button>
@@ -39,7 +42,7 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                     data-active={!isCelsius}
                     onClick={()=>setIsCelsius(false)}
                     className="px-3 py-1 text-sm font-medium data-[active=true]:bg-slate-900 data-[active=true]:text-white"
-                    title="Switch Between Celsius and Fahrenheit"
+                    title={t("weatherHeader.switcher")}
                 >
                     °F
                 </button>

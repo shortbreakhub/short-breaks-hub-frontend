@@ -1,0 +1,585 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "contact": "Contact",
+    "liveWeather": "Météo en direct",
+    "communityTrips": "Voyages communautaires",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "logoutSuccess": "Déconnexion réussie."
+  },
+  "homepage": {
+    "explore": "Explorez",
+    "tagline": "Explorez le monde · Votre voyage commence ici",
+    "exploreByRegion": "Explorer par région",
+    "typewriter": [
+      "les villes européennes",
+      "les aventures asiatiques",
+      "les îles tropicales",
+      "les trésors cachés",
+      "les merveilles naturelles"
+    ],
+    "regions": {
+      "southeastAsia": {
+        "title": "Asie du Sud-Est",
+        "description": "Plages tropicales, villes animées et cuisine de rue légendaire."
+      },
+      "eastAsia": {
+        "title": "Asie de l’Est",
+        "description": "Temples anciens, horizons illuminés au néon et riches traditions."
+      },
+      "europe": {
+        "title": "Europe",
+        "description": "Monuments emblématiques, culture des cafés et élégance intemporelle."
+      },
+      "americas": {
+        "title": "Les Amériques",
+        "description": "Des week-ends à New York aux escapades andines, entre énergie urbaine et nature sauvage."
+      },
+      "oceania": {
+        "title": "Océanie",
+        "description": "Routes côtières, régions viticoles et paysages alpins spectaculaires."
+      },
+      "africa": {
+        "title": "Afrique",
+        "description": "Souks, dunes désertiques et vieilles villes méditerranéennes."
+      }
+    }
+  },
+  "itinerarySearchBar": {
+    "region": "Région",
+    "country": "Pays",
+    "selectARegion": "Sélectionnez une région…",
+    "countries": {
+      "Argentina": "Argentine",
+      "Australia": "Australie",
+      "Brazil": "Brésil",
+      "Cambodia": "Cambodge",
+      "Canada": "Canada",
+      "Chile": "Chili",
+      "China": "Chine",
+      "Colombia": "Colombie",
+      "Costa Rica": "Costa Rica",
+      "Egypt": "Égypte",
+      "Fiji": "Fidji",
+      "France": "France",
+      "French Polynesia": "Polynésie française",
+      "Germany": "Allemagne",
+      "Ghana": "Ghana",
+      "Greece": "Grèce",
+      "Hong Kong": "Hong Kong",
+      "Indonesia": "Indonésie",
+      "Italy": "Italie",
+      "Japan": "Japon",
+      "Kenya": "Kenya",
+      "Laos": "Laos",
+      "Macau": "Macao",
+      "Malaysia": "Malaisie",
+      "Mexico": "Mexique",
+      "Mongolia": "Mongolie",
+      "Morocco": "Maroc",
+      "Myanmar": "Myanmar",
+      "Namibia": "Namibie",
+      "Netherlands": "Pays-Bas",
+      "New Caledonia": "Nouvelle-Calédonie",
+      "New Zealand": "Nouvelle-Zélande",
+      "Papua New Guinea": "Papouasie-Nouvelle-Guinée",
+      "Peru": "Pérou",
+      "Philippines": "Philippines",
+      "Portugal": "Portugal",
+      "Rwanda": "Rwanda",
+      "Samoa": "Samoa",
+      "Senegal": "Sénégal",
+      "Singapore": "Singapour",
+      "South Africa": "Afrique du Sud",
+      "South Korea": "Corée du Sud",
+      "Spain": "Espagne",
+      "Switzerland": "Suisse",
+      "Taiwan": "Taïwan",
+      "Tanzania": "Tanzanie",
+      "Thailand": "Thaïlande",
+      "Tonga": "Tonga",
+      "United Kingdom": "Royaume-Uni",
+      "United States": "États-Unis",
+      "Vanuatu": "Vanuatu",
+      "Vietnam": "Viêt Nam"
+    }
+  },
+  "footer": {
+    "description": "Des itinéraires de courts séjours soigneusement sélectionnés, des outils de planification pratiques et des idées de destinations pour des voyages riches de sens à travers le monde.",
+    "slogan": "Planifiez moins. Profitez davantage.",
+    "copyright": "© 2026 Short Break Hub. Tous droits réservés.",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "contact": "Nous contacter",
+    "emailPlaceholder": "Adresse e-mail",
+    "explore": "Explorer",
+    "planAndDiscover": "Planifier & Découvrir",
+    "allDestinations": "Toutes les destinations",
+    "liveWeather": "Météo en direct",
+    "southeastAsia": "Asie du Sud-Est",
+    "europe": "Europe",
+    "theAmericas": "Les Amériques",
+    "communityTrips": "Voyages de la communauté",
+    "yourFavourites": "Vos favoris",
+    "subscribe": "S'abonner",
+    "stayInspired": "Restez inspiré",
+    "newsletterDescription": "Découvrez de nouveaux itinéraires, des escapades de saison et des idées pratiques pour votre prochain court séjour."
+  },
+  "itineraryPage": {
+    "days": "Jours",
+    "from": "À partir de",
+    "perPerson": "par personne",
+    "excludes": "Vols et hébergement non inclus",
+    "highlights": "Points forts du voyage",
+    "like": "Personnes ayant aimé cet itinéraire",
+    "overview": "Vue d’ensemble",
+    "dayByDay": "Jour par jour",
+    "hotelHint": "Vérifiez l’adresse, les conditions d’arrivée et la politique d’annulation.",
+    "findHotels": "Trouver un hôtel",
+    "flightsHint": "Vérifiez les itinéraires, les règles relatives aux bagages et le choix des sièges.",
+    "findFlights": "Trouver un vol",
+    "insuranceHint": "Particulièrement important pour les réservations non remboursables.",
+    "compareInsurance": "Comparer les assurances voyage",
+    "airportHint": "Parking, navette ou transfert — mieux vaut tout organiser à l’avance.",
+    "findParking": "Trouver un parking / transfert",
+    "carHint": "Choisissez le lieu de prise en charge, les dates et le type de transmission.",
+    "findCarRentals": "Trouver une voiture de location",
+    "localTransportHint": "Préparez vos déplacements : métro, taxis, VTC ou itinéraires à pied.",
+    "planTransport": "Planifier les transports",
+    "docsHint": "Vérifiez votre passeport ou votre pièce d’identité, vos réservations, vos visas et les conditions d’entrée.",
+    "checkRequirements": "Vérifier les formalités"
+  },
+  "travelTips": {
+    "travelTips": "Conseils de voyage",
+    "description": "Conseils pratiques pour vous aider à découvrir la ville en toute sérénité",
+    "bestTime": "Meilleure période pour visiter",
+    "worstTime": "Période la moins recommandée",
+    "withKids": "Avec des enfants"
+  },
+  "transportTips": {
+    "transportTips": "Conseils de transport",
+    "description": "Informations pratiques sur les transports en commun, les taxis et les déplacements sur place",
+    "arrival": "Arrivée",
+    "gettingAround": "Se déplacer en ville",
+    "easyDayTrips": "Excursions faciles à la journée",
+    "dailyFollow": "Déplacements quotidiens",
+    "practicalTips": "Conseils pratiques"
+  },
+  "currencyConverter": {
+    "localRate": "Taux de change local",
+    "description": "Montant estimé dans la devise par défaut ou la devise préférée sélectionnée",
+    "from": "De",
+    "to": "Vers",
+    "usingRate": "Taux de change utilisé"
+  },
+  "foodRecommendations": {
+    "foodRecommendations": "Recommandations culinaires",
+    "description": "Spécialités locales à ne pas manquer et où les déguster",
+    "recommendedPlaces": "Adresses recommandées",
+    "viewOnMap": "Voir sur la carte",
+    "bestAreas": "Meilleurs quartiers où manger",
+    "mustTry": "Spécialités à ne pas manquer",
+    "noCoordinates": "Les coordonnées de cet établissement ne sont pas encore disponibles."
+  },
+  "itineraryDayAccordion": {
+    "day": "Jour",
+    "viewDetails": "Voir les détails"
+  },
+  "dayDetailModal": {
+    "day": "Jour",
+    "close": "Fermer",
+    "summary": "Résumé"
+  },
+  "comments": {
+    "comments": "Commentaires",
+    "rating": "Note",
+    "noRating": "Aucune note",
+    "delete": "Supprimer",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "page": "Page",
+    "firstComment": "Soyez le premier à laisser un commentaire.",
+    "shareExperience": "Partagez votre expérience…",
+    "posting": "Publication en cours…",
+    "post": "Publier",
+    "updating": "Mise à jour en cours…",
+    "update": "Mettre à jour",
+    "emailVerificationRequired": "Vérification de l’adresse e-mail requise",
+    "verifyEmail": "Veuillez d’abord vérifier votre adresse e-mail.",
+    "requestNewLink": "Vous pouvez demander un nouveau lien si le précédent a expiré.",
+    "requestNewEmailVerificationLink": "Demander un nouveau lien de vérification",
+    "ok": "OK",
+    "modifyComment": "Modifier mon commentaire",
+    "writeComment": "Écrire un commentaire",
+    "loginRequiredTitle": "Connexion requise",
+    "loginRequiredMessage": "Veuillez vous connecter avant de laisser un commentaire.",
+    "commentAdded": "Votre commentaire a été publié avec succès.",
+    "errorLoginRequired": "Veuillez vous connecter pour laisser un commentaire.",
+    "postCommentFailed": "Impossible de publier le commentaire.",
+    "commentRemoved": "Le commentaire a été supprimé avec succès.",
+    "commentRemovedFailed": "Impossible de supprimer le commentaire.",
+    "emailVerificationRequest": "Demande de vérification de l’adresse e-mail",
+    "emailVerificationSent": "L’e-mail de vérification a été envoyé.\nVeuillez consulter votre boîte de réception. Cela peut prendre quelques minutes.",
+    "requestCoolDownTitle": "Veuillez patienter",
+    "requestCoolDownMessage": "Vous avez récemment demandé un e-mail de vérification. Veuillez réessayer dans une minute.",
+    "emailVerificationFailed": "Échec de la vérification de l’adresse e-mail",
+    "emailVerificationFailedMessage": "Une erreur est survenue. Veuillez réessayer plus tard.",
+    "user": "Utilisateur",
+    "cancel": "Annuler"
+  },
+  "loginPage": {
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "unauthorizedLogin": "Accès non autorisé. Veuillez d’abord vous connecter.",
+    "welcomeBack": "Bon retour",
+    "traveler": "Voyageur",
+    "incorrectEmailOrPassword": "Adresse e-mail ou mot de passe incorrect.",
+    "login": "Se connecter",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Vous n’avez pas de compte ?",
+    "register": "Inscrivez-vous ici"
+  },
+  "registerPage": {
+    "accountCreatedMessage": "Inscription réussie ! Redirection vers la page de connexion...",
+    "errorEmailExist": "Cette adresse e-mail est déjà enregistrée.",
+    "errorStatus": "Échec de la requête (statut : ",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "register": "S'inscrire",
+    "redirectingTo": "Redirection vers",
+    "login": "la page de connexion",
+    "in": "dans",
+    "seconds": "secondes…",
+    "goNow": "Y aller maintenant",
+    "email": "Adresse e-mail",
+    "validEmailCheck": "Veuillez saisir une adresse e-mail valide.",
+    "password": "Mot de passe",
+    "passwordCheckLength": "Au moins 8 caractères",
+    "passwordCheckUpper": "Au moins une lettre majuscule (A–Z)",
+    "passwordCheckLower": "Au moins une lettre minuscule (a–z)",
+    "passwordCheckNumber": "Au moins un chiffre (0–9)",
+    "passwordCheckSpecialChar": "Au moins un caractère spécial",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordNotMatch": "✗ Les mots de passe ne correspondent pas.",
+    "displayName": "Nom d'affichage",
+    "displayNameCheck": "Veuillez saisir un nom d'affichage sans caractères spéciaux.",
+    "createAccount": "Créer un compte"
+  },
+  "RegionPage": {
+    "discover": "Découvrir",
+    "southeastAsia": "Asie du Sud-Est",
+    "eastAsia": "Asie de l'Est",
+    "europe": "Europe",
+    "americas": "Amériques",
+    "oceania": "Océanie",
+    "africa": "Afrique"
+  },
+  "countryCard": {
+    "itineraries": "itinéraires",
+    "viewAllItineraries": "Voir tous les itinéraires →"
+  },
+  "tripPrepRail": {
+    "hotel": {
+      "title": "Trouver un hôtel",
+      "checkIn": "Arrivée",
+      "checkOut": "Départ",
+      "rooms": "Chambres",
+      "adults": "Adultes",
+      "children": "Enfants",
+      "landmark": "Près d’un lieu / quartier",
+      "landmarkPlaceholder": "Ex. : KLCC, Shinjuku",
+      "breakfast": "Petit-déjeuner inclus",
+      "freeCancel": "Annulation gratuite"
+    },
+    "flights": {
+      "title": "Trouver un vol",
+      "from": "Départ (aéroport/ville)",
+      "fromPlaceholder": "Ex. : Londres (LHR)",
+      "to": "Destination (aéroport/ville)",
+      "toPlaceholder": "Automatique : ville de destination",
+      "depart": "Date de départ",
+      "return": "Date de retour",
+      "cabin": "Classe",
+      "economy": "Économique",
+      "premiumEconomy": "Économique Premium",
+      "business": "Affaires",
+      "first": "Première",
+      "bags": "Bagages",
+      "hand": "Bagage cabine uniquement",
+      "checked": "Bagage en soute inclus"
+    },
+    "insurance": {
+      "title": "Comparer les assurances voyage",
+      "start": "Début du voyage",
+      "end": "Fin du voyage",
+      "travellers": "Voyageurs",
+      "cover": "Niveau de couverture",
+      "standard": "Standard",
+      "comprehensive": "Complète",
+      "winterSports": "Sports d’hiver",
+      "medical": "Antécédents médicaux"
+    },
+    "parking": {
+      "title": "Parking / transfert aéroport",
+      "airport": "Aéroport",
+      "airportPlaceholder": "Ex. : Heathrow T5",
+      "departTime": "Heure de départ",
+      "returnTime": "Heure de retour",
+      "type": "Type",
+      "parking": "Parking",
+      "transfer": "Transfert",
+      "shuttle": "Navette"
+    },
+    "car": {
+      "title": "Trouver une voiture de location",
+      "pickup": "Lieu de prise en charge",
+      "pickupPlaceholder": "Ex. : Aéroport / Centre-ville",
+      "pickupDate": "Date de prise en charge",
+      "dropOffDate": "Date de restitution",
+      "transmission": "Transmission",
+      "auto": "Automatique",
+      "manual": "Manuelle",
+      "driverAge": "Âge du conducteur"
+    },
+    "progressBar": {
+      "done": "terminé"
+    },
+    "statusPill": {
+      "done": "Terminé",
+      "pending": "En attente"
+    },
+    "drawer": {
+      "adjustFilters": "Ajustez les filtres avant de lancer la recherche.",
+      "close": "Fermer"
+    },
+    "mainFrame": {
+      "tripPrep": "Préparation du voyage",
+      "progress": "Progression et prochaines étapes",
+      "markAllDone": "Tout marquer comme terminé",
+      "reset": "Réinitialiser",
+      "nextUp": "À faire ensuite",
+      "remaining": "restants",
+      "markDone": "Marquer comme terminé",
+      "goodToGo": "Tout est prêt",
+      "readyMessage": "Profitez de vos vacances — tout est prêt.",
+      "beforeYouGo": "Avant de partir",
+      "filtersOpen": "Les filtres s’ouvrent lorsque vous cliquez sur Rechercher.",
+      "find": "Rechercher",
+      "resetFilters": "Réinitialiser les filtres",
+      "search": "Rechercher",
+      "noFiltersAvailable": "Aucun filtre disponible.",
+      "days": "jours"
+    }
+  },
+  "mapModal": {
+    "zoomAndMove": "Faites défiler pour zoomer • faites glisser pour déplacer",
+    "close": "Fermer"
+  },
+  "browsePage": {
+    "shortBreaksIn": "Escapades à",
+    "keyword": "Mot-clé",
+    "keywordPlaceholder": "Bangkok, plage, cuisine de rue…",
+    "minDays": "Durée min.",
+    "maxDays": "Durée max.",
+    "days": "jours",
+    "clear": "Effacer",
+    "apply": "Appliquer",
+    "noItinerariesFound": "Aucun itinéraire trouvé.",
+    "try": "Essayez une autre région ou un autre pays."
+  },
+  "itineraryCard": {
+    "daysFrom": "jours • À partir de"
+  },
+  "contactPage": {
+    "contact": "Contact",
+    "description": "Une question, une idée ou une proposition de partenariat ? N'hésitez pas à nous écrire.",
+    "name": "Nom",
+    "namePlaceholder": "Jean Dupont",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "jean@example.com",
+    "message": "Message",
+    "messagePlaceholder": "Parlez-nous de votre projet…",
+    "messageHint": "Minimum 50 caractères et maximum 2 000 caractères.",
+    "send": "Envoyer",
+    "messageSent": "Message envoyé avec succès",
+    "thanks": "Merci de nous avoir contactés !",
+    "response": "Nous vous répondrons dans les plus brefs délais.",
+    "ok": "OK"
+  },
+  "weatherSearchBar": {
+    "placeSearch": "Saisissez un lieu",
+    "searchPlaceholder": "Ex. : Londres",
+    "searchTitle": "Rechercher la météo du lieu indiqué",
+    "loading": "Chargement",
+    "search": "Rechercher",
+    "noWeatherData": "Désolé, aucune donnée météo n’a été trouvée pour votre recherche."
+  },
+  "weatherFooter": {
+    "dataSource": "Source des données : Abstract API – Geolocation | Open-Meteo | Google Maps – Geocoding"
+  },
+  "threadConversation": {
+    "sendFailed": "Impossible d’envoyer la réponse. Veuillez réessayer.",
+    "loginReply": "Veuillez vous connecter pour répondre.",
+    "loading": "Chargement de la conversation...",
+    "addReply": "Ajouter une réponse",
+    "messagePlaceholder": "Écrivez votre réponse...",
+    "charLimit": "1 000 caractères maximum",
+    "sending": "Envoi en cours...",
+    "sendReply": "Envoyer la réponse",
+    "close": "Cette conversation est fermée."
+  },
+  "weatherHeader": {
+    "live": "En direct",
+    "liveTitle": "Retour à la météo d’aujourd’hui",
+    "switcher": "Basculer entre les degrés Celsius et Fahrenheit"
+  },
+  "weatherDatePicker": {
+    "pickADate": "Choisissez une date",
+    "show": "Afficher",
+    "showButtonTitle": "Afficher la météo pour la date sélectionnée",
+    "invalidDateMessage": "Date invalide. Les prévisions ne sont disponibles que pour les 14 prochains jours."
+  },
+  "weatherDetailsCard": {
+    "feelsLike": "Température ressentie",
+    "windSpeed": "Vitesse du vent",
+    "humidity": "Humidité",
+    "precipitation": "Probabilité de précipitations",
+    "sunriseTime": "Heure du lever du soleil",
+    "sunsetTime": "Heure du coucher du soleil",
+    "UVIndex": "Indice UV"
+  },
+  "weatherPage": {
+    "hourly": "12 prochaines heures",
+    "daily": "7 prochains jours"
+  },
+  "dailySummaryCard": {
+    "Mon": "Lun",
+    "Tue": "Mar",
+    "Wed": "Mer",
+    "Thu": "Jeu",
+    "Fri": "Ven",
+    "Sat": "Sam",
+    "Sun": "Dim"
+  },
+  "communityTripsPage": {
+    "exploreByRegion": "Explorer par région",
+    "southeastAsia": {
+      "title": "Asie du Sud-Est",
+      "description": "Des voyages authentiques partagés par des voyageurs, entre plages, marchés de nuit et villes culturelles animées."
+    },
+    "eastAsia": {
+      "title": "Asie de l'Est",
+      "description": "Des itinéraires partagés mettant en valeur des horizons urbains modernes, des sites historiques et des paysages spectaculaires."
+    },
+    "europe": {
+      "title": "Europe",
+      "description": "Des parcours créés par la communauté à travers des villes historiques, des rues bordées de cafés et les paysages emblématiques de l'Europe."
+    },
+    "americas": {
+      "title": "Amériques",
+      "description": "Des aventures partagées par la communauté, des côtes aux grandes métropoles, entre road trips, nature et découvertes culturelles."
+    },
+    "oceania": {
+      "title": "Australie et Nouvelle-Zélande",
+      "description": "Des escapades axées sur la nature, partagées par des voyageurs : routes côtières, faune sauvage et randonnées en montagne."
+    },
+    "africa": {
+      "title": "Afrique",
+      "description": "Des déserts dorés, de vastes savanes sauvages et des cultures riches façonnées par des traditions ancestrales."
+    }
+  },
+  "verifyEmailPage": {
+    "verifying": "Vérification...",
+    "missingToken": "Jeton de vérification manquant.",
+    "emailVerifiedMessage": "Adresse e-mail vérifiée ! Vous pouvez maintenant vous connecter.",
+    "expiredLink": "Lien invalide ou expiré.",
+    "emailAlreadyVerified": "Votre adresse e-mail a déjà été vérifiée.",
+    "linkExpired": "Ce lien de vérification a expiré.",
+    "invalidLink": "Lien de vérification invalide.",
+    "verifyingEmail": "Vérification de l'adresse e-mail…",
+    "verificationSuccessful": "Vérification réussie",
+    "alreadyVerified": "Déjà vérifiée",
+    "verificationFailed": "Échec de la vérification",
+    "backToHome": "Retour à l'accueil",
+    "goToLogin": "Se connecter"
+  },
+  "profilePage": {
+    "noFavorite": "Désolé, vous n'avez encore aucun favori !",
+    "publishedItineraries": "Itinéraires publiés",
+    "chooseImage": "Veuillez choisir une image",
+    "maxFileSize": "La taille maximale est de 3 Mo",
+    "photoUpdated": "La photo de profil a été mise à jour avec succès.",
+    "draftDeleteConfirmationTitle": "Confirmation de suppression du brouillon",
+    "draftDeleteConfirmationMessage": "Êtes-vous sûr de vouloir supprimer ce brouillon ?",
+    "profileUpdatedSuccessfully": "Le profil a été mis à jour avec succès.",
+    "updateFailed": "Échec de l'enregistrement des modifications",
+    "overview": "Aperçu",
+    "favorites": "Favoris",
+    "draftItineraries": "Brouillons d'itinéraires",
+    "settings": "Paramètres",
+    "createItineraryButton": "+ Créer un itinéraire",
+    "displayName": "Nom d'affichage :",
+    "email": "E-mail :",
+    "travelGroup": "Groupe de voyageurs :",
+    "adults": "adultes",
+    "children": "enfants",
+    "location": "Lieu :",
+    "bio": "Présentation :",
+    "currency": "Devise :",
+    "show": "Afficher :",
+    "builtInTrips": "Itinéraires intégrés",
+    "communityTrips": "Itinéraires de la communauté",
+    "noPublished": "Aucun itinéraire publié pour le moment",
+    "createItineraryHint": "Cliquez sur « Créer un itinéraire » puis publiez votre premier itinéraire.",
+    "draftEditHint": "Ces itinéraires sont enregistrés comme brouillons. Continuez à les modifier ou supprimez-les.",
+    "lastUpdated": "Dernière mise à jour",
+    "continueEditing": "Continuer la modification",
+    "discard": "Supprimer",
+    "noDraft": "Aucun brouillon d'itinéraire pour le moment",
+    "displayDraftHint": "Commencez un nouvel itinéraire et choisissez « Enregistrer comme brouillon » pour le voir apparaître ici.",
+    "uploadProfilePicture": "Téléverser une photo de profil",
+    "imageFormatHint": "JPG/PNG, jusqu'à 3 Mo.",
+    "displayNamePlaceholder": "Votre nom d'affichage",
+    "locationPlaceholder": "ex. : Londres, Royaume-Uni",
+    "preferredCurrency": "Devise préférée",
+    "USDollar": "USD – Dollar américain",
+    "BritishPound": "GBP – Livre sterling",
+    "Euro": "EUR – Euro",
+    "AustralianDollar": "AUD – Dollar australien",
+    "CanadianDollar": "CAD – Dollar canadien",
+    "JapaneseYen": "JPY – Yen japonais",
+    "SingaporeDollar": "SGD – Dollar de Singapour",
+    "bioPlaceholder": "Une courte présentation de vous",
+    "saving": "Enregistrement…",
+    "saveChanges": "Enregistrer les modifications",
+    "yes": "Oui",
+    "no": "Non",
+    "loading": "Chargement…",
+    "failedToLoadProfile": "Échec du chargement du profil :",
+    "noLiked": "Vous n'avez encore ajouté aucun itinéraire de la communauté à vos favoris.",
+    "draft": "Brouillon"
+  },
+  "blockingSessionModal": {
+    "sessionAboutToExpire": "Votre session va bientôt expirer",
+    "logOutAlert": "Pour votre sécurité, vous serez bientôt déconnecté.",
+    "timeRemaining": "Temps restant :",
+    "logOut": "Se déconnecter",
+    "staySignedIn": "Rester connecté"
+  },
+  "forgotPasswordPage": {
+    "resetPassword": "Réinitialiser le mot de passe",
+    "emailPlaceholder": "Votre adresse e-mail",
+    "sendResetLink": "Envoyer le lien de réinitialisation",
+    "loginNow": "Se connecter",
+    "resetPasswordRequest": "Demande de réinitialisation du mot de passe",
+    "passwordLinkSent": "Le lien de réinitialisation de votre mot de passe a été envoyé.",
+    "hint": "Vous devriez le recevoir dans quelques minutes si vous possédez un compte chez nous.",
+    "ok": "OK",
+    "resetFailed": "Échec de la demande de réinitialisation du mot de passe",
+    "technicalProblem": "En raison d'un problème technique, votre demande n'a pas pu être envoyée.",
+    "tryLaterHint": "Veuillez réessayer plus tard ou nous contacter si le problème persiste."
+  }
+}

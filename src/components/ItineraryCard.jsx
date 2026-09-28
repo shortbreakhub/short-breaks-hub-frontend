@@ -2,10 +2,13 @@ import {Link, useNavigate} from "react-router-dom";
 import {getFavoritesCount} from "../api.js";
 import {useEffect, useState} from "react";
 import {loadSubFolderImages} from "../utils/loadImage.js";
+import {useTranslation} from "react-i18next";
 
 export default function ItineraryCard({it="",showLikes=false,itineraryType="build in"}) {
     const [favoritesCount, setFavoritesCount] = useState(0);
     const [navigateTo, setNavigateTo] = useState("");
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if(it){
@@ -46,7 +49,7 @@ export default function ItineraryCard({it="",showLikes=false,itineraryType="buil
                             )}
                         </div>
                         <p className="text-sm text-gray-500 mt-1">
-                            {unslug(it.country)} • {it.days} days • From ${it.priceFrom}
+                            {t(`itinerarySearchBar.countries.${unslug(it.country)}`)} • {it.days} {t("itineraryCard.daysFrom")} ${it.priceFrom}
                         </p>
                         {it.summary && (
                             <p className="text-sm text-gray-600 mt-2 line-clamp-2">

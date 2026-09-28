@@ -7,49 +7,49 @@ import africaCommunityImg from "../assets/africa-community.jpg"
 import {useNavigate} from "react-router-dom";
 import RegionCard from "../components/RegionCard.jsx";
 import {useRef} from "react";
+import {useTranslation} from "react-i18next";
 
 
 export default function CommunityTripsPage() {
 
     const exploreRef = useRef(null);
-
-
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const regions = [
         {
-            title: "Southeast Asia",
-            description: "Real traveler journeys through beaches,night markets and vibrant cultural cities",
+            title: t("communityTripsPage.southeastAsia.title"),
+            description: t("communityTripsPage.southeastAsia.description"),
             image: southeastAsiaCommunityImg,
             onClick: "southeast-asia",
         },
         {
-            title: "East Asia",
-            description: "Traveler-shared trips showcasing modern skylines ancient sites, and scenic landscapes",
+            title: t("communityTripsPage.eastAsia.title"),
+            description: t("communityTripsPage.eastAsia.description"),
             image: eastAsiaCommunityImg,
             onClick: "east-asia-community",
         },
         {
-            title: "Europe",
-            description: "User-crafted routes through historic towns,cafe streets and iconic European scenery",
+            title: t("communityTripsPage.europe.title"),
+            description: t("communityTripsPage.europe.description"),
             image: europeCommunityImg,
             onClick: "EUROPE",
         },
         {
-            title: "Americas",
-            description: "Community adventures from coastlines to big cities - road trips,nature and culture.",
+            title: t("communityTripsPage.americas.title"),
+            description: t("communityTripsPage.americas.description"),
             image: americasCommunityImg,
             onClick: "americas-community",
         },
         {
-            title: "Australia & New Zealand",
-            description: "Nature-focused escapes shared by travelers - coastal derives,wildlife and mountain trials",
+            title: t("communityTripsPage.oceania.title"),
+            description: t("communityTripsPage.oceania.description"),
             image: anzCommunityImg,
             onClick: "anz-community",
         },
         {
-            title: "Africa",
-            description: "Golden deserts, wild savanna landscapes and diverse cultures shaped by ancient traditions",
+            title: t("communityTripsPage.africa.title"),
+            description: t("communityTripsPage.africa.description"),
             image: africaCommunityImg,
             onClick: "africa-community",
         },
@@ -59,7 +59,7 @@ export default function CommunityTripsPage() {
         <>
             <section id="explore" className="scroll-mt-20">
                 <div ref={exploreRef} className="py-16 px-6 bg-white">
-                    <h2 className="text-3xl font-bold text-center mb-10">Explore by Region</h2>
+                    <h2 className="text-3xl font-bold text-center mb-10">{t("communityTripsPage.exploreByRegion")}</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         { regions.map((item, index) => (
                             <RegionCard

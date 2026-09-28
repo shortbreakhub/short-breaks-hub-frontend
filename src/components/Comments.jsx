@@ -5,6 +5,7 @@ import {
     getResendVerificationEmail
 } from "../api.js"
 import {Auth} from "../auth.js";
+import {useTranslation} from "react-i18next";
 
 export default function Comments({ itineraryId }) {
 
@@ -20,6 +21,7 @@ export default function Comments({ itineraryId }) {
     const [commentDeleted, setCommentDeleted] = React.useState(false);
     const [showModal, setShowModal] = useState(null);
     const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false);
+    const { t } = useTranslation();
 
     function loadComments(p = 0) {
         getCommentList(itineraryId).then((res) => {
@@ -48,8 +50,8 @@ export default function Comments({ itineraryId }) {
         if(!localStorage.getItem("authToken"))
         {
             setShowModal({
-                "msgTitle": "User Login Required",
-                "msg":"Please log in before make a comment",
+                "msgTitle": t("comments.loginRequiredTitle"),
+                "msg":t("comments.loginRequiredMessage"),
                 "icon": "error",
             });
             return;
@@ -68,13 +70,13 @@ export default function Comments({ itineraryId }) {
                 setCommentDeleted(false);
                 setCommentCount(c => c + 1);
                 setBody(""); setRating(0); setShowComposer(false);
-                showToast("Comment has been added successfully!",{variant:"success",duration:4000});
+                showToast(t("comments.commentAdded"),{variant:"success",duration:4000});
             })
             .catch(err => {
                 if (err?.response?.status === 401) {
-                    showToast("Please log in to comment", { variant: "error",duration:4000 });
+                    showToast(t("comments.errorLoginRequired"), { variant: "error",duration:4000 });
                 } else {
-                    showToast("Failed to post comment", { variant: "error",duration:4000 });
+                    showToast(t("comments.postCommentFailed"), { variant: "error",duration:4000 });
                 }
             })
             .finally(() => setSaving(false));
@@ -82,7 +84,7 @@ export default function Comments({ itineraryId }) {
 
     function deleteComment() {
         deleteCommentApi(itineraryId).then((res) => {
-            showToast("Comment has been removed successfully !", { variant: "success",duration:4000 });
+            showToast(`${t("comments.commentRemoved")} !`, { variant: "success",duration:4000 });
             setCommentDeleted(true);
             setShowComposer(false);
             setBody("");
@@ -91,7 +93,7 @@ export default function Comments({ itineraryId }) {
             setCommentCount(c => c - 1);
         }).catch(err => {
             loadComments(0)
-            showToast("Failed to delete comment", { variant: "error",duration:4000 });
+            showToast(t("comments.commentRemovedFailed"), { variant: "error",duration:4000 });
         })
     }
 
@@ -99,8 +101,8 @@ export default function Comments({ itineraryId }) {
         getResendVerificationEmail().then(() => {
             setShowEmailVerificationModal(false);
             setShowModal({
-                "msgTitle": "Email Verification Request",
-                "msg":"Verification email has been sent.please check your mail\n It may take couple of minutes.",
+                "msgTitle": t("comments.emailVerificationRequest"),
+                "msg":t("comments.emailVerificationSent"),
                 "icon": "success",
             });
         }).catch((err) => {
@@ -110,16 +112,16 @@ export default function Comments({ itineraryId }) {
 
             if (status === 429) {
                 setShowModal({
-                    msgTitle: "Please wait",
-                    msg: "You’ve recently requested a verification email. Try again in 1 minute.",
+                    msgTitle: t("comments.requestCoolDownTitle"),
+                    msg:  t("comments.requestCoolDownMessage"),
                     icon: "warning",
                 });
                 return;
             }
 
             setShowModal({
-                msgTitle: "Email Verification Failed",
-                msg: err?.response?.data?.message || "Something went wrong. Please try again later.",
+                msgTitle: t("comments.emailVerificationFailed"),
+                msg: err?.response?.data?.message || t("comments.emailVerificationFailedMessage"),
                 icon: "error",
             });
         });
@@ -130,27 +132,26 @@ export default function Comments({ itineraryId }) {
         <section id="comments" className="mt-10">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">
-                    Comments {commentCount > 0 && <span className="text-slate-500">({commentCount})</span>}
+                    {t("comments.comments")} {commentCount > 0 && <span className="text-slate-500">({commentCount})</span>}
                 </h3>
                 <button
                     className="px-3 py-2 rounded border hover:bg-slate-50 cursor-pointer"
                     onClick={() => setShowComposer(s => !s)}
                 >
-                    {showComposer ? "Cancel" : hasUserCommented ? "Modify My Comment" : "Write My Comment"}
+                    {showComposer ? t("comments.cancel") : hasUserCommented ? t("comments.modifyComment") : t("comments.writeComment")}
                 </button>
             </div>
 
-            {/* Composer */}
             {showComposer && (
                 <div className="mb-4 rounded border p-3">
                     <div className="mb-2 flex items-center gap-2">
-                        <label className="text-sm text-slate-600">Rating</label>
+                        <label className="text-sm text-slate-600">{t("comments.rating")}</label>
                         <select
                             value={rating}
                             onChange={e => setRating(Number(e.target.value))}
                             className="border rounded px-2 py-1"
                         >
-                            <option value={0}>No rating</option>
+                            <option value={0}>{t("comments.noRating")}</option>
                             <option value={1}>★☆☆☆☆</option>
                             <option value={2}>★★☆☆☆</option>
                             <option value={3}>★★★☆☆</option>
@@ -162,7 +163,7 @@ export default function Comments({ itineraryId }) {
                     <textarea
                         className="w-full border rounded p-2"
                         rows={3}
-                        placeholder="Share your experience…"
+                        placeholder={t("comments.shareExperience")}
                         value={body}
                         onChange={e => setBody(e.target.value)}
                     />
@@ -172,19 +173,19 @@ export default function Comments({ itineraryId }) {
                             onClick={postComment}
                             className="px-4 py-2 rounded bg-black text-white disabled:opacity-50 cursor-pointer"
                         >
-                            { !hasUserCommented ? (saving ? "Posting…" : "Post") : (saving ? "Updating…" : "Update")}
+                            { !hasUserCommented ? (saving ? `${t("comments.posting")}…` : t("comments.post"))
+                                : (saving ? `${t("comments.updating")}…` : t("comments.update"))}
                         </button>
                         { hasUserCommented && (<button className="px-4 py-2 rounded border cursor-pointer" onClick={deleteComment}>
-                            Delete
+                            {t("comments.delete")}
                         </button>)}
 
                     </div>
                 </div>
             )}
 
-            {/* List */}
             {comments.length === 0 ? (
-                <p className="text-slate-500">Be the first to comment.</p>
+                <p className="text-slate-500">{t("comments.firstComment")}</p>
             ) : (
                 <ul className="space-y-4">
                     {comments.map(c => (
@@ -194,9 +195,9 @@ export default function Comments({ itineraryId }) {
                                     <img src={c.userAvatarUrl} alt="" className="h-7 w-7 rounded-full object-cover" />
                                 )}
                                 <div className="text-sm">
-                                    <div className="font-medium">{c.userDisplayName || "User"}</div>
+                                    <div className="font-medium">{c.userDisplayName || t("comments.user")}</div>
                                     <div className="text-slate-500">
-                                        {c.rating ? "★".repeat(c.rating) + "☆".repeat(5 - c.rating) : "No rating"}
+                                        {c.rating ? "★".repeat(c.rating) + "☆".repeat(5 - c.rating) : t("comments.noRating")}
                                     </div>
                                 </div>
                                 <div className="ml-auto text-xs text-slate-500">
@@ -209,22 +210,21 @@ export default function Comments({ itineraryId }) {
                 </ul>
             )}
 
-            {/* Pager */}
             <div className="mt-4 flex items-center gap-3">
                 <button
                     disabled={page === 0}
                     onClick={() => loadComments(page - 1)}
                     className="border rounded px-3 py-1 disabled:opacity-50"
                 >
-                    Prev
+                    {t("comments.prev")}
                 </button>
-                <span className="text-sm">Page {page + 1} / {Math.max(1, totalPages)}</span>
+                <span className="text-sm">{t("comments.page")} {page + 1} / {Math.max(1, totalPages)}</span>
                 <button
                     disabled={page + 1 >= totalPages}
                     onClick={() => loadComments(page + 1)}
                     className="border rounded px-3 py-1 disabled:opacity-50"
                 >
-                    Next
+                    {t("comments.next")}
                 </button>
             </div>
             {
@@ -232,13 +232,13 @@ export default function Comments({ itineraryId }) {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                         <div className="bg-white max-w-md w-full mx-4 rounded-xl shadow-xl p-6 text-center">
                             <h2 className="text-xl font-semibold text-slate-900 mb-2">
-                                ⚠️ Email Verification Required
+                                ⚠️ {t("comments.emailVerificationRequired")}
                             </h2>
                             <p className="text-slate-600 mb-2">
-                                Please verify your email first.
+                                {t("comments.verifyEmail")}
                             </p>
                             <p className="text-slate-600 mb-6">
-                                You can request a new link if previous one is expired.
+                                {t("comments.requestNewLink")}
                             </p>
 
                             <button
@@ -249,7 +249,7 @@ export default function Comments({ itineraryId }) {
                                 className="inline-flex items-center justify-center px-7 py-2 rounded-md bg-slate-900
                                 text-white text-sm font-medium hover:bg-slate-800"
                             >
-                                Ok
+                                {t("comments.ok")}
                             </button>
                             <button
                                 type="button"
@@ -257,7 +257,7 @@ export default function Comments({ itineraryId }) {
                                 className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-slate-900
                                 text-white text-sm font-medium hover:bg-slate-800 ml-5"
                             >
-                                Request New Email Verification Link
+                                {t("comments.RequestNewEmailVerificationLink")}
                             </button>
                         </div>
                     </div>
@@ -280,7 +280,7 @@ export default function Comments({ itineraryId }) {
                                 onClick={() => setShowModal(null)}
                                 className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800"
                             >
-                                Ok
+                                {t("comments.ok")}
                             </button>
                         </div>
                     </div>

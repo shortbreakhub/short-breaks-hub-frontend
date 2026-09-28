@@ -4,31 +4,52 @@ import Logo from "../assets/logo-icon.png"
 import { toast } from 'react-toastify';
 import {Auth} from "../auth.js";
 import {FaUserCircle} from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher.jsx";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const [activeScroll, setActiveScroll] = useState("home");
+    const { t } = useTranslation();
 
     const links = useMemo(() => {
         const base = [
-            { id: 'home',    label: 'Home',    type: 'scroll' },
-            { id: 'explore', label: 'Explore', type: 'scroll' },
-            { id: '/contact', label: 'Contact', type: 'route' },
-            { id: '/live-weather', label: 'Live Weather', type: 'route' },
-            { id: '/community-itineraries/region',label: 'Community Trips',type: 'route' },
+            { id: 'home', label: t("navbar.home"), type: 'scroll' },
+            { id: 'explore', label: t("navbar.explore"), type: 'scroll' },
+            { id: '/contact', label: t("navbar.contact"), type: 'route' },
+            {
+                id: '/live-weather',
+                label: t("navbar.liveWeather"),
+                type: 'route'
+            },
+            {
+                id: '/community-itineraries/region',
+                label: t("navbar.communityTrips"),
+                type: 'route'
+            },
         ];
+
         if (Auth.isLoggedIn()) {
-            base.push({ id: 'logout', label: 'Logout', type: 'logout' });
+            base.push({
+                id: 'logout',
+                label: t("navbar.logout"),
+                type: 'logout'
+            });
         } else {
-            base.push({ id: '/login', label: 'Login', type: 'route' });
+            base.push({
+                id: '/login',
+                label: t("navbar.login"),
+                type: 'route'
+            });
         }
+
         return base;
-    }, [location.key]);
+    }, [location.key, t]);
 
 
-    const go = (item) => {
+    const navigateAndScroll = (item) => {
         setOpen(false);
 
         if (item.type === 'route') {
@@ -36,112 +57,137 @@ export default function Navbar() {
             return;
         }
 
-        const doScroll = () => {
+        const scrollToSection = () => {
             const el = document.getElementById(item.id);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         if (location.pathname !== '/') {
             navigate('/');
-            setTimeout(doScroll, 50);
+            setTimeout(scrollToSection, 50);
         } else {
-            doScroll();
+            scrollToSection();
         }
 
-        if (item.type === 'logout') {
+        if (item.type === "logout") {
             Auth.clear();
-            navigate('/');
-            window.location.reload();
-            toast.success(`You have logged out successfully.`);
+            navigate("/");
+            toast.success(t("navbar.logoutSuccess"));
+            return;
         }
 
     };
 
     return (
         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
-            <nav className="max-w-screen-xl mx-auto h-14 px-4 md:px-6 flex items-center justify-between">
-                <a href="/" className="flex items-center space-x-2">
+
+            <nav className="hidden md:flex max-w-screen-xl mx-auto h-14 px-6 items-center justify-between">
+                <a href="/" className="flex items-center">
                     <img
                         src={Logo}
                         alt="Travel Explorer Logo"
-                        className="hidden sm:block h-28 w-auto"
+                        className="h-28 w-auto"
                     />
                 </a>
-                <ul className="hidden md:flex gap-6">
-                    {links.map((l) => (
-                        <li key={l.label}>
-                            <button
-                                onClick={() =>
-                                {
-                                    if(l.type === 'scroll') {
-                                        setActiveScroll(l.id);
-                                    }
-                                    go(l)
-                                }
-                                }
-                                className={`inline-block text-left py-3 text-gray-700 text-sm font-medium cursor-pointer 
-                                ${
-                                    l.type === 'route' &&
-                                    ((l.id === '/' && location.pathname === '/') ||
-                                        (l.id !== '/' && location.pathname.startsWith(l.id)))
-                                        ? 'text-blue-600 border-b-[2px] border-blue-600 pb-1'
-                                        : ''
 
-                                } ${
-                                    l.type === 'scroll' && location.pathname === '/' && activeScroll === l.id
-                                        ? 'text-blue-600 border-b-[2px] border-blue-600 pb-1'
-                                        : l.type === 'scroll'
-                                            ? 'text-gray-700 hover:text-gray-900'
-                                            : ''
-                                }                              
-                                        `}
-                            >
-                                {l.label}
-                            </button>
-                        </li>
-                    ))}
+                <div className="flex items-center">
+                    <ul className="flex items-center gap-6">
+                        {links.map((l) => (
+                            <li key={l.id}>
+                                <button
+                                    onClick={() => {
+                                        if (l.type === "scroll") {
+                                            setActiveScroll(l.id);
+                                        }
+
+                                        navigateAndScroll(l);
+                                    }}
+                                    className={`inline-block text-left py-3 text-gray-700 text-sm font-medium cursor-pointer
+                            ${
+                                        l.type === "route" &&
+                                        (
+                                            (l.id === "/" && location.pathname === "/") ||
+                                            (l.id !== "/" && location.pathname.startsWith(l.id))
+                                        )
+                                            ? "text-blue-600 border-b-[2px] border-blue-600"
+                                            : ""
+                                    }
+                            ${
+                                        l.type === "scroll" &&
+                                        location.pathname === "/" &&
+                                        activeScroll === l.id
+                                            ? "text-blue-600 border-b-[2px] border-blue-600"
+                                            : l.type === "scroll"
+                                                ? "text-gray-700 hover:text-gray-900"
+                                                : ""
+                                    }`}
+                                >
+                                    {l.label}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+
                     {Auth.isLoggedIn() && (
                         <button
-                            title="Profile"
+                            type="button"
+                            title={t("navbar.profile")}
                             onClick={() => navigate("/profile")}
-                            className="flex items-center text-gray-700 hover:text-gray-900 mx-10 cursor-pointer"
+                            className="ml-10 flex items-center text-gray-700 hover:text-gray-900 cursor-pointer"
                         >
-                            <FaUserCircle size={36} />
+                            <FaUserCircle size={36}/>
                         </button>
-
                     )}
-                </ul>
+
+                    <LanguageSwitcher/>
+                </div>
+            </nav>
+
+            <nav className="md:hidden grid grid-cols-3 items-center h-14 px-4">
+
+                <a href="/" className="justify-self-start">
+                    <img
+                        src={Logo}
+                        alt="Travel Explorer Logo"
+                        className="h-12 w-auto"
+                    />
+                </a>
+
+                <div className="justify-self-center">
+                    <LanguageSwitcher/>
+                </div>
 
                 <button
-                    className="md:hidden absolute right-4 top-3 p-2 rounded-md hover:bg-gray-100"
-                    onClick={() => setOpen(v => !v)}
+                    type="button"
+                    className="justify-self-end p-2 rounded-md hover:bg-gray-100 cursor-pointer"
+                    onClick={() => setOpen((current) => !current)}
+                    aria-label="Open navigation menu"
                 >
-                    {open ? '✕' : '☰'}
+                    {open ? "✕" : "☰"}
                 </button>
-
             </nav>
 
             {open && (
-                <div className="md:hidden fixed top-14 left-0 w-full bg-white border-t z-40">
+                <div className="md:hidden bg-white border-t">
 
                     {Auth.isLoggedIn() && (
                         <button
                             onClick={() => {
                                 setOpen(false);
-                                navigate('/profile');
+                                navigate("/profile");
                             }}
                             className="w-full flex items-center gap-3 px-4 py-4 border-b text-gray-800 font-medium cursor-pointer"
                         >
-                            <FaUserCircle size={24} />
-                            Profile
+                            <FaUserCircle size={24}/>
+                            {t("navbar.profile")}
                         </button>
                     )}
 
-                    {links.map(l => (
+                    {links.map((l) => (
                         <button
-                            key={l.label}
-                            onClick={() => go(l)}
-                            className="w-full text-left px-4 py-4 text-gray-700 hover:bg-gray-100"
+                            key={l.id}
+                            onClick={() => navigateAndScroll(l)}
+                            className="w-full text-left px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer"
                         >
                             {l.label}
                         </button>

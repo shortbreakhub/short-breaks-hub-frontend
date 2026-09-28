@@ -1,8 +1,8 @@
 import {useState, useMemo, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { postUserRegister } from "../api";
+import {useTranslation} from "react-i18next";
 
-// Simple validators
 const isEmailValid = (email) => /^([a-z0-9.-_]+)@([a-z0-9_-])+\.[a-z]{2,10}(.[a-z]{2,8})?$/i.test(email);
 const hasUpper = (s) => /[A-Z]/.test(s);
 const hasLower = (s) => /[a-z]/.test(s);
@@ -31,6 +31,7 @@ export default function RegisterPage() {
     const navigate = useNavigate();
     const [redirectIn, setRedirectIn] = useState(5);
     const [showPwd, setShowPwd] = useState(false)
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!out?.success) return;
@@ -58,8 +59,8 @@ export default function RegisterPage() {
         setOut(null);
 
         postUserRegister(email, password, displayName)
-            .then((res) => {
-                setOut({ success: "Registration successful ! Redirecting to login..." });
+            .then(() => {
+                setOut({ success: t("registerPage.accountCreatedMessage") });
                 setTimeout(() => navigate("/login"), 5000);
             }).catch((err) => {
 
@@ -68,15 +69,14 @@ export default function RegisterPage() {
             let message;
 
             if (status === 409) {
-                message = "Email Already Registered";
+                message = t("registerPage.errorEmailExist");
             } else if (status) {
-                message = dataMsg || `Request failed with status ${status}`;
+                message = dataMsg || `${t("registerPage.errorStatus")} ${status}`;
             } else {
-                message = "Network error. Please try again.";
+                message = t("registerPage.networkError");
             }
 
             setOut({ ok: false, message });
-            console.error("register failed:", { status, data: err?.response?.data, err });
         });
     };
 
@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
     return (
         <div className="container mx-auto max-w-md p-4">
-            <h1 className="text-2xl font-semibold mb-4">Register</h1>
+            <h1 className="text-2xl font-semibold mb-4">{t("registerPage.register")}</h1>
 
             {out && out.success ? (
                 <div
@@ -114,15 +114,15 @@ export default function RegisterPage() {
                                 {out.success}
                             </p>
                             <p className="mt-1 text-sm">
-                                Redirecting to <span className="font-semibold">Login</span> in{" "}
-                                <span className="font-semibold">{redirectIn}</span> seconds…
+                                {t("registerPage.redirectingTo")} <span className="font-semibold">{t("registerPage.login")} </span> {t("registerPage.in")}{" "}
+                                <span className="font-semibold">{redirectIn}</span> {t("registerPage.seconds")}
                                 {" "}
                                 <button
                                     type="button"
                                     onClick={() => navigate("/login")}
                                     className="underline underline-offset-2 hover:text-green-900"
                                 >
-                                    Go now
+                                    {t("registerPage.goNow")}
                                 </button>
                             </p>
                         </div>
@@ -132,7 +132,7 @@ export default function RegisterPage() {
                 <>
                     <form onSubmit={submit} className="space-y-3">
                         <div>
-                            <label className="block mb-1">Email</label>
+                            <label className="block mb-1">{t("registerPage.email")}</label>
                             <input
                                 className="w-full border p-2 rounded-md"
                                 type="email"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                             {
                                 touchedEmail && !checks.email && (
                                     <ul style={{ marginTop: 8, fontSize: 14, lineHeight: 1.4 }}>
-                                        {item(checks.email, "Please enter a valid email address.")}
+                                        {item(checks.email, t("registerPage.validEmailCheck"))}
                                     </ul>
                                 )
                             }
@@ -156,10 +156,10 @@ export default function RegisterPage() {
                         </div>
 
                         <div>
-                            <label className="block mb-1">Password</label>
+                            <label className="block mb-1">{t("registerPage.password")}</label>
                             <div className="relative">
                                 <input
-                                    className="w-full border p-2 pr-10 rounded-md"  // pr-10 gives space for the eye button
+                                    className="w-full border p-2 pr-10 rounded-md"
                                     type={showPwd ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -176,7 +176,7 @@ export default function RegisterPage() {
                                     tabIndex={-1}
                                 >
                                     {showPwd ? (
-                                        // Eye-off
+
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor"
@@ -185,7 +185,7 @@ export default function RegisterPage() {
                                                   d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c1.598 0 3.111-.37 4.444-1.035M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.774 3.162 10.066 7.5a10.522 10.522 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228L21 21" />
                                         </svg>
                                     ) : (
-                                        // Eye
+
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor"
@@ -202,17 +202,17 @@ export default function RegisterPage() {
 
                             {(touchedPwd || (!allOk && out?.error)) && (
                                 <ul style={{ marginTop: 8, fontSize: 14, lineHeight: 1.4 }}>
-                                    {item(checks.len, "At least 8 characters")}
-                                    {item(checks.upper, "At least one uppercase letter (A–Z)")}
-                                    {item(checks.lower, "At least one lowercase letter (a–z)")}
-                                    {item(checks.digit, "At least one digit (0–9)")}
-                                    {item(checks.special, "At least one special character")}
+                                    {item(checks.len, t("registerPage.passwordCheckLength"))}
+                                    {item(checks.upper, t("registerPage.passwordCheckUpper"))}
+                                    {item(checks.lower, t("registerPage.passwordCheckLower"))}
+                                    {item(checks.digit, t("registerPage.passwordCheckNumber"))}
+                                    {item(checks.special, t("registerPage.passwordCheckSpecialChar"))}
                                 </ul>
                             )}
                         </div>
 
                         <div>
-                            <label className="block mb-1 ">Confirm Password</label>
+                            <label className="block mb-1 ">{t("registerPage.confirmPassword")}</label>
                             <input
                                 className="w-full border p-2 rounded-md"
                                 type="password"
@@ -223,12 +223,12 @@ export default function RegisterPage() {
                             />
 
                             {(touchedConfirmation && passwordConfirm !== password) && (
-                                <p className="text-red-500 mt-2 text-[14px]">✗ Password Not Match.</p>
+                                <p className="text-red-500 mt-2 text-[14px]">{t("registerPage.passwordNotMatch")}</p>
                             )}
                         </div>
 
                         <div>
-                            <label className="block mb-1">Display name</label>
+                            <label className="block mb-1">{t("registerPage.displayName")}</label>
                             <input
                                 className="w-full border p-2 rounded-md"
                                 value={displayName}
@@ -240,7 +240,7 @@ export default function RegisterPage() {
                         {
                             (touchedDisplayName && !checks.displayName) && (
                                 <ul style={{ marginTop: 8, fontSize: 14, lineHeight: 1.4 }}>
-                                    {item(checks.displayName, "Please enter a display name. No special characters.")}
+                                    {item(checks.displayName, t("registerPage.displayNameCheck"))}
                                 </ul>
                             )
                         }
@@ -249,7 +249,7 @@ export default function RegisterPage() {
                             className="bg-black text-white px-4 py-2 rounded disabled:opacity-60 cursor-pointer mt-2"
                             disabled={!allOk}
                         >
-                            Create account
+                            {t("registerPage.createAccount")}
                         </button>
                     </form>
 
