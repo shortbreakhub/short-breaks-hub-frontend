@@ -1,7 +1,8 @@
 import celsiusToFahrenheit from "../utils/celsiusToFahrenheit.js";
+import {useTranslation} from "react-i18next";
 
 export default function DetailsCard({currentWeatherData,displayWeatherData,isFutureDateSelected,isCelsius}) {
-
+    const { t } = useTranslation();
     return (
         <div className="p-5 bg-white">
             <div className="flex items-center justify-between">
@@ -35,33 +36,33 @@ export default function DetailsCard({currentWeatherData,displayWeatherData,isFut
 
             <div className="mt-5 grid grid-cols-2 gap-y-3 text-sm text-gray-700">
                 <div className={`flex items-center gap-2 ${isFutureDateSelected ? "hidden" : "block" }`}>
-                    🌡️ <span>Feels Like {displayWeatherData?.feelLike && (
+                    🌡️ <span>{t("weatherDetailsCard.feelsLike")} {displayWeatherData?.feelLike && (
                     isCelsius ? displayWeatherData.feelLike : celsiusToFahrenheit(displayWeatherData.feelLike))}°</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    💨 <span>Wind Speed {displayWeatherData?.windSpeed && (
+                    💨 <span>{t("weatherDetailsCard.windSpeed")} {displayWeatherData?.windSpeed && (
                     displayWeatherData.windSpeed
                 )} km/h</span>
                 </div>
                 <div className={`flex items-center gap-2 ${isFutureDateSelected ? "hidden" : "block" }`}>
-                    💧 <span>Humidity  {displayWeatherData?.relativeHumidity && (
+                    💧 <span>{t("weatherDetailsCard.humidity")}  {displayWeatherData?.relativeHumidity && (
                     displayWeatherData.relativeHumidity
                 )}%</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    🌦️ <span>Precipitation Probability  {displayWeatherData?.precipitationProbability && (
+                    🌦️ <span>{t("weatherDetailsCard.precipitation")}  {displayWeatherData?.precipitationProbability && (
                     displayWeatherData.precipitationProbability
                 )}%</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    🌅 <span>Sunrise Time {displayWeatherData?.sunrise && (
+                    🌅 <span>{t("weatherDetailsCard.sunriseTime")}  {displayWeatherData?.sunrise && (
                     displayWeatherData.sunrise
-                )}  / Sunset Time {displayWeatherData?.sunset && (
+                )}  / {t("weatherDetailsCard.sunsetTime")} {displayWeatherData?.sunset && (
                     displayWeatherData.sunset
                 )}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    🌞 <span> UX Index {displayWeatherData?.uxIndex && (
+                    🌞 <span> {t("weatherDetailsCard.UXIndex")} {displayWeatherData?.uxIndex && (
                     displayWeatherData.uxIndex
                 )}</span>
                 </div>

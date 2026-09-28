@@ -2,7 +2,6 @@ import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {getCommunityCountriesByRegion, getCommunityItinerariesByRegion} from "../api.js";
 import {loadImages} from "../utils/loadImage.js";
-import southeastAsiaBanner from "../assets/southeast-asia-banner.jpg";
 import CountryCard from "../components/CountryCard.jsx";
 
 export default function CommunityRegionPage() {
@@ -19,8 +18,9 @@ export default function CommunityRegionPage() {
                         "image": loadImages(item),
                         "itineraries": [],
                     })
+
                 );
-                console.log(base);
+
                 getCommunityItinerariesByRegion(region).then(
                     (itineraries) => {
                         const merged = base.map((country) => {
@@ -30,6 +30,7 @@ export default function CommunityRegionPage() {
                                     slugs.push(eachItinerary.slug);
                                 }
                             }
+                            console.log(slugs);
                             return {...country, itineraries: slugs}
                         })
                         setCountries(merged);

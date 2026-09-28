@@ -1,40 +1,16 @@
 import React, { useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function TransportTips({ data, defaultOpen = false }) {
     const [open, setOpen] = useState(defaultOpen);
     const contentId = useId();
+    const { t } = useTranslation();
 
-    // Hardcoded fallback data (so UI works immediately)
-    const fallback = {
-        airportToCity: [
-            {
-                title: "KLIA → City centre",
-                note: "Fastest: KLIA Ekspres to KL Sentral. Budget: airport bus. Grab works too (traffic varies).",
-            },
-        ],
-        gettingAround: [
-            "Use LRT/MRT for KLCC, Bukit Bintang, and many central areas.",
-            "Grab is the easiest for point-to-point trips (especially evenings / rain).",
-            "Walking is fine within KLCC and Bukit Bintang, but heat + sudden showers are common.",
-        ],
-        dayTrips: [
-            {
-                title: "Batu Caves",
-                note: "Most common: KTM Komuter to Batu Caves station. Grab is convenient for early starts.",
-            },
-        ],
-        practical: [
-            "Get a Touch 'n Go card (or e-wallet) for smoother transit payments where supported.",
-            "Avoid peak-hour road traffic (roughly 7–9am, 5–7pm).",
-            "Keep small change / backup payment; some smaller spots are cash-friendly.",
-        ],
-    };
-
-    const d = data ?? fallback;
+    const d = data
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white">
-            {/* Header button */}
+
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
@@ -44,12 +20,12 @@ export default function TransportTips({ data, defaultOpen = false }) {
             >
                 <div>
                     <h3 className="text-sm font-bold tracking-tight text-slate-900">
-                        Transport Tips
+                        {t("transportTips.transportTips")}
                     </h3>
-                    <p className="text-xs text-slate-500">Public transport, taxis, and local travel options</p>
+                    <p className="text-xs text-slate-500">{t("transportTips.description")}</p>
                 </div>
 
-                {/* Toggle icon */}
+
                 <span
                     className={`shrink-0 grid place-items-center h-10 w-10 rounded-full border text-xl font-semibold transition
             ${
@@ -63,7 +39,7 @@ export default function TransportTips({ data, defaultOpen = false }) {
         </span>
             </button>
 
-            {/* Collapsible content */}
+
             <div
                 id={contentId}
                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
@@ -72,11 +48,11 @@ export default function TransportTips({ data, defaultOpen = false }) {
             >
                 <div className="overflow-hidden border-t border-slate-200">
                     <div className="p-4">
-                        {/* Airport to city */}
+
                         {d.arrival?.length ? (
                             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Arrival
+                                    {t("transportTips.arrival")}
                                 </div>
 
                                 <div className="mt-2 space-y-2">
@@ -97,11 +73,11 @@ export default function TransportTips({ data, defaultOpen = false }) {
                             </div>
                         ) : null}
 
-                        {/* Getting around */}
+
                         {d.gettingAround?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Getting around the city
+                                    {t("transportTips.gettingAround")}
                                 </div>
 
                                 <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-600">
@@ -112,11 +88,11 @@ export default function TransportTips({ data, defaultOpen = false }) {
                             </div>
                         ) : null}
 
-                        {/* Day trips */}
+
                         {d.dayTrips?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Easy day trips
+                                    {t("transportTips.easyDayTrips")}
                                 </div>
 
                                 <div className="mt-2 space-y-2">
@@ -137,11 +113,11 @@ export default function TransportTips({ data, defaultOpen = false }) {
                             </div>
                         ) : null}
 
-                        {/* Day moves */}
+
                         {d.dayMoves?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Daily Flow
+                                    {t("transportTips.dayMoves")}
                                 </div>
 
                                 <div className="mt-2 space-y-2">
@@ -162,11 +138,11 @@ export default function TransportTips({ data, defaultOpen = false }) {
                             </div>
                         ) : null}
 
-                        {/* Practical tips */}
+
                         {d.practical?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">
-                                    Practical tips
+                                    {t("transportTips.practicalTips")}
                                 </div>
 
                                 <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-600">
@@ -177,7 +153,7 @@ export default function TransportTips({ data, defaultOpen = false }) {
                             </div>
                         ) : null}
 
-                        {/* Optional quick links (empty hrefs for now) */}
+
                         {d.quickLinks?.length ? (
                             <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                                 <div className="text-xs font-semibold text-slate-800">

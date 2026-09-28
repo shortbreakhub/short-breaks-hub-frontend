@@ -4,6 +4,7 @@ import {getMe, updateUser, postUserPhoto, updateUserPhoto,getMeFavorites,getMeIt
 import {Auth} from '../auth.js';
 import {showToast} from "../utils/toast.js";
 import ItineraryCard from "../components/ItineraryCard.jsx";
+import {useTranslation} from "react-i18next";
 
 export default function ProfilePage() {
     const [out, setOut] = useState({loading: true, data: null, error: null});
@@ -26,6 +27,7 @@ export default function ProfilePage() {
     const [favorites, setFavorites] = useState([]);
     const [showWarningModal, setShowWarningModal] = useState(null);
     const [searchParams] = useSearchParams()
+    const { t } = useTranslation();
 
 
 
@@ -71,7 +73,7 @@ export default function ProfilePage() {
                 getMeFavorites().then(data => {
                     setFavorites(data.content)
                 }).catch(err => {
-                    showToast("Sorry,But You Don't Have Any Favorites Yet!",
+                    showToast(t("profilePage.noFavorite"),
                         {variant:"error",duration:4000})
                 })
 
@@ -95,14 +97,14 @@ export default function ProfilePage() {
     function onAvatarChange(e) {
         const file = e.target.files?.[0]
         if (!file) return;
-        if (!file.type.startsWith("image/")) return showToast("Please choose an image",
+        if (!file.type.startsWith("image/")) return showToast(t("profilePage.chooseImage"),
             { variant: 'error', duration: 3500 });
-        if (file.size > 3 * 1024 * 1024) return showToast("Max size is 3MB",
+        if (file.size > 3 * 1024 * 1024) return showToast(t("profilePage.maxFileSize"),
             { variant: 'error', duration: 3500 });
         postUserPhoto(file).then(data => {
             updateUserPhoto({avatarUrl: data}).then(data => {
                 setOut({ ...out, data: { ...(out?.data || {}), ...data} });
-                showToast('Avatar Photo Has Been Updated Successfully.');
+                showToast(t("profilePage.photoUpdated"));
             });
         })
 
@@ -113,8 +115,8 @@ export default function ProfilePage() {
     }
 
     function handleDiscardDraft(draftId){
-        setShowWarningModal({"msgTitle": "Draft Delete Confirmation",
-            "msg":"Are you sure you want to delete this draft ?"});
+        setShowWarningModal({"msgTitle": t("profilePage.draftDeleteConfirmationTitle"),
+            "msg":t("profilePage.draftDeleteConfirmationMessage")});
     }
 
     function handleUpdateProfile() {
@@ -129,22 +131,22 @@ export default function ProfilePage() {
         };
         updateUser(payload).then((data) => {
                 setOut({ ...out, data: { ...(out?.data || {}), ...data} });
-                showToast('Profile Updated Successfully.');
+                showToast(t("profilePage.profileUpdatedSuccessfully"));
             }
         ).catch((err) => {
-            showToast('Failed to save changes', { variant: 'error', duration: 3500 });
+            showToast(t("profilePage.updateFailed"), { variant: 'error', duration: 3500 });
         })
             .finally(() => setSaving(false));
     }
 
 
 
-    if (out.loading) return <div className="p-4">Loading…</div>;
+    if (out.loading) return <div className="p-4">{t("profilePage.loading")}</div>;
 
     if (out.error) {
         return (
             <div className="p-4 text-red-600">
-                Failed to load profile: {out.error}
+                {t("profilePage.failedToLoadProfile")} {out.error}
             </div>
         );
     }
@@ -153,9 +155,9 @@ export default function ProfilePage() {
 
     return (
         <main className="mx-auto max-w-5xl px-4 py-8">
-            {/* Header card */}
+
             <section className="flex items-center gap-4 rounded-lg border bg-white p-4 shadow-sm">
-                {/* Avatar*/}
+
                 <div className="h-16 w-16 rounded-full border bg-slate-100 overflow-hidden">
                     <img src={me.avatarUrl} alt="Avatar Picture" className="h-full w-full object-cover" />
                 </div>
@@ -169,21 +171,21 @@ export default function ProfilePage() {
                     </p>
                 </div>
             </section>
-            {/* Tabs */}
+
             <nav className="mt-6 border-b">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex gap-3 md:gap-6 overflow-x-auto whitespace-nowrap pb-1 -mb-2.5">
-                        <button className={tabClass("overview")}  onClick={() => setTab("overview")}>Overview</button>
-                        <button className={tabClass("favorites")} onClick={() => setTab("favorites")}>Favorites</button>
-                        <button className={tabClass("Published Itineraries")} onClick={() => setTab("Published Itineraries")}>Published Itineraries</button>
-                        <button className={tabClass("Draft Itineraries")} onClick={() => setTab("Draft Itineraries")}>Draft Itineraries</button>
-                        <button className={tabClass("settings")}  onClick={() => setTab("settings")}>Settings</button>
+                        <button className={tabClass("overview")}  onClick={() => setTab("overview")}>{t("profilePage.overview")}</button>
+                        <button className={tabClass("favorites")} onClick={() => setTab("favorites")}>{t("profilePage.favorites")}</button>
+                        <button className={tabClass("Published Itineraries")} onClick={() => setTab("Published Itineraries")}>{t("profilePage.publishedItineraries")}</button>
+                        <button className={tabClass("Draft Itineraries")} onClick={() => setTab("Draft Itineraries")}>{t("profilePage.draftItineraries")}</button>
+                        <button className={tabClass("settings")}  onClick={() => setTab("settings")}>{t("profilePage.settings")}</button>
                     </div>
                     <button
                         onClick={() => navigate("/create-itinerary")}
                         className="w-full sm:w-auto inline-flex items-center justify-center rounded-sm bg-sky-600 px-3 py-2 text-sm font-semibold text-white hover:bg-sky-700"
                     >
-                        + Create Itinerary
+                        {t("profilePage.createItineraryButton")}
                     </button>
                 </div>
             </nav>
@@ -191,29 +193,29 @@ export default function ProfilePage() {
             <section className="mt-6">
                 {tab === "overview" && (
                     <div className="rounded-lg border bg-white p-6 shadow-sm">
-                        <h2 className="text-base font-semibold">Overview</h2>
+                        <h2 className="text-base font-semibold">{t("profilePage.overview")}</h2>
 
                         <div className="mt-3 space-y-3 text-slate-700">
                             <div>
-                                <span className="font-medium">Display Name:</span> {me.displayName || me.username}
+                                <span className="font-medium">{t("profilePage.displayName")}</span> {me.displayName || me.username}
                             </div>
                             <div>
-                                <span className="font-medium">Email:</span> {me.email}
+                                <span className="font-medium">{t("profilePage.email")}</span> {me.email}
                             </div>
                             <div>
-                                <span className="font-medium">Travel Group:</span>{" "}
-                                {(me.adults ?? 1)} adults · {(me.children ?? 0)} children
+                                <span className="font-medium">{t("profilePage.travelGroup")}</span>{" "}
+                                {(me.adults ?? 1)} {t("profilePage.adults")} · {(me.children ?? 0)} {t("profilePage.children")}
                             </div>
 
 
                             <div>
-                                <span className="font-medium">Location:</span> {me.location || "—"}
+                                <span className="font-medium">{t("profilePage.location")}</span> {me.location || "—"}
                             </div>
                             <div>
-                                <span className="font-medium">Bio:</span> {me.bio || "No bio yet"}
+                                <span className="font-medium">{t("profilePage.bio")}</span> {me.bio || "No bio yet"}
                             </div>
                             <div>
-                                <span className="font-medium">Currency:</span> {me.currency}
+                                <span className="font-medium">{t("profilePage.currency")}</span> {me.currency}
                             </div>
                         </div>
                     </div>
@@ -222,16 +224,16 @@ export default function ProfilePage() {
 
                 {tab === "favorites" && (
                     <div className="rounded-lg border bg-white p-6 text-slate-700 shadow-sm">
-                        {/* Sub-tabs header */}
+
                         <div className="mb-4 flex items-center gap-2">
-                            <span className="text-sm font-medium text-slate-600">Show:</span>
+                            <span className="text-sm font-medium text-slate-600">{t("profilePage.show")}</span>
 
                             <button
                                 type="button"
                                 className={favoriteTabClass(favoriteTab === "built-in")}
                                 onClick={() => setFavoriteTab("built-in")}
                             >
-                                Built-in Trips
+                                {t("profilePage.builtInTrips")}
                             </button>
 
                             <button
@@ -239,11 +241,10 @@ export default function ProfilePage() {
                                 className={favoriteTabClass(favoriteTab === "community")}
                                 onClick={() => setFavoriteTab("community")}
                             >
-                                Community Trips
+                                {t("profilePage.communityTrips")}
                             </button>
                         </div>
 
-                        {/* Built-in favorites */}
                         {favoriteTab === "built-in" && (
                             <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {favorites.map((it) => (
@@ -252,12 +253,11 @@ export default function ProfilePage() {
                             </ul>
                         )}
 
-                        {/* Community favorites */}
                         {favoriteTab === "community" && (
                             <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {favorites.length === 0 ? (
                                     <p className="text-sm text-slate-500">
-                                        You haven’t liked any community trips yet.
+                                        {t("profilePage.noLiked")}
                                     </p>
                                 ) : (
                                     favorites.map((it) => (
@@ -280,10 +280,10 @@ export default function ProfilePage() {
                                         </ul>
                                     )):(<div className="flex flex-col items-center justify-center py-10 text-center">
                                     <p className="mb-2 text-sm font-semibold text-slate-600">
-                                        No Published Itineraries Yet
+                                        {t("profilePage.noPublished")}
                                     </p>
                                     <p className="text-xs text-slate-400">
-                                        Click the “Create Itinerary” and publish your first itinerary
+                                        {t("profilePage.createItineraryHint")}
                                     </p>
                                 </div>)
                             }
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                         {draftItineraries.length > 0 ? (
                             <>
                                 <p className="mb-4 text-sm text-slate-500">
-                                    These trips are saved as drafts. Continue editing or discard them.
+                                    {t("profilePage.draftEditHint")}
                                 </p>
 
                                 <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -311,7 +311,7 @@ export default function ProfilePage() {
                                                     {draft.title || "Untitled itinerary"}
                                                 </h3>
                                                 <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
-                  Draft
+                  {t("profilePage.draft")}
                 </span>
                                             </div>
 
@@ -323,7 +323,7 @@ export default function ProfilePage() {
 
                                             {draft.lastUpdatedAt && (
                                                 <p className="mb-3 text-xs text-slate-400">
-                                                    Last updated {new Date(draft.lastUpdatedAt).toLocaleDateString()}
+                                                    {t("profilePage.lastUpdated")} {new Date(draft.lastUpdatedAt).toLocaleDateString()}
                                                 </p>
                                             )}
 
@@ -333,7 +333,7 @@ export default function ProfilePage() {
                                                     onClick={() => handleContinueDraft(draft.id)}
                                                     className="flex-1 rounded-md bg-sky-600 text-white px-4 py-2 text-sm font-medium hover:bg-sky-700"
                                                 >
-                                                    Continue editing
+                                                    {t("profilePage.continueEditing")}
                                                 </button>
 
                                                 <button
@@ -341,7 +341,7 @@ export default function ProfilePage() {
                                                     onClick={() => handleDiscardDraft(draft.id)}
                                                     className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100"
                                                 >
-                                                    Discard
+                                                    {t("profilePage.discard")}
                                                 </button>
 
                                             </div>
@@ -352,10 +352,10 @@ export default function ProfilePage() {
                         ) : (
                             <div className="flex flex-col items-center justify-center py-10 text-center">
                                 <p className="mb-2 text-sm font-semibold text-slate-600">
-                                    No draft itineraries yet
+                                    {t("profilePage.noDraft")}
                                 </p>
                                 <p className="text-xs text-slate-400">
-                                    Start a new itinerary and choose “Save as draft” to see it here.
+                                    {t("profilePage.displayDraftHint")}
                                 </p>
                             </div>
                         )}
@@ -366,9 +366,9 @@ export default function ProfilePage() {
 
                 {tab === "settings" && (
                     <div className="rounded-lg border bg-white p-6 shadow-sm">
-                        <h2 className="text-base font-semibold">Settings</h2>
+                        <h2 className="text-base font-semibold">{t("profilePage.settings")}</h2>
                         <div className="mt-4 grid max-w-md gap-4 text-slate-700">
-                            {/* Avatar uploader */}
+
                             <div className="mt-2 flex items-center gap-4">
                                 <div className="flex items-center gap-4">
                                     <input
@@ -382,37 +382,34 @@ export default function ProfilePage() {
                                         htmlFor="avatar-file"
                                         className="inline-flex cursor-pointer items-center gap-2 rounded border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50"
                                     >
-                                        Upload Profile Picture
+                                        {t("profilePage.uploadProfilePicture")}
                                     </label>
-                                    <p className="mt-1 text-xs text-slate-500">JPG/PNG, up to 3 MB.</p>
+                                    <p className="mt-1 text-xs text-slate-500"> {t("profilePage.imageFormatHint")}</p>
                                 </div>
                             </div>
 
-                            {/* Display name */}
                             <label className="block">
-                                <span className="text-sm text-slate-700">Display Name</span>
+                                <span className="text-sm text-slate-700">{t("profilePage.displayName")}</span>
                                 <input
                                     className="mt-1 w-full rounded border px-3 py-2"
                                     value={settings.displayName}
                                     onChange={(e) => setSettings({ ...settings, displayName: e.target.value })}
-                                    placeholder="Your display name"
+                                    placeholder={t("profilePage.displayNamePlaceholder")}
                                 />
                             </label>
 
-                            {/* Location */}
                             <label className="block">
-                                <span className="text-sm text-slate-700">Location</span>
+                                <span className="text-sm text-slate-700">{t("profilePage.location")}</span>
                                 <input
                                     className="mt-1 w-full rounded border px-3 py-2"
                                     value={settings.location}
                                     onChange={(e) => setSettings({ ...settings, location: e.target.value })}
-                                    placeholder="e.g., Sheffield, UK"
+                                    placeholder={t("profilePage.locationPlaceholder")}
                                 />
                             </label>
 
-                            {/* Preferred Currency */}
                             <label className="block">
-                                <span className="text-sm text-slate-700">Preferred Currency</span>
+                                <span className="text-sm text-slate-700">{t("profilePage.preferredCurrency")}</span>
                                 <select
                                     className="mt-1 w-full rounded border px-3 py-2 bg-white"
                                     value={settings.currency || "USD"}
@@ -423,36 +420,32 @@ export default function ProfilePage() {
                                         })
                                     }
                                 >
-                                    <option value="USD">USD – US Dollar</option>
-                                    <option value="GBP">GBP – British Pound</option>
-                                    <option value="EUR">EUR – Euro</option>
-                                    <option value="AUD">AUD – Australian Dollar</option>
-                                    <option value="CAD">CAD – Canadian Dollar</option>
-                                    <option value="JPY">JPY – Japanese Yen</option>
-                                    <option value="SGD">SGD – Singapore Dollar</option>
+                                    <option value="USD">{t("profilePage.USDollar")}</option>
+                                    <option value="GBP">{t("profilePage.BritishPound")}</option>
+                                    <option value="EUR">{t("profilePage.Euro")}</option>
+                                    <option value="AUD">{t("profilePage.AustralianDollar")}</option>
+                                    <option value="CAD">{t("profilePage.CanadianDollar")}</option>
+                                    <option value="JPY">{t("profilePage.JapaneseYen")}</option>
+                                    <option value="SGD">{t("profilePage.SingaporeDollar")}</option>
                                 </select>
                             </label>
 
-
-                            {/* Bio */}
                             <label className="block">
-                                <span className="text-sm text-slate-700">Bio</span>
+                                <span className="text-sm text-slate-700">{t("profilePage.bio")}</span>
                                 <textarea
                                     rows={3}
                                     className="mt-1 w-full rounded border px-3 py-2"
                                     value={settings.bio}
                                     onChange={(e) => setSettings({ ...settings, bio: e.target.value })}
-                                    placeholder="A short intro about you"
+                                    placeholder={t("profilePage.bioPlaceholder")}
                                 />
                             </label>
 
-                            {/* Travel group */}
                             <div className="block">
-                                <span className="text-sm text-slate-700">Travel Group</span>
+                                <span className="text-sm text-slate-700">{t("profilePage.travelGroup")}</span>
                                 <div className="mt-2 flex gap-6">
-                                    {/* Adults */}
                                     <div className="flex items-center gap-2">
-                                        <span>Adults:</span>
+                                        <span>{t("profilePage.adults")}</span>
                                         <button
                                             className="w-7 h-7 rounded border bg-slate-100 hover:bg-slate-200"
                                             onClick={() =>
@@ -468,9 +461,8 @@ export default function ProfilePage() {
                                         >+</button>
                                     </div>
 
-                                    {/* Children */}
                                     <div className="flex items-center gap-2">
-                                        <span>Children:</span>
+                                        <span>{t("profilePage.children")}</span>
                                         <button
                                             className="w-7 h-7 rounded border bg-slate-100 hover:bg-slate-200"
                                             onClick={() =>
@@ -488,14 +480,13 @@ export default function ProfilePage() {
                                 </div>
                             </div>
 
-                            {/* Save */}
                             <div className="pt-2">
                                 <button
                                     disabled={saving}
                                     className={`rounded cursor-pointer px-3 py-2 text-white ${saving ? "bg-slate-400" : "bg-sky-600 hover:bg-sky-700"}`}
                                     onClick={handleUpdateProfile}
                                 >
-                                    {saving ? "Saving…" : "Save changes"}
+                                    {saving ? t("profilePage.saving") : t("profilePage.saveChanges")}
                                 </button>
                             </div>
                         </div>
@@ -520,14 +511,14 @@ export default function ProfilePage() {
                                 onClick={() => setShowWarningModal(null)}
                                 className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800"
                             >
-                                Yes
+                                {t("profilePage.yes")}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setShowWarningModal(null)}
                                 className="inline-flex ml-11 items-center justify-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800"
                             >
-                                No
+                                {t("profilePage.no")}
                             </button>
                         </div>
                     </div>

@@ -1,9 +1,11 @@
 import React, { useId, useState } from "react";
 import getCurrencyCode from "../utils/countryToCurrency.js";
+import { useTranslation } from "react-i18next";
 
-export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount,userCurrency,userCurrencyValue,convertRate }) {
+export default function CurrencyConverter({ data, defaultOpen = false,fromAmount,userCurrency,userCurrencyValue,convertRate }) {
     const [open, setOpen] = useState(defaultOpen);
     const contentId = useId();
+    const { t } = useTranslation();
 
     function unslug(s) {
         return s.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
@@ -12,7 +14,7 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white">
-            {/* Header button */}
+
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
@@ -22,12 +24,12 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
             >
                 <div>
                     <h3 className="text-sm font-bold tracking-tight text-slate-900">
-                        Local Currency Rate
+                        {t("currencyConverter.localRate")}
                     </h3>
-                    <p className="text-xs text-slate-500">The approximate amount for the default or preferred currency selected</p>
+                    <p className="text-xs text-slate-500">{t("currencyConverter.description")}</p>
                 </div>
 
-                {/* Toggle icon */}
+
                 <span
                     className={`shrink-0 grid place-items-center h-10 w-10 rounded-full border text-xl font-semibold transition
             ${
@@ -41,7 +43,7 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
         </span>
             </button>
 
-            {/* Collapsible content */}
+
             <div
                 id={contentId}
                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
@@ -54,7 +56,7 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
 
                             <div className="space-y-3">
                                 <label className="block text-xs text-gray-500">
-                                    From ({getCurrencyCode(unslug(data.region), data.country)["Base Code"]})
+                                    {t("currencyConverter.from")} ({getCurrencyCode(unslug(data.region), data.country)["Base Code"]})
                                     <div className="mt-1 flex items-center gap-2">
                                         <input
                                             type="number"
@@ -69,7 +71,7 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
 
 
                                 <label className="block text-xs text-gray-500">
-                                    To ({userCurrency})
+                                    {t("currencyConverter.to")} ({userCurrency})
                                     <div className="mt-1 flex items-center gap-2">
                                         <input
                                             type="text"
@@ -82,7 +84,7 @@ export default function CurrencyConvertor({ data, defaultOpen = false,fromAmount
                                 </label>
 
                                 <p className="text-[11px] text-gray-400">
-                                    Using rate: 1 {getCurrencyCode(unslug(data.region), data.country)["Base Code"]} ≈ {convertRate} {userCurrency}
+                                    {t("currencyConverter.usingRate")}: 1 {getCurrencyCode(unslug(data.region), data.country)["Base Code"]} ≈ {convertRate} {userCurrency}
                                 </p>
                             </div>
                         </section>

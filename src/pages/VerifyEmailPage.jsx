@@ -1,34 +1,37 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import {useTranslation} from "react-i18next";
 
-const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
 export default function VerifyEmailPage() {
     const [params] = useSearchParams();
-    const [state, setState] = useState({ status: "loading", message: "Verifying..." });
+    const { t } = useTranslation();
+    const [state, setState] = useState({ status: "loading", message: t("verifyEmailPage.verifying") });
     const token = params.get("token");
+
 
     useEffect(() => {
         if (!token) {
-            setState({ status: "error", message: "Missing token." });
+            setState({ status: "error", message: t("verifyEmailPage.missingToken") });
             return;
         }
         axios
-            .get(`${API}/api/auth/verify-email`, { params: { token } })
-            .then(() => setState({ status: "success", message: "Email verified! You can now log in." }))
+            .get(`${API}/auth/verify-email`, { params: { token } })
+            .then(() => setState({ status: "success", message: t("verifyEmailPage.emailVerifiedMessage") }))
             .catch((err) => {
-                let msg = "Invalid or expired link.";
+                let msg = t("verifyEmailPage.expiredLink");
                 if (err.response) {
                     const status = err.response.status;
                     if (status === 409) {
-                        msg = "Your email address has already been verified.";
+                        msg = t("verifyEmailPage.emailAlreadyVerified");
                         setState({ status: "warning", message: msg });
                     } else if (status === 410) {
-                        msg = "This verification link has expired.";
+                        msg = t("verifyEmailPage.linkExpired");
                         setState({ status: "error", message: msg });
                     } else if (status === 400) {
-                        msg = "Invalid verification link.";
+                        msg = t("verifyEmailPage.invalidLink");
                         setState({ status: "error", message: msg });
                     } else {
                         msg = err.response.data?.message || msg;
@@ -77,9 +80,10 @@ export default function VerifyEmailPage() {
                             )}
                         </div>
                         <h1 className="text-lg font-semibold">
-                            {state.status === "loading" ? "Verifying email…" :
-                                state.status === "success" ? "Verification successful" :
-                                    state.status === "warning" ? "Already Verified" : "Verification failed"}
+                            {state.status === "loading" ? t("verifyEmailPage.verifyingEmail") :
+                                state.status === "success" ?  t("verifyEmailPage.verificationSuccessful") :
+                                    state.status === "warning" ? t("verifyEmailPage.alreadyVerified")
+                                        : t("verifyEmailPage.verificationFailed")}
                         </h1>
                     </div>
 
@@ -90,13 +94,13 @@ export default function VerifyEmailPage() {
                             to="/"
                             className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm hover:bg-slate-50"
                         >
-                            Back to home
+                            {t("verifyEmailPage.backToHome")}
                         </Link>
                         <Link
                             to="/login"
                             className="inline-flex items-center justify-center rounded-md bg-black px-4 py-2 text-sm text-white hover:opacity-90"
                         >
-                            Go to login
+                            {t("verifyEmailPage.goToLogin")}
                         </Link>
                     </div>
                 </div>

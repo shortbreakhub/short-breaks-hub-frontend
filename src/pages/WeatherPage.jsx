@@ -11,6 +11,7 @@ import DailySummaryCard from "../components/DailySummaryCard.jsx";
 import WeatherFooter from "../components/WeatherFooter.jsx";
 import DatePicker from "../components/DatePicker.jsx";
 import SearchBar from "../components/SearchBar.jsx";
+import {useTranslation} from "react-i18next";
 
 
 export default function WeatherPage(){
@@ -29,6 +30,7 @@ export default function WeatherPage(){
     const [locationQuery, setLocationQuery] = useState("");
     const [noLocationQueryResults, setNoLocationQueryResults] = useState(false);
     const [isDataFetching, setIsDataFetching] = useState(false);
+    const { t } = useTranslation();
 
 
     function displayWeatherDetails(dayWeatherSummary) {
@@ -278,7 +280,7 @@ export default function WeatherPage(){
                 />
 
                 <div className="px-4 pb-4">
-                    <p className="text-xs font-medium text-slate-500 mb-2">Next 12 hours</p>
+                    <p className="text-xs font-medium text-slate-500 mb-2">{t("weatherPage.hourly")}</p>
                     <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
                         {twelveHoursWeatherSummary && twelveHoursWeatherSummary.map((eachHour)=>
                             (
@@ -295,7 +297,7 @@ export default function WeatherPage(){
                 </div>
 
                 <div className="px-4 pb-4">
-                    <p className="text-xs font-medium text-slate-500 mb-2">Next 7 days</p>
+                    <p className="text-xs font-medium text-slate-500 mb-2">{t("weatherPage.daily")}</p>
                     <ul className="divide-y divide-slate-400 rounded-xl border border-slate-400 overflow-hidden">
                         {sevenDaysWeatherSummary && sevenDaysWeatherSummary.map((eachDay)=>(
                             <

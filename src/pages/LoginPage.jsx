@@ -4,6 +4,7 @@ import {Auth} from "../auth.js";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { toast } from 'react-toastify';
 import {showToast} from "../utils/toast.js";
+import {useTranslation} from "react-i18next";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export default function LoginPage() {
     const [out, setOut] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -19,7 +21,7 @@ export default function LoginPage() {
 
 
         if (reason === 'unauthorized' || reason === 'expired') {
-            showToast(msg || (reason === 'expired' ? 'Session expired. Please log in again' : 'Unauthorized. Please log in first'),{
+            showToast(msg || (reason === 'expired' ? t("loginPage.sessionExpired") : t("loginPage.unauthorizedLogin")),{
                 variant: 'error',
                 duration: 3500,
             });
@@ -33,19 +35,19 @@ export default function LoginPage() {
         postUserLogin(email, password).then((res) => {
             Auth.save(res.token,res.emailVerified);
             setOut({ ok: true, user: res.user });
-            toast.success(`Welcome back, ${res?.displayName || 'traveler'} !`);
+            toast.success(`${t("loginPage.welcomeBack")}, ${res?.displayName || t("loginPage.traveler")} !`);
             navigate("/");
         }).catch((err) => {
-            setOut(err.response?.data ? { error: "Incorrect Email Or Password" } : null);
+            setOut(err.response?.data ? { error: t("loginPage.incorrectEmailOrPassword") } : null);
         });
     };
 
     return (
         <div className="container mx-auto max-w-md p-4">
-            <h1 className="text-2xl font-semibold mb-4">Login</h1>
+            <h1 className="text-2xl font-semibold mb-4">{t("loginPage.login")}</h1>
             <form onSubmit={submit} className="space-y-3">
                 <div>
-                    <label className="block mb-1">Email</label>
+                    <label className="block mb-1">{t("loginPage.email")}</label>
                     <input
                         className="w-full border p-2 rounded-md"
                         type="email"
@@ -55,7 +57,7 @@ export default function LoginPage() {
                     />
                 </div>
                 <div>
-                    <label className="block mb-1">Password</label>
+                    <label className="block mb-1">{t("loginPage.password")}</label>
                     <input
                         className="w-full border p-2 rounded-md"
                         type="password"
@@ -64,22 +66,22 @@ export default function LoginPage() {
                         required
                     />
                 </div>
-                <button className="bg-black text-white px-4 py-2 rounded cursor-pointer">Login</button>
+                <button className="bg-black text-white px-4 py-2 rounded cursor-pointer">{t("loginPage.login")}</button>
                 <p className="mt-3 text-sm text-gray-600">
                     <Link
                         to="/forgot-password"
                         className="text-blue-600 hover:underline"
                     >
-                        Forgot your password?
+                        {t("loginPage.forgotPassword")}
                     </Link>
                 </p>
 
             </form>
 
             <p className="mt-4 text-sm text-gray-600">
-                Don’t have an account?{" "}
+                {t("loginPage.noAccount")}{" "}
                 <Link to="/register" className="text-blue-600 hover:underline">
-                    Register here
+                    {t("loginPage.register")}
                 </Link>
             </p>
             {out && out.error ? (

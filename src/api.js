@@ -11,8 +11,12 @@ export const api = axios.create({
     timeout: 5000,
 });
 
-export const getItineraryBySlug = (slug) =>
-    publicApi.get(`/itineraries/slug/${slug}`).then((res) => res.data);
+export const getItineraryBySlug = (slug,lang) =>
+    publicApi.get(`/itineraries/slug/${slug}`,{
+        params: {
+            lang,
+        },
+    }).then((res) => res.data);
 
 export const getCountriesByRegion = (region) =>
     publicApi.get(`/itineraries/region/${region}`).then((res) => res.data);

@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useParams,useLocation} from "react-router-dom";
-import { getItinerariesByCountry,getAllItinerariesByCustomSearch } from "../api";
+import {getItinerariesByCountry, getAllItinerariesByCustomSearch, getItineraryBySlug} from "../api";
 import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/Loading-Animation.json";
 import ItineraryCard from "../components/ItineraryCard.jsx";
 import {formatSlug} from "../utils/formatSlug.js"
+import {useTranslation} from "react-i18next";
 
 function useQuery() {
     const { search } = useLocation();
@@ -23,6 +24,10 @@ export default function BrowsePage() {
     const [daysMin, setDaysMin] = useState(1);
     const [daysMax, setDaysMax] = useState(6);
     const [q, setQ] = React.useState(initialQ);
+    const { i18n } = useTranslation();
+    const lang = i18n.resolvedLanguage ?? "en";
+    const { t } = useTranslation();
+    let testing =useRef(null)
 
     function applyFilters(page = 0) {
         const params = new URLSearchParams();
@@ -58,13 +63,28 @@ export default function BrowsePage() {
 
         getItinerariesByCountry(country)
             .then((data) => { if (!ignore) {
-                setItems(data);
-            } })
+                return Promise.all(
+                    data.map((item) =>
+                        getItineraryBySlug(item.slug, lang)
+                            .then((response) => ({
+                                slug: response.slug,
+                                title: response.title,
+                                summary: response.summary,
+                                hero: response.hero,
+                                country: response.country,
+                                days: response.days,
+                            }))
+                    )
+                );
+            }
+            }).then((result) => {
+                setItems(result);
+        })
             .catch((e) => { if (!ignore) setErr(e?.message || "Failed to load"); })
             .finally(() => { if (!ignore) setLoading(false); });
 
         return () => { ignore = true; };
-    }, [country]);
+    }, [country,lang]);
 
     if (loading) {
         return (
@@ -93,27 +113,27 @@ export default function BrowsePage() {
                 <section className="max-w-screen-xl mx-auto px-4 py-8">
                     <header className="mb-6">
                         <h1 className="text-2xl font-bold">
-                            Short Breaks In {country ? `— ${formatSlug(country)}` : ""}
+                            {t("browsePage.shortBreaksIn")} {country ? `— ${formatSlug(country)}` : ""}
                         </h1>
                     </header>
 
                     <section className="mb-4 rounded-lg border bg-white p-4">
                         <form className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" onSubmit={onSubmit}>
-                            {/* q */}
+
                             <label className="md:col-span-4 block">
-                                <span className="block text-sm text-slate-600 mb-1">Keyword</span>
+                                <span className="block text-sm text-slate-600 mb-1">{t("browsePage.keyword")}</span>
                                 <input
                                     type="search"
                                     className="w-full h-10 rounded border px-3"
-                                    placeholder="Bangkok, beach, street food…"
+                                    placeholder={t("browsePage.keywordPlaceholder")}
                                     value={q}
                                     onChange={e => setQ(e.target.value)}
                                 />
                             </label>
 
-                            {/* Min days */}
+
                             <label className="md:col-span-2 block">
-                                <span className="block text-sm text-slate-600 mb-1">Min days</span>
+                                <span className="block text-sm text-slate-600 mb-1">{t("browsePage.minDays")}</span>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -122,13 +142,13 @@ export default function BrowsePage() {
                                         value={daysMin ?? ""}
                                         onChange={e => setDaysMin(e.target.value ? +e.target.value : null)}
                                     />
-                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm whitespace-nowrap">days</span>
+                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm whitespace-nowrap">{t("browsePage.days")}</span>
                                 </div>
                             </label>
 
-                            {/* Max days */}
+
                             <label className="md:col-span-2 block">
-                                <span className="block text-sm text-slate-600 mb-1">Max days</span>
+                                <span className="block text-sm text-slate-600 mb-1">{t("browsePage.maxDays")}</span>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -137,7 +157,7 @@ export default function BrowsePage() {
                                         value={daysMax ?? ""}
                                         onChange={e => setDaysMax(e.target.value ? +e.target.value : null)}
                                     />
-                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm whitespace-nowrap">days</span>
+                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm whitespace-nowrap">{t("browsePage.days")}</span>
                                 </div>
                             </label>
 
@@ -146,13 +166,13 @@ export default function BrowsePage() {
                                 onClick={clearFilters}
                                 className="h-10 px-4 rounded border text-slate-700 hover:bg-slate-50 md:col-span-2 cursor-pointer"
                             >
-                                Clear
+                                {t("browsePage.clear")}
                             </button>
                             <button
                                 type="submit"
                                 className="h-10 px-4 rounded bg-amber-500 text-white hover:bg-amber-600 md:col-span-2 cursor-pointer"
                             >
-                                Apply
+                                {t("browsePage.apply")}
                             </button>
                         </form>
 
@@ -164,8 +184,8 @@ export default function BrowsePage() {
 
                     {!loading && !err && items.length === 0 && (
                         <div className="rounded-lg border border-dashed p-6 text-gray-600 bg-white">
-                            <p className="font-semibold mb-1">No itineraries found.</p>
-                            <p className="text-sm">Try a different region or country.</p>
+                            <p className="font-semibold mb-1">{t("browsePage.noItinerariesFound")}</p>
+                            <p className="text-sm">{t("browsePage.try")}</p>
                         </div>
                     )}
 

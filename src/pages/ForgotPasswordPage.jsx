@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {postRestPasswordEmail} from "../api.js"
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ export default function ForgotPasswordPage() {
     const [showSuccessSendModal,setShowSuccessSendModal] = useState(false);
     const [showErrorSendModal,setShowErrorSendModal] = useState(false);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -20,7 +22,7 @@ export default function ForgotPasswordPage() {
 
     return (
         <div className="container mx-auto max-w-md p-4 my-10">
-            <h1 className="text-2xl font-semibold mb-4">Reset password</h1>
+            <h1 className="text-2xl font-semibold mb-4">{t("forgotPasswordPage.resetPassword")}</h1>
 
             <form onSubmit={handleSubmit} className="space-y-3">
                 <input
@@ -29,17 +31,17 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    placeholder="Your email"
+                    placeholder={t("forgotPasswordPage.emailPlaceholder")}
                 />
 
                 <button className="bg-black text-white px-4 py-2 rounded cursor-pointer">
-                    Send Reset Link
+                    {t("forgotPasswordPage.sendResetLink")}
                 </button>
 
                 {success && (
                         <button type={"button"} className="bg-black text-white px-4 py-2 rounded ml-5 cursor-pointer"
                                 onClick={() => navigate("/login")}>
-                            Login Now
+                            {t("forgotPasswordPage.loginNow")}
                         </button>
                 )}
             </form>
@@ -48,12 +50,12 @@ export default function ForgotPasswordPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                     <div className="bg-white max-w-md w-full mx-4 rounded-xl shadow-xl p-6 text-center">
                         <h2 className="text-xl font-semibold text-slate-900 mb-2">
-                            🟢 Reset Password Request
+                            🟢 {t("forgotPasswordPage.resetPasswordRequest")}
                         </h2>
                         <p className="text-slate-600 mb-6">
-                            Your reset password link has been sent.
+                            {t("forgotPasswordPage.passwordLinkSent")}
                             <br />
-                            You should receive it within few minutes if you have account with us.
+                            {t("forgotPasswordPage.hint")}
                         </p>
 
                         <button
@@ -61,7 +63,7 @@ export default function ForgotPasswordPage() {
                             onClick={() => setShowSuccessSendModal(!showSuccessSendModal)}
                             className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800"
                         >
-                            Ok
+                            {t("forgotPasswordPage.ok")}
                         </button>
                     </div>
                 </div>
@@ -70,12 +72,12 @@ export default function ForgotPasswordPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                     <div className="bg-white max-w-md w-full mx-4 rounded-xl shadow-xl p-6 text-center">
                         <h2 className="text-xl font-semibold text-slate-900 mb-2">
-                            ⚠️ Reset Password Request Failed
+                            ⚠️  {t("forgotPasswordPage.resetFailed")}
                         </h2>
                         <p className="text-slate-600 mb-6">
-                            Duo to a technical problem, You request couldn't to be sent.
+                            {t("forgotPasswordPage.technicalProblem")}
                             <br />
-                            Please try it again later or contact us if problem persists.
+                            {t("forgotPasswordPage.tryLaterHint")}
                         </p>
 
                         <button
@@ -83,7 +85,7 @@ export default function ForgotPasswordPage() {
                             onClick={() => setShowErrorSendModal(!showErrorSendModal)}
                             className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800"
                         >
-                            Ok
+                            {t("forgotPasswordPage.ok")}
                         </button>
                     </div>
                 </div>

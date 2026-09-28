@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {postQuestionThread} from "../api.js";
 import {isExpired,getUserId} from "../utils/jwtParser.js";
+import {useTranslation} from "react-i18next";
 
 export default function ThreadConversation({   creatorId,
                                                threadDetails,
@@ -14,10 +15,9 @@ export default function ThreadConversation({   creatorId,
     const [replyError, setReplyError] = useState(null);
     const [isSamePerson, setIsSamePerson] = useState(false);
     const token = localStorage.getItem("authToken");
+    const { t } = useTranslation();
 
     useEffect(() => {
-
-        console.log(threadDetails);
 
         setIsSamePerson(false);
 
@@ -52,7 +52,6 @@ export default function ThreadConversation({   creatorId,
 
                 setReplyText("");
 
-                // Let parent update its state (threadDetails + summary)
                 if (onThreadUpdated) {
                     onThreadUpdated(updatedThread);
                 }
@@ -61,11 +60,11 @@ export default function ThreadConversation({   creatorId,
                 console.error("Failed to send reply", err);
 
                 if (err.response?.status === 401) {
-                    setReplyError("Please log in to reply.");
+                    setReplyError(t("threadConversation.sendFailed"));
                 } else if (err.response?.data?.message) {
                     setReplyError(err.response.data.message);
                 } else {
-                    setReplyError("Failed to send reply. Please try again.");
+                    setReplyError(t("threadConversation.loginReply"));
                 }
             })
             .finally(() => {
@@ -77,7 +76,7 @@ export default function ThreadConversation({   creatorId,
     if (loading) {
         return (
             <div className="mt-3 text-sm text-slate-500">
-                Loading conversation...
+                {t("threadConversation.loading")}
             </div>
         );
     }
@@ -115,7 +114,7 @@ export default function ThreadConversation({   creatorId,
                 !isSamePerson  && (
                 <div className="mt-3 border-t border-slate-200 pt-3">
                     <label className="block text-xs font-medium text-slate-700">
-                        Add a reply
+                        {t("threadConversation.addReply")}
                     </label>
                     <textarea
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm
@@ -124,12 +123,12 @@ export default function ThreadConversation({   creatorId,
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         maxLength={1000}
-                        placeholder="Write your reply..."
+                        placeholder={t("threadConversation.messagePlaceholder")}
                     />
 
                     <div className="mt-2 flex items-center justify-between">
                         <p className="text-xs text-slate-500">
-                            {replyText.length}/1000 characters
+                            {replyText.length}/{t("threadConversation.charLimit")}
                         </p>
 
                         <button
@@ -139,7 +138,7 @@ export default function ThreadConversation({   creatorId,
                             className="inline-flex items-center rounded-md bg-sky-600 px-3 py-1.5 text-xs font-medium
                        text-white hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed"
                         >
-                            {replyLoading ? "Sending..." : "Send reply"}
+                            {replyLoading ? t("threadConversation.sending") : t("threadConversation.sendReply")}
                         </button>
                     </div>
 
@@ -153,7 +152,7 @@ export default function ThreadConversation({   creatorId,
 
             {threadDetails.closed && (
                 <p className="mt-3 text-xs text-slate-500 italic">
-                    This conversation is closed.
+                    {t("threadConversation.close")}
                 </p>
             )}
 

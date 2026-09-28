@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useRef} from "react";
 import heroBg from "../assets/hero-bg.jpg";
 import {Typewriter} from "react-simple-typewriter";
 import {FaChevronDown} from "react-icons/fa";
@@ -11,19 +11,25 @@ import anzImg from "../assets/anz.jpg";
 import northAfricaImg from "../assets/northAfrica.jpg"
 import {useNavigate} from "react-router-dom";
 import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
+import { useTranslation } from "react-i18next";
 
 
 function HomePage() {
-    const [loading, setLoading] = useState(true);
+
     const exploreRef = useRef(null);
     const scrollToExplore = () => {
         exploreRef.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     const navigate = useNavigate();
+    const { t } = useTranslation();
+    const words = t("homepage.typewriter", {
+        returnObjects: true,
+    });
 
     const regions = [
         {
+            key: "southeastAsia",
             title: "Southeast Asia",
             description: "Tropical beaches, vibrant cities, and legendary street food.",
             image: southeastImg,
@@ -31,6 +37,7 @@ function HomePage() {
             bannerName: "southeast-asia-banner",
         },
         {
+            key: "eastAsia",
             title: "East Asia",
             description: "Ancient temples, neon skylines, and rich traditions.",
             image: eastAsiaImg,
@@ -38,6 +45,7 @@ function HomePage() {
             bannerName: "east-asia-banner",
         },
         {
+            key: "europe",
             title: "Europe",
             description: "Iconic landmarks, café culture, and timeless elegance.",
             image: europeImg,
@@ -45,6 +53,7 @@ function HomePage() {
             bannerName: "europe-banner",
         },
         {
+            key: "americas",
             title: "Americas",
             description: "From NYC weekends to Andean escapes—urban buzz & wild nature.",
             image: americasImg,
@@ -52,6 +61,7 @@ function HomePage() {
             bannerName: "americas-banner",
         },
         {
+            key: "oceania",
             title: "Oceania",
             description: "Coastal road trips, wine regions, and epic alpine scenery.",
             image: anzImg,
@@ -59,6 +69,7 @@ function HomePage() {
             bannerName: "anzalia-nz-banner",
         },
         {
+            key: "africa",
             title: "Africa",
             description: "Souks, desert dunes, and Mediterranean old towns.",
             image: northAfricaImg,
@@ -66,8 +77,6 @@ function HomePage() {
             bannerName: "africa-banner"
         },
     ];
-
-
 
     return (
         <>
@@ -86,37 +95,37 @@ function HomePage() {
                             Short Break Hub
                         </h1>
                         <h4 className="text-3xl mt-16 sm:text-4xl font-extrabold text-yellow-300 drop-shadow-lg text-center">
-                            Explore&nbsp;
+                            {t("homepage.explore")}&nbsp;
                             <span className="text-white">
                                 <Typewriter
-                                    words={['Asia', 'Europe', 'Tropical Paradise']}
+                                    words={words}
                                     loop={true}
                                     cursor
                                     cursorStyle="_"
                                     typeSpeed={70}
-                                    deleteSpeed={50}
-                                    delaySpeed={1000}
+                                    deleteSpeed={40}
+                                    delaySpeed={1800}
                                 />
                           </span>
                         </h4>
                         <section className="mx-auto max-w-5xl px-4 mt-28">
-                            <ItinerarySearchBar region={regions} />
+                            <ItinerarySearchBar regions={regions} />
                         </section>
-                        {/* Desktop vertical ribbon */}
+
                         <div className="hidden lg:flex absolute right-3 lg:right-6 top-10 bottom-10 items-center">
                           <span
                               className="text-white/80 tracking-widest uppercase text-xs lg:text-sm
                                        pl-3 border-l-2 border-white/50"
                               style={{ writingMode: 'vertical-rl' }}
                           >
-                            Explore the world · Your journey starts here
+                            {t(`homepage.tagline`)}
                           </span>
                         </div>
 
-                        {/* Mobile horizontal tagline */}
+
                         <div className="block lg:hidden mt-16 text-center">
                           <span className="text-white/90 text-sm tracking-wide">
-                            Explore the world · Your journey starts here
+                            {t(`homepage.tagline`)}
                           </span>
                         </div>
 
@@ -127,16 +136,17 @@ function HomePage() {
                     </div>
                 </div>
             </section>
+
             <section id="explore" className="scroll-mt-20">
                 <div ref={exploreRef} className="py-16 px-6 bg-white">
-                    <h2 className="text-3xl font-bold text-center mb-10">Explore by Region</h2>
+                    <h2 className="text-3xl font-bold text-center mb-10">{t(`homepage.exploreByRegion`)}</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         { regions.map((item, index) => (
                             <RegionCard
                                 key={index}
                                 image={item.image}
-                                title={item.title}
-                                description={item.description}
+                                title={t(`homepage.regions.${item.key}.title`)}
+                                description={t(`homepage.regions.${item.key}.description`)}
                                 onClick={() => navigate(item.onClick)}
                             />
                         ))}
@@ -144,7 +154,7 @@ function HomePage() {
                 </div>
             </section>
             <footer id="contact" className="scroll-mt-20">
-                {/* contact/footer */}
+
             </footer>
         </>
     );
