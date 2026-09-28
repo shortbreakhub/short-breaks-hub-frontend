@@ -4,7 +4,7 @@ import React, {useState, useMemo, useEffect} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
 import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
-import LoadingAnimation from "../assets/Loading-Animation.json";
+import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
 import CommentsSection from "../components/Comments";
 import {loadSubFolderImages} from "../utils/loadImage.js";

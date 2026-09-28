@@ -3,7 +3,7 @@ import {useParams,useLocation} from "react-router-dom";
 import {getItinerariesByCountry, getAllItinerariesByCustomSearch, getItineraryBySlug} from "../api";
 import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
-import LoadingAnimation from "../assets/Loading-Animation.json";
+import LoadingAnimation from "../assets/loading-animation.json";
 import ItineraryCard from "../components/ItineraryCard.jsx";
 import {formatSlug} from "../utils/formatSlug.js"
 import {useTranslation} from "react-i18next";
