@@ -13,6 +13,8 @@ import {useNavigate} from "react-router-dom";
 import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import PageMetadata from "../components/PageMetadata.jsx";
+import {HOME_PAGE_METADATA} from "../utils/pageMetadata.js";
 
 
 function HomePage() {
@@ -82,6 +84,7 @@ function HomePage() {
     return (
         <>
             <PageCanonical segments={[]} />
+            <PageMetadata {...HOME_PAGE_METADATA} />
             <section id="home" className="scroll-mt-20">
 
                 <div
