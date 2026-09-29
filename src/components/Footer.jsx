@@ -1,5 +1,6 @@
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {getRegionPath} from "../utils/publicNavigation.js";
 
 export default function Footer() {
     const navigate = useNavigate();
@@ -18,6 +19,15 @@ export default function Footer() {
     const scrollToSection = (sectionId) => {
         const el = document.getElementById(sectionId);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const handleRegionLinkClick = (event, pathname) => {
+        if (event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) {
+            return;
+        }
+
+        event.preventDefault();
+        navigateAndScroll(pathname, 'region-countries');
     };
 
     return (
@@ -68,30 +78,33 @@ export default function Footer() {
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() =>navigateAndScroll("/southeast-asia",'region-countries')}
+                                    <Link
+                                        to={getRegionPath("southeast-asia")}
+                                        onClick={(event) => handleRegionLinkClick(event, "/southeast-asia")}
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.southeastAsia")}
-                                    </button>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() =>navigateAndScroll("/europe",'region-countries')}
+                                    <Link
+                                        to={getRegionPath("europe")}
+                                        onClick={(event) => handleRegionLinkClick(event, "/europe")}
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.europe")}
-                                    </button>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() =>navigateAndScroll("/americas",'region-countries')}
+                                    <Link
+                                        to={getRegionPath("americas")}
+                                        onClick={(event) => handleRegionLinkClick(event, "/americas")}
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.theAmericas")}
-                                    </button>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
