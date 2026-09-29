@@ -12,6 +12,7 @@ import northAfricaImg from "../assets/northAfrica.jpg"
 import {useNavigate} from "react-router-dom";
 import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
 import { useTranslation } from "react-i18next";
+import PageCanonical from "../components/PageCanonical.jsx";
 
 
 function HomePage() {
@@ -80,6 +81,7 @@ function HomePage() {
 
     return (
         <>
+            <PageCanonical segments={[]} />
             <section id="home" className="scroll-mt-20">
 
                 <div
