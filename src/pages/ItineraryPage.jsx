@@ -17,6 +17,7 @@ import TransportTips from "../components/TransportTips.jsx"
 import CurrencyConverter from "../components/CurrencyConverter.jsx";
 import TripPrepRail from "../components/TripPrepRail";
 import { useTranslation } from "react-i18next";
+import PageCanonical from "../components/PageCanonical.jsx";
 
 
 export default function ItineraryPage() {
@@ -301,6 +302,7 @@ export default function ItineraryPage() {
     if (loading) {
         return (
             <div className="fixed inset-0 z-50 bg-white">
+                <PageCanonical segments={["itinerary", data?.slug || slug]} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -323,6 +325,7 @@ export default function ItineraryPage() {
 
     return (
         <>
+            <PageCanonical segments={["itinerary", data?.slug || slug]} />
             <Helmet>
                 <title>{data ? `${data.title} | ${data.country} | Short Breaks Hub` : 'Itinerary | Short Breaks Hub'}</title>
                 <meta

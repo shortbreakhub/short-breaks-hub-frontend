@@ -4,6 +4,7 @@ import {getCountriesByRegion, getItinerariesByRegion} from "../api.js";
 import {useParams} from "react-router-dom";
 import {loadImages} from "../utils/loadImage.js";
 import {useTranslation} from "react-i18next";
+import PageCanonical from "../components/PageCanonical.jsx";
 
 
 
@@ -59,6 +60,7 @@ function RegionPage() {
 
     return (
         <div id="region-countries" className="bg-gray-50 min-h-screen w-full overflow-x-hidden">
+            <PageCanonical segments={[region]} />
             <div className="relative h-[300px] md:h-[400px] bg-cover bg-center shadow-lg"
                  style={{ backgroundImage: `url('${bannerImage}')` }}>
                 <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center">
@@ -80,7 +82,6 @@ function RegionPage() {
                         />
                     ))}
                 </div>
-
             </div>
         </div>
 

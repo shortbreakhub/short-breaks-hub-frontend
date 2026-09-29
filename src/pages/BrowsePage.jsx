@@ -7,6 +7,7 @@ import LoadingAnimation from "../assets/loading-animation.json";
 import ItineraryCard from "../components/ItineraryCard.jsx";
 import {formatSlug} from "../utils/formatSlug.js"
 import {useTranslation} from "react-i18next";
+import PageCanonical from "../components/PageCanonical.jsx";
 
 function useQuery() {
     const { search } = useLocation();
@@ -89,6 +90,7 @@ export default function BrowsePage() {
     if (loading) {
         return (
             <div className="fixed inset-0 z-50 bg-white">
+                <PageCanonical segments={["browse", country]} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -98,6 +100,7 @@ export default function BrowsePage() {
 
     return (
         <>
+            <PageCanonical segments={["browse", country]} />
             <Helmet>
                 <title>{country ? `Short Breaks in ${formatSlug(country)} | Short Breaks Hub`
                     : `Browse Short Breaks | Short Breaks Hub`}</title>
@@ -199,4 +202,3 @@ export default function BrowsePage() {
         </>
     );
 }
-
