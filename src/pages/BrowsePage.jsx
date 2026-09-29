@@ -1,13 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useParams,useLocation} from "react-router-dom";
 import {getItinerariesByCountry, getAllItinerariesByCustomSearch, getItineraryBySlug} from "../api";
-import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import ItineraryCard from "../components/ItineraryCard.jsx";
 import {formatSlug} from "../utils/formatSlug.js"
 import {useTranslation} from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import PageMetadata from "../components/PageMetadata.jsx";
+import {getCountryPageMetadata} from "../utils/pageMetadata.js";
 
 function useQuery() {
     const { search } = useLocation();
@@ -29,6 +30,7 @@ export default function BrowsePage() {
     const lang = i18n.resolvedLanguage ?? "en";
     const { t } = useTranslation();
     let testing =useRef(null)
+    const pageMetadata = getCountryPageMetadata(formatSlug(country || ""));
 
     function applyFilters(page = 0) {
         const params = new URLSearchParams();
@@ -91,6 +93,7 @@ export default function BrowsePage() {
         return (
             <div className="fixed inset-0 z-50 bg-white">
                 <PageCanonical segments={["browse", country]} />
+                <PageMetadata {...pageMetadata} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -101,16 +104,7 @@ export default function BrowsePage() {
     return (
         <>
             <PageCanonical segments={["browse", country]} />
-            <Helmet>
-                <title>{country ? `Short Breaks in ${formatSlug(country)} | Short Breaks Hub`
-                    : `Browse Short Breaks | Short Breaks Hub`}</title>
-                <meta
-                    name="description"
-                    content={country
-                        ? `Discover curated short-break itineraries in ${formatSlug(country)} — days, highlights, and prices in one place.`
-                        : `Browse curated short-break itineraries across regions and countries. Find your next 2–5 day escape.`}
-                />
-            </Helmet>
+            <PageMetadata {...pageMetadata} />
 
             <main className="min-h-screen bg-gray-50">
                 <section className="max-w-screen-xl mx-auto px-4 py-8">

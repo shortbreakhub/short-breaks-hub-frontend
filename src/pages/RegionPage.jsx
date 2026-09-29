@@ -5,6 +5,9 @@ import {useParams} from "react-router-dom";
 import {loadImages} from "../utils/loadImage.js";
 import {useTranslation} from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import PageMetadata from "../components/PageMetadata.jsx";
+import {formatSlug} from "../utils/formatSlug.js";
+import {getRegionPageMetadata} from "../utils/pageMetadata.js";
 
 
 
@@ -13,6 +16,7 @@ function RegionPage() {
     const [countries, setCountries] = useState([]);
     const [bannerImage, setBannerImage] = useState(null);
     const { t } = useTranslation();
+    const pageMetadata = getRegionPageMetadata(formatSlug(region || ""));
 
     function titleCase(str) {
         const splitStr = str.replace("-"," ").split(' ')
@@ -61,6 +65,7 @@ function RegionPage() {
     return (
         <div id="region-countries" className="bg-gray-50 min-h-screen w-full overflow-x-hidden">
             <PageCanonical segments={[region]} />
+            <PageMetadata {...pageMetadata} />
             <div className="relative h-[300px] md:h-[400px] bg-cover bg-center shadow-lg"
                  style={{ backgroundImage: `url('${bannerImage}')` }}>
                 <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center">

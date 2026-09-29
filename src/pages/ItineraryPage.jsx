@@ -18,6 +18,8 @@ import CurrencyConverter from "../components/CurrencyConverter.jsx";
 import TripPrepRail from "../components/TripPrepRail";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import PageMetadata from "../components/PageMetadata.jsx";
+import {getItineraryPageMetadata} from "../utils/pageMetadata.js";
 
 
 export default function ItineraryPage() {
@@ -57,6 +59,7 @@ export default function ItineraryPage() {
     const { i18n } = useTranslation();
     const lang = i18n.resolvedLanguage ?? "en";
     const { t } = useTranslation();
+    const pageMetadata = getItineraryPageMetadata(data, slug);
 
     function toLocalISO(d) {
         const t = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
@@ -141,21 +144,6 @@ export default function ItineraryPage() {
     useEffect(() => {
         getItineraryBySlug(slug,lang).then(
             (data) => {
-                document.title = `${data.slug} • Short Breaks Hub`;
-                const descr =
-                    document.querySelector('meta[name="description"]') ||
-                    (() => {
-                        const m = document.createElement("meta");
-                        m.setAttribute("name", "description");
-                        document.head.appendChild(m);
-                        return m;
-                    })();
-
-                descr.setAttribute(
-                    "content",
-                    data.summary ||
-                    `${data.country} • ${data.days} days from $${data.priceFrom}`
-                );
                 setData(data);
                 setPlanning({
                     city: data.planningCity,
@@ -303,6 +291,7 @@ export default function ItineraryPage() {
         return (
             <div className="fixed inset-0 z-50 bg-white">
                 <PageCanonical segments={["itinerary", data?.slug || slug]} />
+                <PageMetadata {...pageMetadata} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -326,12 +315,8 @@ export default function ItineraryPage() {
     return (
         <>
             <PageCanonical segments={["itinerary", data?.slug || slug]} />
+            <PageMetadata {...pageMetadata} />
             <Helmet>
-                <title>{data ? `${data.title} | ${data.country} | Short Breaks Hub` : 'Itinerary | Short Breaks Hub'}</title>
-                <meta
-                    name="description"
-                    content={data?.summary || `Explore a curated short-break itinerary with highlights, day plan, and pricing.`}
-                />
                 <meta property="og:title" content={data ? data.title : 'Itinerary'} />
                 <meta property="og:description" content={data?.summary || 'Curated short-break itinerary.'} />
                 {data?.hero && <meta property="og:image" content={data.hero} />}

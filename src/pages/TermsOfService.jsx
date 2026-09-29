@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PageCanonical from "../components/PageCanonical.jsx";
+import PageMetadata from "../components/PageMetadata.jsx";
+import {STATIC_PAGE_METADATA} from "../utils/pageMetadata.js";
 
 const TermsOfService = () => {
     useEffect(() => {
@@ -13,6 +15,7 @@ const TermsOfService = () => {
     return (
         <main className="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
             <PageCanonical segments={["terms"]} />
+            <PageMetadata {...STATIC_PAGE_METADATA.terms} />
             <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
                 <header className="border-b border-slate-200 pb-8">
                     <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-teal-700">
