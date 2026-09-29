@@ -27,6 +27,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 import GoogleMap from "./components/GoogleMap.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/TermsOfService.jsx";
+import RouteRobots from "./components/RouteRobots.jsx";
 
 function App() {
 
@@ -78,6 +79,7 @@ function App() {
                 pauseOnHover
                 draggable
             />
+            <RouteRobots />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/:region" element={<RegionPage />} />
