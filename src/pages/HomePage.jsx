@@ -9,12 +9,12 @@ import europeImg from "../assets/europe.jpg";
 import americasImg from "../assets/americas.jpg";
 import anzImg from "../assets/anz.jpg";
 import northAfricaImg from "../assets/northAfrica.jpg"
-import {useNavigate} from "react-router-dom";
 import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {HOME_PAGE_METADATA} from "../utils/pageMetadata.js";
+import {getRegionPath} from "../utils/publicNavigation.js";
 
 
 function HomePage() {
@@ -24,7 +24,6 @@ function HomePage() {
         exploreRef.current.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const navigate = useNavigate();
     const { t } = useTranslation();
     const words = t("homepage.typewriter", {
         returnObjects: true,
@@ -152,7 +151,7 @@ function HomePage() {
                                 image={item.image}
                                 title={t(`homepage.regions.${item.key}.title`)}
                                 description={t(`homepage.regions.${item.key}.description`)}
-                                onClick={() => navigate(item.onClick)}
+                                to={getRegionPath(item.onClick)}
                             />
                         ))}
                     </div>

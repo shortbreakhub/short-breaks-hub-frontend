@@ -3,28 +3,26 @@ import {getFavoritesCount} from "../api.js";
 import {useEffect, useState} from "react";
 import {loadSubFolderImages} from "../utils/loadImage.js";
 import {useTranslation} from "react-i18next";
+import {getOfficialItineraryPath} from "../utils/publicNavigation.js";
 
 export default function ItineraryCard({it="",showLikes=false,itineraryType="build in"}) {
     const [favoritesCount, setFavoritesCount] = useState(0);
-    const [navigateTo, setNavigateTo] = useState("");
+    const itineraryId = it?.id;
+    const navigateTo = it
+        ? itineraryType === "build in"
+            ? getOfficialItineraryPath(it.slug)
+            : `/user-itinerary/${it.slug}`
+        : "";
 
     const { t } = useTranslation();
 
     useEffect(() => {
-        if(it){
-            if(itineraryType === "build in")
-            {
-                setNavigateTo(`/itinerary/${it.slug}`);
-                getFavoritesCount(it.id).then(data => {
-                    setFavoritesCount(data.count);
-                })
-            }
-            else {
-                setNavigateTo(`/user-itinerary/${it.slug}`);
-            }
-
+        if(itineraryId && itineraryType === "build in") {
+            getFavoritesCount(itineraryId).then(data => {
+                setFavoritesCount(data.count);
+            });
         }
-    },[])
+    }, [itineraryId, itineraryType]);
     return (
         <>
             <li key={it.id} className="bg-white rounded-xl shadow-md border border-gray-400 hover:shadow-lg transition hover:scale-105">

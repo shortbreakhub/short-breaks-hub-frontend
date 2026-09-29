@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {getCountryBrowsePath, getOfficialItineraryPath} from "../utils/publicNavigation.js";
 import {getItineraryBySlug} from "../api.js";
 
 
@@ -51,30 +52,34 @@ export default function CountryCard({ name, itineraries, image, itineraryType })
 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                    {previewList.map(({slug,title}) => (
-                        <button
-                            key={slug}
-                            onClick={() => navigate(`/${itineraryType}/${slug}`)}
-                            className="text-left text-sm border border-gray-200 rounded-lg px-3 py-2
-                         bg-gray-50 hover:bg-blue-100 hover:border-blue-500
-                         shadow-sm hover:shadow-md transition
-                         focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                        >
-                            {title}
-                        </button>
-                    ))}
+                    {previewList.map(({slug,title}) => {
+                        const className = "text-left text-sm border border-gray-200 rounded-lg px-3 py-2 bg-gray-50 hover:bg-blue-100 hover:border-blue-500 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer";
+
+                        return itineraryType === "itinerary" ? (
+                            <Link key={slug} to={getOfficialItineraryPath(slug)} className={className}>
+                                {title}
+                            </Link>
+                        ) : (
+                            <button
+                                key={slug}
+                                onClick={() => navigate(`/${itineraryType}/${slug}`)}
+                                className={className}
+                            >
+                                {title}
+                            </button>
+                        );
+                    })}
                 </div>
 
-                <button
-                    onClick={() => navigate(`/browse/${name}`)}
+                <Link
+                    to={getCountryBrowsePath(name)}
                     className="text-sm text-blue-600 underline mt-5 cursor-pointer"
                 >
                     {t("countryCard.viewAllItineraries")}
-                </button>
+                </Link>
 
             </div>
         </div>
     );
 }
-
 
