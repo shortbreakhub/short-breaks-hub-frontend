@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import CountryCard from '../components/CountryCard';
 import {getCountriesByRegion, getItinerariesByRegion} from "../api.js";
 import {useParams} from "react-router-dom";
@@ -8,13 +8,31 @@ import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {formatSlug} from "../utils/formatSlug.js";
 import {getRegionPageMetadata} from "../utils/pageMetadata.js";
+import {PrerenderDataContext} from "../context/PrerenderDataContext.jsx";
+
+function makeRegionCountries(countryList, itineraries) {
+    return countryList.map((name) => ({
+        name,
+        image: loadImages(name),
+        itineraries: itineraries
+            .filter((itinerary) => itinerary.country?.toLowerCase() === name.toLowerCase())
+            .map(({slug, title}) => ({slug, title})),
+    }));
+}
 
 
 
 function RegionPage() {
     const {region} = useParams();
-    const [countries, setCountries] = useState([]);
-    const [bannerImage, setBannerImage] = useState(null);
+    const prerenderData = useContext(PrerenderDataContext);
+    const matchingPrerenderData = prerenderData?.region === region ? prerenderData : null;
+    const prerenderDataRef = useRef(matchingPrerenderData);
+    const [countries, setCountries] = useState(() => matchingPrerenderData
+        ? makeRegionCountries(matchingPrerenderData.countries, matchingPrerenderData.itineraries)
+        : []);
+    const [bannerImage, setBannerImage] = useState(() => matchingPrerenderData
+        ? loadImages(`${region}-banner`)
+        : null);
     const { t } = useTranslation();
     const pageMetadata = getRegionPageMetadata(formatSlug(region || ""));
 
@@ -28,32 +46,18 @@ function RegionPage() {
 
 
     useEffect(() => {
+        if (prerenderDataRef.current?.region === region) {
+            prerenderData.clear();
+            prerenderDataRef.current = null;
+            return;
+        }
+
         setBannerImage(loadImages(`${region}-banner`));
         getCountriesByRegion(region).then(
             (country_list) => {
-
-                const base = country_list.map((item) => ({
-                        "name": item,
-                        "image": loadImages(item),
-                        "itineraries": [],
-                    })
-                );
                 getItinerariesByRegion(region).then(
                     (itineraries) => {
-                        const merged = base.map((country) => {
-                            const slugsAndTitles = []
-                            for (const eachItinerary of itineraries){
-                                if (eachItinerary.country.toLowerCase() === country.name.toLowerCase()) {
-                                    slugsAndTitles.push(
-                                        {
-                                            slug:eachItinerary.slug,
-                                            title: eachItinerary.title,
-                                        });
-                                }
-                            }
-                            return {...country, itineraries: slugsAndTitles};
-                        })
-                        setCountries(merged);
+                        setCountries(makeRegionCountries(country_list, itineraries));
                     }
                 )
             }

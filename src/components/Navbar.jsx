@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from "../assets/logo-icon.png"
 import { toast } from 'react-toastify';
@@ -12,7 +12,12 @@ export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeScroll, setActiveScroll] = useState("home");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { t } = useTranslation();
+
+    useEffect(() => {
+        setIsLoggedIn(Auth.isLoggedIn());
+    }, [location.key]);
 
     const links = useMemo(() => {
         const base = [
@@ -31,7 +36,7 @@ export default function Navbar() {
             },
         ];
 
-        if (Auth.isLoggedIn()) {
+        if (isLoggedIn) {
             base.push({
                 id: 'logout',
                 label: t("navbar.logout"),
@@ -46,7 +51,7 @@ export default function Navbar() {
         }
 
         return base;
-    }, [location.key, t]);
+    }, [isLoggedIn, location.key, t]);
 
 
     const navigateAndScroll = (item) => {
@@ -128,7 +133,7 @@ export default function Navbar() {
                         ))}
                     </ul>
 
-                    {Auth.isLoggedIn() && (
+                    {isLoggedIn && (
                         <button
                             type="button"
                             title={t("navbar.profile")}
@@ -170,7 +175,7 @@ export default function Navbar() {
             {open && (
                 <div className="md:hidden bg-white border-t">
 
-                    {Auth.isLoggedIn() && (
+                    {isLoggedIn && (
                         <button
                             onClick={() => {
                                 setOpen(false);
