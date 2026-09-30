@@ -2,13 +2,14 @@ import {mkdir, readFile, readdir, writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
 import {fileURLToPath} from "node:url";
 import {createServer, loadEnv} from "vite";
+import {REGIONS} from "../src/config/regions.js";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const distRoot = resolve(projectRoot, "dist");
 const env = loadEnv("production", projectRoot, "VITE_");
 
 if (!env.VITE_API_BASE) {
-    throw new Error("Pre-rendering requires VITE_API_BASE to fetch current /europe content.");
+    throw new Error("Pre-rendering requires VITE_API_BASE to fetch current Region content.");
 }
 
 const vite = await createServer({
@@ -21,17 +22,17 @@ const vite = await createServer({
     server: {middlewareMode: true},
 });
 
-function validateEuropeData(countries, itineraries) {
+function validateRegionData(region, countries, itineraries) {
     if (!Array.isArray(countries) || countries.length === 0) {
-        throw new Error("Europe pre-render failed: /itineraries/region/europe returned no countries.");
+        throw new Error(`Region ${region} pre-render failed: /itineraries/region/${region} returned no countries.`);
     }
 
     if (!Array.isArray(itineraries) || itineraries.length === 0) {
-        throw new Error("Europe pre-render failed: /itineraries/europe returned no itineraries.");
+        throw new Error(`Region ${region} pre-render failed: /itineraries/${region} returned no itineraries.`);
     }
 
     if (!countries.every((country) => typeof country === "string" && country.trim())) {
-        throw new Error("Europe pre-render failed: the region API returned an invalid country list.");
+        throw new Error(`Region ${region} pre-render failed: the region API returned an invalid country list.`);
     }
 
     const validItineraries = itineraries.filter((itinerary) =>
@@ -47,7 +48,7 @@ function validateEuropeData(countries, itineraries) {
     );
 
     if (countriesWithoutItineraries.length > 0) {
-        throw new Error(`Europe pre-render failed: no usable itinerary links were returned for ${countriesWithoutItineraries.join(", ")}.`);
+        throw new Error(`Region ${region} pre-render failed: no usable itinerary links were returned for ${countriesWithoutItineraries.join(", ")}.`);
     }
 
     return validItineraries.map(({slug, title, country}) => ({slug, title, country}));
@@ -117,22 +118,25 @@ try {
     const {renderRoute} = await vite.ssrLoadModule("/src/prerenderEntry.jsx");
     const api = await vite.ssrLoadModule("/src/api.js");
 
-    const [countries, regionItineraries] = await Promise.all([
-        api.getCountriesByRegion("europe"),
-        api.getItinerariesByRegion("europe"),
-    ]);
-    const itineraries = validateEuropeData(countries, regionItineraries);
+    const regionRoutes = await Promise.all(REGIONS.map(async ({onClick: region}) => {
+        const [countries, regionItineraries] = await Promise.all([
+            api.getCountriesByRegion(region),
+            api.getItinerariesByRegion(region),
+        ]);
+        const itineraries = validateRegionData(region, countries, regionItineraries);
+        return {
+            pathname: `/${region}`,
+            outputPath: resolve(distRoot, region, "index.html"),
+            initialData: {region, countries, itineraries},
+        };
+    }));
     const template = await readFile(resolve(distRoot, "index.html"), "utf8");
     const manifest = JSON.parse(await readFile(resolve(distRoot, ".vite/manifest.json"), "utf8"));
 
     const routeSpecs = [
         {pathname: "/", outputPath: resolve(distRoot, "index.html"), initialData: null},
         {pathname: "/contact", outputPath: resolve(distRoot, "contact/index.html"), initialData: null},
-        {
-            pathname: "/europe",
-            outputPath: resolve(distRoot, "europe/index.html"),
-            initialData: {region: "europe", countries, itineraries},
-        },
+        ...regionRoutes,
     ];
 
     const renderedRoutes = [];

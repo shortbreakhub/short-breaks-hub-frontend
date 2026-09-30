@@ -1,3 +1,4 @@
+import {REGIONS} from "../config/regions.js";
 import React, {useRef} from "react";
 import heroBg from "../assets/hero-bg.jpg";
 import {Typewriter} from "react-simple-typewriter";
@@ -29,56 +30,15 @@ function HomePage() {
         returnObjects: true,
     });
 
-    const regions = [
-        {
-            key: "southeastAsia",
-            title: "Southeast Asia",
-            description: "Tropical beaches, vibrant cities, and legendary street food.",
-            image: southeastImg,
-            onClick: "southeast-asia",
-            bannerName: "southeast-asia-banner",
-        },
-        {
-            key: "eastAsia",
-            title: "East Asia",
-            description: "Ancient temples, neon skylines, and rich traditions.",
-            image: eastAsiaImg,
-            onClick: "east-asia",
-            bannerName: "east-asia-banner",
-        },
-        {
-            key: "europe",
-            title: "Europe",
-            description: "Iconic landmarks, café culture, and timeless elegance.",
-            image: europeImg,
-            onClick: "europe",
-            bannerName: "europe-banner",
-        },
-        {
-            key: "americas",
-            title: "Americas",
-            description: "From NYC weekends to Andean escapes—urban buzz & wild nature.",
-            image: americasImg,
-            onClick: "americas",
-            bannerName: "americas-banner",
-        },
-        {
-            key: "oceania",
-            title: "Oceania",
-            description: "Coastal road trips, wine regions, and epic alpine scenery.",
-            image: anzImg,
-            onClick: "Oceania",
-            bannerName: "anzalia-nz-banner",
-        },
-        {
-            key: "africa",
-            title: "Africa",
-            description: "Souks, desert dunes, and Mediterranean old towns.",
-            image: northAfricaImg,
-            onClick: "africa",
-            bannerName: "africa-banner"
-        },
-    ];
+    const regionImages = {
+        southeastAsia: southeastImg,
+        eastAsia: eastAsiaImg,
+        europe: europeImg,
+        americas: americasImg,
+        oceania: anzImg,
+        africa: northAfricaImg,
+    };
+    const regions = REGIONS.map((region) => ({...region, image: regionImages[region.key]}));
 
     return (
         <>

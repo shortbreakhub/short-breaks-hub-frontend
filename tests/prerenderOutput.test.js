@@ -1,13 +1,17 @@
 import assert from "node:assert/strict";
-import {existsSync, readFileSync} from "node:fs";
+import {existsSync, readFileSync, readdirSync} from "node:fs";
 import {resolve} from "node:path";
 import test from "node:test";
+
+import {REGIONS} from "../src/config/regions.js";
+import {formatSlug} from "../src/utils/formatSlug.js";
+import {getRegionPageMetadata} from "../src/utils/pageMetadata.js";
 
 const dist = resolve(process.cwd(), "dist");
 const routes = {
     home: readFileSync(resolve(dist, "index.html"), "utf8"),
     contact: readFileSync(resolve(dist, "contact/index.html"), "utf8"),
-    europe: readFileSync(resolve(dist, "europe/index.html"), "utf8"),
+    ...Object.fromEntries(REGIONS.map(({onClick}) => [onClick, readFileSync(resolve(dist, onClick, "index.html"), "utf8")])),
 };
 const appShell = readFileSync(resolve(dist, "app-shell.html"), "utf8");
 
@@ -93,7 +97,7 @@ test("pre-rendered Europe HTML contains route metadata and current real Region p
 test("route outputs contain distinct page trees and valid built JS/CSS assets", () => {
     const pageTrees = Object.values(routes).map(getRenderedRoot);
     assert.ok(pageTrees.every(Boolean));
-    assert.equal(new Set(pageTrees).size, 3, "route outputs should contain distinct rendered React pages");
+    assert.equal(new Set(pageTrees).size, REGIONS.length + 2, "route outputs should contain distinct rendered React pages");
 
     for (const html of [...Object.values(routes), appShell]) {
         const js = html.match(/<script\b[^>]*\bsrc="([^"]+\.js)"/i)?.[1];
@@ -109,4 +113,41 @@ test("the generic SPA fallback shell remains available for routes not pre-render
     assert.match(appShell, /<div id="root"><\/div>/);
     assert.doesNotMatch(appShell, /data-prerendered="true"/);
     assert.ok(existsSync(resolve(dist, "app-shell.html")));
+});
+
+for (const {onClick: region, title} of REGIONS) {
+    test(`pre-rendered ${region} contains route metadata, hydration data, content and assets`, () => {
+        const html = routes[region];
+        assertMetadata(html, {
+            ...getRegionPageMetadata(formatSlug(region)),
+            canonical: `https://www.shortbreakhub.com/${region}`,
+        });
+        const heading = getRenderedRoot(html).match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1];
+        assert.ok(heading?.includes("Discover") && heading.includes(title), "expected Region heading");
+        const data = JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+        assert.equal(data.region, region);
+        assert.ok(data.countries.length > 0);
+        assert.ok(data.itineraries.length > 0);
+        for (const country of data.countries) {
+            assert.ok(html.includes(`href="/browse/${country}"`), `missing country link for ${country}`);
+            const itinerary = data.itineraries.find(item => item.country.toLowerCase() === country.toLowerCase());
+            assert.ok(itinerary, `missing itinerary data for ${country}`);
+            assert.ok(html.includes(`href="/itinerary/${itinerary.slug}"`), `missing itinerary link for ${country}`);
+        }
+        assert.doesNotMatch(html, /\/src\/assets\/|url\(&#x27;undefined/);
+        const assets = [...html.matchAll(/(?:src="|url\(&#x27;)(\/assets\/[^"&']+)/g)];
+        assert.ok(assets.length > 0, "expected rendered image assets");
+        for (const [, asset] of assets) {
+            assert.ok(existsSync(resolve(dist, asset.slice(1))), `missing rendered asset ${asset}`);
+        }
+    });
+}
+
+test("only the known public routes have prerendered documents", () => {
+    const documents = readdirSync(dist, {recursive: true})
+        .filter(path => path === "index.html" || path.endsWith("/index.html"))
+        .sort();
+    assert.deepEqual(documents, ["index.html", "contact/index.html", ...REGIONS.map(({onClick}) => `${onClick}/index.html`)].sort());
+    assert.equal(new Set(REGIONS.map(({onClick}) => onClick)).size, REGIONS.length);
+    assert.doesNotMatch(appShell, /shortbreakhub-prerender-data|region-countries/);
 });
