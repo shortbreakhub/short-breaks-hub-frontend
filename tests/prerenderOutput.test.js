@@ -151,3 +151,32 @@ test("only the known public routes have prerendered documents", () => {
     assert.equal(new Set(REGIONS.map(({onClick}) => onClick)).size, REGIONS.length);
     assert.doesNotMatch(appShell, /shortbreakhub-prerender-data|region-countries/);
 });
+
+for (const [route, html] of Object.entries(routes)) {
+    test(`${route} has one consistent set of production social metadata`, () => {
+        const head = html.split("</head>")[0];
+        const social = new Map();
+        for (const tag of head.match(/<meta\b[^>]*>/g) || []) {
+            const key = tag.match(/(?:property|name)="((?:og:|twitter:)[^"]+)"/)?.[1];
+            if (!key) continue;
+            assert.ok(!social.has(key), `duplicate ${key}`);
+            social.set(key, tag.match(/content="([^"]*)"/)?.[1]);
+        }
+        const title = head.match(/<title[^>]*>([\s\S]*?)<\/title>/)[1];
+        const description = htmlAttribute(head, "meta", "name", "description").match(/content="([^"]*)"/)[1];
+        const canonical = htmlAttribute(head, "link", "rel", "canonical").match(/href="([^"]*)"/)[1];
+        assert.equal(social.get("og:title"), title);
+        assert.equal(social.get("twitter:title"), title);
+        assert.equal(social.get("og:description"), description);
+        assert.equal(social.get("twitter:description"), description);
+        assert.equal(social.get("og:url"), canonical);
+        assert.equal(social.get("og:type"), "website");
+        assert.equal(social.get("twitter:card"), "summary_large_image");
+        for (const key of ["og:image", "twitter:image"]) {
+            assert.equal(social.get(key), "https://www.shortbreakhub.com/og-cover.png");
+            assert.ok(existsSync(resolve(dist, new URL(social.get(key)).pathname.slice(1))));
+        }
+        assert.doesNotMatch(html, /shortbreakshub\.com|currentTime-by-currentTime/);
+        assert.doesNotMatch(getRenderedRoot(html), /(?:property|name)="(?:og:|twitter:)/);
+    });
+}

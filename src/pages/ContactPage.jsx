@@ -47,7 +47,7 @@ export default function ContactPage() {
     return (
         <main className="min-h-[70vh] bg-gray-50">
             <PageCanonical segments={["contact"]} />
-            <PageMetadata {...STATIC_PAGE_METADATA.contact} />
+            <PageMetadata canonicalSegments={["contact"]} {...STATIC_PAGE_METADATA.contact} />
             <section className="max-w-3xl mx-auto px-4 py-12">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("contactPage.contact")}</h1>
                 <p className="text-gray-600 mb-8">

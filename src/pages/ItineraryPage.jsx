@@ -2,7 +2,6 @@ import { useParams,useNavigate } from "react-router-dom";
 import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
 import React, {useState, useMemo, useEffect} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
-import {Helmet} from "react-helmet-async";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
@@ -291,7 +290,7 @@ export default function ItineraryPage() {
         return (
             <div className="fixed inset-0 z-50 bg-white">
                 <PageCanonical segments={["itinerary", data?.slug || slug]} />
-                <PageMetadata {...pageMetadata} />
+                <PageMetadata canonicalSegments={["itinerary", data?.slug || slug]} {...pageMetadata} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -315,12 +314,7 @@ export default function ItineraryPage() {
     return (
         <>
             <PageCanonical segments={["itinerary", data?.slug || slug]} />
-            <PageMetadata {...pageMetadata} />
-            <Helmet>
-                <meta property="og:title" content={data ? data.title : 'Itinerary'} />
-                <meta property="og:description" content={data?.summary || 'Curated short-break itinerary.'} />
-                {data?.hero && <meta property="og:image" content={data.hero} />}
-            </Helmet>
+            <PageMetadata canonicalSegments={["itinerary", data?.slug || slug]} {...pageMetadata} />
 
             <main className="min-h-screen bg-gray-50">
 

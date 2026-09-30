@@ -75,8 +75,10 @@ function applyAssetManifest(markup, manifest) {
     return output;
 }
 
+// Route components exclusively own standard and social metadata.
 function cleanStaticRouteHead(html) {
     return html
+        .replace(/\s*<meta\b(?=[^>]*\b(?:property|name)=["'](?:og:|twitter:))[^>]*>/gi, "")
         .replace(/\s*<title>[\s\S]*?<\/title>/i, "")
         .replace(/\s*<meta\s+name=["']description["'][^>]*\/?\s*>/gi, "")
         .replace(/\s*<meta\s+name=["']robots["'][^>]*\/?\s*>/gi, "")
