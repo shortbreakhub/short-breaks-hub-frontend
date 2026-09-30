@@ -43,7 +43,7 @@ function HomePage() {
     return (
         <>
             <PageCanonical segments={[]} />
-            <PageMetadata {...HOME_PAGE_METADATA} />
+            <PageMetadata canonicalSegments={[]} {...HOME_PAGE_METADATA} />
             <section id="home" className="scroll-mt-20">
 
                 <div

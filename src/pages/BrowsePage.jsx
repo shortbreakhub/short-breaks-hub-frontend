@@ -93,7 +93,7 @@ export default function BrowsePage() {
         return (
             <div className="fixed inset-0 z-50 bg-white">
                 <PageCanonical segments={["browse", country]} />
-                <PageMetadata {...pageMetadata} />
+                <PageMetadata canonicalSegments={["browse", country]} {...pageMetadata} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -104,7 +104,7 @@ export default function BrowsePage() {
     return (
         <>
             <PageCanonical segments={["browse", country]} />
-            <PageMetadata {...pageMetadata} />
+            <PageMetadata canonicalSegments={["browse", country]} {...pageMetadata} />
 
             <main className="min-h-screen bg-gray-50">
                 <section className="max-w-screen-xl mx-auto px-4 py-8">

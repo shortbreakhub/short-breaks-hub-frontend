@@ -7,7 +7,7 @@ import {
     getCommunityFavoritesMe, getUserItineraryBySlug, postCommunityFavorite, getQuestionThreadSummary,
     postAQuestionOrAnswer,getQuestionThread
 } from "../api.js";
-import {Helmet} from "react-helmet-async";
+import PageMetadata from "../components/PageMetadata.jsx";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
@@ -175,21 +175,6 @@ export default function CommunityItineraryPage() {
     useEffect(() => {
         getUserItineraryBySlug(slug).then(
             (data) => {
-                document.title = `${data.slug} • Short Breaks Hub`;
-                const descr =
-                    document.querySelector('meta[name="description"]') ||
-                    (() => {
-                        const m = document.createElement("meta");
-                        m.setAttribute("name", "description");
-                        document.head.appendChild(m);
-                        return m;
-                    })();
-
-                descr.setAttribute(
-                    "content",
-                    data.summary ||
-                    `${data.country} • ${data.days} days from $${data.priceFrom}`
-                );
                 setData(data);
                 setLoading(false);
                 if(parseInt(data.userId) === parseInt(getUserId())){
@@ -259,16 +244,10 @@ export default function CommunityItineraryPage() {
 
     return (
         <>
-            <Helmet>
-                <title>{data ? `${data.title} | ${data.country} | Short Breaks Hub` : 'Itinerary | Short Breaks Hub'}</title>
-                <meta
-                    name="description"
-                    content={data?.summary || `Explore a curated short-break itinerary with highlights, day plan, and pricing.`}
-                />
-                <meta property="og:title" content={data ? data.title : 'Itinerary'} />
-                <meta property="og:description" content={data?.summary || 'Curated short-break itinerary.'} />
-                {data?.hero && <meta property="og:image" content={data.hero} />}
-            </Helmet>
+            <PageMetadata
+                title={`${data.title} | ${data.country} | Short Breaks Hub`}
+                description={data.summary || "Explore a curated short-break itinerary with highlights, day plan, and pricing."}
+            />
 
             <main className="min-h-screen bg-gray-50">
                 {/* Hero */}

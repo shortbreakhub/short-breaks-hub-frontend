@@ -69,7 +69,7 @@ function RegionPage() {
     return (
         <div id="region-countries" className="bg-gray-50 min-h-screen w-full overflow-x-hidden">
             <PageCanonical segments={[region]} />
-            <PageMetadata {...pageMetadata} />
+            <PageMetadata canonicalSegments={[region]} {...pageMetadata} />
             <div className="relative h-[300px] md:h-[400px] bg-cover bg-center shadow-lg"
                  style={{ backgroundImage: `url('${bannerImage}')` }}>
                 <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center">
