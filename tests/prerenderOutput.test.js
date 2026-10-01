@@ -5,7 +5,7 @@ import test from "node:test";
 
 import {REGIONS} from "../src/config/regions.js";
 import {formatSlug} from "../src/utils/formatSlug.js";
-import {getRegionPageMetadata, getCountryPageMetadata} from "../src/utils/pageMetadata.js";
+import {getRegionPageMetadata, getCountryPageMetadata, getItineraryPageMetadata} from "../src/utils/pageMetadata.js";
 
 import {createCountryDirectory} from "../src/utils/countries.js";
 import {getCountryBrowsePath} from "../src/utils/publicNavigation.js";
@@ -22,6 +22,10 @@ function bootstrapData(html) {
 const directory = createCountryDirectory(REGIONS.flatMap(({onClick}) => bootstrapData(routes[onClick]).countries));
 for (const slug of directory.keys()) {
     routes[`browse/${slug}`] = readFileSync(resolve(dist, "browse", slug, "index.html"), "utf8");
+}
+const officialSlugs = [...new Set(REGIONS.flatMap(({onClick}) => bootstrapData(routes[onClick]).itineraries.map(item => item.slug)))];
+for (const slug of officialSlugs) {
+    routes[`itinerary/${slug}`] = readFileSync(resolve(dist, "itinerary", slug, "index.html"), "utf8");
 }
 const appShell = readFileSync(resolve(dist, "app-shell.html"), "utf8");
 
@@ -157,7 +161,7 @@ test("only the known public routes have prerendered documents", () => {
     const documents = readdirSync(dist, {recursive: true})
         .filter(path => path === "index.html" || path.endsWith("/index.html"))
         .sort();
-    assert.deepEqual(documents, ["index.html", "contact/index.html", ...REGIONS.map(({onClick}) => `${onClick}/index.html`), ...[...directory.keys()].map(slug => `browse/${slug}/index.html`)].sort());
+    assert.deepEqual(documents, ["index.html", "contact/index.html", ...REGIONS.map(({onClick}) => `${onClick}/index.html`), ...officialSlugs.map(slug => `itinerary/${slug}/index.html`), ...[...directory.keys()].map(slug => `browse/${slug}/index.html`)].sort());
     assert.equal(new Set(REGIONS.map(({onClick}) => onClick)).size, REGIONS.length);
     assert.doesNotMatch(appShell, /shortbreakhub-prerender-data|region-countries/);
 });
@@ -214,5 +218,36 @@ for (const [slug, name] of directory) {
         assert.ok(images.length >= data.items.length);
         for (const [, src] of images) assert.ok(existsSync(resolve(dist, src.slice(1))), `missing ${src}`);
         assert.doesNotMatch(getRenderedRoot(html), /\/src\/assets\/|\$undefined/);
+    });
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+}
+for (const slug of officialSlugs) {
+    test(`Official itinerary ${slug} contains full public bootstrap, content, metadata and built assets`, () => {
+        const html = routes[`itinerary/${slug}`];
+        const bootstrap = bootstrapData(html);
+        const data = bootstrap.detail;
+        assert.equal(bootstrap.type, "official-itinerary");
+        assert.equal(bootstrap.slug, slug);
+        assert.equal(bootstrap.language, "en");
+        assert.equal(data.slug, slug);
+        assertMetadata(html, {title: escapeHtml(getItineraryPageMetadata(data, slug).title),
+            description: escapeHtml(data.summary), canonical: `https://www.shortbreakhub.com/itinerary/${slug}`});
+        const root = getRenderedRoot(html);
+        for (const content of [data.title, data.summary, ...data.highlights,
+            ...data.schedule.flatMap(day => [day.title, day.summary]), ...data.tips, ...data.mustTry,
+            ...data.arrival.flatMap(item => [item.title, item.note]), ...data.places.map(place => place.name)]) {
+            assert.ok(root.includes(escapeHtml(content)), `missing initial content: ${content}`);
+        }
+        assert.ok(data.schedule.every(day => typeof day.details === "string"));
+        assert.doesNotMatch(root, /url\(undefined\)|\/src\/assets\/|fixed inset-0 z-50 bg-white/);
+        for (const [, asset] of root.matchAll(/(?:src="|url\()(\/assets\/[^"&')]+)/g)) {
+            assert.ok(existsSync(resolve(dist, asset.slice(1))), `missing ${asset}`);
+        }
+        const serialized = JSON.stringify(bootstrap);
+        assert.doesNotMatch(serialized, /"(?:authToken|profile|liked|saving|prepDone|tripPrepStatus|userCurrency|comments|token)"/);
+        assert.deepEqual(Object.keys(bootstrap).sort(), ["detail", "language", "slug", "type"]);
     });
 }

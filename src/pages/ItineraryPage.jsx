@@ -1,6 +1,6 @@
 import { useParams,useNavigate } from "react-router-dom";
 import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
-import React, {useState, useMemo, useEffect} from "react";
+import React, {useState, useMemo, useEffect, useContext, useRef} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
@@ -20,12 +20,20 @@ import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {getItineraryPageMetadata} from "../utils/pageMetadata.js";
 
+import {PrerenderDataContext} from "../context/PrerenderDataContext.jsx";
+import {getOfficialBootstrap, getItineraryPlanning, getItineraryTransport} from "../utils/officialItineraries.js";
+
+const defaultPreparation = {hotel: false, flights: false, insurance: false, airport: false, localTransport: false, car: false, docs: false};
 
 export default function ItineraryPage() {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const [data,setData] = useState({});
-    const [loading, setLoading] = useState(true);
+    const { i18n, t } = useTranslation();
+    const lang = i18n.resolvedLanguage ?? "en";
+    const prerenderData = useContext(PrerenderDataContext);
+    const bootstrapRef = useRef(getOfficialBootstrap(prerenderData, slug, lang));
+    const [data,setData] = useState(() => bootstrapRef.current?.detail || {});
+    const [loading, setLoading] = useState(() => !bootstrapRef.current);
     const [userCurrency, setUserCurrency] = useState("USD");
     const [userCurrencyValue, setUserCurrencyValue] = useState(0);
     const [convertRate, setConvertRate] = useState(1);
@@ -36,28 +44,11 @@ export default function ItineraryPage() {
         saving: false,
     });
     const [showSmartSuggestions, setShowSmartSuggestions] = React.useState(true);
-    const [prepDone, setPrepDone] = useState(() => {
-        const saved = localStorage.getItem("tripPrepStatus");
-        return saved
-            ? JSON.parse(saved)
-            : {
-                hotel: false,
-                flights: false,
-                insurance: false,
-                airport: false,
-                localTransport: false,
-                car: false,
-                docs: false,
-            };
-    });
+    const [prepDone, setPrepDone] = useState(defaultPreparation);
+    const [prepRestored, setPrepRestored] = useState(false);
+    const planning = useMemo(() => getItineraryPlanning(data), [data]);
+    const transport = useMemo(() => getItineraryTransport(data), [data]);
 
-
-    const [planning, setPlanning] = useState(null)
-    const [transport, setTransport] = useState(null)
-
-    const { i18n } = useTranslation();
-    const lang = i18n.resolvedLanguage ?? "en";
-    const { t } = useTranslation();
     const pageMetadata = getItineraryPageMetadata(data, slug);
 
     function toLocalISO(d) {
@@ -141,50 +132,39 @@ export default function ItineraryPage() {
     const [checkOut, setCheckOut] = useState(toLocalISO(defaultOut));
 
     useEffect(() => {
-        getItineraryBySlug(slug,lang).then(
-            (data) => {
-                setData(data);
-                setPlanning({
-                    city: data.planningCity,
-                    bestTime: {
-                        months: data.bestTimeMonths,
-                        note: data.bestTimeNote
-                    },
-                    worstTime: {
-                        months: data.worstTimeMonths,
-                        note: data.worstTimeNote
-                    },
-                    tips: data.tips,
-                    withKids: data.withKids
-                })
-                setTransport({
-                    arrival: data.arrival,
-                    gettingAround: data.gettingAround,
-                    dayTrips: data.dayTrips,
-                    dayMoves: data.dayMoves,
-                    practical: data.practical
-                })
-                setLoading(false);
-                axios.get(`https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGERATE_API_KEY}/latest/${getCurrencyCode(unslug(data.region), data.country)["Base Code"]}`).then(
-                    (res) => {
-                        const token = localStorage.getItem("authToken");
-                        if (token) {
-                            getMe().then((data) => {
-                                if (data.currency) {
-                                    setUserCurrency(data.currency);
-                                }
-                                setConvertRate(res.data.conversion_rates[userCurrency]);
-                            })
-                        }
-                        else {
-                            setConvertRate(res.data.conversion_rates["USD"]);
-                        }
-                    }
-                )
-            }
-        );
+        if (getOfficialBootstrap(bootstrapRef.current, slug, lang)) {
+            prerenderData?.clear();
+            return;
+        }
+        bootstrapRef.current = null;
+        let ignore = false;
+        setLoading(true);
+        setData({});
+        getItineraryBySlug(slug, lang).then(detail => {
+            if (ignore) return;
+            setData(detail);
+            setLoading(false);
+        }).catch(error => {
+            if (!ignore) console.error("Unable to load itinerary", error);
+        });
+        return () => { ignore = true; };
+    }, [slug, lang]);
 
-    }, [slug,lang]);
+    // Live currency/profile enrichment is independent of detail bootstrap.
+    useEffect(() => {
+        if (!data?.id) return;
+        let ignore = false;
+        async function enrichCurrency() {
+            const res = await axios.get(`https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGERATE_API_KEY}/latest/${getCurrencyCode(unslug(data.region), data.country)["Base Code"]}`);
+            const profile = localStorage.getItem("authToken") ? await getMe() : null;
+            if (ignore) return;
+            const currency = profile?.currency || "USD";
+            setUserCurrency(currency);
+            setConvertRate(res.data.conversion_rates[currency]);
+        }
+        enrichCurrency().catch(error => { if (!ignore) console.error("Unable to load currency rates", error); });
+        return () => { ignore = true; };
+    }, [data]);
 
     useEffect(() => {
         if (!data?.id) return
@@ -213,11 +193,25 @@ export default function ItineraryPage() {
     },[convertRate])
 
     useEffect(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem("tripPrepStatus") || "null");
+            if (saved && typeof saved === "object") {
+                setPrepDone(Object.fromEntries(Object.keys(defaultPreparation)
+                    .map(key => [key, saved[key] === true])));
+            }
+        } catch (error) {
+            console.error("Unable to restore trip preparation", error);
+        }
+        setPrepRestored(true);
+    }, []);
+
+    useEffect(() => {
+        if (!prepRestored) return;
         localStorage.setItem(
             "tripPrepStatus",
             JSON.stringify(prepDone)
         );
-    }, [prepDone]);
+    }, [prepDone, prepRestored]);
 
 
     const city = data.city;
