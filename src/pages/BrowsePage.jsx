@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {useParams,useLocation} from "react-router-dom";
-import {getItinerariesByCountry, getAllItinerariesByCustomSearch, getItineraryBySlug} from "../api";
+import {getItinerariesByCountry, getAllItinerariesByCustomSearch, getItineraryBySlug, getPublicCountryNames} from "../api";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import ItineraryCard from "../components/ItineraryCard.jsx";
@@ -10,15 +10,27 @@ import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {getCountryPageMetadata} from "../utils/pageMetadata.js";
 
+import {PrerenderDataContext} from "../context/PrerenderDataContext.jsx";
+import {getCountrySlug, getCountryBootstrap, resolveCountryName, toCountryCard} from "../utils/countries.js";
+
 function useQuery() {
     const { search } = useLocation();
     return new URLSearchParams(search);
 }
 
 export default function BrowsePage() {
-    let {country} = useParams();
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const {country} = useParams();
+    const countrySlug = getCountrySlug(country);
+    const {i18n, t} = useTranslation();
+    const lang = i18n.resolvedLanguage ?? "en";
+    const prerenderData = useContext(PrerenderDataContext);
+    const bootstrap = getCountryBootstrap(prerenderData, countrySlug, lang)
+        && resolveCountryName(country, prerenderData.countryNames) ? prerenderData : null;
+    const bootstrapRef = useRef(bootstrap);
+    const countryNamesRef = useRef(prerenderData?.type === "country" ? prerenderData.countryNames : null);
+    const [countryName, setCountryName] = useState(() => bootstrap?.countryName || formatSlug(country));
+    const [items, setItems] = useState(() => bootstrap?.items || []);
+    const [loading, setLoading] = useState(() => !bootstrap);
     const [err, setErr] = useState("");
     const qs = useQuery();
     const initialQ = qs.get("q") || "";
@@ -26,11 +38,7 @@ export default function BrowsePage() {
     const [daysMin, setDaysMin] = useState(1);
     const [daysMax, setDaysMax] = useState(6);
     const [q, setQ] = React.useState(initialQ);
-    const { i18n } = useTranslation();
-    const lang = i18n.resolvedLanguage ?? "en";
-    const { t } = useTranslation();
-    let testing =useRef(null)
-    const pageMetadata = getCountryPageMetadata(formatSlug(country || ""));
+    const pageMetadata = getCountryPageMetadata(countryName);
 
     function applyFilters(page = 0) {
         const params = new URLSearchParams();
@@ -39,7 +47,10 @@ export default function BrowsePage() {
         if (daysMax != null) params.set("daysMax", String(daysMax));
         params.set("page", String(page));
         params.set("size", "12");
-        params.set("country", country.replace("-"," "));
+        if (!countryNamesRef.current) return;
+        const apiCountry = resolveCountryName(country, countryNamesRef.current);
+        if (!apiCountry) return;
+        params.set("country", apiCountry);
         if (sort) params.set("sort", sort);
         getAllItinerariesByCustomSearch(params.toString()).then((res) => {
             setItems(res.content);
@@ -57,43 +68,43 @@ export default function BrowsePage() {
 
 
     useEffect(() => {
+        // Keep the initial match through effect replays; discard it once route/language changes.
+        if (getCountryBootstrap(bootstrapRef.current, countrySlug, lang)
+            && resolveCountryName(country, bootstrapRef.current.countryNames)) {
+            prerenderData?.clear();
+            return;
+        }
+        bootstrapRef.current = null;
         let ignore = false;
         setLoading(true);
+        setItems([]);
         setErr("");
-        if(country.includes("-")){
-            country = country.replace("-"," ");
+
+        async function loadCountry() {
+            const names = countryNamesRef.current || await getPublicCountryNames();
+            if (ignore) return;
+            countryNamesRef.current = names;
+            const apiCountry = resolveCountryName(country, names);
+            if (!apiCountry) throw new Error("Country not found");
+            setCountryName(apiCountry);
+            const data = await getItinerariesByCountry(apiCountry);
+            if (ignore) return;
+            const result = await Promise.all(data.map(item =>
+                getItineraryBySlug(item.slug, lang).then(toCountryCard)));
+            if (!ignore) setItems(result);
         }
 
-        getItinerariesByCountry(country)
-            .then((data) => { if (!ignore) {
-                return Promise.all(
-                    data.map((item) =>
-                        getItineraryBySlug(item.slug, lang)
-                            .then((response) => ({
-                                slug: response.slug,
-                                title: response.title,
-                                summary: response.summary,
-                                hero: response.hero,
-                                country: response.country,
-                                days: response.days,
-                            }))
-                    )
-                );
-            }
-            }).then((result) => {
-                setItems(result);
-        })
-            .catch((e) => { if (!ignore) setErr(e?.message || "Failed to load"); })
+        loadCountry()
+            .catch(error => { if (!ignore) setErr(error?.message || "Failed to load"); })
             .finally(() => { if (!ignore) setLoading(false); });
-
         return () => { ignore = true; };
-    }, [country,lang]);
+    }, [country, countrySlug, lang]);
 
     if (loading) {
         return (
             <div className="fixed inset-0 z-50 bg-white">
-                <PageCanonical segments={["browse", country]} />
-                <PageMetadata canonicalSegments={["browse", country]} {...pageMetadata} />
+                <PageCanonical segments={["browse", countrySlug]} />
+                <PageMetadata canonicalSegments={["browse", countrySlug]} {...pageMetadata} />
                 <div className="w-[1000px] h-[1000px] mt-[250px] ml-[20px] xl:ml-[650px] md:ml-[250px] lg:ml-[400px]">
                     <Lottie animationData={LoadingAnimation} loop={true} />
                 </div>
@@ -103,14 +114,14 @@ export default function BrowsePage() {
 
     return (
         <>
-            <PageCanonical segments={["browse", country]} />
-            <PageMetadata canonicalSegments={["browse", country]} {...pageMetadata} />
+            <PageCanonical segments={["browse", countrySlug]} />
+            <PageMetadata canonicalSegments={["browse", countrySlug]} {...pageMetadata} />
 
             <main className="min-h-screen bg-gray-50">
                 <section className="max-w-screen-xl mx-auto px-4 py-8">
                     <header className="mb-6">
                         <h1 className="text-2xl font-bold">
-                            {t("browsePage.shortBreaksIn")} {country ? `— ${formatSlug(country)}` : ""}
+                            {t("browsePage.shortBreaksIn")} {countryName ? `— ${countryName}` : ""}
                         </h1>
                     </header>
 

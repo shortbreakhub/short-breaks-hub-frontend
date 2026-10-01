@@ -2,6 +2,7 @@ import {mkdir, readFile, readdir, writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
 import {fileURLToPath} from "node:url";
 import {createServer, loadEnv} from "vite";
+import {buildCountryPages} from "../src/utils/countries.js";
 import {REGIONS} from "../src/config/regions.js";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -120,25 +121,44 @@ try {
     const {renderRoute} = await vite.ssrLoadModule("/src/prerenderEntry.jsx");
     const api = await vite.ssrLoadModule("/src/api.js");
 
-    const regionRoutes = await Promise.all(REGIONS.map(async ({onClick: region}) => {
+    const regionData = await Promise.all(REGIONS.map(async ({onClick: region}) => {
         const [countries, regionItineraries] = await Promise.all([
             api.getCountriesByRegion(region),
             api.getItinerariesByRegion(region),
         ]);
         const itineraries = validateRegionData(region, countries, regionItineraries);
         return {
-            pathname: `/${region}`,
-            outputPath: resolve(distRoot, region, "index.html"),
-            initialData: {region, countries, itineraries},
+            countries, itineraries: regionItineraries,
+            route: {
+                pathname: `/${region}`,
+                outputPath: resolve(distRoot, region, "index.html"),
+                initialData: {region, countries, itineraries},
+            },
         };
+    }));
+    const countryPages = buildCountryPages(regionData);
+    const regionRoutes = regionData.map(({route}) => route);
+    const countryRoutes = countryPages.map(initialData => ({
+        pathname: `/browse/${initialData.countrySlug}`,
+        outputPath: resolve(distRoot, "browse", initialData.countrySlug, "index.html"),
+        initialData,
     }));
     const template = await readFile(resolve(distRoot, "index.html"), "utf8");
     const manifest = JSON.parse(await readFile(resolve(distRoot, ".vite/manifest.json"), "utf8"));
 
+    for (const {countryName, items} of countryPages) {
+        for (const item of items) {
+            if (!manifest[item.hero.slice(1)]?.file) {
+                throw new Error(`Country ${countryName}: missing built hero asset ${item.hero}.`);
+            }
+        }
+    }
+    console.log(`Country prerendering reuses Region data: ${countryPages.length} countries; no Country/detail API requests.`);
     const routeSpecs = [
         {pathname: "/", outputPath: resolve(distRoot, "index.html"), initialData: null},
         {pathname: "/contact", outputPath: resolve(distRoot, "contact/index.html"), initialData: null},
         ...regionRoutes,
+        ...countryRoutes,
     ];
 
     const renderedRoutes = [];
