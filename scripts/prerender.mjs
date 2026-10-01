@@ -3,6 +3,7 @@ import {resolve} from "node:path";
 import {fileURLToPath} from "node:url";
 import {createServer, loadEnv} from "vite";
 import {buildCountryPages} from "../src/utils/countries.js";
+import {getOfficialInventory, fetchOfficialPages} from "../src/utils/officialItineraries.js";
 import {REGIONS} from "../src/config/regions.js";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -137,6 +138,13 @@ try {
         };
     }));
     const countryPages = buildCountryPages(regionData);
+    const officialSlugs = getOfficialInventory(regionData);
+    const officialPages = await fetchOfficialPages(officialSlugs, api.getItineraryBySlug, 4);
+    const officialRoutes = officialPages.map(initialData => ({
+        pathname: `/itinerary/${initialData.slug}`,
+        outputPath: resolve(distRoot, "itinerary", initialData.slug, "index.html"),
+        initialData,
+    }));
     const regionRoutes = regionData.map(({route}) => route);
     const countryRoutes = countryPages.map(initialData => ({
         pathname: `/browse/${initialData.countrySlug}`,
@@ -153,18 +161,51 @@ try {
             }
         }
     }
+    const {loadSubFolderImages} = await vite.ssrLoadModule("/src/utils/loadImage.js");
+    for (const {slug, detail} of officialPages) {
+        if (!manifest[detail.hero.slice(1)]?.file) {
+            throw new Error(`Official itinerary ${slug}: missing built hero asset ${detail.hero}.`);
+        }
+        for (const place of detail.places) {
+            if (!place.imageUrl) continue;
+            // Inspect the existing component resolver, including its extension aliases.
+            const parts = place.imageUrl.split("/");
+            const image = loadSubFolderImages(parts.slice(3, 6).join("/"), parts[6].split(".")[0]);
+            if (!image) {
+                console.warn(`Official itinerary ${slug}: existing optional food image is missing: ${place.imageUrl}`);
+            }
+        }
+    }
+    console.log(`Official itinerary prerendering: ${officialPages.length} documents/detail requests; concurrency 4.`);
     console.log(`Country prerendering reuses Region data: ${countryPages.length} countries; no Country/detail API requests.`);
     const routeSpecs = [
         {pathname: "/", outputPath: resolve(distRoot, "index.html"), initialData: null},
         {pathname: "/contact", outputPath: resolve(distRoot, "contact/index.html"), initialData: null},
         ...regionRoutes,
         ...countryRoutes,
+        ...officialRoutes,
     ];
 
     const renderedRoutes = [];
     for (const route of routeSpecs) {
-        const rendered = renderRoute(route.pathname, route.initialData);
+        let rendered;
+        try {
+            rendered = renderRoute(route.pathname, route.initialData);
+        } catch (error) {
+            throw new Error(`Route ${route.pathname}: rendering failed: ${error.message}`, {cause: error});
+        }
         const html = makeRouteHtml(template, rendered.markup, manifest, route.initialData);
+        if (route.initialData?.type === "official-itinerary") {
+            const page = splitRenderedMarkup(rendered.markup, manifest).pageMarkup;
+            if (/\/src\/assets\/|url\(undefined\)/.test(page)) {
+                throw new Error(`Official itinerary ${route.initialData.slug}: unresolved rendered asset.`);
+            }
+            for (const [, asset] of page.matchAll(/(?:src="|url\()(?:(?:&quot;|&#x27;))?(\/assets\/[^"&')]+)/g)) {
+                await readFile(resolve(distRoot, asset.slice(1))).catch(() => {
+                    throw new Error(`Official itinerary ${route.initialData.slug}: missing rendered asset ${asset}.`);
+                });
+            }
+        }
         renderedRoutes.push({...route, html});
     }
 
