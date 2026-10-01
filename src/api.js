@@ -1,4 +1,5 @@
 import axios from "axios";
+import {REGIONS} from "./config/regions.js";
 import {isExpired} from "./utils/jwtParser.js";
 
 export const publicApi = axios.create({
@@ -20,6 +21,17 @@ export const getItineraryBySlug = (slug,lang) =>
 
 export const getCountriesByRegion = (region) =>
     publicApi.get(`/itineraries/region/${region}`).then((res) => res.data);
+
+// Cached public Region discovery for SPA visits without Country bootstrap data.
+let countryNamesPromise;
+export function getPublicCountryNames() {
+    if (!countryNamesPromise) {
+        countryNamesPromise = Promise.all(REGIONS.map(({onClick}) => getCountriesByRegion(onClick)))
+            .then(lists => [...new Set(lists.flat())])
+            .catch(error => { countryNamesPromise = null; throw error; });
+    }
+    return countryNamesPromise;
+}
 
 export const getItinerariesByCountry = (country) =>
     publicApi.get(`/itineraries/browse/${country}`).then((res) => res.data);

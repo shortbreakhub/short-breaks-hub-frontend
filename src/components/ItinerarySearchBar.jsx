@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCountriesByRegion } from "../api";
+import {getCountryBrowsePath} from "../utils/publicNavigation.js";
 import { useTranslation } from "react-i18next";
 
 export default function ItinerarySearchBar({regions}) {
@@ -11,25 +12,18 @@ export default function ItinerarySearchBar({regions}) {
     const nav = useNavigate();
     const { t } = useTranslation();
 
-    function slugify(str) {
-        return str
-            .toLowerCase()
-            .replace(/\s+/g, '-')       // spaces → dashes
-            .replace(/[^a-z0-9-]/g, ''); // remove other weird chars
-    }
-
     useEffect(() => {
         setCountry("");
         if (!region) { setCountries([]); return; }
         setLoading(true);
-        getCountriesByRegion(slugify(region))
+        getCountriesByRegion(region)
             .then(setCountries)
             .finally(() => setLoading(false));
     }, [region]);
 
     const onSearch = (e) => {
         e.preventDefault();
-        nav(`/browse/${slugify(country)}`);
+        nav(getCountryBrowsePath(country));
     };
 
     return (
@@ -43,7 +37,7 @@ export default function ItinerarySearchBar({regions}) {
                     className="w-full bg-white/85 text-slate-800 rounded-md border border-white/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 >
                     <option value="">{t(`itinerarySearchBar.selectARegion`)}</option>
-                    {regions.map(r => <option key={r.title} value={r.title}>{toLabel(t(`homepage.regions.${r.key}.title`))}</option>)}
+                    {regions.map(r => <option key={r.title} value={r.onClick}>{toLabel(t(`homepage.regions.${r.key}.title`))}</option>)}
                 </select>
             </label>
 

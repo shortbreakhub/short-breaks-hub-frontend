@@ -11,9 +11,9 @@ test("region links retain their route spelling", () => {
     assert.equal(getRegionPath("Oceania"), "/Oceania");
 });
 
-test("country cards retain the country browse route", () => {
-    assert.equal(getCountryBrowsePath("Japan"), "/browse/Japan");
-    assert.equal(getCountryBrowsePath("United States"), "/browse/United States");
+test("country cards use canonical lowercase Country slugs", () => {
+    assert.equal(getCountryBrowsePath("Japan"), "/browse/japan");
+    assert.equal(getCountryBrowsePath("United States"), "/browse/united-states");
 });
 
 test("official itinerary links retain the itinerary route", () => {

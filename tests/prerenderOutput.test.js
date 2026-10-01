@@ -5,7 +5,10 @@ import test from "node:test";
 
 import {REGIONS} from "../src/config/regions.js";
 import {formatSlug} from "../src/utils/formatSlug.js";
-import {getRegionPageMetadata} from "../src/utils/pageMetadata.js";
+import {getRegionPageMetadata, getCountryPageMetadata} from "../src/utils/pageMetadata.js";
+
+import {createCountryDirectory} from "../src/utils/countries.js";
+import {getCountryBrowsePath} from "../src/utils/publicNavigation.js";
 
 const dist = resolve(process.cwd(), "dist");
 const routes = {
@@ -13,6 +16,13 @@ const routes = {
     contact: readFileSync(resolve(dist, "contact/index.html"), "utf8"),
     ...Object.fromEntries(REGIONS.map(({onClick}) => [onClick, readFileSync(resolve(dist, onClick, "index.html"), "utf8")])),
 };
+function bootstrapData(html) {
+    return JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+}
+const directory = createCountryDirectory(REGIONS.flatMap(({onClick}) => bootstrapData(routes[onClick]).countries));
+for (const slug of directory.keys()) {
+    routes[`browse/${slug}`] = readFileSync(resolve(dist, "browse", slug, "index.html"), "utf8");
+}
 const appShell = readFileSync(resolve(dist, "app-shell.html"), "utf8");
 
 function htmlAttribute(html, tagName, attributeName, value) {
@@ -89,7 +99,7 @@ test("pre-rendered Europe HTML contains route metadata and current real Region p
     });
     assert.match(routes.europe, /<h1[^>]*>[\s\S]*?Discover[\s\S]*?Europe[\s\S]*?<\/h1>/);
     assert.match(routes.europe, />France<\/h2>/);
-    assert.match(routes.europe, /href="\/browse\/France"/);
+    assert.match(routes.europe, /href="\/browse\/france"/);
     assert.match(routes.europe, /href="\/itinerary\//);
     assert.doesNotMatch(routes.europe, /\/src\/assets\//, "asset URLs must point to built production assets");
 });
@@ -97,7 +107,7 @@ test("pre-rendered Europe HTML contains route metadata and current real Region p
 test("route outputs contain distinct page trees and valid built JS/CSS assets", () => {
     const pageTrees = Object.values(routes).map(getRenderedRoot);
     assert.ok(pageTrees.every(Boolean));
-    assert.equal(new Set(pageTrees).size, REGIONS.length + 2, "route outputs should contain distinct rendered React pages");
+    assert.equal(new Set(pageTrees).size, Object.keys(routes).length, "route outputs should contain distinct rendered React pages");
 
     for (const html of [...Object.values(routes), appShell]) {
         const js = html.match(/<script\b[^>]*\bsrc="([^"]+\.js)"/i)?.[1];
@@ -129,7 +139,7 @@ for (const {onClick: region, title} of REGIONS) {
         assert.ok(data.countries.length > 0);
         assert.ok(data.itineraries.length > 0);
         for (const country of data.countries) {
-            assert.ok(html.includes(`href="/browse/${country}"`), `missing country link for ${country}`);
+            assert.ok(html.includes(`href="${getCountryBrowsePath(country)}"`), `missing country link for ${country}`);
             const itinerary = data.itineraries.find(item => item.country.toLowerCase() === country.toLowerCase());
             assert.ok(itinerary, `missing itinerary data for ${country}`);
             assert.ok(html.includes(`href="/itinerary/${itinerary.slug}"`), `missing itinerary link for ${country}`);
@@ -147,7 +157,7 @@ test("only the known public routes have prerendered documents", () => {
     const documents = readdirSync(dist, {recursive: true})
         .filter(path => path === "index.html" || path.endsWith("/index.html"))
         .sort();
-    assert.deepEqual(documents, ["index.html", "contact/index.html", ...REGIONS.map(({onClick}) => `${onClick}/index.html`)].sort());
+    assert.deepEqual(documents, ["index.html", "contact/index.html", ...REGIONS.map(({onClick}) => `${onClick}/index.html`), ...[...directory.keys()].map(slug => `browse/${slug}/index.html`)].sort());
     assert.equal(new Set(REGIONS.map(({onClick}) => onClick)).size, REGIONS.length);
     assert.doesNotMatch(appShell, /shortbreakhub-prerender-data|region-countries/);
 });
@@ -178,5 +188,31 @@ for (const [route, html] of Object.entries(routes)) {
         }
         assert.doesNotMatch(html, /shortbreakshub\.com|currentTime-by-currentTime/);
         assert.doesNotMatch(getRenderedRoot(html), /(?:property|name)="(?:og:|twitter:)/);
+    });
+}
+
+for (const [slug, name] of directory) {
+    test(`Country ${slug} renders real cards with matching bootstrap and assets`, () => {
+        const html = routes[`browse/${slug}`];
+        assertMetadata(html, {...getCountryPageMetadata(name), canonical: `https://www.shortbreakhub.com/browse/${slug}`});
+        const data = bootstrapData(html);
+        assert.equal(data.type, "country");
+        assert.equal(data.countrySlug, slug);
+        assert.equal(data.countryName, name);
+        assert.equal(data.language, "en");
+        assert.deepEqual(createCountryDirectory(data.countryNames), directory);
+        assert.match(slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+        assert.ok(data.items.length > 0);
+        assert.ok(getRenderedRoot(html).includes(name));
+        for (const card of data.items) {
+            assert.equal(card.country.toLowerCase(), name.toLowerCase());
+            assert.ok(html.includes(`href="/itinerary/${card.slug}"`));
+            assert.ok(getRenderedRoot(html).replace(/<!--[\s\S]*?-->/g, "").includes(`$${card.priceFrom}`));
+            assert.ok(card.title && card.summary && card.hero && card.days > 0);
+        }
+        const images = [...html.matchAll(/<img\b[^>]*src="([^"]+)"/g)];
+        assert.ok(images.length >= data.items.length);
+        for (const [, src] of images) assert.ok(existsSync(resolve(dist, src.slice(1))), `missing ${src}`);
+        assert.doesNotMatch(getRenderedRoot(html), /\/src\/assets\/|\$undefined/);
     });
 }
