@@ -1,3 +1,5 @@
+import {projectHotelDestination} from "./hotelBooking.js";
+
 // Official identifiers are API identities, never values to normalize into slugs.
 export function validateOfficialSlug(slug) {
     if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
@@ -64,6 +66,7 @@ export function validateOfficialDetail(slug, data) {
             .filter(key => record[key] !== undefined)
             .map(key => [key, record[key]])));
     }
+    detail.hotelDestination = projectHotelDestination(data.hotelDestination);
     return detail;
 }
 
