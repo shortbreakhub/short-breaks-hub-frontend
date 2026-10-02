@@ -23,6 +23,8 @@ import {getItineraryPageMetadata} from "../utils/pageMetadata.js";
 import {PrerenderDataContext} from "../context/PrerenderDataContext.jsx";
 import {getOfficialBootstrap, getItineraryPlanning, getItineraryTransport} from "../utils/officialItineraries.js";
 
+import {initializeHotelBooking, resolveHotelBooking, changeHotelBooking, validateHotelSearch, buildTripComHotelUrl} from "../utils/hotelBooking.js";
+
 const defaultPreparation = {hotel: false, flights: false, insurance: false, airport: false, localTransport: false, car: false, docs: false};
 
 export default function ItineraryPage() {
@@ -34,6 +36,9 @@ export default function ItineraryPage() {
     const bootstrapRef = useRef(getOfficialBootstrap(prerenderData, slug, lang));
     const [data,setData] = useState(() => bootstrapRef.current?.detail || {});
     const [loading, setLoading] = useState(() => !bootstrapRef.current);
+    const [hotelState, setHotelState] = useState(null);
+    useEffect(() => { setHotelState(null); }, [slug]);
+    const hotelValues = hotelState?.slug === slug ? resolveHotelBooking(hotelState, data.days) : {};
     const [userCurrency, setUserCurrency] = useState("USD");
     const [userCurrencyValue, setUserCurrencyValue] = useState(0);
     const [convertRate, setConvertRate] = useState(1);
@@ -224,7 +229,13 @@ export default function ItineraryPage() {
                 hint: t("itineraryPage.hotelHint"),
                 ctaLabel: t("itineraryPage.findHotels"),
                 done: prepDone.hotel,
-                onFind: () => console.log("affiliate: hotels", { city, checkIn, checkOut }),
+                onSearch: filters => {
+                    const now = new Date();
+                    const error = validateHotelSearch(data.hotelDestination, filters, now);
+                    if (error) return error;
+                    const url = buildTripComHotelUrl(data.hotelDestination, filters, {now});
+                    window.open(url, "_blank", "noopener,noreferrer");
+                },
             },
             {
                 id: "flights",
@@ -277,7 +288,7 @@ export default function ItineraryPage() {
                 onFind: () => console.log("affiliate: docs", { country: data?.country }),
             },
         ];
-    }, [prepDone, city, checkIn, checkOut, data?.country,lang]);
+    }, [prepDone, city, checkIn, checkOut, data?.country, data.hotelDestination,lang]);
 
 
     if (loading) {
@@ -407,6 +418,16 @@ export default function ItineraryPage() {
 
                     <aside>
                         <TripPrepRail
+                            city={city}
+                            country={data.country}
+                            days={data.days}
+                            hotelDestination={data.hotelDestination}
+                            hotelBooking={hotelValues}
+                            onHotelOpen={() => setHotelState(previous => initializeHotelBooking(previous,
+                                {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
+                            onHotelChange={(field, value) => setHotelState(previous => changeHotelBooking(previous, field, value, data.days))}
+                            onHotelReset={() => setHotelState(initializeHotelBooking(null,
+                                {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
                             items={tripPrepItems}
                             onMarkDone={markPrepDone}
                             onReset={resetPrep}

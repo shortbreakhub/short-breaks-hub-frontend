@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {HOTEL_CHILD_AGE_OPTIONS, MAX_HOTEL_CHILDREN, resizeHotelChildAges, validateHotelChildAges, getHotelDefaults, addCalendarDays} from "../utils/hotelBooking.js";
 
 function ProgressBar({ done, total }) {
     const pct = total === 0 ? 0 : Math.round((done / total) * 100);
@@ -154,10 +155,10 @@ function Field({ field, value, onChange }) {
 }
 
 function Drawer({ open, title, onClose, children, footer }) {
-    if (!open) return null;
     const { t } = useTranslation();
+    if (!open) return null;
     return (
-        <div className="fixed inset-0 z-50">
+        <div role="dialog" aria-modal="true" aria-label={title} className="fixed inset-0 z-50">
 
             <button
                 type="button"
@@ -195,6 +196,11 @@ export default function TripPrepRail({
                                          city,
                                          country,
                                          days,
+                                         hotelDestination,
+                                         hotelBooking,
+                                         onHotelOpen,
+                                         onHotelChange,
+                                         onHotelReset,
                                          items,
                                          onMarkDone,
                                          onReset,
@@ -208,18 +214,19 @@ export default function TripPrepRail({
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeKey, setActiveKey] = useState(null); // "hotel" | "flights" | ...
     const [filtersByKey, setFiltersByKey] = useState({});
+    const [hotelError, setHotelError] = useState(null);
     const { t } = useTranslation();
 
     const FILTER_SCHEMAS = {
         hotel: {
             title: t("tripPrepRail.hotel.title"),
             fields: [
+                { key: "destination", label: t("tripPrepRail.hotel.destination"), type: "text" },
                 { key: "checkIn", label: t("tripPrepRail.hotel.checkIn"), type: "date" },
                 { key: "checkOut", label: t("tripPrepRail.hotel.checkOut"), type: "date" },
                 { key: "rooms", label: t("tripPrepRail.hotel.rooms"), type: "number", min: 1, max: 5, placeholder: "1" },
                 { key: "adults", label: t("tripPrepRail.hotel.adults"), type: "number", min: 1, max: 10, placeholder: "2" },
-                { key: "children", label: t("tripPrepRail.hotel.children"), type: "number", min: 0, max: 6, placeholder: "0" },
-                { key: "landmark", label: t("tripPrepRail.hotel.landmark"), type: "text", placeholder: t("tripPrepRail.hotel.landmarkPlaceholder") },
+                { key: "children", label: t("tripPrepRail.hotel.children"), type: "number", min: 0, max: MAX_HOTEL_CHILDREN, placeholder: "0" },
                 { key: "breakfast", label: t("tripPrepRail.hotel.breakfast"), type: "toggle" },
                 { key: "freeCancel", label: t("tripPrepRail.hotel.freeCancel"), type: "toggle" },
             ],
@@ -327,21 +334,28 @@ export default function TripPrepRail({
         }
         if (key === "hotel") {
             return {
+                ...getHotelDefaults({city, days, hotelDestination}),
                 ...base,
                 rooms: base.rooms ?? 1,
                 adults: base.adults ?? 2,
                 children: base.children ?? 0,
+                childAges: resizeHotelChildAges(base.childAges, base.children ?? 0),
             };
         }
         return base;
     }
 
     function openFilters(key) {
+        setHotelError(null);
         setActiveKey(key);
-        setFiltersByKey((prev) => ({
-            ...prev,
-            [key]: getDefaultFilters(key),
-        }));
+        if (key === "hotel" && onHotelOpen) {
+            onHotelOpen();
+        } else {
+            setFiltersByKey((prev) => ({
+                ...prev,
+                [key]: getDefaultFilters(key),
+            }));
+        }
         setDrawerOpen(true);
     }
 
@@ -350,14 +364,32 @@ export default function TripPrepRail({
     }
 
     function changeFilter(key, fieldKey, value) {
-        setFiltersByKey((prev) => ({
-            ...prev,
-            [key]: { ...(prev[key] ?? {}), [fieldKey]: value },
-        }));
+        setHotelError(null);
+        if (key === "hotel" && onHotelChange) {
+            onHotelChange(fieldKey, value);
+            return;
+        }
+        setFiltersByKey((prev) => {
+            const filters = {...(prev[key] ?? {}), [fieldKey]: value};
+            if (key === "hotel" && fieldKey === "children") {
+                filters.childAges = resizeHotelChildAges(prev.hotel?.childAges, value);
+            }
+            if (key === "hotel" && fieldKey === "checkIn" && !prev.hotel?.checkOutEdited) {
+                filters.checkOut = addCalendarDays(value, Number.isInteger(days) && days > 0 ? days : 3);
+            }
+            if (key === "hotel" && fieldKey === "checkOut") filters.checkOutEdited = true;
+            return {...prev, [key]: filters};
+        });
     }
 
     function resetFilters(key) {
-        setFiltersByKey((prev) => ({ ...prev, [key]: {} }));
+        setHotelError(null);
+        if (key === "hotel" && onHotelReset) {
+            onHotelReset();
+            return;
+        }
+        setFiltersByKey((prev) => ({ ...prev, [key]: key === "hotel"
+            ? getHotelDefaults({city, days, hotelDestination}) : {} }));
     }
 
 
@@ -370,10 +402,18 @@ export default function TripPrepRail({
     };
 
     const activeSchema = activeKey ? FILTER_SCHEMAS[activeKey] : null;
-    const activeFilters = activeKey ? (filtersByKey[activeKey] ?? {}) : {};
+    const activeFilters = activeKey === "hotel" && hotelBooking
+        ? hotelBooking : activeKey ? (filtersByKey[activeKey] ?? {}) : {};
 
     function handleSearch() {
         if (!activeKey) return;
+        if (activeKey === "hotel") {
+            const error = validateHotelChildAges(activeFilters);
+            if (error) {
+                setHotelError(error);
+                return;
+            }
+        }
 
         const matchingItemId = Object.keys(idToSchemaKey).find(
             (id) => idToSchemaKey[id] === activeKey
@@ -383,12 +423,12 @@ export default function TripPrepRail({
 
         const context = { city, country, days };
 
-        if (item?.onSearch) {
-            item.onSearch(activeFilters, context);
-        } else if (item?.onFind) {
-            item.onFind(activeFilters, context);
+        const result = item?.onSearch
+            ? item.onSearch(activeFilters, context) : item?.onFind?.(activeFilters, context);
+        if (activeKey === "hotel" && typeof result === "string") {
+            setHotelError(result);
+            return;
         }
-
         closeFilters();
     }
 
@@ -546,13 +586,39 @@ export default function TripPrepRail({
                         </div>
 
                         {activeSchema.fields.map((field) => (
-                            <Field
-                                key={field.key}
-                                field={field}
-                                value={activeFilters[field.key]}
-                                onChange={(k, v) => changeFilter(activeKey, k, v)}
-                            />
+                            <React.Fragment key={field.key}>
+                                <Field
+                                    field={field}
+                                    value={activeFilters[field.key]}
+                                    onChange={(k, v) => changeFilter(activeKey, k, v)}
+                                />
+                                {activeKey === "hotel" && field.key === "children" &&
+                                    resizeHotelChildAges(activeFilters.childAges, activeFilters.children).map((age, index) => (
+                                        <label key={index} className="block space-y-1">
+                                            <span className="text-xs font-medium text-gray-700">
+                                                {t("tripPrepRail.hotel.childAge", {number: index + 1})}
+                                            </span>
+                                            <select
+                                                value={age ?? ""}
+                                                required
+                                                aria-invalid={hotelError === "tripPrepRail.hotel.missingChildAges" && !HOTEL_CHILD_AGE_OPTIONS.includes(age)}
+                                                onChange={event => {
+                                                    const ages = [...activeFilters.childAges];
+                                                    ages[index] = event.target.value || null;
+                                                    changeFilter("hotel", "childAges", ages);
+                                                }}
+                                                className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-gray-400"
+                                            >
+                                                <option value="">{t("tripPrepRail.hotel.selectAge")}</option>
+                                                {HOTEL_CHILD_AGE_OPTIONS.map(option => <option key={option} value={option}>{option}</option>)}
+                                            </select>
+                                        </label>
+                                    ))}
+                            </React.Fragment>
                         ))}
+                        {activeKey === "hotel" && hotelError && (
+                            <p role="alert" className="text-sm text-red-600">{t(hotelError)}</p>
+                        )}
                     </div>
                 ) : (
                     <p className="text-sm text-gray-600">{t("tripPrepRail.mainFrame.noFiltersAvailable")}</p>
