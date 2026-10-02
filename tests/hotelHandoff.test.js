@@ -116,10 +116,13 @@ test("Official Hotel handoff hydrates safely, preserves edits, resets across iti
         assert.equal(opened.length, 0);
         assert.ok(document.querySelector("select"), "missing age keeps drawer open");
         await selectAge("<1");
-        await search();
-        assert.equal(opened.length, 0);
-        assert.equal(document.querySelector('[role="alert"]').textContent, i18n.t("tripPrepRail.hotel.infantUnavailable"));
         assert.equal(document.querySelector("select").value, "<1");
+        await search();
+        assert.equal(opened.length, 1);
+        assert.equal(new URL(opened[0][0]).searchParams.get("ages"), "0");
+        await openHotel();
+        assert.equal(document.querySelector("select").value, "<1", "handoff does not change UI age state");
+        opened.length = 0;
         await selectAge("6");
         await search();
         assert.equal(opened.length, 1);

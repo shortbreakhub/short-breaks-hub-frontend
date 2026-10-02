@@ -53,7 +53,31 @@ test("builder emits verified search parameters and preserves affiliate values, i
         assert.ok(url.searchParams.has(key));
         assert.equal(url.searchParams.get(key), original.searchParams.get(key));
     }
-    for (const key of ["city", "display", "optionId", "optionType", "optionName", "listFilters"]) assert.ok(!url.searchParams.has(key));
+    assert.equal(url.searchParams.get("listFilters"), "5~1*5*1,23~10*23*10");
+    for (const key of ["city", "display", "optionId", "optionType", "optionName"]) assert.ok(!url.searchParams.has(key));
+});
+
+test("verified Hotel filters compose independently and discard every stale base filter", () => {
+    const baseUrl = TRIP_COM_HOTEL_AFFILIATE_URL + "&listFilters=29~1*29*1~2*2,unverified&listFilters=stale";
+    const hotel = {...defaults, children: 2, childAges: ["6", "11"]};
+    for (const [breakfast, freeCancel, expected] of [
+        [false, false, null], [true, false, "5~1*5*1"],
+        [false, true, "23~10*23*10"], [true, true, "5~1*5*1,23~10*23*10"],
+        [false, true, "23~10*23*10"], [true, false, "5~1*5*1"], [false, false, null],
+    ]) {
+        const url = new URL(buildTripComHotelUrl(shanghai, {...hotel, breakfast, freeCancel}, {now, baseUrl}));
+        assert.equal(url.searchParams.get("listFilters"), expected);
+        assert.equal(url.searchParams.getAll("listFilters").length, expected === null ? 0 : 1);
+        assert.equal(url.searchParams.get("children"), "2");
+        assert.equal(url.searchParams.get("ages"), "6,11");
+        for (const key of ["provinceId", "countryId", "curr", "locale", "old", "fixedDate", "flexType"]) {
+            assert.equal(url.searchParams.has(key), false);
+        }
+    }
+    const url = new URL(buildTripComHotelUrl(shanghai, {...defaults, breakfast: true}, {now, baseUrl}));
+    assert.equal(url.searchParams.get("listFilters"), "5~1*5*1");
+    assert.equal(url.searchParams.has("children"), false);
+    assert.equal(url.searchParams.has("ages"), false);
 });
 
 test("builder uses opaque IDs, safely encodes another destination, and removes stale destination/child/filter parameters", () => {
@@ -69,15 +93,13 @@ test("builder uses opaque IDs, safely encodes another destination, and removes s
     assert.equal(typeof destination.externalId, "string");
 });
 
-test("unusable mappings, infant ages, missing ages, mismatched edited names, dates and guest counts fail safely", () => {
+test("unusable mappings, missing ages, mismatched edited names, dates and guest counts fail safely", () => {
     for (const destination of [null, {...shanghai, status: "SKIPPED", externalId: null},
         {...shanghai, provider: "OTHER"}, {...shanghai, entityType: "HOTEL"}, {...shanghai, externalId: " "}, {...shanghai, externalId: 2}]) {
         assert.equal(getMappedHotelDestination(destination), null);
         assert.equal(validateHotelSearch(destination, defaults, now), "tripPrepRail.hotel.destinationUnavailable");
         assert.throws(() => buildTripComHotelUrl(destination, defaults, {now}), /destinationUnavailable/);
     }
-    assert.equal(validateHotelSearch(shanghai, {...defaults, children: 1, childAges: ["<1"]}, now), "tripPrepRail.hotel.infantUnavailable");
-    assert.throws(() => buildTripComHotelUrl(shanghai, {...defaults, children: 1, childAges: ["<1"]}, {now}), /infantUnavailable/);
     assert.throws(() => buildTripComHotelUrl(shanghai, {...defaults, children: 1, childAges: [null]}, {now}), /missingChildAges/);
     assert.equal(validateHotelSearch(shanghai, {...defaults, destination: "Kyoto"}, now), "tripPrepRail.hotel.destinationMismatch");
     for (const dates of [{checkIn: "2026-10-01"}, {checkOut: defaults.checkIn}, {checkIn: "2026-02-30"}]) {
@@ -100,4 +122,31 @@ test("provider bootstrap projection retains exactly public descriptor fields and
         assert.deepEqual(projected.hotelDestination, shanghai);
         assert.equal(validateOfficialDetail(data.slug, {...data, hotelDestination: undefined}).hotelDestination, null);
     });
+});
+
+
+test("infant serialization changes only the provider value and preserves numeric UI ages", () => {
+    for (const ages of [["<1"], ["<1", "6", "11"], ...Array.from({length: 17}, (_, i) => [String(i + 1)])]) {
+        const hotel = {...defaults, children: ages.length, childAges: [...ages]};
+        assert.equal(validateHotelSearch(shanghai, hotel, now), null);
+        const url = new URL(buildTripComHotelUrl(shanghai, hotel, {now}));
+        assert.equal(url.searchParams.get("children"), String(ages.length));
+        assert.equal(url.searchParams.get("ages"), ages.map(age => age === "<1" ? "0" : age).join(","));
+        assert.deepEqual(hotel.childAges, ages);
+        assert.equal(url.searchParams.has("listFilters"), false, "no guest filter fragments emitted");
+        const original = new URL(TRIP_COM_HOTEL_AFFILIATE_URL);
+        for (const key of ["Allianceid", "SID", "trip_sub1", "trip_sub3"]) {
+            assert.equal(url.searchParams.get(key), original.searchParams.get(key));
+        }
+    }
+});
+
+test("malformed and sparse child ages fail validation without throwing or navigating", () => {
+    for (const ages of [undefined, null, "6", {length: 1, 0: "6"}, new Array(1), [undefined], [null], ["0"], ["18"]]) {
+        const hotel = {...defaults, children: 1, childAges: ages};
+        assert.equal(validateHotelSearch(shanghai, hotel, now), "tripPrepRail.hotel.missingChildAges");
+        assert.throws(() => buildTripComHotelUrl(shanghai, hotel, {now}), /missingChildAges/);
+    }
+    const sparse = ["6", , "11"];
+    assert.equal(validateHotelSearch(shanghai, {...defaults, children: 3, childAges: sparse}, now), "tripPrepRail.hotel.missingChildAges");
 });
