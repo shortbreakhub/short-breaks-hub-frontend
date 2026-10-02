@@ -1,5 +1,5 @@
 // Verified Trip.com Hotel UI options. "<1" is an explicit draft value;
-// its future provider URL serialization has not been verified.
+// it becomes "0" only at the verified Trip.com serialization boundary.
 export const HOTEL_CHILD_AGE_OPTIONS = ["<1", ...Array.from({length: 17}, (_, index) => String(index + 1))];
 export const MAX_HOTEL_CHILDREN = 6;
 
@@ -16,7 +16,9 @@ export function validateHotelChildAges(hotel) {
     const count = hotel.children ?? 0;
     if (!isValidHotelChildCount(count)) return "tripPrepRail.hotel.invalidChildren";
     const ages = hotel.childAges ?? [];
-    if (ages.length !== count || ages.some(age => !HOTEL_CHILD_AGE_OPTIONS.includes(age))) {
+    if (!Array.isArray(ages) || ages.length !== count
+        || Array.from({length: count}, (_, index) => ages[index])
+            .some(age => !HOTEL_CHILD_AGE_OPTIONS.includes(age))) {
         return "tripPrepRail.hotel.missingChildAges";
     }
     return null;
@@ -24,6 +26,12 @@ export function validateHotelChildAges(hotel) {
 
 // Approved affiliate configuration; destination/search values are replaced below.
 export const TRIP_COM_HOTEL_AFFILIATE_URL = "https://www.trip.com/hotels/list?city=2&display=Shanghai&optionId=2&optionType=City&optionName=Shanghai&Allianceid=9927800&SID=327885881&trip_sub1=&trip_sub3=D19155586";
+
+// Verified 2026-10-02 against Trip.com's public /hotels/list page data:
+// Breakfast included = filterID 5|1; Free cancellation = filterID 23|10.
+// Each fragment alone selects only its named checkbox; comma composition selects
+// both. Guest state is derived by Trip.com from adult/children/ages/crn separately.
+const TRIP_COM_HOTEL_FILTERS = {breakfast: "5~1*5*1", freeCancel: "23~10*23*10"};
 
 export function getMappedHotelDestination(destination) {
     return destination?.provider === "TRIP_COM" && destination.entityType === "CITY"
@@ -98,7 +106,6 @@ export function changeHotelBooking(state, field, value, days) {
 export function validateHotelSearch(destination, hotel, now = new Date()) {
     const childError = validateHotelChildAges(hotel);
     if (childError) return childError;
-    if (hotel.childAges?.includes("<1")) return "tripPrepRail.hotel.infantUnavailable";
     const mapped = getMappedHotelDestination(destination);
     if (!mapped) return "tripPrepRail.hotel.destinationUnavailable";
     // An edited name cannot supply a new canonical provider identity.
@@ -128,7 +135,12 @@ export function buildTripComHotelUrl(destination, hotel, {now = new Date(), base
     })) url.searchParams.set(key, String(value));
     if (hotel.children > 0) {
         url.searchParams.set("children", String(hotel.children));
-        url.searchParams.set("ages", hotel.childAges.join(","));
+        // Manual Trip.com search: UI <1 produced children=1&ages=0.
+        url.searchParams.set("ages", hotel.childAges.map(age => age === "<1" ? "0" : age).join(","));
     }
+    const filters = Object.entries(TRIP_COM_HOTEL_FILTERS)
+        .filter(([field]) => hotel[field] === true)
+        .map(([, fragment]) => fragment);
+    if (filters.length) url.searchParams.set("listFilters", filters.join(","));
     return url.href;
 }

@@ -284,7 +284,6 @@
   "tripPrepRail": {
     "hotel": {
       "destination": "Destination",
-      "infantUnavailable": "L’option moins de 1 an ne peut pas encore être transférée automatiquement à Trip.com. Veuillez rechercher directement sur Trip.com.",
       "destinationUnavailable": "La recherche directe d’hôtels n’est pas disponible actuellement pour cette destination.",
       "destinationMismatch": "La recherche directe d’hôtels prend actuellement en charge uniquement la destination associée à cet itinéraire. Veuillez rétablir son nom.",
       "invalidDates": "Veuillez choisir une date d’arrivée qui n’est pas passée et une date de départ ultérieure.",
