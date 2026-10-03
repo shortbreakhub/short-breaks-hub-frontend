@@ -1,0 +1,204 @@
+{
+  "issue": 38,
+  "method": "Node gzip level 9; cold Chromium local uncompressed asset/HTML bodies. External requests blocked, API fixtures from production prerender. Desktop 1440x900 DPR1; mobile 390x844 DPR2. Not field Core Web Vitals.",
+  "before": {
+    "initialJsRaw": 470646,
+    "initialJsGzip": 152482,
+    "css": [
+      {
+        "raw": 75421,
+        "gzip": 13561
+      }
+    ],
+    "productionBytes": 1384117087,
+    "sourceAssetBytes": 1480956369,
+    "prerenderedPages": 258,
+    "initialFiles": [
+      "assets/index-DUrBHdr9.js"
+    ]
+  },
+  "after": {
+    "initialJsRaw": 491613,
+    "initialJsGzip": 159778,
+    "css": [
+      {
+        "raw": 79971,
+        "gzip": 14841
+      }
+    ],
+    "productionBytes": 1385064302,
+    "sourceAssetBytes": 1481851015,
+    "prerenderedPages": 258,
+    "initialFiles": [
+      "assets/index-DPqH1MKA.js"
+    ]
+  },
+  "runtime": [
+    {
+      "name": "home-desktop",
+      "beforeBytes": 1244043,
+      "afterBytes": 870826,
+      "errors": [],
+      "requestedImages": [
+        {
+          "url": "/assets/logo-icon-224-C8wnferF.png",
+          "bytes": 12257
+        },
+        {
+          "url": "/assets/english-flag-ChPF0WU8.png",
+          "bytes": 4599
+        },
+        {
+          "url": "/assets/shanghai-960-CGj8AkGu.webp",
+          "bytes": 63208
+        },
+        {
+          "url": "/assets/paris-480-x6jttU_v.webp",
+          "bytes": 18292
+        },
+        {
+          "url": "/assets/tokyo-480-D4AlBPsF.webp",
+          "bytes": 41168
+        },
+        {
+          "url": "/assets/newYork-480-B51go_ei.webp",
+          "bytes": 19992
+        },
+        {
+          "url": "/assets/sydney-480-CgB7jBNX.webp",
+          "bytes": 28922
+        },
+        {
+          "url": "/assets/marrakech-480-CdB5aC9x.webp",
+          "bytes": 37840
+        },
+        {
+          "url": "/assets/southeast-480-gWtXtvvZ.webp",
+          "bytes": 44326
+        }
+      ]
+    },
+    {
+      "name": "home-mobile",
+      "beforeBytes": 1617013,
+      "afterBytes": 982524,
+      "errors": [],
+      "requestedImages": [
+        {
+          "url": "/assets/logo-icon-224-C8wnferF.png",
+          "bytes": 12257
+        },
+        {
+          "url": "/assets/english-flag-ChPF0WU8.png",
+          "bytes": 4599
+        },
+        {
+          "url": "/assets/shanghai-960-CGj8AkGu.webp",
+          "bytes": 63208
+        },
+        {
+          "url": "/assets/paris-480-x6jttU_v.webp",
+          "bytes": 18292
+        },
+        {
+          "url": "/assets/tokyo-480-D4AlBPsF.webp",
+          "bytes": 41168
+        },
+        {
+          "url": "/assets/newYork-480-B51go_ei.webp",
+          "bytes": 19992
+        },
+        {
+          "url": "/assets/sydney-480-CgB7jBNX.webp",
+          "bytes": 28922
+        },
+        {
+          "url": "/assets/marrakech-480-CdB5aC9x.webp",
+          "bytes": 37840
+        },
+        {
+          "url": "/assets/southeast-960-BelmNk9R.webp",
+          "bytes": 156024
+        }
+      ]
+    },
+    {
+      "name": "europe",
+      "beforeBytes": 1157613,
+      "afterBytes": 1183180,
+      "errors": []
+    },
+    {
+      "name": "china",
+      "beforeBytes": 29176514,
+      "afterBytes": 29202082,
+      "errors": []
+    },
+    {
+      "name": "shanghai",
+      "beforeBytes": 7764572,
+      "afterBytes": 7790140,
+      "errors": []
+    }
+  ],
+  "aboveFold": {
+    "englishRasterBytes": 16856,
+    "frenchRasterBytes": 65020,
+    "atlasInlineMarkupRaw": 6508,
+    "atlasInlineMarkupGzip": 1926,
+    "atlasExternalAssetBytes": 0
+  },
+  "verification": {
+    "tests": 622,
+    "homepageTests": 6,
+    "focusedTests": 22,
+    "visualLanguages": [
+      "en",
+      "fr"
+    ],
+    "visualWidths": [
+      1440,
+      768,
+      390
+    ],
+    "routeInventoryUnchanged": true,
+    "representativeSeo": [
+      {
+        "path": "index.html",
+        "title": "Short Breaks Hub – Curated City Breaks & Weekend Getaways",
+        "canonical": "https://www.shortbreakhub.com/",
+        "jsonLd": 2,
+        "heading": "Short Breaks. Big Stories.",
+        "metadataUnchanged": true,
+        "contentAndBootstrapUnchanged": false
+      },
+      {
+        "path": "europe/index.html",
+        "title": "Short Breaks in Europe | Regional Itineraries | Short Breaks Hub",
+        "canonical": "https://www.shortbreakhub.com/europe",
+        "jsonLd": 2,
+        "heading": "Discover Europe",
+        "metadataUnchanged": true,
+        "contentAndBootstrapUnchanged": true
+      },
+      {
+        "path": "browse/china/index.html",
+        "title": "Short Breaks in China | Short Breaks Hub",
+        "canonical": "https://www.shortbreakhub.com/browse/china",
+        "jsonLd": 2,
+        "heading": "Short Breaks In — China",
+        "metadataUnchanged": true,
+        "contentAndBootstrapUnchanged": true
+      },
+      {
+        "path": "itinerary/4-days-shanghai-where-the-future-never-waits/index.html",
+        "title": "Shanghai in 4 Days: Where the Future Never Waits | China | Short Breaks Hub",
+        "canonical": "https://www.shortbreakhub.com/itinerary/4-days-shanghai-where-the-future-never-waits",
+        "jsonLd": 2,
+        "heading": "Shanghai in 4 Days: Where the Future Never Waits",
+        "metadataUnchanged": true,
+        "contentAndBootstrapUnchanged": true
+      }
+    ]
+  }
+}

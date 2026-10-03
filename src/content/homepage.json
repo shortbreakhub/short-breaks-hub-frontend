@@ -1,0 +1,224 @@
+[
+  {
+    "key": "shanghai",
+    "slug": "4-days-shanghai-where-the-future-never-waits",
+    "city": "Shanghai",
+    "country": "China",
+    "days": 4,
+    "copy": {
+      "en": {
+        "title": "Shanghai in 4 Days: Where the Future Never Waits",
+        "summary": "This 4-day Shanghai itinerary explores China’s most dynamic city through its skyline, historic concessions, river life, and everyday neighbourhoods. Designed to balance speed with observation, the itinerary moves between iconic modern spaces and quieter streets, allowing Shanghai’s sense of momentum and reinvention to reveal itself naturally."
+      },
+      "fr": {
+        "title": "Shanghai en 4 jours : Là où l’avenir n’attend jamais",
+        "summary": "Cet itinéraire de 4 jours à Shanghai explore la ville la plus dynamique de Chine à travers sa ligne d’horizon, ses anciennes concessions, la vie au bord du fleuve et ses quartiers du quotidien. Conçu pour équilibrer vitesse et observation, il alterne espaces modernes emblématiques et rues plus paisibles, laissant l’élan et la capacité de réinvention de Shanghai se révéler naturellement."
+      }
+    },
+    "source": "src/assets/itineraries/china/4-days-shanghai-where-the-future-never-waits.jpg",
+    "sourceBytes": 3129223,
+    "sourceSha256": "c6dee098de53c2d701cde3cad8ab19454c6f4e196a6b890456fa16ffffabc875",
+    "width": 4704,
+    "height": 3136,
+    "variants": [
+      {
+        "file": "shanghai-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 18172
+      },
+      {
+        "file": "shanghai-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 63208
+      },
+      {
+        "file": "shanghai-1440.webp",
+        "width": 1440,
+        "height": 960,
+        "bytes": 126442
+      }
+    ]
+  },
+  {
+    "key": "paris",
+    "slug": "4-days-paris-where-icons-meet-everyday-grace",
+    "city": "Paris",
+    "country": "France",
+    "days": 4,
+    "copy": {
+      "en": {
+        "title": "Paris in 4 Days: Where Icons Meet Everyday Grace",
+        "summary": "This 4-day Paris itinerary blends the city’s essential landmarks with lived-in neighbourhood rhythm. Designed for first-time visitors who want to see Paris properly — without rushing or turning the city into a checklist — the itinerary places iconic sights at their most human moments, balancing monuments with cafés, streets, and river light."
+      },
+      "fr": {
+        "title": "Paris en 4 jours : Là où les icônes rencontrent la grâce du quotidien",
+        "summary": "Cet itinéraire de 4 jours à Paris associe les sites incontournables de la ville au rythme vivant de ses quartiers. Conçu pour une première visite qui permette de découvrir Paris pleinement, sans se presser ni transformer la ville en simple liste à cocher, il présente les lieux emblématiques à leurs moments les plus humains, en équilibrant monuments, cafés, rues et lumière sur la Seine."
+      }
+    },
+    "source": "src/assets/itineraries/france/4-days-paris-where-icons-meet-everyday-grace.jpg",
+    "sourceBytes": 4141742,
+    "sourceSha256": "920c683972bd9887d4eec7d2b3193ae77e818cb890d658f4fc6e22a3cf3c2eed",
+    "width": 5376,
+    "height": 3584,
+    "variants": [
+      {
+        "file": "paris-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 18292
+      },
+      {
+        "file": "paris-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 69982
+      }
+    ]
+  },
+  {
+    "key": "tokyo",
+    "slug": "4-days-tokyo-where-order-holds-the-motion",
+    "city": "Tokyo",
+    "country": "Japan",
+    "days": 4,
+    "copy": {
+      "en": {
+        "title": "Tokyo in 4 Days: Where Order Holds the Motion",
+        "summary": "This 4-day Tokyo itinerary explores a city defined by precision, contrast, and deeply rooted everyday rituals. Designed to balance movement with pause, the itinerary moves between dense districts, quiet neighbourhood streets, green sanctuaries, and moments of intentional order. Tokyo reveals itself not through spectacle alone, but through how carefully motion is held together."
+      },
+      "fr": {
+        "title": "Tokyo en 4 jours : Là où l’ordre guide le mouvement",
+        "summary": "Cet itinéraire de 4 jours à Tokyo vous invite à découvrir une ville définie par la précision, les contrastes et des rituels du quotidien profondément ancrés. Conçu pour alterner mouvement et moments de calme, il vous emmène entre quartiers animés, rues résidentielles paisibles, havres de verdure et instants où l’ordre semble délibérément préservé. Tokyo ne se révèle pas uniquement par son spectaculaire, mais par la manière dont chaque mouvement est soigneusement maîtrisé."
+      }
+    },
+    "source": "src/assets/itineraries/japan/4-days-tokyo-where-order-holds-the-motion.jpg",
+    "sourceBytes": 3891482,
+    "sourceSha256": "f77cac99a96ca22e5b18e8a78b1783c841313c71366357e63a7bdb32aab2dc08",
+    "width": 4681,
+    "height": 3097,
+    "variants": [
+      {
+        "file": "tokyo-480.webp",
+        "width": 480,
+        "height": 318,
+        "bytes": 41168
+      },
+      {
+        "file": "tokyo-960.webp",
+        "width": 960,
+        "height": 635,
+        "bytes": 153464
+      }
+    ]
+  },
+  {
+    "key": "sydney",
+    "slug": "4-days-sydney-light-water-and-open-living",
+    "city": "Sydney",
+    "country": "Australia",
+    "days": 4,
+    "copy": {
+      "en": {
+        "title": "Sydney in 4 Days: Light, Water, and Open Living",
+        "summary": "This 4-day Sydney itinerary explores Australia’s largest city as a place shaped by light, water, and outward-facing life. Wrapped around one of the world’s most navigable harbours, Sydney invites movement — walking, swimming, ferry crossings — rather than enclosure. Designed to balance iconic harbour space, coastal exposure, and neighbourhood rhythm, the itinerary treats Sydney not as a dense metropolis, but as an outdoor city where daily life unfolds in open air."
+      },
+      "fr": {
+        "title": "Sydney en 4 jours : lumière, océan et art de vivre en plein air",
+        "summary": "Cet itinéraire de 4 jours vous invite à découvrir Sydney, la plus grande ville d'Australie, où le port, les plages et la lumière façonnent le quotidien. Entre l'emblématique Sydney Harbour, les traversées en ferry, les promenades côtières et les quartiers animés, la ville se vit avant tout en extérieur. Ce séjour équilibre les sites incontournables, les paysages maritimes et l'art de vivre australien, offrant une immersion dans une métropole où l'océan fait partie intégrante de chaque journée."
+      }
+    },
+    "source": "src/assets/itineraries/australia/4-days-sydney-light-water-and-open-living.jpg",
+    "sourceBytes": 3819425,
+    "sourceSha256": "421206a59bf54b4d3112497be7879e5068bf302f0734e20d61f9264d0461b140",
+    "width": 4896,
+    "height": 3264,
+    "variants": [
+      {
+        "file": "sydney-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 28922
+      },
+      {
+        "file": "sydney-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 107398
+      }
+    ]
+  },
+  {
+    "key": "marrakech",
+    "slug": "5-days-morocco-pattern-ritual-and-warm-shadow",
+    "city": "Marrakech",
+    "country": "Morocco",
+    "days": 5,
+    "copy": {
+      "en": {
+        "title": "Morocco in 5 Days: Pattern, Ritual, and Warm Shadow",
+        "summary": "This 5-day Morocco itinerary is centred in Marrakech, a city shaped by pattern, ritual, and layered time. Rather than rushing between imperial cities, the journey stays anchored, allowing repetition to reveal meaning. Marrakech unfolds slowly — through courtyards, souks, call to prayer, and the movement between light and shadow. Designed to prioritise immersion over coverage, the itinerary treats Morocco as a place best understood through texture, rhythm, and return."
+      },
+      "fr": {
+        "title": "Le Maroc en 5 jours : motifs, traditions et lumière ocre",
+        "summary": "Cet itinéraire de 5 jours au Maroc se concentre sur Marrakech, une ville où les motifs géométriques, les traditions séculaires et le rythme quotidien façonnent chaque instant. Plutôt que de parcourir plusieurs villes impériales, ce voyage privilégie une immersion profonde dans la médina afin de laisser les lieux révéler progressivement leur caractère. Entre riads paisibles, souks animés, appels à la prière, jardins luxuriants et jeux d'ombre et de lumière, Marrakech se découvre lentement. Conçu pour favoriser l'observation, la contemplation et les rencontres, cet itinéraire invite à comprendre le Maroc à travers ses textures, son artisanat et son art de vivre."
+      }
+    },
+    "source": "src/assets/itineraries/morocco/5-days-morocco-pattern-ritual-and-warm-shadow.jpg",
+    "sourceBytes": 5153781,
+    "sourceSha256": "e1228099dcd7cea3e4fdf40c76af629272066f6bc4803d118b327fcf4b44d66b",
+    "width": 5067,
+    "height": 3442,
+    "variants": [
+      {
+        "file": "marrakech-480.webp",
+        "width": 480,
+        "height": 326,
+        "bytes": 37840
+      },
+      {
+        "file": "marrakech-960.webp",
+        "width": 960,
+        "height": 652,
+        "bytes": 135086
+      }
+    ]
+  },
+  {
+    "key": "newYork",
+    "slug": "4-days-new-york-city-moving-through-everything",
+    "city": "New York City",
+    "country": "United States",
+    "days": 4,
+    "copy": {
+      "en": {
+        "title": "New York City in 4 Days: Moving Through Everything",
+        "summary": "This 4-day New York City itinerary approaches the city as a living system rather than a checklist. Built by migration, pressure, and reinvention, New York reveals itself through neighbourhood rhythm, vertical movement, and constant negotiation of space. Designed to balance iconic structure with lived streets, the itinerary treats New York not as a spectacle to consume, but as a place you pass through — repeatedly — until patterns begin to emerge."
+      },
+      "fr": {
+        "title": "New York en 4 jours : traverser une ville en mouvement",
+        "summary": "Cet itinéraire de quatre jours à New York aborde la ville comme un système vivant plutôt que comme une simple liste de sites à voir. Façonnée par les migrations, la densité et les réinventions successives, New York se révèle à travers le rythme de ses quartiers, la verticalité de ses espaces et une négociation permanente avec l'espace. Conçu pour équilibrer les lieux emblématiques et les rues du quotidien, cet itinéraire invite à traverser la ville encore et encore, jusqu'à ce que ses motifs commencent à apparaître."
+      }
+    },
+    "source": "src/assets/itineraries/united-states/4-days-new-york-city-moving-through-everything.jpg",
+    "sourceBytes": 3666216,
+    "sourceSha256": "2e5078c5d3aebf3f802fa885660429eabaa5125c30c5f15e88298b53a8e34f05",
+    "width": 5577,
+    "height": 3718,
+    "variants": [
+      {
+        "file": "newYork-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 19992
+      },
+      {
+        "file": "newYork-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 74680
+      }
+    ]
+  }
+]

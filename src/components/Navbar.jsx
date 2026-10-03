@@ -86,7 +86,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
+        <header className={`sticky top-0 z-50 bg-white/80 backdrop-blur border-b ${location.pathname === "/" ? "home-nav" : ""}`}>
 
             <nav className="hidden md:flex max-w-screen-xl mx-auto h-14 px-6 items-center justify-between">
                 <a href="/" className="flex items-center">
@@ -179,14 +179,16 @@ export default function Navbar() {
                     type="button"
                     className="justify-self-end p-2 rounded-md hover:bg-gray-100 cursor-pointer"
                     onClick={() => setOpen((current) => !current)}
-                    aria-label="Open navigation menu"
+                    aria-label={t("navbar.openMenu")}
+                    aria-expanded={open}
+                    aria-controls="navbar-menu"
                 >
                     {open ? "✕" : "☰"}
                 </button>
             </nav>
 
             {open && (
-                <div className="md:hidden bg-white border-t">
+                <div id="navbar-menu" className="md:hidden bg-white border-t">
 
                     {isLoggedIn && (
                         <Link

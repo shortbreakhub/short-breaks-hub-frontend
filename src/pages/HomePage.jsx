@@ -1,126 +1,97 @@
-import {optimizedImages} from "../utils/optimizedImages.js";
-
-import {REGIONS} from "../config/regions.js";
-import React, {useRef} from "react";
-import {Typewriter} from "react-simple-typewriter";
-import {FaChevronDown} from "react-icons/fa";
-import RegionCard from "../components/RegionCard.jsx";
-import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
-import { useTranslation } from "react-i18next";
+import React from "react";
+import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {HOME_PAGE_METADATA} from "../utils/pageMetadata.js";
-import {getRegionPath} from "../utils/publicNavigation.js";
+import {REGIONS} from "../config/regions.js";
+import {getOfficialItineraryPath, getRegionPath} from "../utils/publicNavigation.js";
+import stories from "../content/homepage.json";
+import {homepageImages} from "../utils/homepageImages.js";
+import {optimizedImages} from "../utils/optimizedImages.js";
+import {Action, Container, EditorialSurface, Media, Metadata, SectionHeader} from "../components/ui/EditorialUI.jsx";
+import AtlasStage from "../components/home/AtlasStage.jsx";
+import HomeDiscovery from "../components/home/HomeDiscovery.jsx";
+import "../styles/homepage.css";
 
-const heroBg = optimizedImages["hero-bg"].src;
-
-
-function HomePage() {
-
-    const exploreRef = useRef(null);
-    const scrollToExplore = () => {
-        exploreRef.current.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const { t } = useTranslation();
-    const words = t("homepage.typewriter", {
-        returnObjects: true,
-    });
-
-    const regionImages = {
-        southeastAsia: optimizedImages["southeast"],
-        eastAsia: optimizedImages["eastasia"],
-        europe: optimizedImages["europe"],
-        americas: optimizedImages["americas"],
-        oceania: optimizedImages["anz"],
-        africa: optimizedImages["northafrica"],
-    };
-    const regions = REGIONS.map((region) => ({...region, image: regionImages[region.key].src, imageMeta: regionImages[region.key]}));
-
-    return (
-        <>
-            <PageCanonical segments={[]} />
-            <PageMetadata canonicalSegments={[]} {...HOME_PAGE_METADATA} />
-            <section id="home" className="scroll-mt-20">
-
-                <div
-                    className="relative min-h-[65vh] bg-cover bg-center"
-                    style={{ backgroundImage: `url('${heroBg}')` }}
-                >
-
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-0"></div>
-
-
-                    <div className="relative z-10 flex flex-col items-center justify-center text-white text-center px-4 h-screen">
-                        <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
-                            Short Break Hub
-                        </h1>
-                        <h4 className="text-3xl mt-16 sm:text-4xl font-extrabold text-yellow-300 drop-shadow-lg text-center">
-                            {t("homepage.explore")}&nbsp;
-                            <span className="text-white">
-                                <Typewriter
-                                    words={words}
-                                    loop={true}
-                                    cursor
-                                    cursorStyle="_"
-                                    typeSpeed={70}
-                                    deleteSpeed={40}
-                                    delaySpeed={1800}
-                                />
-                          </span>
-                        </h4>
-                        <section className="mx-auto max-w-5xl px-4 mt-28">
-                            <ItinerarySearchBar regions={regions} />
-                        </section>
-
-                        <div className="hidden lg:flex absolute right-3 lg:right-6 top-10 bottom-10 items-center">
-                          <span
-                              className="text-white/80 tracking-widest uppercase text-xs lg:text-sm
-                                       pl-3 border-l-2 border-white/50"
-                              style={{ writingMode: 'vertical-rl' }}
-                          >
-                            {t(`homepage.tagline`)}
-                          </span>
-                        </div>
-
-
-                        <div className="block lg:hidden mt-16 text-center">
-                          <span className="text-white/90 text-sm tracking-wide">
-                            {t(`homepage.tagline`)}
-                          </span>
-                        </div>
-
-
-                        <div onClick={scrollToExplore} className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-10 cursor-pointer">
-                            <FaChevronDown className="animate-bounce text-white text-4xl" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="explore" className="scroll-mt-20">
-                <div ref={exploreRef} className="py-16 px-6 bg-white">
-                    <h2 className="text-3xl font-bold text-center mb-10">{t(`homepage.exploreByRegion`)}</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        { regions.map((item, index) => (
-                            <RegionCard
-                                key={index}
-                                image={item.image}
-                                imageMeta={item.imageMeta}
-                                loading="lazy"
-                                title={t(`homepage.regions.${item.key}.title`)}
-                                description={t(`homepage.regions.${item.key}.description`)}
-                                to={getRegionPath(item.onClick)}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </section>
-            <footer id="contact" className="scroll-mt-20">
-
-            </footer>
-        </>
-    );
+function Story({item, feature = false}) {
+    const {t, i18n} = useTranslation();
+    const copy = item.copy[i18n.resolvedLanguage === "fr" ? "fr" : "en"];
+    const image = homepageImages[item.key];
+    const dimensions = item.variants.at(-1);
+    return <article className={`home-story ${feature ? "home-story-feature" : ""}`}>
+        <Link to={getOfficialItineraryPath(item.slug)} className="story-image-link" tabIndex={-1}>
+            <Media {...image} alt={t(`homeMagazine.photos.${item.key}`)} width={dimensions.width} height={dimensions.height}
+                ratio={feature ? "5 / 4" : "16 / 10"} sizes={feature ? "(min-width: 1024px) 720px, (min-width: 768px) 60vw, 92vw" : "(min-width: 1024px) 380px, (min-width: 768px) 40vw, 44vw"} />
+        </Link>
+        <div className="home-story-copy">
+            <p className="sbh-kicker">{item.city} <span aria-hidden="true">/</span> {t(`itinerarySearchBar.countries.${item.country}`)}</p>
+            <h3><Link to={getOfficialItineraryPath(item.slug)}>{copy.title}</Link></h3>
+            {feature && <p className="story-excerpt">{copy.summary.split(/(?<=\.)\s/)[0]}</p>}
+            <Metadata items={[t("homeMagazine.duration", {count: item.days}), t("homeMagazine.curated")]} />
+        </div>
+    </article>;
 }
 
-export default HomePage;
+export default function HomePage() {
+    const {t, i18n} = useTranslation();
+    return <EditorialSurface className="home-page" lang={i18n.resolvedLanguage === "fr" ? "fr" : "en"}>
+        <PageCanonical segments={[]} />
+        <PageMetadata canonicalSegments={[]} {...HOME_PAGE_METADATA} />
+        <main>
+            <section id="home" className="home-hero" aria-labelledby="home-title">
+                <Container>
+                    <div className="home-opening">
+                        <div className="home-copy">
+                            <p className="sbh-kicker">{t("homeMagazine.hero.eyebrow")}</p>
+                            <h1 id="home-title"><span>{t("homeMagazine.hero.lineOne")}</span>{" "}<em>{t("homeMagazine.hero.lineTwo")}</em></h1>
+                            <p className="home-intro">{t("homeMagazine.hero.description")}</p>
+                            <a href="#editors-picks" className="home-story-jump">{t("homeMagazine.hero.stories")} <span aria-hidden="true">↘</span></a>
+                        </div>
+                        <AtlasStage destinations={stories} />
+                    </div>
+                    <HomeDiscovery />
+                </Container>
+            </section>
+            <div className="home-bridge"><Container><p>{t("homeMagazine.bridge")} <span aria-hidden="true">✦</span> {t("homeMagazine.bridgeEnd")}</p></Container></div>
+            <section id="editors-picks" className="home-editorial home-picks" aria-labelledby="picks-title">
+                <Container>
+                    <SectionHeader id="picks-title" eyebrow={t("homeMagazine.picks.eyebrow")} title={t("homeMagazine.picks.title")}
+                        description={t("homeMagazine.picks.description")} action={<Action to="/east-asia" variant="quiet">{t("homeMagazine.picks.action")}</Action>} />
+                    <div className="home-picks-layout">
+                        <Story item={stories[0]} feature />
+                        <div className="home-supporting-stories"><Story item={stories[1]} /><Story item={stories[2]} /></div>
+                    </div>
+                </Container>
+            </section>
+            <section className="home-editorial home-itineraries" aria-labelledby="itineraries-title">
+                <Container>
+                    <SectionHeader id="itineraries-title" eyebrow={t("homeMagazine.itineraries.eyebrow")} title={t("homeMagazine.itineraries.title")}
+                        description={t("homeMagazine.itineraries.description")} />
+                    <div className="home-itinerary-layout">{[stories[5], stories[3], stories[4]].map((item, index) => <div key={item.key}>
+                        <span className="home-story-number" aria-hidden="true">0{index + 1}</span><Story item={item} />
+                    </div>)}</div>
+                </Container>
+            </section>
+            <section id="explore" className="home-editorial home-regions" aria-labelledby="regions-title">
+                <Container><div className="home-region-layout">
+                    <div className="home-region-intro"><p className="sbh-kicker">{t("homeMagazine.regions.eyebrow")}</p>
+                        <h2 id="regions-title" className="sbh-section-title">{t("homeMagazine.regions.title")}</h2><p>{t("homeMagazine.regions.description")}</p>
+                        <Media {...optimizedImages.southeast} alt={t("homeMagazine.photos.southeast")} width={960} height={640} ratio="4 / 3" sizes="(min-width: 768px) 390px, 92vw" />
+                    </div>
+                    <ul className="home-region-list">{REGIONS.map((region, index) => <li key={region.key}>
+                        <Link to={getRegionPath(region.onClick)}><span className="region-number" aria-hidden="true">0{index + 1}</span><div>
+                            <h3>{t(`homepage.regions.${region.key}.title`)}</h3><p>{t(`homepage.regions.${region.key}.description`)}</p>
+                        </div><span aria-hidden="true">↗</span></Link>
+                    </li>)}</ul>
+                </div></Container>
+            </section>
+            <section className="home-planning" aria-labelledby="planning-title">
+                <Container><div className="home-planning-layout"><div><p className="sbh-kicker">{t("homeMagazine.planning.eyebrow")}</p>
+                    <h2 id="planning-title">{t("homeMagazine.planning.title")}</h2><p>{t("homeMagazine.planning.description")}</p>
+                    <Action to={getOfficialItineraryPath(stories[0].slug)}>{t("homeMagazine.planning.action")} <span aria-hidden="true">→</span></Action>
+                </div><ol>{["discover", "plan", "stay"].map((key, index) => <li key={key}><span aria-hidden="true">0{index + 1}</span><div><h3>{t(`homeMagazine.planning.${key}.title`)}</h3><p>{t(`homeMagazine.planning.${key}.description`)}</p></div></li>)}</ol></div></Container>
+            </section>
+        </main>
+    </EditorialSurface>;
+}

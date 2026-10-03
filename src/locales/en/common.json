@@ -1,4 +1,74 @@
 {
+  "homeMagazine": {
+    "hero": {
+      "eyebrow": "A little time. A whole world.",
+      "lineOne": "Short Breaks.",
+      "lineTwo": "Big Stories.",
+      "description": "Discover places worth your time. Thoughtful itineraries for a few unforgettable days, wherever the world takes you.",
+      "stories": "Find your next story"
+    },
+    "atlas": {
+      "caption": "The world, one short break at a time",
+      "hint": "Choose a destination to explore",
+      "destinations": "Selected destinations around the world"
+    },
+    "discovery": {
+      "kicker": "Your next chapter",
+      "title": "Where will you go?",
+      "chooseCountry": "Choose a country…",
+      "action": "Explore",
+      "loading": "Loading countries…",
+      "failed": "We couldn’t load destinations. Please try again."
+    },
+    "bridge": "A world of possibilities.",
+    "bridgeEnd": "A few days to make them yours.",
+    "picks": {
+      "eyebrow": "From our collection",
+      "title": "Editor’s Picks",
+      "description": "Different cities. Different rhythms. Stories that stay with you.",
+      "action": "Explore East Asia"
+    },
+    "itineraries": {
+      "eyebrow": "Made for a little time away",
+      "title": "A few days. A different perspective.",
+      "description": "From city streets to quieter corners, let a considered itinerary lead the way."
+    },
+    "regions": {
+      "eyebrow": "Follow your curiosity",
+      "title": "Six regions. Endless possibilities.",
+      "description": "Start somewhere familiar, or somewhere entirely new. Your next story is closer than you think."
+    },
+    "planning": {
+      "eyebrow": "From a spark to a plan",
+      "title": "Make the story yours.",
+      "description": "Discover an itinerary, make room for the unexpected, and find a place to stay. We’ll help with the practical part.",
+      "action": "Plan a Shanghai short break",
+      "discover": {
+        "title": "Find your inspiration",
+        "description": "Explore destinations and choose an itinerary that feels like you."
+      },
+      "plan": {
+        "title": "Shape your days",
+        "description": "Use the daily itinerary, local food recommendations and planning tools."
+      },
+      "stay": {
+        "title": "Find your place to stay",
+        "description": "Open Hotel Search on your itinerary to choose dates and compare stays."
+      }
+    },
+    "duration_one": "{{count}} day",
+    "duration_other": "{{count}} days",
+    "curated": "Curated itinerary",
+    "photos": {
+      "shanghai": "The illuminated Shanghai skyline beside the Huangpu River",
+      "paris": "The Eiffel Tower above the Champ de Mars in Paris",
+      "tokyo": "Tokyo’s skyline and streets",
+      "sydney": "Sydney Harbour and the Opera House",
+      "marrakech": "Fishing boats on the Moroccan coast",
+      "newYork": "New York City architecture and skyline",
+      "southeast": "Temples and statues in Southeast Asia"
+    }
+  },
   "routeLoad": {
     "loading": "Loading…",
     "failed": "Unable to load this page. Please try again."
@@ -9,6 +79,7 @@
     "retry": "Try again"
   },
   "navbar": {
+    "openMenu": "Open navigation menu",
     "home": "Home",
     "explore": "Explore",
     "contact": "Contact",

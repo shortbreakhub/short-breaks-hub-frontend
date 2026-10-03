@@ -1,0 +1,130 @@
+/* Homepage composition only; atlas illustration/markers are replaceable. */
+.home-page { --home-ocean: #e9eee3; --home-land: #d8dfbd; }
+.home-page :where(#home, #explore, #editors-picks) { scroll-margin-top: 5rem; }
+.home-page .home-hero { padding: 2.5rem 0 1.5rem; background: #f5f0e5; }
+.home-opening { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr); align-items: center; gap: 1rem; }
+.home-copy { position: relative; z-index: 1; padding-block: 1.5rem; }
+.home-copy .sbh-kicker { font-size: 0.6875rem; letter-spacing: 0.16em; margin-bottom: 1.5rem; }
+.home-copy h1 { font: 400 clamp(2.6rem, 4.25vw, 4.1rem)/1.06 var(--sbh-font-heading); letter-spacing: -0.055em; margin: 0; }
+.home-copy h1 span, .home-copy h1 em { display: block; white-space: nowrap; }
+.home-copy h1 em { color: #876018; font-weight: 400; }
+.home-page[lang="fr"] .home-copy h1 { font-size: clamp(2.15rem, 3.1vw, 3rem); }
+.home-intro { max-width: 30ch; color: var(--sbh-secondary); font-size: 1rem; margin-block: 1.5rem; }
+.home-story-jump { display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; font-size: 0.875rem; font-weight: 600; text-decoration: underline; text-underline-offset: 0.3em; }
+.atlas-stage { min-width: 0; margin: 0; }
+.atlas-paper { position: relative; width: 100%; aspect-ratio: 1000 / 550; background: radial-gradient(ellipse, #e9eadd80, transparent 73%); }
+.atlas-visual { width: 100%; height: 100%; display: block; }
+.atlas-destinations { list-style: none; padding: 0; margin: 0; }
+.atlas-destination { position: absolute; transform: translate(-50%, -75%); }
+.atlas-destination a { display: flex; flex-direction: column; align-items: center; min-width: 44px; min-height: 44px; color: #384838; text-decoration: none; }
+.atlas-landmark { width: clamp(100px, 9.5vw, 138px); height: clamp(100px, 9.5vw, 138px); filter: drop-shadow(0 4px 3px #72573812); }
+.atlas-pin { width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: #a57219; margin-top: -5px; box-shadow: 0 0 0 1px #a57219; }
+.atlas-label { font-size: 0.8125rem; font-weight: 600; line-height: 1.4; padding: 0.2rem 0.6rem; background: #faf7f2; border: 1px solid #ded6c5; border-radius: 1rem; white-space: nowrap; }
+.atlas-destination a:hover .atlas-label { background: #e9dfc8; text-decoration: underline; }
+.atlas-stage figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 1rem; color: var(--sbh-secondary); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid #d7ddcc; }
+.home-discovery { display: grid; grid-template-columns: 1.1fr 1fr 1fr auto; align-items: end; gap: 1.5rem; padding: 1.5rem 2rem; margin-top: 1.5rem; background: var(--sbh-surface); border: 1px solid #e3dfd5; border-radius: 0.75rem; }
+.discovery-intro p { font-family: var(--sbh-font-heading); font-size: 1.375rem; margin: 0.25rem 0; line-height: 1.25; }
+.discovery-intro .sbh-kicker { font-size: 0.6875rem; }
+.home-discovery .sbh-control { border: 0; border-bottom: 1px solid var(--sbh-control-border); border-radius: 0; padding-inline: 0; }
+.home-discovery .sbh-label { font-size: 0.75rem; color: var(--sbh-secondary); }
+.discovery-feedback { grid-column: 1 / -1; }
+.home-bridge { padding-block: 1.25rem; border-bottom: 1px solid #e5dfd2; background: #f5f0e5; }
+.home-bridge p { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 0; font-size: 0.75rem; color: var(--sbh-secondary); letter-spacing: 0.04em; }
+.home-bridge span { color: #946a1e; }
+.home-editorial { padding-block: 4.5rem; }
+.home-picks .sbh-section-header { margin-bottom: 2rem; }
+.home-picks-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 3rem; }
+.home-supporting-stories { display: grid; gap: 2rem; }
+.home-page .home-story .sbh-media { border-radius: 0.375rem; }
+.home-story-copy { padding-top: 1rem; }
+.home-story-copy .sbh-kicker { font-size: 0.6875rem; margin: 0 0 0.5rem; }
+.home-story h3 { font: 400 1.375rem/1.25 var(--sbh-font-heading); letter-spacing: -0.02em; margin: 0 0 0.75rem; }
+.home-story h3 a { display: block; min-height: 44px; text-decoration: none; }
+.home-story h3 a:hover { text-decoration: underline; text-underline-offset: 0.15em; }
+.home-story-feature h3 { font-size: clamp(1.75rem, 2.5vw, 2.5rem); max-width: 26ch; }
+.story-excerpt { max-width: 60ch; color: var(--sbh-secondary); margin-block: 0.75rem 1rem; font-size: 0.9375rem; }
+.home-itineraries { background: #efede5; }
+.home-itinerary-layout { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.home-story-number { display: block; font: italic 1.25rem var(--sbh-font-heading); color: #76510d; margin-bottom: 0.75rem; }
+.home-itinerary-layout > div:nth-child(2) { padding-top: 2.5rem; }
+.home-region-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: 5rem; }
+.home-region-intro > p { color: var(--sbh-secondary); }
+.home-region-intro .sbh-media { margin-top: 1.5rem; }
+.home-region-list { list-style: none; padding: 0; margin: 0; }
+.home-region-list li { border-bottom: 1px solid var(--sbh-border); }
+.home-region-list li:first-child { border-top: 1px solid var(--sbh-border); }
+.home-region-list a { display: grid; grid-template-columns: 1.5rem 1fr 1.5rem; align-items: center; gap: 1.5rem; padding-block: 1.25rem; text-decoration: none; }
+.region-number { font-size: 0.6875rem; color: var(--sbh-muted); }
+.home-region-list h3 { font: 400 1.5rem var(--sbh-font-heading); margin: 0 0 0.3rem; }
+.home-region-list p { color: var(--sbh-secondary); font-size: 0.875rem; margin: 0; }
+.home-region-list a:hover h3 { text-decoration: underline; text-underline-offset: 0.2em; }
+.home-planning { background: #263e37; color: #faf7f2; padding-block: 4.5rem; }
+.home-planning-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.home-page .home-planning .sbh-kicker { color: #dfc17e; }
+.home-planning h2 { font: 400 clamp(2rem, 3vw, 3rem)/1.15 var(--sbh-font-heading); margin-block: 1rem; max-width: 20ch; }
+.home-planning p { color: #e0e8e2; font-size: 0.9375rem; max-width: 55ch; }
+.home-planning .sbh-action { margin-top: 1rem; }
+.home-planning ol { list-style: none; padding: 0; margin: 0; }
+.home-planning li { display: flex; gap: 1.5rem; padding-block: 1.25rem; border-bottom: 1px solid #667b70; }
+.home-planning li > span { font: italic 1.25rem var(--sbh-font-heading); color: #dfc17e; }
+.home-planning h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+.home-planning li p { margin: 0.4rem 0 0; }
+.home-page .home-planning a:focus-visible { outline-color: #f4bb42; }
+/* Only the existing homepage shell receives visual integration. */
+.home-nav { background: #faf7f2; border-color: #e5dfd2; }
+.home-nav nav { height: 72px; }
+.home-nav img[alt="Travel Explorer Logo"] { height: 64px; }
+.home-nav :where(a, button) { min-height: 44px; }
+.home-nav :where(a, button):focus-visible { outline: 3px solid #285c69; outline-offset: 3px; }
+@media (min-width: 768px) and (max-width: 1023px) {
+    .home-nav nav:first-child { display: none; }
+    .home-nav nav:nth-child(2) { display: grid; }
+    .home-nav > div { display: block; }
+    .home-opening { grid-template-columns: 1fr; }
+    .home-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+    .home-copy .sbh-kicker { grid-column: 1 / -1; }
+    .home-copy h1 { grid-row: 2 / 4; }
+    .home-copy h1 { font-size: 3.5rem; }
+    .home-page[lang="fr"] .home-copy h1 { font-size: 2.5rem; }
+    .atlas-paper { max-width: 850px; margin-inline: auto; }
+    .home-discovery { grid-template-columns: 1fr 1fr auto; padding: 1.5rem; }
+    .discovery-intro { grid-column: 1 / -1; }
+    .home-picks-layout { grid-template-columns: 1.35fr 1fr; gap: 1.5rem; }
+    .home-region-layout, .home-planning-layout { gap: 2rem; }
+}
+@media (max-width: 767px) {
+    .home-page .home-hero { padding-top: 0.75rem; }
+    .home-opening { grid-template-columns: 1fr; gap: 0; }
+    .home-copy { padding-top: 1rem; padding-bottom: 0.5rem; text-align: center; }
+    .home-copy .sbh-kicker { margin-bottom: 1rem; font-size: 0.625rem; }
+    .home-copy h1 { font-size: clamp(2.4rem, 9.5vw, 3.5rem); }
+    .home-page[lang="fr"] .home-copy h1 { font-size: clamp(1.95rem, 7.8vw, 2.8rem); }
+    .home-intro { max-width: 38ch; margin: 1rem auto 0.5rem; font-size: 0.9375rem; }
+    .home-story-jump { min-height: 44px; }
+    .atlas-paper { aspect-ratio: 1000 / 800; }
+    .atlas-secondary { display: none; }
+    .atlas-landmark { width: 78px; height: 78px; }
+    .atlas-label { font-size: 0.6875rem; }
+    .atlas-stage figcaption { justify-content: center; font-size: 0.625rem; text-align: center; }
+    .atlas-stage figcaption span:last-child { display: none; }
+    .home-discovery { grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.25rem; margin-top: 1rem; }
+    .discovery-intro, .home-discovery > .sbh-action { grid-column: 1 / -1; }
+    .discovery-intro p { font-size: 1.25rem; }
+    .home-bridge p { gap: 0.5rem; text-align: center; font-size: 0.6875rem; }
+    .home-bridge span { display: none; }
+    .home-editorial, .home-planning { padding-block: 3rem; }
+    .home-picks-layout, .home-itinerary-layout, .home-region-layout, .home-planning-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .home-supporting-stories { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .home-supporting-stories .home-story h3 { font-size: 1.125rem; }
+    .home-supporting-stories .sbh-kicker { font-size: 0.625rem; }
+    .home-supporting-stories .sbh-metadata { font-size: 0.75rem; }
+    .home-itinerary-layout > div:nth-child(2) { padding-top: 0; }
+    .home-itinerary-layout .home-story { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1rem; align-items: center; }
+    .home-itinerary-layout .home-story-copy { padding-top: 0; }
+    .home-itinerary-layout .home-story h3 { font-size: 1.25rem; }
+    .home-itinerary-layout .home-story .sbh-media { aspect-ratio: 1 !important; }
+    .home-itinerary-layout .sbh-metadata { font-size: 0.75rem; }
+    .home-region-intro .sbh-media { max-height: 240px; }
+    .home-region-list a { gap: 1rem; }
+    .home-region-list h3 { font-size: 1.375rem; }
+}
