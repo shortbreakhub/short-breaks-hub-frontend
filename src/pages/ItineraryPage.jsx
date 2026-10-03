@@ -1,4 +1,4 @@
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
 import React, {useState, useMemo, useEffect, useContext, useRef} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
@@ -29,13 +29,14 @@ const defaultPreparation = {hotel: false, flights: false, insurance: false, airp
 
 export default function ItineraryPage() {
     const { slug } = useParams();
-    const navigate = useNavigate();
     const { i18n, t } = useTranslation();
     const lang = i18n.resolvedLanguage ?? "en";
     const prerenderData = useContext(PrerenderDataContext);
     const bootstrapRef = useRef(getOfficialBootstrap(prerenderData, slug, lang));
     const [data,setData] = useState(() => bootstrapRef.current?.detail || {});
     const [loading, setLoading] = useState(() => !bootstrapRef.current);
+    const [loadError, setLoadError] = useState("");
+    const [retry, setRetry] = useState(0);
     const [hotelState, setHotelState] = useState(null);
     useEffect(() => { setHotelState(null); }, [slug]);
     const hotelValues = hotelState?.slug === slug ? resolveHotelBooking(hotelState, data.days) : {};
@@ -144,16 +145,17 @@ export default function ItineraryPage() {
         bootstrapRef.current = null;
         let ignore = false;
         setLoading(true);
+        setLoadError("");
         setData({});
         getItineraryBySlug(slug, lang).then(detail => {
             if (ignore) return;
+            if (!detail) throw new Error("Empty itinerary response");
             setData(detail);
-            setLoading(false);
         }).catch(error => {
-            if (!ignore) console.error("Unable to load itinerary", error);
-        });
+            if (!ignore) setLoadError(error?.response?.status === 404 ? "notFound" : "failed");
+        }).finally(() => { if (!ignore) setLoading(false); });
         return () => { ignore = true; };
-    }, [slug, lang]);
+    }, [slug, lang, retry]);
 
     // Live currency/profile enrichment is independent of detail bootstrap.
     useEffect(() => {
@@ -304,12 +306,14 @@ export default function ItineraryPage() {
     }
 
 
-    if (!data) {
+    if (loadError) {
         return (
             <div className="max-w-screen-lg mx-auto px-4 py-16">
-                <h1 className="text-2xl font-bold mb-4">Itinerary not found</h1>
-                <button onClick={() => navigate(-1)} className="text-yellow-700 underline">
-                    Go back
+                <PageCanonical segments={["itinerary", slug]} />
+                <PageMetadata canonicalSegments={["itinerary", slug]} {...pageMetadata} />
+                <h1 role="alert" className="text-2xl font-bold mb-4">{t(`itineraryLoad.${loadError}`)}</h1>
+                <button type="button" onClick={() => setRetry(value => value + 1)} className="text-yellow-700 underline">
+                    {t("itineraryLoad.retry")}
                 </button>
             </div>
         );

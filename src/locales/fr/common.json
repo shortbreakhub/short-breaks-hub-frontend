@@ -1,4 +1,9 @@
 {
+  "itineraryLoad": {
+    "failed": "Impossible de charger cet itinéraire. Veuillez réessayer.",
+    "notFound": "Itinéraire introuvable.",
+    "retry": "Réessayer"
+  },
   "navbar": {
     "home": "Accueil",
     "explore": "Explorer",

@@ -85,6 +85,18 @@ test("pre-rendered home HTML contains its route metadata and real page content",
     assert.match(routes.home, /href="\/europe"/);
 });
 
+test("public discovery documents retain meaningful headings and crawlable shell navigation", () => {
+    for (const html of Object.values(routes)) {
+        const root = getRenderedRoot(html);
+        assert.equal((root.match(/<h1\b/g) || []).length, 1, "public pages must have one primary heading");
+        assert.match(root, /<h1\b[^>]*>[^]*?\S[^]*?<\/h1>/);
+        for (const path of ["/contact", "/live-weather", "/community-itineraries/region", "/login", "/privacy", "/terms"]) {
+            assert.ok(root.includes(`href="${path}"`), `missing crawlable navigation to ${path}`);
+        }
+    }
+    for (const {onClick} of REGIONS) assert.ok(getRenderedRoot(routes.home).includes(`href="/${onClick}"`));
+});
+
 test("pre-rendered Contact HTML contains route metadata and real Contact page content", () => {
     assertMetadata(routes.contact, {
         title: "Contact Short Breaks Hub",
@@ -224,6 +236,13 @@ for (const [slug, name] of directory) {
 function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
 }
+test("production Shanghai bootstrap retains the backend Trip.com CITY mapping", () => {
+    const data = bootstrapData(routes["itinerary/4-days-shanghai-where-the-future-never-waits"]);
+    assert.deepEqual(data.detail.hotelDestination, {
+        destinationKey: "china--shanghai", name: "Shanghai", provider: "TRIP_COM",
+        entityType: "CITY", status: "MAPPED", externalId: "2",
+    });
+});
 for (const slug of officialSlugs) {
     test(`Official itinerary ${slug} contains full public bootstrap, content, metadata and built assets`, () => {
         const html = routes[`itinerary/${slug}`];

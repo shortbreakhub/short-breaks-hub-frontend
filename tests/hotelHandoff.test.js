@@ -124,13 +124,28 @@ test("Official Hotel handoff hydrates safely, preserves edits, resets across iti
         assert.equal(document.querySelector("select").value, "<1", "handoff does not change UI age state");
         opened.length = 0;
         await selectAge("6");
+        await changeInput(drawer().querySelectorAll('input[type="number"]')[0], "2");
+        await changeInput(drawer().querySelectorAll('input[type="number"]')[1], "4");
+        await React.act(async () => {
+            for (const input of drawer().querySelectorAll('input[type="checkbox"]')) input.click();
+        });
         await search();
         assert.equal(opened.length, 1);
         assert.deepEqual(opened[0].slice(1), ["_blank", "noopener,noreferrer"]);
         let url = new URL(opened[0][0]);
+        for (const [key, value] of Object.entries({Allianceid: "9927800", SID: "327885881", trip_sub1: "", trip_sub3: "D19155586"})) {
+            assert.deepEqual(url.searchParams.getAll(key), [value]);
+        }
         assert.equal(url.searchParams.get("cityId"), "2");
+        assert.equal(url.searchParams.get("cityName"), "Shanghai");
+        assert.equal(url.searchParams.get("destName"), "Shanghai");
+        assert.equal(url.searchParams.get("crn"), "2");
+        assert.equal(url.searchParams.get("adult"), "4");
+        assert.equal(url.searchParams.get("children"), "1");
         assert.equal(url.searchParams.get("ages"), "6");
         assert.equal(url.searchParams.get("checkin"), "2026-11-10");
+        assert.equal(url.searchParams.get("checkout"), "2026-11-20");
+        assert.equal(url.searchParams.get("listFilters"), "5~1*5*1,23~10*23*10");
         assert.equal(document.querySelectorAll('input[type="date"]').length, 0);
         await React.act(async () => navigate(`/itinerary/${parisSlug}`));
         await openHotel();
