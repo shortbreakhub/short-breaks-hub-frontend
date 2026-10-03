@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "performance:measure": "node scripts/measure-performance.mjs",
-    "performance:browser": "node scripts/measure-runtime.mjs"
+    "performance:browser": "node scripts/measure-runtime.mjs",
+    "ui:dev": "vite --open /src/dev/index.html",
+    "ui:verify": "node scripts/verify-editorial-ui.mjs"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
