@@ -1,4 +1,74 @@
 {
+  "homeMagazine": {
+    "hero": {
+      "eyebrow": "Un peu de temps. Le monde entier.",
+      "lineOne": "Petites escapades.",
+      "lineTwo": "Grandes histoires.",
+      "description": "Découvrez des lieux qui méritent votre temps. Des itinéraires choisis pour quelques jours inoubliables, où que le monde vous mène.",
+      "stories": "Trouvez votre prochaine histoire"
+    },
+    "atlas": {
+      "caption": "Le monde, une escapade à la fois",
+      "hint": "Choisissez une destination à découvrir",
+      "destinations": "Une sélection de destinations dans le monde"
+    },
+    "discovery": {
+      "kicker": "Votre prochain chapitre",
+      "title": "Où partirez-vous ?",
+      "chooseCountry": "Choisissez un pays…",
+      "action": "Explorer",
+      "loading": "Chargement des pays…",
+      "failed": "Impossible de charger les destinations. Veuillez réessayer."
+    },
+    "bridge": "Un monde de possibilités.",
+    "bridgeEnd": "Quelques jours pour les vivre.",
+    "picks": {
+      "eyebrow": "Dans notre collection",
+      "title": "Les choix de la rédaction",
+      "description": "Des villes différentes. Des rythmes différents. Des histoires qui vous accompagnent.",
+      "action": "Explorer l’Asie de l’Est"
+    },
+    "itineraries": {
+      "eyebrow": "Pour quelques jours ailleurs",
+      "title": "Quelques jours. Un autre regard.",
+      "description": "Des rues animées aux coins plus tranquilles, laissez-vous guider par un itinéraire soigneusement pensé."
+    },
+    "regions": {
+      "eyebrow": "Suivez votre curiosité",
+      "title": "Six régions. Mille possibilités.",
+      "description": "Un lieu familier ou une toute nouvelle découverte : votre prochaine histoire est plus proche que vous ne le pensez."
+    },
+    "planning": {
+      "eyebrow": "De l’inspiration au départ",
+      "title": "À vous d’écrire l’histoire.",
+      "description": "Découvrez un itinéraire, gardez une place pour l’imprévu et trouvez où séjourner. Nous vous aidons à préparer le reste.",
+      "action": "Préparer une escapade à Shanghai",
+      "discover": {
+        "title": "Trouvez l’inspiration",
+        "description": "Explorez les destinations et choisissez un itinéraire qui vous ressemble."
+      },
+      "plan": {
+        "title": "Préparez vos journées",
+        "description": "Profitez du programme quotidien, des recommandations culinaires et des outils pratiques."
+      },
+      "stay": {
+        "title": "Trouvez où séjourner",
+        "description": "Ouvrez la recherche d’hôtels dans votre itinéraire pour choisir vos dates et comparer les séjours."
+      }
+    },
+    "duration_one": "{{count}} jour",
+    "duration_other": "{{count}} jours",
+    "curated": "Itinéraire sélectionné",
+    "photos": {
+      "shanghai": "Le panorama illuminé de Shanghai au bord du Huangpu",
+      "paris": "La tour Eiffel au-dessus du Champ-de-Mars à Paris",
+      "tokyo": "Les rues et le panorama urbain de Tokyo",
+      "sydney": "Le port de Sydney et son Opéra",
+      "marrakech": "Des bateaux de pêche sur la côte marocaine",
+      "newYork": "L’architecture et le panorama de New York",
+      "southeast": "Des temples et des statues en Asie du Sud-Est"
+    }
+  },
   "routeLoad": {
     "loading": "Chargement…",
     "failed": "Impossible de charger cette page. Veuillez réessayer."
@@ -9,6 +79,7 @@
     "retry": "Réessayer"
   },
   "navbar": {
+    "openMenu": "Ouvrir le menu de navigation",
     "home": "Accueil",
     "explore": "Explorer",
     "contact": "Contact",

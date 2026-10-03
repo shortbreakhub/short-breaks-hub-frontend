@@ -81,7 +81,7 @@ test("pre-rendered home HTML contains its route metadata and real page content",
         description: "Discover curated city breaks",
         canonical: "https://www.shortbreakhub.com/",
     });
-    assert.match(routes.home, /<h1[^>]*>[\s\S]*?Short Break Hub[\s\S]*?<\/h1>/);
+    assert.match(routes.home, /<h1[^>]*>[\s\S]*?Short Breaks\.[\s\S]*?Big Stories\.[\s\S]*?<\/h1>/);
     assert.match(routes.home, /href="\/europe"/);
 });
 
