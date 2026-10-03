@@ -1,0 +1,437 @@
+{
+  "logo-icon": {
+    "source": "logo-icon.png",
+    "sourceBytes": 1494019,
+    "sourceSha256": "9e1a38073dadccd783e06da741ebc5ed094c5e6798745759aa6285232b121c7e",
+    "width": 1024,
+    "height": 1024,
+    "variants": [
+      {
+        "file": "logo-icon-224.png",
+        "width": 224,
+        "height": 224,
+        "bytes": 12257
+      }
+    ]
+  },
+  "hero-bg": {
+    "source": "hero-bg.jpg",
+    "sourceBytes": 2383628,
+    "sourceSha256": "cdaac2f1377bbbe43fe8278906a3559af9046c88a3c8fd593ce96243a7e03be1",
+    "width": 3926,
+    "height": 2209,
+    "variants": [
+      {
+        "file": "hero-bg-1920.webp",
+        "width": 1920,
+        "height": 1080,
+        "bytes": 507190
+      }
+    ]
+  },
+  "southeast": {
+    "source": "southeast.jpg",
+    "sourceBytes": 3699617,
+    "sourceSha256": "9518370129e06c3e1e7b815a67fe8331999b9fe4c9f985d11a554acaefb73434",
+    "width": 5034,
+    "height": 3356,
+    "variants": [
+      {
+        "file": "southeast-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 44326
+      },
+      {
+        "file": "southeast-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 156024
+      }
+    ]
+  },
+  "eastasia": {
+    "source": "eastasia.jpg",
+    "sourceBytes": 1781203,
+    "sourceSha256": "964d64435652b7a0c3476ea8abe057bf08dc0e005b9379db7d462258e4f82983",
+    "width": 3552,
+    "height": 5328,
+    "variants": [
+      {
+        "file": "eastasia-480.webp",
+        "width": 480,
+        "height": 720,
+        "bytes": 29624
+      },
+      {
+        "file": "eastasia-960.webp",
+        "width": 960,
+        "height": 1440,
+        "bytes": 88254
+      }
+    ]
+  },
+  "europe": {
+    "source": "europe.jpg",
+    "sourceBytes": 7002789,
+    "sourceSha256": "d19551f724d53964675364b354766484164dce1c4c19c7e1b92d7709a8f8c9f1",
+    "width": 7360,
+    "height": 4912,
+    "variants": [
+      {
+        "file": "europe-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 35088
+      },
+      {
+        "file": "europe-960.webp",
+        "width": 960,
+        "height": 641,
+        "bytes": 125750
+      }
+    ]
+  },
+  "americas": {
+    "source": "americas.jpg",
+    "sourceBytes": 3758652,
+    "sourceSha256": "cf983a0ede8026dfc935b92bdfaa0711453e73b294b4c4b359689274779e7b91",
+    "width": 6000,
+    "height": 3375,
+    "variants": [
+      {
+        "file": "americas-480.webp",
+        "width": 480,
+        "height": 269,
+        "bytes": 19816
+      },
+      {
+        "file": "americas-960.webp",
+        "width": 960,
+        "height": 540,
+        "bytes": 69226
+      }
+    ]
+  },
+  "anz": {
+    "source": "anz.jpg",
+    "sourceBytes": 1451232,
+    "sourceSha256": "4ac6aa4da1707ef8d62797cf06ab5e0bcbb6e60209e393db8d66c5fce41c9baf",
+    "width": 5138,
+    "height": 2423,
+    "variants": [
+      {
+        "file": "anz-480.webp",
+        "width": 480,
+        "height": 226,
+        "bytes": 11194
+      },
+      {
+        "file": "anz-960.webp",
+        "width": 960,
+        "height": 452,
+        "bytes": 31542
+      }
+    ]
+  },
+  "northafrica": {
+    "source": "northAfrica.jpg",
+    "sourceBytes": 2510627,
+    "sourceSha256": "2ffb16f760058bfde98c66bf67b055305b0842a4a902f3b41891008a015ce4dc",
+    "width": 5379,
+    "height": 3585,
+    "variants": [
+      {
+        "file": "northAfrica-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 15878
+      },
+      {
+        "file": "northAfrica-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 58100
+      }
+    ]
+  },
+  "southeast-asia-banner": {
+    "source": "southeast-asia-banner.jpg",
+    "sourceBytes": 3858206,
+    "sourceSha256": "8ef07f8b94aca121cbefc9b31318d5cabcfcece2b144561374aeb6fd638af887",
+    "width": 6000,
+    "height": 4000,
+    "variants": [
+      {
+        "file": "southeast-asia-banner-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 209304
+      }
+    ]
+  },
+  "east-asia-banner": {
+    "source": "east-asia-banner.jpg",
+    "sourceBytes": 3281663,
+    "sourceSha256": "97853f21a200330a6b0265a67513cb2e51b21c7ff2cfc352a45900332c5479f2",
+    "width": 5248,
+    "height": 3499,
+    "variants": [
+      {
+        "file": "east-asia-banner-1600.webp",
+        "width": 1600,
+        "height": 1066,
+        "bytes": 280208
+      }
+    ]
+  },
+  "europe-banner": {
+    "source": "europe-banner.jpg",
+    "sourceBytes": 1513997,
+    "sourceSha256": "3485695addb9d87906befffa2e3c79371e0d539d07d890d9c044dac88a4b944a",
+    "width": 3264,
+    "height": 2176,
+    "variants": [
+      {
+        "file": "europe-banner-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 283884
+      }
+    ]
+  },
+  "americas-banner": {
+    "source": "americas-banner.jpg",
+    "sourceBytes": 8015222,
+    "sourceSha256": "4c71de4ad01326ca43f28943c1322ef2b7268998945c4781a8b2cb367c13124d",
+    "width": 5999,
+    "height": 2833,
+    "variants": [
+      {
+        "file": "americas-banner-1600.webp",
+        "width": 1600,
+        "height": 755,
+        "bytes": 388010
+      }
+    ]
+  },
+  "oceania-banner": {
+    "source": "oceania-banner.jpg",
+    "sourceBytes": 1524361,
+    "sourceSha256": "39254c32a2da9cbe3867f14cba0d6368004e02096252596d17195eb94be2de3d",
+    "width": 4000,
+    "height": 2250,
+    "variants": [
+      {
+        "file": "oceania-banner-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 99140
+      }
+    ]
+  },
+  "africa-banner": {
+    "source": "africa-banner.jpg",
+    "sourceBytes": 4022369,
+    "sourceSha256": "872d2ec78a8e47edf46dff9cbb0ca78ee9d42f42aed40c7d09b156dfb0d5880c",
+    "width": 5464,
+    "height": 3643,
+    "variants": [
+      {
+        "file": "africa-banner-1600.webp",
+        "width": 1600,
+        "height": 1066,
+        "bytes": 213760
+      }
+    ]
+  },
+  "france": {
+    "source": "france.jpg",
+    "sourceBytes": 2500372,
+    "sourceSha256": "8cec4c9f36275219df001459761f5c329defcba2644305bceed98004fa17d5f1",
+    "width": 3882,
+    "height": 2201,
+    "variants": [
+      {
+        "file": "france-480.webp",
+        "width": 480,
+        "height": 272,
+        "bytes": 43274
+      },
+      {
+        "file": "france-960.webp",
+        "width": 960,
+        "height": 544,
+        "bytes": 159258
+      }
+    ]
+  },
+  "germany": {
+    "source": "germany.jpg",
+    "sourceBytes": 5474642,
+    "sourceSha256": "6cf18d6c268736df87b087299fbad1e79a4ddc121346ecf0634c0d3a58fcb2af",
+    "width": 7000,
+    "height": 4667,
+    "variants": [
+      {
+        "file": "germany-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 20054
+      },
+      {
+        "file": "germany-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 74732
+      }
+    ]
+  },
+  "greece": {
+    "source": "greece.jpg",
+    "sourceBytes": 4422422,
+    "sourceSha256": "01a36a739f9c12cbb4992c28514a219546d43d199ae255672da4fcd7a43dd6ea",
+    "width": 6000,
+    "height": 4000,
+    "variants": [
+      {
+        "file": "greece-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 28372
+      },
+      {
+        "file": "greece-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 102298
+      }
+    ]
+  },
+  "italy": {
+    "source": "italy.jpg",
+    "sourceBytes": 2491865,
+    "sourceSha256": "443610ade80a91f948033b758033df88a293e3b1259d982512ad4b6e85cdf03a",
+    "width": 3872,
+    "height": 2592,
+    "variants": [
+      {
+        "file": "italy-480.webp",
+        "width": 480,
+        "height": 321,
+        "bytes": 42750
+      },
+      {
+        "file": "italy-960.webp",
+        "width": 960,
+        "height": 643,
+        "bytes": 160462
+      }
+    ]
+  },
+  "netherlands": {
+    "source": "netherlands.jpg",
+    "sourceBytes": 4454501,
+    "sourceSha256": "e41219377398fe9db0d05297e48120e608c698193c1db016abeb9695983a37fd",
+    "width": 6000,
+    "height": 4000,
+    "variants": [
+      {
+        "file": "netherlands-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 21728
+      },
+      {
+        "file": "netherlands-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 79422
+      }
+    ]
+  },
+  "portugal": {
+    "source": "portugal.jpg",
+    "sourceBytes": 3241322,
+    "sourceSha256": "920f848b1d7db7d856f94f5f7969896fae269babbdf43cfafe2413cfcfa24788",
+    "width": 6016,
+    "height": 4016,
+    "variants": [
+      {
+        "file": "portugal-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 27556
+      },
+      {
+        "file": "portugal-960.webp",
+        "width": 960,
+        "height": 641,
+        "bytes": 102940
+      }
+    ]
+  },
+  "spain": {
+    "source": "spain.jpg",
+    "sourceBytes": 2845621,
+    "sourceSha256": "1e0cc5e6651cff01a4af7e1f4745b3f0cf5bcc1bed58af1d2282121683844572",
+    "width": 4841,
+    "height": 3225,
+    "variants": [
+      {
+        "file": "spain-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 22112
+      },
+      {
+        "file": "spain-960.webp",
+        "width": 960,
+        "height": 639,
+        "bytes": 74032
+      }
+    ]
+  },
+  "switzerland": {
+    "source": "switzerland.jpg",
+    "sourceBytes": 3856565,
+    "sourceSha256": "4fed82538373e1a9f89f9cfbe24ad5d8ad7a5bdfae2ab2cdd3d8cb31146d28b2",
+    "width": 5760,
+    "height": 3840,
+    "variants": [
+      {
+        "file": "switzerland-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 35080
+      },
+      {
+        "file": "switzerland-960.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 127506
+      }
+    ]
+  },
+  "united kingdom": {
+    "source": "united kingdom.jpg",
+    "sourceBytes": 3717979,
+    "sourceSha256": "40e8f592449dbe9a5b20ca784e5d569b15e1233edadc9d1365cc8cf01c6c03fa",
+    "width": 5009,
+    "height": 3339,
+    "variants": [
+      {
+        "file": "united-kingdom-480.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 22218
+      },
+      {
+        "file": "united-kingdom-960.webp",
+        "width": 960,
+        "height": 639,
+        "bytes": 75164
+      }
+    ]
+  }
+}

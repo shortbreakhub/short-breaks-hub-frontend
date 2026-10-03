@@ -1,35 +1,26 @@
 import {Routes, Route} from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
-import RegionPage from "./pages/RegionPage.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import ItineraryPage from "./pages/ItineraryPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
-import BrowsePage from "./pages/BrowsePage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import ProfilePage from "./pages/ProfilePage";
-import CreateItineraryPage from "./pages/CreateItineraryPage.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import WeatherPage from "./pages/WeatherPage.jsx";
 import useTokenCountdown from "./hooks/useTokenCountdown";
 import BlockingSessionModal from "./components/BlockingSessionModal.jsx";
-import {useState} from "react";
+import {Suspense, useState} from "react";
+import {useLocation} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import {lazyPages, RouteLoadBoundary} from "./routePages.jsx";
 import {postUserRenewToken} from "./api.js";
-import VerifyEmailPage from "./pages/VerifyEmailPage.jsx";
-import CommunityItineraryPage from "./pages/CommunityItineraryPage.jsx";
-import CommunityTripsPage from "./pages/CommunityTripsPage.jsx";
-import CommunityRegionPage from "./pages/CommunityRegionPage.jsx";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
-import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
-import GoogleMap from "./components/GoogleMap.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/TermsOfService.jsx";
 import RouteRobots from "./components/RouteRobots.jsx";
 
-function App() {
+function App({pages = lazyPages}) {
+    const {RegionPage, ItineraryPage, BrowsePage, RegisterPage, LoginPage, ProfilePage, CreateItineraryPage, WeatherPage, VerifyEmailPage, CommunityItineraryPage, CommunityTripsPage, CommunityRegionPage, ForgotPasswordPage, ResetPasswordPage, GoogleMap} = pages;
+    const {pathname} = useLocation();
+    const {t} = useTranslation();
 
     const [secondsLeft, setSecondsLeft] = useState(null);
 
@@ -80,6 +71,13 @@ function App() {
                 draggable
             />
             <RouteRobots />
+            <RouteLoadBoundary pathname={pathname} fallback={
+                <div className="max-w-screen-lg mx-auto px-4 py-16">
+                    <p role="alert">{t("routeLoad.failed")}</p>
+                    <button type="button" onClick={() => window.location.reload()} className="text-yellow-700 underline">{t("itineraryLoad.retry")}</button>
+                </div>
+            }>
+            <Suspense fallback={<div className="min-h-screen" role="status" aria-label={t("routeLoad.loading")} />}>
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/:region" element={<RegionPage />} />
@@ -103,6 +101,8 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
             </Routes>
+            </Suspense>
+            </RouteLoadBoundary>
             <Footer />
             {shouldShowModal && (
                 <BlockingSessionModal

@@ -6,7 +6,7 @@ import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
 import CommentsSection from "../components/Comments";
-import {loadSubFolderImages} from "../utils/loadImage.js";
+import {loadSubFolderImages} from "../utils/loadItineraryImage.js";
 import {isExpired} from "../utils/jwtParser.js";
 import getCurrencyCode from "../utils/countryToCurrency.js";
 import axios from "axios";

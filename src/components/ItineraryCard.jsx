@@ -1,7 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import {getFavoritesCount} from "../api.js";
 import {useEffect, useState} from "react";
-import {loadSubFolderImages} from "../utils/loadImage.js";
+import {loadSubFolderImages} from "../utils/loadItineraryImage.js";
 import {useTranslation} from "react-i18next";
 import {getOfficialItineraryPath} from "../utils/publicNavigation.js";
 
