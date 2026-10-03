@@ -1,4 +1,9 @@
 {
+  "itineraryLoad": {
+    "failed": "Unable to load this itinerary. Please try again.",
+    "notFound": "Itinerary not found.",
+    "retry": "Try again"
+  },
   "navbar": {
     "home": "Home",
     "explore": "Explore",

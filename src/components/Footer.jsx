@@ -117,39 +117,39 @@ export default function Footer() {
 
                             <ul className="mt-5 space-y-3 text-sm text-white/70">
                                 <li>
-                                    <button
-                                        onClick={() => navigate("/community-itineraries/region")}
+                                    <Link
+                                        to="/community-itineraries/region"
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.communityTrips")}
-                                    </button>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() => navigate("/live-weather")}
+                                    <Link
+                                        to="/live-weather"
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.liveWeather")}
-                                    </button>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() => navigate("/login")}
+                                    <Link
+                                        to="/login"
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.yourFavourites")}
-                                    </button>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <button
-                                        onClick={() => navigate("/contact")}
+                                    <Link
+                                        to="/contact"
                                         className="hover:text-amber-300 transition-colors"
                                     >
                                         {t("footer.contact")}
-                                    </button>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -198,15 +198,13 @@ export default function Footer() {
                         </p>
 
                         <div className="flex items-center gap-6">
-                            <button className="hover:text-white transition-colors"
-                                    onClick={() => navigate("/privacy")}>
+                            <Link className="hover:text-white transition-colors" to="/privacy">
                                 {t("footer.privacy")}
-                            </button>
+                            </Link>
 
-                            <button className="hover:text-white transition-colors"
-                                    onClick={() => navigate("/terms")}>
+                            <Link className="hover:text-white transition-colors" to="/terms">
                                 {t("footer.terms")}
-                            </button>
+                            </Link>
 
                         </div>
                     </div>

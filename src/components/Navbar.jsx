@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Logo from "../assets/logo-icon.png"
 import { toast } from 'react-toastify';
 import {Auth} from "../auth.js";
@@ -97,10 +97,17 @@ export default function Navbar() {
 
                 <div className="flex items-center">
                     <ul className="flex items-center gap-6">
-                        {links.map((l) => (
+                        {links.map((l) => {
+                            const Control = l.type === "route" ? Link : "button";
+                            return (
                             <li key={l.id}>
-                                <button
+                                <Control
+                                    {...(l.type === "route" ? {to: l.id} : {type: "button"})}
                                     onClick={() => {
+                                        if (l.type === "route") {
+                                            setOpen(false);
+                                            return;
+                                        }
                                         if (l.type === "scroll") {
                                             setActiveScroll(l.id);
                                         }
@@ -128,20 +135,20 @@ export default function Navbar() {
                                     }`}
                                 >
                                     {l.label}
-                                </button>
+                                </Control>
                             </li>
-                        ))}
+                            );
+                        })}
                     </ul>
 
                     {isLoggedIn && (
-                        <button
-                            type="button"
+                        <Link
+                            to="/profile"
                             title={t("navbar.profile")}
-                            onClick={() => navigate("/profile")}
                             className="ml-10 flex items-center text-gray-700 hover:text-gray-900 cursor-pointer"
                         >
                             <FaUserCircle size={36}/>
-                        </button>
+                        </Link>
                     )}
 
                     <LanguageSwitcher/>
@@ -176,27 +183,31 @@ export default function Navbar() {
                 <div className="md:hidden bg-white border-t">
 
                     {isLoggedIn && (
-                        <button
+                        <Link
+                            to="/profile"
                             onClick={() => {
                                 setOpen(false);
-                                navigate("/profile");
                             }}
                             className="w-full flex items-center gap-3 px-4 py-4 border-b text-gray-800 font-medium cursor-pointer"
                         >
                             <FaUserCircle size={24}/>
                             {t("navbar.profile")}
-                        </button>
+                        </Link>
                     )}
 
-                    {links.map((l) => (
-                        <button
+                    {links.map((l) => {
+                        const Control = l.type === "route" ? Link : "button";
+                        return (
+                        <Control
                             key={l.id}
-                            onClick={() => navigateAndScroll(l)}
-                            className="w-full text-left px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                            {...(l.type === "route" ? {to: l.id} : {type: "button"})}
+                            onClick={() => l.type === "route" ? setOpen(false) : navigateAndScroll(l)}
+                            className="block w-full text-left px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer"
                         >
                             {l.label}
-                        </button>
-                    ))}
+                        </Control>
+                        );
+                    })}
                 </div>
             )}
 

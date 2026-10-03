@@ -10,6 +10,15 @@ const shanghai = {destinationKey: "china--shanghai", name: "Shanghai", provider:
 const context = {slug: "shanghai-trip", city: "Shanghai display", days: 4, hotelDestination: shanghai};
 const defaults = getHotelDefaults(context, now);
 
+test("Shanghai CITY mapping and exact approved affiliate tracking remain stable", () => {
+    assert.equal(getMappedHotelDestination(shanghai), shanghai);
+    const url = new URL(buildTripComHotelUrl(shanghai, defaults, {now}));
+    for (const [key, value] of Object.entries({cityId: "2", cityName: "Shanghai", destName: "Shanghai",
+        Allianceid: "9927800", SID: "327885881", trip_sub1: "", trip_sub3: "D19155586"})) {
+        assert.deepEqual(url.searchParams.getAll(key), [value], `${key} must occur once with its approved value`);
+    }
+});
+
 test("Hotel defaults use canonical mapped name and local +30-day/+days dates", () => {
     assert.equal(defaults.destination, "Shanghai");
     assert.equal(defaults.checkIn, "2026-11-01");

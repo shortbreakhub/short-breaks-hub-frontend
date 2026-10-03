@@ -13,6 +13,7 @@ import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
 import {isExpired,getUserId} from "../utils/jwtParser.js";
 import ThreadConversation from "../components/ThreadConversation.jsx";
+import {useTranslation} from "react-i18next";
 
 
 
@@ -22,6 +23,9 @@ export default function CommunityItineraryPage() {
     const navigate = useNavigate();
     const [data,setData] = useState({});
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState("");
+    const [retry, setRetry] = useState(0);
+    const {t} = useTranslation();
     const [likes, setLikes] = React.useState({
         liked: false,
         count: 0,
@@ -173,16 +177,21 @@ export default function CommunityItineraryPage() {
 
 
     useEffect(() => {
-        getUserItineraryBySlug(slug).then(
-            (data) => {
-                setData(data);
-                setLoading(false);
-                if(parseInt(data.userId) === parseInt(getUserId())){
-                    setCreator(true);
-                }
-            }
-        );
-    }, [slug]);
+        let ignore = false;
+        setLoading(true);
+        setLoadError("");
+        setData({});
+        setCreator(false);
+        getUserItineraryBySlug(slug).then(detail => {
+            if (ignore) return;
+            if (!detail) throw new Error("Empty itinerary response");
+            setData(detail);
+            setCreator(parseInt(detail.userId) === parseInt(getUserId()));
+        }).catch(error => {
+            if (!ignore) setLoadError(error?.response?.status === 404 ? "notFound" : "failed");
+        }).finally(() => { if (!ignore) setLoading(false); });
+        return () => { ignore = true; };
+    }, [slug, retry]);
 
     useEffect(() => {
         if (!data?.id) return
@@ -229,12 +238,12 @@ export default function CommunityItineraryPage() {
     }
 
 
-    if (!data) {
+    if (loadError) {
         return (
             <div className="max-w-screen-lg mx-auto px-4 py-16">
-                <h1 className="text-2xl font-bold mb-4">Itinerary not found</h1>
-                <button onClick={() => navigate(-1)} className="text-yellow-700 underline">
-                    Go back
+                <h1 role="alert" className="text-2xl font-bold mb-4">{t(`itineraryLoad.${loadError}`)}</h1>
+                <button type="button" onClick={() => setRetry(value => value + 1)} className="text-yellow-700 underline">
+                    {t("itineraryLoad.retry")}
                 </button>
             </div>
         );
