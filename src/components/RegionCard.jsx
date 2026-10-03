@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from "react-i18next";
 import {Link} from "react-router-dom";
 
-function RegionCard({ image, title, description, onClick, to }) {
+function RegionCard({ image, title, description, onClick, to, imageMeta, loading = "eager" }) {
 
     const { t } = useTranslation();
 
@@ -10,6 +10,12 @@ function RegionCard({ image, title, description, onClick, to }) {
         <>
             <img
                 src={image}
+                srcSet={imageMeta?.srcSet}
+                sizes="(min-width: 768px) 400px, (min-width: 640px) 50vw, 100vw"
+                width={imageMeta?.width}
+                height={imageMeta?.height}
+                loading={loading}
+                decoding="async"
                 alt={title}
                 className="h-48 w-full object-cover"
             />

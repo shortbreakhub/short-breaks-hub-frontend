@@ -161,7 +161,7 @@ try {
             }
         }
     }
-    const {loadSubFolderImages} = await vite.ssrLoadModule("/src/utils/loadImage.js");
+    const {loadSubFolderImages} = await vite.ssrLoadModule("/src/utils/loadItineraryImage.js");
     for (const {slug, detail} of officialPages) {
         if (!manifest[detail.hero.slice(1)]?.file) {
             throw new Error(`Official itinerary ${slug}: missing built hero asset ${detail.hero}.`);

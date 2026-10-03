@@ -1,0 +1,312 @@
+{
+  "method": {
+    "gzipLevel": 9,
+    "browser": "Chromium, desktop 1440x900 DPR1; mobile 390x844 DPR2",
+    "runtime": "Cold contexts, local production HTTP without compression, external traffic blocked; API fixtures from generated HTML; initial networkidle and bottom scroll, no affiliate clicks. Not field CWV or a Lighthouse score.",
+    "gzip": "Baseline-comparable gzip: Python gzip.compress(level=9, mtime=0) before/after. Reusable Node measurement script uses Node gzip level 9; its zlib output differs slightly, so both are recorded."
+  },
+  "before": {
+    "sourceAssetBytes": 1477048774,
+    "productionBytes": 1450911956,
+    "chunks": [
+      {
+        "name": "index-CxicFEzw.js",
+        "raw": 1743830,
+        "gzip": 388143
+      },
+      {
+        "name": "index-C06h-pi5.css",
+        "raw": 66948,
+        "gzip": 11852
+      }
+    ],
+    "runtime": [
+      {
+        "name": "home-desktop",
+        "initialBytes": 25914165,
+        "jsRaw": 1743830
+      },
+      {
+        "name": "home-mobile",
+        "initialBytes": 25914165,
+        "jsRaw": 1743830
+      },
+      {
+        "name": "europe",
+        "initialBytes": 34149301,
+        "jsRaw": 1743830
+      },
+      {
+        "name": "china",
+        "initialBytes": 30949142,
+        "jsRaw": 1743830
+      },
+      {
+        "name": "shanghai",
+        "initialBytes": 9488999,
+        "jsRaw": 1743830
+      }
+    ]
+  },
+  "after": {
+    "sourceAssetBytes": 1480956369,
+    "productionBytes": 1384108614,
+    "initialJsRaw": 470646,
+    "initialJsGzip": 152484,
+    "initialFiles": [
+      "assets/index-BglBZVGx.js"
+    ],
+    "chunks": [
+      {
+        "file": "assets/loading-animation-CxWO7YTd.js",
+        "raw": 843287,
+        "gzip": 138490
+      },
+      {
+        "file": "assets/index-BglBZVGx.js",
+        "raw": 470646,
+        "gzip": 152484
+      },
+      {
+        "file": "assets/loadItineraryImage-DyOPMh9c.js",
+        "raw": 124284,
+        "gzip": 36735
+      },
+      {
+        "file": "assets/index-C06h-pi5.css",
+        "raw": 66948,
+        "gzip": 11877
+      },
+      {
+        "file": "assets/WeatherPage-D520nuEx.js",
+        "raw": 53157,
+        "gzip": 13786
+      },
+      {
+        "file": "assets/ItineraryPage-4g_FDmkl.js",
+        "raw": 51127,
+        "gzip": 12813
+      },
+      {
+        "file": "assets/communityPages-EOf6XS3a.js",
+        "raw": 49444,
+        "gzip": 12006
+      },
+      {
+        "file": "assets/GoogleMap-2QPaRY_M.js",
+        "raw": 20755,
+        "gzip": 7737
+      },
+      {
+        "file": "assets/accountPages-CT_mwj7U.js",
+        "raw": 18315,
+        "gzip": 4693
+      },
+      {
+        "file": "assets/CountryCard-C_vdub6o.js",
+        "raw": 5349,
+        "gzip": 2280
+      },
+      {
+        "file": "assets/BrowsePage-x-TwPfam.js",
+        "raw": 4749,
+        "gzip": 1856
+      },
+      {
+        "file": "assets/ItineraryDayAccordion-QQh9uwGE.js",
+        "raw": 2476,
+        "gzip": 1020
+      },
+      {
+        "file": "assets/RegionPage-C1hZGJVh.js",
+        "raw": 1701,
+        "gzip": 929
+      },
+      {
+        "file": "assets/ItineraryCard-D7q1PIf3.js",
+        "raw": 1446,
+        "gzip": 795
+      },
+      {
+        "file": "assets/toast-nTgtsiRk.js",
+        "raw": 793,
+        "gzip": 490
+      }
+    ],
+    "largestImages": [
+      {
+        "file": "assets/san-miguel-Bh5t66dI.jpg",
+        "bytes": 15239178
+      },
+      {
+        "file": "assets/grand-central-market-BPbnDFuR.jpg",
+        "bytes": 12586808
+      },
+      {
+        "file": "assets/3-days-phnom-penh-where-history-speaks-softly-DrNwpmU8.jpg",
+        "bytes": 11535252
+      },
+      {
+        "file": "assets/3-days-ha-long-bay-where-stone-rises-from-water-MN7LPR63.jpg",
+        "bytes": 11156464
+      },
+      {
+        "file": "assets/vietnam-BxAUTqB6.jpg",
+        "bytes": 10922932
+      },
+      {
+        "file": "assets/3-days-zermatt-altitude-silence-and-effort-B1Oog7OV.jpg",
+        "bytes": 8631491
+      },
+      {
+        "file": "assets/5-days-tasmania-isolation-weather-and-attention-BGG0l5ou.jpg",
+        "bytes": 8496788
+      },
+      {
+        "file": "assets/4-days-taipei-where-everyday-life-feels-kind-Begh-tSa.jpg",
+        "bytes": 8376739
+      },
+      {
+        "file": "assets/boqueria-C0QlXSM5.jpg",
+        "bytes": 7936831
+      },
+      {
+        "file": "assets/brazil-p1whkcdd.jpg",
+        "bytes": 7400647
+      }
+    ],
+    "prerenderedPages": 258,
+    "runtime": [
+      {
+        "name": "home-desktop",
+        "initialBytes": 1235570,
+        "jsRaw": 470646
+      },
+      {
+        "name": "home-mobile",
+        "initialBytes": 1608540,
+        "jsRaw": 470646
+      },
+      {
+        "name": "europe",
+        "initialBytes": 1149140,
+        "jsRaw": 477696
+      },
+      {
+        "name": "china",
+        "initialBytes": 29168041,
+        "jsRaw": 1444412
+      },
+      {
+        "name": "shanghai",
+        "initialBytes": 7756099,
+        "jsRaw": 1492613
+      }
+    ],
+    "baselineComparableGzip": {
+      "initialJsGzip": 151952,
+      "chunks": [
+        {
+          "file": "assets/loading-animation-CxWO7YTd.js",
+          "raw": 843287,
+          "gzip": 138523
+        },
+        {
+          "file": "assets/index-BglBZVGx.js",
+          "raw": 470646,
+          "gzip": 151952
+        },
+        {
+          "file": "assets/loadItineraryImage-DyOPMh9c.js",
+          "raw": 124284,
+          "gzip": 37029
+        },
+        {
+          "file": "assets/index-C06h-pi5.css",
+          "raw": 66948,
+          "gzip": 11852
+        },
+        {
+          "file": "assets/WeatherPage-D520nuEx.js",
+          "raw": 53157,
+          "gzip": 13775
+        },
+        {
+          "file": "assets/ItineraryPage-4g_FDmkl.js",
+          "raw": 51127,
+          "gzip": 12790
+        },
+        {
+          "file": "assets/communityPages-EOf6XS3a.js",
+          "raw": 49444,
+          "gzip": 11969
+        },
+        {
+          "file": "assets/GoogleMap-2QPaRY_M.js",
+          "raw": 20755,
+          "gzip": 7741
+        },
+        {
+          "file": "assets/accountPages-CT_mwj7U.js",
+          "raw": 18315,
+          "gzip": 4668
+        },
+        {
+          "file": "assets/CountryCard-C_vdub6o.js",
+          "raw": 5349,
+          "gzip": 2288
+        },
+        {
+          "file": "assets/BrowsePage-x-TwPfam.js",
+          "raw": 4749,
+          "gzip": 1844
+        },
+        {
+          "file": "assets/ItineraryDayAccordion-QQh9uwGE.js",
+          "raw": 2476,
+          "gzip": 1020
+        },
+        {
+          "file": "assets/RegionPage-C1hZGJVh.js",
+          "raw": 1701,
+          "gzip": 927
+        },
+        {
+          "file": "assets/ItineraryCard-D7q1PIf3.js",
+          "raw": 1446,
+          "gzip": 795
+        },
+        {
+          "file": "assets/toast-nTgtsiRk.js",
+          "raw": 793,
+          "gzip": 488
+        }
+      ]
+    },
+    "browserVerification": {
+      "spaNavigation": {
+        "route": "/itinerary/4-days-paris-where-icons-meet-everyday-grace",
+        "errors": [],
+        "documentRequests": 1
+      },
+      "secondaryRoutes": [
+        {
+          "route": "/login",
+          "errors": []
+        },
+        {
+          "route": "/register",
+          "errors": []
+        },
+        {
+          "route": "/community-itineraries/region",
+          "errors": []
+        },
+        {
+          "route": "/live-weather",
+          "errors": []
+        }
+      ]
+    }
+  }
+}

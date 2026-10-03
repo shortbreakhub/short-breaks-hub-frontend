@@ -1,4 +1,8 @@
 {
+  "routeLoad": {
+    "loading": "Loading…",
+    "failed": "Unable to load this page. Please try again."
+  },
   "itineraryLoad": {
     "failed": "Unable to load this itinerary. Please try again.",
     "notFound": "Itinerary not found.",

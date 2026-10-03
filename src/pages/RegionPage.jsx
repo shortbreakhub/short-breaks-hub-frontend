@@ -81,12 +81,13 @@ function RegionPage() {
 
             <div className="max-w-screen-xl mx-auto my-14">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-cols-fr">
-                    {countries.map((country) => (
+                    {countries.map((country, index) => (
                         <CountryCard
                             key={country.name}
                             name={country.name}
                             itineraries={country.itineraries}
                             image={country.image}
+                            loading={index < 3 ? "eager" : "lazy"}
                             itineraryType={"itinerary"}
                         />
                     ))}

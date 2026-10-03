@@ -1,8 +1,9 @@
-import React, {useEffect, useId, useState} from "react";
+import React, {lazy, Suspense, useEffect, useId, useState} from "react";
 import MapModal from "./MapModal";
-import GoogleMap from "./GoogleMap";
-import {loadSubFolderImages} from "../utils/loadImage.js";
+import {loadSubFolderImages} from "../utils/loadItineraryImage.js";
 import { useTranslation } from "react-i18next";
+
+const GoogleMap = lazy(() => import("./GoogleMap.jsx"));
 
 export default function FoodRecommendations({ mustTry,areas,places, defaultOpen = false }) {
     const [open, setOpen] = useState(defaultOpen);
@@ -149,7 +150,9 @@ export default function FoodRecommendations({ mustTry,areas,places, defaultOpen 
                 title={mapPlace ? `${mapPlace.name} • ${mapPlace.area || ""}` : "Map"}
             >
                 {mapPlace?.lat && mapPlace?.lng ? (
+                    <Suspense fallback={null}>
                     <GoogleMap center={{ lat: mapPlace.lat, lng: mapPlace.lng }} zoom={16} />
+                    </Suspense>
                 ) : (
                     <div className="h-full w-full grid place-items-center text-sm text-slate-600">
                         {t("foodRecommendations.noCoordinates")}

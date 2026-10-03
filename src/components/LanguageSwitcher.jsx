@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { loadPngImages } from "../utils/loadImage.js";
+import englishFlag from "../assets/english-flag.png";
+import frenchFlag from "../assets/french-flag.png";
 
 const LANGUAGES = [
     {
         code: "en",
         label: "English",
-        flag: "english-flag",
+        flag: englishFlag,
         flagAlt: "British flag",
     },
     {
         code: "fr",
         label: "Français",
-        flag: "french-flag",
+        flag: frenchFlag,
         flagAlt: "French flag",
     },
 ];
@@ -60,7 +61,7 @@ export default function LanguageSwitcher() {
                 className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
                 <img
-                    src={loadPngImages(currentLanguage.flag)}
+                    src={currentLanguage.flag}
                     alt={currentLanguage.flagAlt}
                     className="h-6 w-6 shrink-0"
                 />
@@ -101,7 +102,7 @@ export default function LanguageSwitcher() {
                                 </span>
 
                                 <img
-                                    src={loadPngImages(language.flag)}
+                                    src={language.flag}
                                     alt={language.flagAlt}
                                     className="h-5 w-5 shrink-0"
                                 />

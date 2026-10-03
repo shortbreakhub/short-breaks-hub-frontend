@@ -1,11 +1,13 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Logo from "../assets/logo-icon.png"
+import {optimizedImages} from "../utils/optimizedImages.js";
 import { toast } from 'react-toastify';
 import {Auth} from "../auth.js";
 import {FaUserCircle} from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher.jsx";
+
+const Logo = optimizedImages["logo-icon"].src;
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
@@ -90,6 +92,8 @@ export default function Navbar() {
                 <a href="/" className="flex items-center">
                     <img
                         src={Logo}
+                        width={224}
+                        height={224}
                         alt="Travel Explorer Logo"
                         className="h-28 w-auto"
                     />
@@ -160,6 +164,8 @@ export default function Navbar() {
                 <a href="/" className="justify-self-start">
                     <img
                         src={Logo}
+                        width={224}
+                        height={224}
                         alt="Travel Explorer Logo"
                         className="h-12 w-auto"
                     />

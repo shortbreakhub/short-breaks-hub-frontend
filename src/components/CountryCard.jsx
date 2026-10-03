@@ -1,3 +1,4 @@
+import {optimizedImages} from "../utils/optimizedImages.js";
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
@@ -6,7 +7,8 @@ import {getItineraryBySlug} from "../api.js";
 
 
 
-export default function CountryCard({ name, itineraries, image, itineraryType }) {
+export default function CountryCard({ name, itineraries, image, itineraryType, loading = "eager" }) {
+    const imageMeta = optimizedImages[name.toLowerCase()];
     const navigate = useNavigate();
 
     const [previewList,setPreviewList] = useState(itineraries.slice(0, 4));
@@ -35,6 +37,12 @@ export default function CountryCard({ name, itineraries, image, itineraryType })
             <div className="h-40 md:h-48 w-full overflow-hidden">
                 <img
                     src={image}
+                    srcSet={imageMeta?.srcSet}
+                    sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                    width={imageMeta?.width}
+                    height={imageMeta?.height}
+                    loading={loading}
+                    decoding="async"
                     alt={name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />

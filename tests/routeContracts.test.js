@@ -26,6 +26,7 @@ test("App retains public, community, legal, account and utility route contracts"
     });
     try {
         const {default: App} = await vite.ssrLoadModule("/src/App.jsx");
+        const pages = await vite.ssrLoadModule("/src/prerenderPages.js");
         await vite.ssrLoadModule("/src/i18n.js");
         assert.deepEqual(REGIONS.map(({onClick}) => onClick),
             ["southeast-asia", "east-asia", "europe", "americas", "Oceania", "africa"],
@@ -51,7 +52,7 @@ test("App retains public, community, legal, account and utility route contracts"
             ["/missing/nested/path", "NotFound", {"*": "missing/nested/path"}],
         ];
         for (const [url, page, params] of cases) await t.test(url, () => {
-            const html = renderToString(React.createElement(MemoryRouter, {initialEntries: [url]}, React.createElement(App)));
+            const html = renderToString(React.createElement(MemoryRouter, {initialEntries: [url]}, React.createElement(App, {pages})));
             const dom = new JSDOM(html);
             try {
                 const main = dom.window.document.querySelector("main[data-route-page]");

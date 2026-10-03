@@ -1,21 +1,18 @@
+import {optimizedImages} from "../utils/optimizedImages.js";
+
 import {REGIONS} from "../config/regions.js";
 import React, {useRef} from "react";
-import heroBg from "../assets/hero-bg.jpg";
 import {Typewriter} from "react-simple-typewriter";
 import {FaChevronDown} from "react-icons/fa";
 import RegionCard from "../components/RegionCard.jsx";
-import southeastImg from "../assets/southeast.jpg";
-import eastAsiaImg from "../assets/eastasia.jpg";
-import europeImg from "../assets/europe.jpg";
-import americasImg from "../assets/americas.jpg";
-import anzImg from "../assets/anz.jpg";
-import northAfricaImg from "../assets/northAfrica.jpg"
 import ItinerarySearchBar from "../components/ItinerarySearchBar.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {HOME_PAGE_METADATA} from "../utils/pageMetadata.js";
 import {getRegionPath} from "../utils/publicNavigation.js";
+
+const heroBg = optimizedImages["hero-bg"].src;
 
 
 function HomePage() {
@@ -31,14 +28,14 @@ function HomePage() {
     });
 
     const regionImages = {
-        southeastAsia: southeastImg,
-        eastAsia: eastAsiaImg,
-        europe: europeImg,
-        americas: americasImg,
-        oceania: anzImg,
-        africa: northAfricaImg,
+        southeastAsia: optimizedImages["southeast"],
+        eastAsia: optimizedImages["eastasia"],
+        europe: optimizedImages["europe"],
+        americas: optimizedImages["americas"],
+        oceania: optimizedImages["anz"],
+        africa: optimizedImages["northafrica"],
     };
-    const regions = REGIONS.map((region) => ({...region, image: regionImages[region.key]}));
+    const regions = REGIONS.map((region) => ({...region, image: regionImages[region.key].src, imageMeta: regionImages[region.key]}));
 
     return (
         <>
@@ -109,6 +106,8 @@ function HomePage() {
                             <RegionCard
                                 key={index}
                                 image={item.image}
+                                imageMeta={item.imageMeta}
+                                loading="lazy"
                                 title={t(`homepage.regions.${item.key}.title`)}
                                 description={t(`homepage.regions.${item.key}.description`)}
                                 to={getRegionPath(item.onClick)}
