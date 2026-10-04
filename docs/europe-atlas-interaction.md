@@ -1,3 +1,5 @@
+> Historical Europe interaction baseline. Europe interactions are now owner accepted; see [Europe ↔ UK scene transition](atlas-uk-scene-transition.md) for the current UK selection behavior. The hit geometry below remains unchanged.
+
 # Issue #40 — Europe destination interaction
 
 Europe remains the only Atlas test bed. This iteration uses the CURRENT approved muted watercolor PNG (1536 × 1024, 3,574,321 bytes). Its bytes were checked before and after implementation and are unchanged. Earlier experiment measurements describe the earlier artwork version, not this current source.
@@ -6,7 +8,7 @@ Europe remains the only Atlas test bed. This iteration uses the CURRENT approved
 
 `src/components/home/atlas/europeDestinations.js` defines exactly nine destinations: France, Germany, Greece, Italy, Netherlands, Portugal, Spain, Switzerland and United Kingdom. Each record has an id, existing country name, existing EN/FR translation key, normalized `hitAreas` (country geography, primary and secondary landmarks/motifs) and optional label alignment. The first hit region retains the existing country focus/callout anchor. Positions were inspected against the current illustration, not inherited from geographic data. Future countries and Nordics have no controls.
 
-`AtlasStage({onCountrySelect})` forwards the selected record to a supplied callback. With no callback, the real anchor navigates to the existing `/browse/<country-slug>` route via `getCountryBrowsePath`. Modified clicks retain ordinary new-tab behavior. No routes were invented. The real homepage currently uses this browse fallback; no cloud transition or country scene is implemented.
+`AtlasStage({onCountrySelect})` forwards the selected record to a supplied callback. With no callback, the real anchor navigates to the existing `/browse/<country-slug>` route via `getCountryBrowsePath`. Modified clicks retain ordinary new-tab behavior. No routes were invented. In this historical baseline, the homepage used this browse fallback before the UK scene transition documented separately.
 
 ## Rendering and accessibility
 
@@ -24,7 +26,7 @@ Focused Atlas/homepage tests: **10 passed**. The tests cover exactly nine suppor
 
 Review artifacts: `/tmp/issue40-interaction-default-{1440,768,390}.png`, `/tmp/issue40-interaction-hover-desktop.png`, `/tmp/issue40-interaction-zoom-desktop.png`, `/tmp/issue40-interaction-tap-mobile.png`. Desktop default/hover/zoom and mobile default/tap were inspected. At rest there are no permanent labels. Active callouts temporarily cover some nearby artwork on narrow screens; only one touch destination is armed. Minimum 44px targets have limited overlap around Switzerland/Italy on mobile, with distinct usable centers. These micro-interaction choices await owner visual acceptance and physical-device review.
 
-Do not proceed to CloudTransition, CountryStoryMap, UK itinerary landmarks, region navigation or image optimization until reviewed. No protected APIs, routes, SEO strategy, Hotel Search, Trip.com mappings/tracking, itinerary behavior or EN/FR architecture were changed. No commit, push, merge or issue closure.
+At the time of this baseline, CloudTransition, CountryStoryMap, UK itinerary landmarks, region navigation and image optimization remained deferred. No protected APIs, routes, SEO strategy, Hotel Search, Trip.com mappings/tracking, itinerary behavior or EN/FR architecture were changed. No commit, push, merge or issue closure.
 
 Final production build and complete prerender succeeded with exactly 258 unchanged routes. Saved homepage/Europe/China/Shanghai metadata, canonical and JSON-LD comparisons passed; Shanghai CITY externalId remains "2". Initial JS/CSS size guards pass; no full application matrix was rerun for this focused interaction step. `git diff --check` and unchanged artwork hash verification pass.
 

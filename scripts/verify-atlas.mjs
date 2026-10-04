@@ -1,127 +1,98 @@
 import assert from 'node:assert/strict';
-import {chromium} from 'playwright';
 import {createServer} from 'vite';
-import {EUROPE_DESTINATIONS} from '../src/components/home/atlas/europeDestinations.js';
-import {writeFile} from 'node:fs/promises';
-
-// Observe the existing overlay seam, never expose testing globals in production.
-const vite=await createServer({server:{host:'127.0.0.1',port:0,open:false},logLevel:'error',plugins:[{
-    name:'atlas-verification-observer',enforce:'pre',transform(code,id){
-        if(id.endsWith('/src/components/home/AtlasStage.jsx')) return code.replace('const fail = error => {', 'const fail = error => {console.log("Atlas error", error?.message || error?.error?.message || "deadline");');
-        if(id.endsWith('/src/pages/HomePage.jsx'))return code.replace('<AtlasStage />','<AtlasStage onMapReady={map => {window.__atlasForTest = map;}} onCountrySelect={country => {window.__countrySelections = [...(window.__countrySelections || []), country.id];}} />');
-    }
-}]});
-let browser; const results=[];
+import {chromium} from 'playwright';
+const vite=await createServer({server:{host:'127.0.0.1',port:0,open:false},logLevel:'error'});
+let browser;
 try {
-    await vite.listen(); const origin=vite.resolvedUrls.local[0];
+    await vite.listen();const origin=vite.resolvedUrls.local[0];
     browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-    for(const width of (process.env.ATLAS_WIDTH ? [Number(process.env.ATLAS_WIDTH)] : [1440,768,390])) {
-        const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===1440?1:2,hasTouch:width===390,reducedMotion:'reduce'});
+    for(const width of [1440,390]) {
+        const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390});
         await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
-        const page=await context.newPage(); page.on('console', m=>{if(m.text().includes('Atlas error'))console.log(m.text());}); const errors=[];page.on('pageerror',e=>errors.push(e.message));
-        await page.goto(origin,{waitUntil:'networkidle'});
-        await page.locator('.atlas-preview').evaluate(img=>img.decode());
-        const frame=await page.locator('.atlas-paper').boundingBox();
-        assert.ok(Math.abs(frame.width/frame.height-1.5)<0.01);
+        await context.addInitScript(()=> {
+            window.__atlasEvents=[];
+            new MutationObserver(records=>{for(const record of records){
+                const el=record.target;
+                window.__atlasEvents.push({scene:el.dataset.atlasScene,phase:el.dataset.atlasTransition,time:performance.now()});
+            }}).observe(document,{subtree:true,attributes:true,attributeFilter:['data-atlas-scene','data-atlas-transition']});
+        });
+        const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+        await page.goto(origin,{waitUntil:'domcontentloaded'});
+        const stage=page.locator('.atlas-stage'),paper=page.locator('.atlas-paper');
+        await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
+        assert.equal(await stage.getAttribute('data-atlas-scene'),'europe');
         assert.equal(await page.locator('.atlas-country').count(),9);
-        await page.screenshot({path:`/tmp/issue40-interaction-default-${width}.png`});
+        assert.equal(await page.locator('.atlas-entry,.atlas-controls,#atlas-gestures').count(),0);
+        assert.equal(await page.getByRole('button',{name:'Explore the map'}).count(),0);
+        assert.doesNotMatch(await page.locator('.home-hero').innerText(),/Drag to pan|two fingers on touch/i);
+        assert.equal(await page.locator('.atlas-map canvas').count(),0);
+        await page.evaluate(()=>document.fonts.ready);
+        await page.waitForTimeout(150);
+        const topBefore=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
+        const frameBefore=await paper.boundingBox();
+        assert.ok(Math.abs(frameBefore.width/frameBefore.height-1.5)<.01);
+        await page.screenshot({path:'/tmp/issue40-polish-europe-'+width+'.png'});
         const uk=page.locator('[data-country="united-kingdom"]');
-        if(width===1440){await uk.hover();await page.waitForTimeout(220);assert.equal(await uk.locator('.atlas-country-callout').isVisible(),true);await page.screenshot({path:'/tmp/issue40-interaction-hover-desktop.png'});await uk.focus();await page.keyboard.press('Enter');assert.deepEqual(await page.evaluate(()=>window.__countrySelections),['united-kingdom']);}
-        if(width===390){await uk.tap();assert.equal(await uk.getAttribute('data-revealed'),'true');assert.equal(await page.evaluate(()=>window.__countrySelections?.length || 0),0);await page.screenshot({path:'/tmp/issue40-interaction-tap-mobile.png'});await uk.tap();assert.deepEqual(await page.evaluate(()=>window.__countrySelections),['united-kingdom']);}
-        
-        await page.locator('.atlas-entry button').click();
-        await page.locator('[data-atlas-state="ready"]').waitFor({timeout:20000});
-        const inspect=()=>page.evaluate(()=>{const m=window.__atlasForTest;return {zoom:m.getZoom(),min:m.getMinZoom(),max:m.getMaxZoom(),center:m.getCenter().toArray(),sources:Object.keys(m.getStyle().sources),layers:m.getStyle().layers.map(l=>l.type),overflow:document.documentElement.scrollWidth>innerWidth};});
-        const alignment=async()=>{
-            // Camera setters update state immediately; canvas and DOM overlays
-            // are painted together on the next render frame.
-            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-            const errors=await page.evaluate(destinations=>destinations.flatMap(destination=>destination.hitAreas.map(area=>{
-                const map=window.__atlasForTest,{x,y}=area.artworkPosition;
-                const latitude=180/Math.PI*Math.atan(Math.sinh(Math.PI*(1-2*y)/3));
-                const projected=map.project([-90+180*x,latitude]);
-                const canvas=map.getContainer().getBoundingClientRect(),country=document.querySelector(`[data-country="${destination.id}"]`),link=(area.id===destination.hitAreas[0].id?country:country.querySelector(`[data-hit-area="${area.id}"]`)).getBoundingClientRect();
-                return Math.hypot(link.x+link.width/2-canvas.x-projected.x,link.y+link.height/2-canvas.y-projected.y);
-            })),EUROPE_DESTINATIONS);
-            assert.ok(errors.every(error=>error<1),'DOM destinations must track the artwork camera');
-        };
-        const initial=await inspect();await alignment();assert.equal(initial.overflow,false);assert.deepEqual(initial.layers,['background','raster']);assert.deepEqual(initial.sources,['europe']);assert.ok(Math.abs(initial.zoom-initial.min)<0.005);
-        assert.ok(2**(initial.max-initial.min)<=1.601);
-        assert.equal(await page.locator('.atlas-controls button').nth(1).isDisabled(),true);
-        // At default zoom there is no slack to drag into empty space.
-        const canvas=page.locator('.atlas-map canvas'),box=await canvas.boundingBox();
-        await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width*.8,box.y+box.height/2,{steps:5});await page.mouse.up();await page.waitForTimeout(300);
-        assert.ok(Math.abs((await inspect()).center[0])<0.1);
-        for(let i=0;i<3;i++){if(await page.locator('.atlas-controls button').first().isEnabled())await page.locator('.atlas-controls button').first().click();}
-        const zoomed=await inspect();await alignment();
-        if(width===1440){
-            // Tab/focus can reveal a previously clipped destination at max zoom.
-            const greece=page.locator('[data-country="greece"]');await page.keyboard.press('Tab');await greece.focus();await page.keyboard.press('Enter');await alignment();
-            const visible=await page.evaluate(()=>{const link=document.querySelector('[data-country="greece"]').getBoundingClientRect(),frame=document.querySelector('.atlas-paper').getBoundingClientRect();return link.x+link.width/2>=frame.x && link.x+link.width/2<=frame.right && link.y+link.height/2>=frame.y && link.y+link.height/2<=frame.bottom;});assert.equal(visible,true);
-            assert.equal(await page.evaluate(()=>window.__countrySelections.at(-1)),'greece');
-            await page.locator('.atlas-controls button').first().focus();
-        }
-        if(width===1440){await page.mouse.move(10,10);await page.screenshot({path:"/tmp/issue40-interaction-zoom-desktop.png"});}assert.ok(Math.abs(zoomed.zoom-zoomed.max)<0.001);
-        // Even a large pan must keep every canvas corner inside the artwork rectangle.
-        await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width*.95,box.y+box.height*.9,{steps:8});await page.mouse.up();await page.waitForTimeout(400);
-        await alignment();
-        const corners=await page.evaluate(()=>{const m=window.__atlasForTest,w=m.getContainer().clientWidth,h=m.getContainer().clientHeight;return [[0,0],[w,0],[w,h],[0,h]].map(p=>m.unproject(p).toArray());});
-        for(const [lng,lat] of corners){assert.ok(Math.abs(lng)<=90.01);assert.ok(Math.abs(lat)<=51.34);}
-        await page.locator('.atlas-controls button').nth(2).click();assert.ok(Math.abs((await inspect()).zoom-initial.zoom)<0.005);
-        await canvas.focus();await page.keyboard.press('Tab');assert.equal(await uk.evaluate(el=>el===document.activeElement),true);
-        // Resize/orientation keeps every normalized artwork point aligned.
-        await page.setViewportSize({width:width===1440?1200:width+20,height:900});await page.waitForTimeout(200);await alignment();
-        await page.setViewportSize({width,height:900});await page.waitForTimeout(200);await alignment();
+        if(width===1440){await uk.hover();assert.equal(await uk.locator('.atlas-country-callout').isVisible(),true);await page.screenshot({path:'/tmp/issue40-polish-uk-hover.png'});await uk.focus();await page.keyboard.press('Enter');}
+        else {await uk.tap();assert.equal(await uk.getAttribute('data-revealed'),'true');await uk.tap();}
+        await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
+        const coverStart=await page.evaluate(()=>performance.now());
+        assert.equal(await stage.getAttribute('data-atlas-scene'),'europe');
+        const topCover=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
+        if(Math.abs(topCover-topBefore)>1)console.log('layout diagnostics',await page.evaluate(()=>Object.fromEntries(['.home-opening','.home-copy','.atlas-stage','.atlas-paper','.atlas-caption','.atlas-scene-status'].map(sel=>{const el=document.querySelector(sel),r=el.getBoundingClientRect();return [sel,{top:r.top,height:r.height,display:getComputedStyle(el).display,align:getComputedStyle(el).alignItems}]}))));
+        assert.ok(Math.abs(topCover-topBefore)<=1,'hero moved '+(topCover-topBefore)+'px at cover');
+        await page.waitForTimeout(320);await page.screenshot({path:'/tmp/issue40-polish-covering-'+width+'.png'});
+        assert.equal(await stage.getAttribute('data-atlas-scene'),'europe');
+        await page.locator('.atlas-stage[data-atlas-transition="covered"]').waitFor();
+        const coveredAt=await page.evaluate(()=>performance.now());
+        assert.ok(coveredAt-coverStart>=650,'cover took '+(coveredAt-coverStart)+'ms');
+        assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true);
+        await page.screenshot({path:'/tmp/issue40-polish-covered-'+width+'.png'});
+        await page.locator('.atlas-stage[data-atlas-scene="uk"][data-atlas-transition="idle"]').waitFor({timeout:12000});
+        const heroUK=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
+        assert.ok(Math.abs(heroUK-topBefore)<=1,'hero moved '+(heroUK-topBefore)+'px in UK');
+        assert.equal(await page.locator('.atlas-country').count(),0,'UK remains without itinerary hit regions');
+        assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),'UNITED KINGDOM Where old stones remember, and every road tells a story.');
+        const back=page.locator('.atlas-back');assert.equal(await back.isVisible(),true);
+        const backBox=await back.boundingBox(),artBox=await paper.boundingBox();
+        assert.ok(backBox.y>=artBox.y+artBox.height,'Back is in the caption strip outside the artwork');
+        assert.ok(backBox.height>=44);assert.equal(await back.evaluate(el=>getComputedStyle(el).fontWeight),'700');
+        assert.equal(await back.evaluate(el=>getComputedStyle(el).textTransform),'uppercase');
+        await back.focus();
+        if(width===390){await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');}
+        assert.equal(await back.evaluate(el=>el.matches(':focus-visible')),true);
+        if(width===1440)await page.screenshot({path:'/tmp/issue40-polish-uk-desktop.png'});
         if(width===390){
-            const cdp=await context.newCDPSession(page);await page.evaluate(()=>scrollTo(0,0));
+            const styles=await back.evaluate(el=>({fontSize:parseFloat(getComputedStyle(el).fontSize),height:el.getBoundingClientRect().height}));
+            assert.ok(styles.fontSize>=12&&styles.height>=44);
+            await page.screenshot({path:'/tmp/issue40-polish-uk-mobile.png'});
+        }
+        if(width===1440)await page.keyboard.press('Enter'); else await back.tap();
+        await page.locator('.atlas-stage[data-atlas-scene="europe"][data-atlas-transition="idle"]').waitFor();
+        const topEuropeAgain=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
+        assert.ok(Math.abs(topEuropeAgain-topBefore)<=1,'hero moved '+(topEuropeAgain-topBefore)+'px after return');
+        assert.equal(await page.locator('.atlas-country').count(),9);
+        for(const id of ['france','germany','greece','italy','netherlands','portugal','spain','switzerland'])assert.equal(await page.locator('[data-country="'+id+'"]').getAttribute('href'),'/browse/'+id);
+        assert.equal(await uk.evaluate(el=>el===document.activeElement),true,'focus returns to the UK country control');
+        const events=await page.evaluate(()=>window.__atlasEvents.slice());const ukSwap=events.find(event=>event.scene==='uk'),returnSwap=events.find((event,index)=>event.scene==='europe'&&index>events.indexOf(ukSwap));
+        assert.equal(ukSwap?.phase,'covered');assert.equal(returnSwap?.phase,'covered');
+        const reveal=events.find((event,index)=>index>events.indexOf(ukSwap)&&event.phase==='revealing');
+        const idle=events.find((event,index)=>index>events.indexOf(reveal||ukSwap)&&event.phase==='idle');
+        assert.ok(idle.time-reveal.time>=780,'reveal honors its minimum duration');
+        if(width===390){
+            await page.emulateMedia({reducedMotion:'reduce'});
+            await uk.tap();await uk.tap();const reducedStart=Date.now();
+            await page.locator('.atlas-stage[data-atlas-scene="uk"][data-atlas-transition="idle"]').waitFor();
+            assert.ok(Date.now()-reducedStart<500,'reduced-motion transition remains near instant');
+            assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),'UNITED KINGDOM Where old stones remember, and every road tells a story.');
+            await back.tap();await page.locator('.atlas-stage[data-atlas-scene="europe"][data-atlas-transition="idle"]').waitFor();
+            const cdp=await context.newCDPSession(page);await page.evaluate(()=>scrollTo(0,300));
+            const box=await paper.boundingBox(),x=box.x+box.width/2,y=box.y+box.height-15;
             const touch=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
-            const x=box.x+box.width/2,y=box.y+box.height*.8;
             await touch('touchStart',[{x,y}]);for(let i=1;i<=6;i++)await touch('touchMove',[{x,y:y-i*20}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
-            assert.ok(await page.evaluate(()=>scrollY)>20,'one finger scrolls the page');
-            await page.evaluate(()=>scrollTo(0,0));
-            const cy=box.y+box.height/2;
-            await touch('touchStart',[{x:x-30,y:cy},{x:x+30,y:cy}]);for(let i=1;i<=5;i++)await touch('touchMove',[{x:x-30-i*5,y:cy},{x:x+30+i*5,y:cy}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
-            assert.ok((await inspect()).zoom>initial.min,'two finger pinch zooms');
-            await page.locator('.atlas-controls button').nth(2).click();
+            assert.ok(await page.evaluate(()=>scrollY)>300,'one finger still scrolls the page');
         }
-        await page.screenshot({path:`/tmp/issue40-europe-map-${width}.png`});
-        if(width===390){await page.getByRole('button',{name:/English/}).filter({visible:true}).click();await page.getByRole('menuitem',{name:/Français/}).click();assert.equal(await page.locator('.atlas-map').getAttribute('aria-label'),'Atlas interactif de l’Europe');assert.match(await uk.getAttribute('aria-label'),/Royaume-Uni/);await page.screenshot({path:'/tmp/issue40-europe-mobile-fr.png'});}
-        // Every country is keyboard-selectable through the same callback seam.
-        for(const destination of EUROPE_DESTINATIONS){await page.locator(`[data-country="${destination.id}"]`).focus();await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>window.__countrySelections.at(-1)),destination.id);}
-        if(width===390){
-            for(const destination of EUROPE_DESTINATIONS){
-                const link=page.locator(`[data-country="${destination.id}"]`), count=await page.evaluate(()=>window.__countrySelections.length);
-                await link.tap();assert.equal(await page.evaluate(()=>window.__countrySelections.length),count,'first tap reveals, without selecting');
-                await link.tap();assert.equal(await page.evaluate(()=>window.__countrySelections.at(-1)),destination.id,'every landmark center is touch-selectable');
-            }
-        }
-        // Every audited region, including Edinburgh and both Italian landmarks,
-        // resolves through its parent country's ONE semantic link.
-        await page.locator('.atlas-controls button').nth(2).click();await alignment();
-        for(const destination of EUROPE_DESTINATIONS) for(const area of destination.hitAreas){
-            const link=page.locator(`[data-country="${destination.id}"]`),hit=area.id===destination.hitAreas[0].id?link:link.locator(`[data-hit-area="${area.id}"]`);
-            const rect=await hit.boundingBox(), before=await page.evaluate(()=>window.__countrySelections.length);
-            if(width===390){
-                // Clear any previous touch label, including same-country regions.
-                await page.locator('#atlas-caption').tap();
-                await page.touchscreen.tap(rect.x+rect.width/2,rect.y+rect.height/2);
-                assert.equal(await page.evaluate(()=>window.__countrySelections.length),before,`${destination.id}/${area.id}: first tap reveals`);
-                await page.touchscreen.tap(rect.x+rect.width/2,rect.y+rect.height/2);
-            } else await page.mouse.click(rect.x+rect.width/2,rect.y+rect.height/2);
-            assert.equal(await page.evaluate(()=>window.__countrySelections.length),before+1,`${destination.id}/${area.id}: selects once`);
-            assert.equal(await page.evaluate(()=>window.__countrySelections.at(-1)),destination.id,`${destination.id}/${area.id}: correct country, no adjacent-country overlap`);
-        }
-        // Independent artwork samples around dense neighbouring landmarks.
-        for(const [country,x,y] of [['netherlands',.41,.285],['netherlands',.456,.345],['germany',.548,.315],['germany',.596,.29],['switzerland',.478,.415],['switzerland',.49,.518]]){
-            const rect=await page.locator('.atlas-paper').boundingBox();
-            if(width===390){await page.locator('#atlas-caption').tap();await page.touchscreen.tap(rect.x+x*rect.width,rect.y+y*rect.height);await page.touchscreen.tap(rect.x+x*rect.width,rect.y+y*rect.height);}
-            else await page.mouse.click(rect.x+x*rect.width,rect.y+y*rect.height);
-            assert.equal(await page.evaluate(()=>window.__countrySelections.at(-1)),country,'dense-area sample selects its own country');
-        }
-        assert.equal(await page.locator('.atlas-country-layer a').count(),9);
-        assert.equal(await page.locator('.atlas-country-layer a [tabindex]').count(),0);
-        assert.deepEqual(errors,[]);results.push({width,frame,initial,zoomed,errors});console.log(`${width}: Europe interaction, aligned zoom/pan/resize, focus and gestures passed`);
-        await context.close();
+        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+        assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
     }
-    await writeFile('/tmp/issue40-europe-verification.json',JSON.stringify(results,null,2));
 } finally {await browser?.close();await vite.close();}

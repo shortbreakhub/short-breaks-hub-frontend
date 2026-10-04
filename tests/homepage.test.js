@@ -14,6 +14,14 @@ import sharp from "sharp";
 import {REGIONS} from "../src/config/regions.js";
 
 const stories = JSON.parse(readFileSync("src/content/homepage.json", "utf8"));
+test("UK story-map heading and story line use the approved localized copy", () => {
+    const en = JSON.parse(readFileSync("src/locales/en/common.json", "utf8")).homeMagazine.atlas;
+    const fr = JSON.parse(readFileSync("src/locales/fr/common.json", "utf8")).homeMagazine.atlas;
+    assert.equal(en.ukCaption, "UNITED KINGDOM");
+    assert.equal(en.ukStory, "Where old stones remember, and every road tells a story.");
+    assert.equal(fr.ukCaption, "ROYAUME-UNI");
+    assert.ok(fr.ukStory.length > 20);
+});
 test("homepage renders semantic, localized discovery and replaceable atlas scenery", async t => {
     const vite = await createServer({appType: "custom", logLevel: "error", server: {middlewareMode: true, hmr: false, ws: false},
         optimizeDeps: {noDiscovery: true, include: []}, ssr: {resolve: {externalConditions: ["node", "module-sync"]}}});
@@ -43,6 +51,10 @@ test("homepage renders semantic, localized discovery and replaceable atlas scene
             assert.ok(doc.querySelector('button[type="submit"]').disabled);
             assert.ok(doc.querySelector("form").getAttribute("aria-label"));
             assert.equal(doc.querySelectorAll(".atlas-destinations,.atlas-landmark,.atlas-pin,.atlas-label").length, 0);
+            assert.equal(doc.querySelector('.atlas-entry,.atlas-controls'),null);
+            assert.equal([...doc.querySelectorAll('.atlas-stage button')].some(button=>button.textContent.includes('Explore the map')),false);
+            assert.equal(doc.querySelector('#atlas-gestures'),null);
+            assert.equal(doc.querySelector('.atlas-stage').textContent.includes('Drag to pan'),false);
             for (const svg of doc.querySelectorAll(".atlas-stage svg")) assert.equal(svg.getAttribute("aria-hidden"), "true");
             const images = [...doc.querySelectorAll(".home-editorial img")];
             assert.equal(images.length, 7);
@@ -74,9 +86,16 @@ test("homepage renders semantic, localized discovery and replaceable atlas scene
             const preview = doc.querySelector(".atlas-preview");
             assert.ok(preview.alt); assert.match(preview.getAttribute("src"), /europe-atlas\.png/);
             assert.equal(preview.getAttribute("loading"), "eager");
-            assert.ok(doc.querySelector("button[type=button]"));
+            const ukPreview = doc.querySelector('.atlas-uk-preview');
+            assert.ok(ukPreview.alt); assert.equal(ukPreview.getAttribute('loading'),'lazy');
+            assert.equal(ukPreview.hasAttribute('hidden'),true);
+            assert.equal(doc.querySelector('.atlas-stage').getAttribute('data-atlas-scene'),'europe');
+            assert.equal(doc.querySelector('.atlas-stage').getAttribute('data-atlas-transition'),'idle');
+            assert.equal(doc.querySelector('.atlas-back,.atlas-cloud-transition'),null);
+            assert.equal(doc.querySelector(".atlas-stage button"),null);
             assert.equal(doc.querySelectorAll("canvas,.atlas-destinations,.atlas-landmark,.atlas-pin,.atlas-label").length, 0);
-            assert.ok(doc.querySelector('.atlas-map[role="region"][aria-describedby="atlas-gestures"]'));
+            assert.ok(doc.querySelector('.atlas-map[role="region"][aria-label]'));
+            assert.equal(doc.querySelector('.atlas-country-story'),null);
         });
     } finally {for (const dom of doms) dom.window.close(); await vite.close();}
 });

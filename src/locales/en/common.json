@@ -8,6 +8,13 @@
       "stories": "Find your next story"
     },
     "atlas": {
+      "ukMapLabel": "United Kingdom story map",
+      "ukPreviewAlt": "Illustrated United Kingdom country story map",
+      "ukCaption": "UNITED KINGDOM",
+      "ukStory": "Where old stones remember, and every road tells a story.",
+      "backEurope": "Back to Europe",
+      "travelling": "Travelling through the atlas…",
+      "sceneFailed": "The country map could not open. Europe is ready to explore again.",
       "countryExplore": "Explore short breaks",
       "mapLabel": "Interactive Europe atlas",
       "previewUnavailable": "A world of stories awaits. Discover destinations below.",

@@ -67,7 +67,7 @@ export default function EuropeDestinations({map, onCountrySelect}) {
                     if(event.defaultPrevented || moved){event.preventDefault();return;}
                     if(touch && armed !== destination.id){event.preventDefault();setArmed(destination.id);return;}
                     // Keep native modified clicks/new-tab behavior for real links.
-                    if(onCountrySelect && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey){event.preventDefault();onCountrySelect(destination);}
+                    if(onCountrySelect && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey){if(onCountrySelect(destination)!==false)event.preventDefault();}
                 }}>
                 {destination.hitAreas.slice(1).map(area => <span key={area.id} data-hit-area={area.id} aria-hidden="true"
                     style={{position:'absolute',pointerEvents:'auto',touchAction:'pan-x pan-y',transform:'translate(-50%, -50%)',

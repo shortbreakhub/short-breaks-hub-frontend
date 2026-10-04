@@ -8,6 +8,13 @@
       "stories": "Trouvez votre prochaine histoire"
     },
     "atlas": {
+      "ukMapLabel": "Carte des récits du Royaume-Uni",
+      "ukPreviewAlt": "Carte illustrée des récits du Royaume-Uni",
+      "ukCaption": "ROYAUME-UNI",
+      "ukStory": "Là où les vieilles pierres se souviennent et où chaque route raconte une histoire.",
+      "backEurope": "Retour à l’Europe",
+      "travelling": "Voyage à travers l’atlas…",
+      "sceneFailed": "La carte du pays n’a pas pu s’ouvrir. Vous pouvez à nouveau explorer l’Europe.",
       "countryExplore": "Explorer les escapades",
       "mapLabel": "Atlas interactif de l’Europe",
       "previewUnavailable": "Un monde d’histoires vous attend. Découvrez les destinations ci-dessous.",

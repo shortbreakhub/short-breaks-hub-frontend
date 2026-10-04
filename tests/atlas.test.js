@@ -46,7 +46,11 @@ test("atlas engine is deferred; existing initial bundle guards remain unchanged"
     assert.match(component,/AbortController/); assert.match(component,/15000/);
     const adapter=readFileSync("src/components/home/atlas/createAtlasMap.js","utf8");
     assert.doesNotMatch(adapter,/https?:\/\//);
-    assert.match(adapter,/cooperativeGestures: true/); assert.match(adapter,/disableRotation/);
+    assert.match(adapter,/interactive: false/); assert.match(adapter,/scrollZoom: false/);
+    assert.match(adapter,/touchZoomRotate: false/); assert.match(adapter,/map\.dragPan\.disable\(\)/);
+    const stage = readFileSync("src/components/home/AtlasStage.jsx", "utf8");
+    assert.doesNotMatch(stage,/className="atlas-entry"|atlas-controls/);
+    assert.doesNotMatch(stage,/atlas-gestures/);
     assert.match(adapter,/fadeDuration: 0/);
 });
 
