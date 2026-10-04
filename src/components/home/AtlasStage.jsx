@@ -2,7 +2,8 @@ import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import previewUrl from "../../assets/atlas/europe/europe-atlas.png";
 import EuropeDestinations from "./atlas/EuropeDestinations.jsx";
-import UkDestinations from "./atlas/UkDestinations.jsx";
+import CountryDestinations from "./atlas/CountryDestinations.jsx";
+import {COUNTRY_SCENES, sceneForCountry} from "./atlas/countryScenes.js";
 import useAtlasScene, {SCENE_ASSETS} from "./atlas/useAtlasScene.js";
 import AtlasCloudTransition from "./atlas/AtlasCloudTransition.jsx";
 import {initialCamera} from "./atlas/atlasConfig.js";
@@ -11,9 +12,12 @@ import {initialCamera} from "./atlas/atlasConfig.js";
 // illustration camera for percentage overlays; its return value cleans them up.
 export default function AtlasStage({onMapReady, onCountrySelect}) {
     const {t} = useTranslation();
-    const frame = useRef(null), host = useRef(null), mapRef = useRef(null), preview = useRef(null);
-    const ukPreview = useRef(null), backButton = useRef(null), sceneRef = useRef('europe');
-    const scenes = useAtlasScene({images:{europe:preview,uk:ukPreview},
+    const frame = useRef(null), host = useRef(null), mapRef = useRef(null);
+    const backButton = useRef(null), sceneRef = useRef('europe'), lastCountry = useRef('uk');
+    // One persistent decoded <img> per scene: static fallback and renderer upload source.
+    const [images] = useState(() => Object.fromEntries(Object.keys(SCENE_ASSETS).map(scene => [scene, {current: null}])));
+    const preview = images.europe;
+    const scenes = useAtlasScene({images,
         swapScene: async (target,image,signal) => {
             const map=mapRef.current;
             if(map && state === 'ready') {
@@ -34,22 +38,23 @@ export default function AtlasStage({onMapReady, onCountrySelect}) {
             } else {
                 // Give React time to reveal the persistent decoded DOM image.
                 await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-                const active=target==='uk'?ukPreview.current:preview.current;
+                const active=images[target].current;
                 if(active)await active.decode();
             }
         },
         onComplete: target => requestAnimationFrame(()=>{
-            const focus=target==='uk'?backButton.current:frame.current?.querySelector('[data-country="united-kingdom"]');
+            const focus=target!=='europe'?backButton.current:frame.current?.querySelector(`[data-country="${COUNTRY_SCENES[lastCountry.current].countryId}"]`);
             focus?.focus({preventScroll:true});
         }),
     });
     sceneRef.current=scenes.scene;
-    const locked=scenes.phase!=='idle';
+    const locked=scenes.phase!=='idle', country=COUNTRY_SCENES[scenes.scene];
     const selectCountry = destination => {
         if(locked || state==='loading')return;
         if(onCountrySelect)return onCountrySelect(destination);
-        if(destination.id==='united-kingdom'){scenes.transitionTo('uk');return;}
-        return false; // The other eight retain their existing native browse links.
+        const scene=sceneForCountry(destination.id);
+        if(scene){lastCountry.current=scene;scenes.transitionTo(scene);return;}
+        return false; // Countries without a story map retain their native browse links.
     };
     const [width, setWidth] = useState(800), [attempt, setAttempt] = useState(0);
     const [state, setState] = useState("preview"), [previewFailed, setPreviewFailed] = useState(false);
@@ -98,7 +103,7 @@ export default function AtlasStage({onMapReady, onCountrySelect}) {
             throw error;
         }).then(({createAtlasMap}) => {
             if (disposed || controller.signal.aborted) return null;
-            return createAtlasMap(host.current, {signal: controller.signal, locale: localeRef.current, imageUrl:SCENE_ASSETS[sceneRef.current], image:sceneRef.current==='uk'?ukPreview.current:undefined});
+            return createAtlasMap(host.current, {signal: controller.signal, locale: localeRef.current, imageUrl:SCENE_ASSETS[sceneRef.current], image:sceneRef.current!=='europe'?images[sceneRef.current].current:undefined});
         }).then(instance => {
             if (!instance) return;
             if (disposed || controller.signal.aborted) {instance.remove(); return;}
@@ -117,27 +122,27 @@ export default function AtlasStage({onMapReady, onCountrySelect}) {
     useEffect(() => {
         const map = mapRef.current;
         if (!map) return;
-        map.getCanvas().setAttribute("aria-label", t(scenes.scene==='uk'?"homeMagazine.atlas.ukMapLabel":"homeMagazine.atlas.mapLabel"));
+        map.getCanvas().setAttribute("aria-label", t(country?.keys.mapLabel || "homeMagazine.atlas.mapLabel"));
         map.getCanvas().removeAttribute("aria-describedby");
-    }, [t, state, scenes.scene]);
+    }, [t, state, country]);
     return <figure className="atlas-stage" aria-labelledby="atlas-caption" data-atlas-stage="illustrated-europe" data-atlas-state={state} data-atlas-scene={scenes.scene} data-atlas-transition={scenes.phase}>
         <div className="atlas-paper" ref={frame} aria-busy={locked}>
             <div className="atlas-scene-surface" inert={locked}>
             <img ref={preview} onError={() => setPreviewFailed(true)} className="atlas-preview" src={previewUrl} width={1536} height={1024} alt={t("homeMagazine.atlas.previewAlt")} loading="eager" hidden={state==='ready' || scenes.scene!=='europe' || previewFailed} />
-            <img ref={ukPreview} className="atlas-preview atlas-uk-preview" src={SCENE_ASSETS.uk} width={1536} height={1024} alt={t("homeMagazine.atlas.ukPreviewAlt")} loading="lazy" hidden={state==='ready' || scenes.scene!=='uk'} />
+            {Object.entries(COUNTRY_SCENES).map(([id, scene]) => <img key={id} ref={images[id]} className={`atlas-preview ${scene.previewClass}`} src={SCENE_ASSETS[id]} width={1536} height={1024} alt={t(scene.keys.previewAlt)} loading="lazy" hidden={state==='ready' || scenes.scene!==id} />)}
             {scenes.scene==='europe' && state !== "ready" && previewFailed && <p className="atlas-preview-unavailable">{t("homeMagazine.atlas.previewUnavailable")}</p>}
-            <div ref={host} className="atlas-map" role="region" aria-label={t(scenes.scene==='uk'?"homeMagazine.atlas.ukMapLabel":"homeMagazine.atlas.mapLabel")} hidden={state === "preview" || state === "failed"} />
+            <div ref={host} className="atlas-map" role="region" aria-label={t(country?.keys.mapLabel || "homeMagazine.atlas.mapLabel")} hidden={state === "preview" || state === "failed"} />
             {scenes.scene==='europe' && (state === "ready" || !previewFailed) && <EuropeDestinations map={state === "ready" ? mapRef.current : null} onCountrySelect={selectCountry} />}
-            {scenes.scene==='uk' && <UkDestinations map={state === "ready" ? mapRef.current : null} />}
+            {country && <CountryDestinations key={scenes.scene} destinations={country.destinations} navLabelKey={country.keys.nav} map={state === "ready" ? mapRef.current : null} />}
             </div>
             <AtlasCloudTransition phase={scenes.phase} reducedMotion={scenes.reducedMotion} />
         </div>
         <figcaption id="atlas-caption" className="atlas-caption">
-            {scenes.scene==='uk' ? <div className="atlas-country-story">
-                <span className="atlas-country-name">{t("homeMagazine.atlas.ukCaption")}</span>
-                <p>{t("homeMagazine.atlas.ukStory")}</p>
+            {country ? <div className="atlas-country-story">
+                <span className="atlas-country-name">{t(country.keys.caption)}</span>
+                <p>{t(country.keys.story)}</p>
             </div> : <span className="atlas-caption-europe">{t("homeMagazine.atlas.caption")}</span>}
-            {scenes.scene==='uk' && <button ref={backButton} type="button" className="atlas-back" disabled={locked} onClick={()=>scenes.transitionTo('europe')}>← {t("homeMagazine.atlas.backEurope")}</button>}
+            {country && <button ref={backButton} type="button" className="atlas-back" disabled={locked} onClick={()=>scenes.transitionTo('europe')}>← {t("homeMagazine.atlas.backEurope")}</button>}
         </figcaption>
         <div className="atlas-scene-status" aria-live="polite">
             {locked && <span role="status">{t('homeMagazine.atlas.travelling')}</span>}

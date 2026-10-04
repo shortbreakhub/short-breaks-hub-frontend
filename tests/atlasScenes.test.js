@@ -45,3 +45,17 @@ test('preload shares one decoded image and failed loads remain retryable',async(
     const failed=new Image();const failure=loadAtlasArtwork('test://failed',failed);failed.dispatchEvent(new Event('error'));await assert.rejects(failure,/unavailable/);
     const retry=new Image();const retried=loadAtlasArtwork('test://failed',retry);retry.naturalWidth=1536;retry.dispatchEvent(new Event('load'));assert.equal(await retried,retry);
 });
+test('France joins the same covered-only sequence and its artwork loads only when selected',async()=>{
+    const loads=[];const f=fixture({scenes:['europe','uk','france'],loadArtwork:async scene=>{loads.push(scene);return {scene};},wait:async()=>{}});
+    assert.deepEqual(loads,[]);
+    assert.equal(await f.controller.go('france'),true);assert.deepEqual(loads,['france']);
+    assert.deepEqual(f.swaps,[{scene:'france',phase:'covered'}]);assert.equal(f.controller.getState().scene,'france');
+    assert.equal(await f.controller.go('europe'),true);assert.deepEqual(f.completions,['france','europe']);
+    assert.equal(await f.controller.go('italy'),false,'unconfigured scenes are rejected');
+    const legacy=fixture({wait:async()=>{}});assert.equal(await legacy.controller.go('france'),false,'default allowlist remains europe/uk');
+});
+test('failed France artwork restores Europe without swapping',async()=>{
+    const f=fixture({scenes:['europe','uk','france'],loadArtwork:scene=>scene==='france'?Promise.reject(Error('France unavailable')):Promise.resolve({scene}),wait:async()=>{}});
+    assert.equal(await f.controller.go('france'),false);assert.equal(f.controller.getState().scene,'europe');
+    assert.deepEqual(f.swaps,[]);assert.equal(f.errors.at(-1),true);assert.deepEqual(f.completions,['europe']);
+});

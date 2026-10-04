@@ -1,9 +1,11 @@
 import {useEffect,useRef,useState} from 'react';
 import europeUrl from '../../../assets/atlas/europe/europe-atlas.png';
 import ukUrl from '../../../assets/atlas/countries/uk/uk-atlas.png';
+import franceUrl from '../../../assets/atlas/countries/france/france-atlas.png';
 import {cloudUrl} from './AtlasCloudTransition.jsx';
 import {createAtlasSceneTransition,loadAtlasArtwork} from './atlasSceneTransition.js';
-export const SCENE_ASSETS={europe:europeUrl,uk:ukUrl};
+// France (and later countries) load on selection, under cloud cover; only UK is warmed below.
+export const SCENE_ASSETS={europe:europeUrl,uk:ukUrl,france:franceUrl};
 export default function useAtlasScene({images,swapScene,onComplete}) {
     const [scene,setScene]=useState('europe'),[phase,setPhase]=useState('idle'),[error,setError]=useState(false),[reducedMotion,setReducedMotion]=useState(false);
     const controller=useRef(null),callbacks=useRef(null);callbacks.current={images,swapScene,onComplete};
@@ -16,6 +18,7 @@ export default function useAtlasScene({images,swapScene,onComplete}) {
             loadCloud:()=>loadAtlasArtwork(cloudUrl,undefined,8000,loadingLifetime.signal),
             swapScene:(...args)=>callbacks.current.swapScene(...args),
             onPhase:setPhase,onScene:setScene,onError:setError,onComplete:target=>callbacks.current.onComplete(target),
+            scenes:Object.keys(SCENE_ASSETS),
         });
         const preload=setTimeout(()=>{
             loadAtlasArtwork(ukUrl,callbacks.current.images.uk.current,8000,loadingLifetime.signal).catch(()=>{});

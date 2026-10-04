@@ -40,7 +40,7 @@ function pause(duration,signal) {
     });
 }
 // Only scene orchestration; no routing, map engine, or destination geometry here.
-export function createAtlasSceneTransition({loadArtwork,loadCloud,swapScene,onPhase,onScene,onError,onComplete,wait=pause}) {
+export function createAtlasSceneTransition({loadArtwork,loadCloud,swapScene,onPhase,onScene,onError,onComplete,wait=pause,scenes=['europe','uk']}) {
     let scene='europe', phase='idle', busy=false;
     const lifetime=new AbortController();
     const updatePhase=value=>{phase=value;if(!lifetime.signal.aborted)onPhase(value);};
@@ -48,7 +48,7 @@ export function createAtlasSceneTransition({loadArtwork,loadCloud,swapScene,onPh
         getState:()=>({scene,phase,busy}),
         dispose:()=>lifetime.abort(),
         async go(target,reducedMotion=false) {
-            if(busy || target===scene || lifetime.signal.aborted || !['europe','uk'].includes(target)) return false;
+            if(busy || target===scene || lifetime.signal.aborted || !scenes.includes(target)) return false;
             busy=true;onError(false);updatePhase('preparing');
             const previous=scene;
             // Attach rejection handling immediately, even while clouds are travelling.
