@@ -2,10 +2,11 @@ import {useEffect,useRef,useState} from 'react';
 import europeUrl from '../../../assets/atlas/europe/europe-atlas.png';
 import ukUrl from '../../../assets/atlas/countries/uk/uk-atlas.png';
 import franceUrl from '../../../assets/atlas/countries/france/france-atlas.png';
+import spainUrl from '../../../assets/atlas/countries/spain/spain-atlas.png';
 import {cloudUrl} from './AtlasCloudTransition.jsx';
 import {createAtlasSceneTransition,loadAtlasArtwork} from './atlasSceneTransition.js';
 // France (and later countries) load on selection, under cloud cover; only UK is warmed below.
-export const SCENE_ASSETS={europe:europeUrl,uk:ukUrl,france:franceUrl};
+export const SCENE_ASSETS={europe:europeUrl,uk:ukUrl,france:franceUrl,spain:spainUrl};
 export default function useAtlasScene({images,swapScene,onComplete}) {
     const [scene,setScene]=useState('europe'),[phase,setPhase]=useState('idle'),[error,setError]=useState(false),[reducedMotion,setReducedMotion]=useState(false);
     const controller=useRef(null),callbacks=useRef(null);callbacks.current={images,swapScene,onComplete};

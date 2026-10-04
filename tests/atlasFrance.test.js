@@ -94,8 +94,8 @@ test("France and UK scenes share one configuration-driven layer", async t => {
         const {default: CountryDestinations} = await vite.ssrLoadModule("/src/components/home/atlas/CountryDestinations.jsx");
         const {COUNTRY_SCENES, sceneForCountry} = await vite.ssrLoadModule("/src/components/home/atlas/countryScenes.js");
         const {SCENE_ASSETS} = await vite.ssrLoadModule("/src/components/home/atlas/useAtlasScene.js");
-        assert.deepEqual(Object.keys(COUNTRY_SCENES), ["uk", "france"]);
-        assert.deepEqual(Object.keys(SCENE_ASSETS), ["europe", "uk", "france"]);
+        assert.deepEqual(Object.keys(COUNTRY_SCENES), ["uk", "france", "spain"]);
+        assert.deepEqual(Object.keys(SCENE_ASSETS), ["europe", "uk", "france", "spain"]);
         assert.equal(sceneForCountry("france"), "france"); assert.equal(sceneForCountry("united-kingdom"), "uk");
         assert.equal(sceneForCountry("italy"), undefined);
         assert.equal(COUNTRY_SCENES.uk.destinations.length, UK_DESTINATIONS.length);

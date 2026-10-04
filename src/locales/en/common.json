@@ -39,6 +39,20 @@
         "strasbourg": "Strasbourg",
         "marseille": "Marseille"
       },
+      "spainCaption": "SPAIN",
+      "spainStory": "Where the sun lingers, and every evening begins again.",
+      "spainMapLabel": "Spain story map",
+      "spainPreviewAlt": "Illustrated Spain country story map",
+      "spainDestinations": "Explore Spain itineraries",
+      "spainPlaces": {
+        "barcelona": "Barcelona",
+        "madrid": "Madrid",
+        "valencia": "Valencia",
+        "cordoba": "Córdoba",
+        "seville": "Seville",
+        "granada": "Granada",
+        "malaga": "Málaga"
+      },
       "travelling": "Travelling through the atlas…",
       "sceneFailed": "The country map could not open. Europe is ready to explore again.",
       "countryExplore": "Explore short breaks",
