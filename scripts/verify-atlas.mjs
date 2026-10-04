@@ -1,6 +1,93 @@
 import assert from 'node:assert/strict';
 import {createServer} from 'vite';
 import {chromium} from 'playwright';
+import {UK_DESTINATIONS} from '../src/components/home/atlas/ukDestinations.js';
+const ukHref=id=>'/itinerary/'+UK_DESTINATIONS.find(d=>d.id===id).slug;
+const regionPoint=(box,area)=>({x:box.x+area.artworkPosition.x*box.width,y:box.y+area.artworkPosition.y*box.height});
+// isVisible() ignores opacity; require the faded-in callout before asserting or capturing it.
+const calloutShown=link=>link.locator('.atlas-itinerary-callout').evaluate(el=>new Promise(resolve=>{const check=()=>getComputedStyle(el).opacity==='1'&&getComputedStyle(el).visibility==='visible'?resolve(true):requestAnimationFrame(check);check();setTimeout(()=>resolve(false),1000);}));
+// Issue #42: every landmark and name plate resolves to its own single itinerary link.
+async function checkUkItineraries(page,width){
+    const paper=page.locator('.atlas-paper'),box=await paper.boundingBox();
+    const nav=page.getByRole('navigation',{name:'Explore United Kingdom itineraries'});
+    assert.equal(await nav.count(),1);
+    const links=nav.locator('a.atlas-itinerary');assert.equal(await links.count(),9);
+    for(const d of UK_DESTINATIONS){
+        const link=page.locator('[data-destination="'+d.id+'"]');
+        assert.equal(await link.getAttribute('href'),ukHref(d.id));
+        assert.match(await link.getAttribute('aria-label'),/ — View itinerary$/);
+        assert.equal(await link.locator('a,button,[tabindex]').count(),0,'one tab stop per destination');
+        for(const area of d.hitAreas){
+            const {x,y}=regionPoint(box,area);
+            assert.equal(await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.closest('.atlas-itinerary')?.dataset.destination,[x,y]),d.id,area.id+' resolves to '+d.id+' at '+width+'px');
+        }
+    }
+    assert.equal(await page.locator('.atlas-itinerary-callout:visible').count(),0,'no permanent callouts');
+    // Window bubble listener runs after React: records native default, then blocks the real navigation.
+    await page.evaluate(()=>{window.__ukClicks=[];window.addEventListener('click',event=>{const link=event.target.closest?.('.atlas-itinerary');if(!link)return;window.__ukClicks.push({id:link.dataset.destination,prevented:event.defaultPrevented});event.preventDefault();});});
+    const clicks=()=>page.evaluate(()=>window.__ukClicks.splice(0));
+    if(width===1440){
+        for(const d of UK_DESTINATIONS)for(const area of d.hitAreas){const {x,y}=regionPoint(box,area);await page.mouse.click(x,y);}
+        assert.deepEqual(await clicks(),UK_DESTINATIONS.flatMap(d=>d.hitAreas.map(()=>({id:d.id,prevented:false}))),'every landmark and plate activates natively');
+        const oxford=page.locator('[data-destination="oxford"]'),plate=regionPoint(box,UK_DESTINATIONS.find(d=>d.id==='oxford').hitAreas[1]);
+        await page.mouse.move(plate.x,plate.y);assert.equal(await calloutShown(oxford),true);
+        assert.equal((await oxford.locator('.atlas-itinerary-callout').innerText()).trim(),'Oxford · View itinerary →');
+        await page.screenshot({path:'/tmp/issue42-uk-hover-1440.png'});await page.mouse.move(box.x+5,box.y+5);
+        // Initial UK focus stays on Back; reverse Tab reaches all nine single tab stops.
+        const back=page.locator('.atlas-back');await back.focus();const order=[];
+        for(let i=0;i<9;i++){await page.keyboard.press('Shift+Tab');order.unshift(await page.evaluate(()=>document.activeElement.dataset.destination));}
+        assert.deepEqual(order,UK_DESTINATIONS.map(d=>d.id));
+        const focused=page.locator('[data-destination="'+order[0]+'"]');
+        assert.equal(await focused.evaluate(el=>el===document.activeElement&&el.matches(':focus-visible')),true);
+        assert.equal(await calloutShown(focused),true);
+        await page.screenshot({path:'/tmp/issue42-uk-focus-1440.png'});
+        await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>document.activeElement.classList.contains('atlas-itinerary')),false);
+        assert.equal(await focused.locator('.atlas-itinerary-callout').isVisible(),false);
+    } else {
+        // Two taps: arm, then navigate. Neighbours in the dense cluster arm independently.
+        for(const id of ['bristol','oxford','bath','glasgow','edinburgh','cambridge','london']){
+            const d=UK_DESTINATIONS.find(item=>item.id===id);
+            for(const area of d.hitAreas){
+                const {x,y}=regionPoint(box,area);
+                await page.touchscreen.tap(x,y);
+                assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),[id],area.id+' arms only '+id);
+                assert.deepEqual(await clicks(),[{id,prevented:true}],'first tap does not navigate');
+                await page.locator('.atlas-country-story').tap();
+                assert.equal(await page.locator('.atlas-itinerary[data-revealed="true"]').count(),0,'tapping elsewhere disarms');
+            }
+        }
+        const bath=UK_DESTINATIONS.find(d=>d.id==='bath').hitAreas[0],{x,y}=regionPoint(box,bath);
+        await page.touchscreen.tap(x,y);assert.equal(await calloutShown(page.locator('[data-destination="bath"]')),true);await page.screenshot({path:'/tmp/issue42-uk-armed-390.png'});
+        await page.touchscreen.tap(x,y);assert.deepEqual(await clicks(),[{id:'bath',prevented:true},{id:'bath',prevented:false}],'second tap navigates natively');
+        await page.locator('.atlas-country-story').tap();
+        // A one-finger drag that starts on a destination still scrolls the page and never arms it.
+        const cdp=await page.context().newCDPSession(page),london=regionPoint(box,UK_DESTINATIONS.find(d=>d.id==='london').hitAreas[0]);
+        const before=await page.evaluate(()=>scrollY),touch=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
+        await touch('touchStart',[london]);for(let i=1;i<=6;i++)await touch('touchMove',[{x:london.x,y:london.y-i*20}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
+        assert.ok(await page.evaluate(()=>scrollY)>before,'one finger scrolls the page from a UK destination');
+        assert.equal(await page.locator('.atlas-itinerary[data-revealed="true"]').count(),0);assert.deepEqual(await clicks(),[]);
+        await page.evaluate(y=>scrollTo(0,y),before);await cdp.detach();
+    }
+}
+// Real navigation and native modified clicks, isolated from the transition checks above.
+async function checkUkNavigation(browser,origin,width){
+    const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390,reducedMotion:'reduce'});
+    await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
+    const page=await context.newPage();await page.goto(origin,{waitUntil:'domcontentloaded'});
+    await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
+    const uk=page.locator('[data-country="united-kingdom"]');
+    if(width===390){await uk.tap();await uk.tap();}else await uk.click();
+    await page.locator('.atlas-stage[data-atlas-scene="uk"][data-atlas-transition="idle"]').waitFor();
+    if(width===1440){
+        const [tab]=await Promise.all([context.waitForEvent('page'),page.locator('[data-destination="oxford"]').click({modifiers:['ControlOrMeta']})]);
+        await tab.waitForURL('**'+ukHref('oxford'));assert.equal(new URL(page.url()).pathname,'/','modified click keeps the atlas page');await tab.close();
+        await page.locator('[data-destination="london"]').click();await page.waitForURL('**'+ukHref('london'));
+    } else {
+        const link=page.locator('[data-destination="bristol"]');await link.tap();assert.equal(new URL(page.url()).pathname,'/');
+        await link.tap();await page.waitForURL('**'+ukHref('bristol'));
+    }
+    console.log(width+': UK itinerary navigation reached '+new URL(page.url()).pathname);await context.close();
+}
 const vite=await createServer({server:{host:'127.0.0.1',port:0,open:false},logLevel:'error'});
 let browser;
 try {
@@ -51,7 +138,9 @@ try {
         await page.locator('.atlas-stage[data-atlas-scene="uk"][data-atlas-transition="idle"]').waitFor({timeout:12000});
         const heroUK=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
         assert.ok(Math.abs(heroUK-topBefore)<=1,'hero moved '+(heroUK-topBefore)+'px in UK');
-        assert.equal(await page.locator('.atlas-country').count(),0,'UK remains without itinerary hit regions');
+        assert.equal(await page.locator('.atlas-country').count(),0,'Europe country links are not rendered over UK');
+        await page.waitForFunction(()=>document.activeElement?.classList.contains('atlas-back'));
+        await checkUkItineraries(page,width);
         assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),'UNITED KINGDOM Where old stones remember, and every road tells a story.');
         const back=page.locator('.atlas-back');assert.equal(await back.isVisible(),true);
         const backBox=await back.boundingBox(),artBox=await paper.boundingBox();
@@ -68,10 +157,12 @@ try {
             await page.screenshot({path:'/tmp/issue40-polish-uk-mobile.png'});
         }
         if(width===1440)await page.keyboard.press('Enter'); else await back.tap();
+        await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
+        assert.equal(await page.locator('.atlas-itinerary').count(),9);assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true,'UK itineraries are inert while clouds travel');
         await page.locator('.atlas-stage[data-atlas-scene="europe"][data-atlas-transition="idle"]').waitFor();
         const topEuropeAgain=await page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY);
         assert.ok(Math.abs(topEuropeAgain-topBefore)<=1,'hero moved '+(topEuropeAgain-topBefore)+'px after return');
-        assert.equal(await page.locator('.atlas-country').count(),9);
+        assert.equal(await page.locator('.atlas-country').count(),9);assert.equal(await page.locator('.atlas-itinerary').count(),0);
         for(const id of ['france','germany','greece','italy','netherlands','portugal','spain','switzerland'])assert.equal(await page.locator('[data-country="'+id+'"]').getAttribute('href'),'/browse/'+id);
         assert.equal(await uk.evaluate(el=>el===document.activeElement),true,'focus returns to the UK country control');
         const events=await page.evaluate(()=>window.__atlasEvents.slice());const ukSwap=events.find(event=>event.scene==='uk'),returnSwap=events.find((event,index)=>event.scene==='europe'&&index>events.indexOf(ukSwap));
@@ -94,5 +185,6 @@ try {
         }
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
+        await checkUkNavigation(browser,origin,width);
     }
 } finally {await browser?.close();await vite.close();}

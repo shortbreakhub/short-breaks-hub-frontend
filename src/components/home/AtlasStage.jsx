@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import previewUrl from "../../assets/atlas/europe/europe-atlas.png";
 import EuropeDestinations from "./atlas/EuropeDestinations.jsx";
+import UkDestinations from "./atlas/UkDestinations.jsx";
 import useAtlasScene, {SCENE_ASSETS} from "./atlas/useAtlasScene.js";
 import AtlasCloudTransition from "./atlas/AtlasCloudTransition.jsx";
 import {initialCamera} from "./atlas/atlasConfig.js";
@@ -127,6 +128,7 @@ export default function AtlasStage({onMapReady, onCountrySelect}) {
             {scenes.scene==='europe' && state !== "ready" && previewFailed && <p className="atlas-preview-unavailable">{t("homeMagazine.atlas.previewUnavailable")}</p>}
             <div ref={host} className="atlas-map" role="region" aria-label={t(scenes.scene==='uk'?"homeMagazine.atlas.ukMapLabel":"homeMagazine.atlas.mapLabel")} hidden={state === "preview" || state === "failed"} />
             {scenes.scene==='europe' && (state === "ready" || !previewFailed) && <EuropeDestinations map={state === "ready" ? mapRef.current : null} onCountrySelect={selectCountry} />}
+            {scenes.scene==='uk' && <UkDestinations map={state === "ready" ? mapRef.current : null} />}
             </div>
             <AtlasCloudTransition phase={scenes.phase} reducedMotion={scenes.reducedMotion} />
         </div>
