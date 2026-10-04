@@ -26,6 +26,19 @@
         "oxford": "Oxford",
         "edinburgh": "Edinburgh"
       },
+      "franceCaption": "FRANCE",
+      "franceStory": "Where time slows, and beauty learns to stay.",
+      "franceMapLabel": "France story map",
+      "francePreviewAlt": "Illustrated France country story map",
+      "franceDestinations": "Explore France itineraries",
+      "francePlaces": {
+        "paris": "Paris",
+        "nice": "Nice",
+        "lyon": "Lyon",
+        "bordeaux": "Bordeaux",
+        "strasbourg": "Strasbourg",
+        "marseille": "Marseille"
+      },
       "travelling": "Travelling through the atlas…",
       "sceneFailed": "The country map could not open. Europe is ready to explore again.",
       "countryExplore": "Explore short breaks",

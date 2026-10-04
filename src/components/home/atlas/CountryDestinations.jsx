@@ -1,12 +1,11 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {useTranslation} from 'react-i18next';
-import {UK_DESTINATIONS} from './ukDestinations.js';
 import {artworkCoordinate} from './atlasConfig.js';
 import {getOfficialItineraryPath} from '../../../utils/publicNavigation.js';
 
-// Itinerary selection is plain navigation: no scene interception. Mirrors the
-// accepted Europe layer's link/touch semantics without sharing its code.
+// Country Story Map itinerary links (UK, France): plain navigation, no scene
+// interception. Mirrors the accepted Europe layer's link/touch semantics without sharing its code.
 const relative = (area, anchor) => ({
     left: `${50 + (area.artworkPosition.x - anchor.artworkPosition.x) / anchor.hitArea.width * 100}%`,
     top: `${50 + (area.artworkPosition.y - anchor.artworkPosition.y) / anchor.hitArea.height * 100}%`,
@@ -19,7 +18,7 @@ const calloutBelow = ([anchor, ...areas]) => {
     return {top: `calc(${50 + (bottom - anchor.artworkPosition.y) / anchor.hitArea.height * 100}% + 6px)`, bottom: 'auto'};
 };
 
-export default function UkDestinations({map}) {
+export default function CountryDestinations({destinations, navLabelKey, map}) {
     const {t} = useTranslation();
     const links = useRef(new Map()), pointer = useRef(null);
     const [armed, setArmed] = useState(null);
@@ -33,7 +32,7 @@ export default function UkDestinations({map}) {
         if (!map) return;
         const project = () => {
             const point = (x,y) => map.project(artworkCoordinate(x,y));
-            for (const destination of UK_DESTINATIONS) {
+            for (const destination of destinations) {
                 const link = links.current.get(destination.id), anchor = destination.hitAreas[0];
                 if (!link) continue;
                 const {x,y} = anchor.artworkPosition, center = point(x,y);
@@ -45,8 +44,8 @@ export default function UkDestinations({map}) {
         project(); map.on('render',project); map.on('resize',project); map.on('movestart',dismiss);
         return () => {map.off('render',project);map.off('resize',project);map.off('movestart',dismiss);};
     });
-    const layer = <nav className="atlas-itinerary-layer" aria-label={t('homeMagazine.atlas.ukDestinations')}>
-        {UK_DESTINATIONS.map(destination => {
+    const layer = <nav className="atlas-itinerary-layer" aria-label={t(navLabelKey)}>
+        {destinations.map(destination => {
             const [anchor, ...areas] = destination.hitAreas, {x,y} = anchor.artworkPosition;
             const label = t(destination.labelKey), action = t('homeMagazine.atlas.viewItinerary');
             return <a key={destination.id} ref={node => {if(node) links.current.set(destination.id,node);else links.current.delete(destination.id);}}

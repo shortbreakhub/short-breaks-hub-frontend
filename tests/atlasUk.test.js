@@ -29,7 +29,7 @@ test("UK atlas maps exactly nine destinations to their literal official itinerar
     assert.deepEqual(Object.fromEntries(UK_DESTINATIONS.map(d => [d.id, d.slug])), OFFICIAL);
     const data = readFileSync("src/components/home/atlas/ukDestinations.js", "utf8");
     for (const slug of Object.values(OFFICIAL)) assert.ok(data.includes(`'${slug}'`), `${slug} is stored literally`);
-    const layer = readFileSync("src/components/home/atlas/UkDestinations.jsx", "utf8");
+    const layer = readFileSync("src/components/home/atlas/CountryDestinations.jsx", "utf8");
     assert.match(layer, /href=\{getOfficialItineraryPath\(destination\.slug\)\}/);
     // No destination-name-derived slugs or scene interception for itinerary links.
     for (const source of [data, layer]) assert.doesNotMatch(source, /toLowerCase|formatSlug|getCountrySlug|\.replace\(/);
@@ -83,11 +83,12 @@ test("UK layer renders one native link per destination with hit regions inside i
         optimizeDeps: {noDiscovery: true, include: []}, ssr: {resolve: {externalConditions: ["node", "module-sync"]}}});
     try {
         await vite.ssrLoadModule("/src/i18n.js");
-        const {default: UkDestinations} = await vite.ssrLoadModule("/src/components/home/atlas/UkDestinations.jsx");
+        const {default: CountryDestinations} = await vite.ssrLoadModule("/src/components/home/atlas/CountryDestinations.jsx");
+        const {COUNTRY_SCENES} = await vite.ssrLoadModule("/src/components/home/atlas/countryScenes.js");
         for (const [language, nav, action, london] of [["en", "Explore United Kingdom itineraries", "View itinerary", "London"],
             ["fr", "Explorer les itinéraires du Royaume-Uni", "Voir l’itinéraire", "Londres"]]) await t.test(language, async () => {
             await i18n.changeLanguage(language);
-            const doc = new JSDOM(renderToStaticMarkup(React.createElement(UkDestinations, {map: null}))).window.document;
+            const doc = new JSDOM(renderToStaticMarkup(React.createElement(CountryDestinations, {destinations: COUNTRY_SCENES.uk.destinations, navLabelKey: COUNTRY_SCENES.uk.keys.nav, map: null}))).window.document;
             assert.equal(doc.querySelectorAll("nav").length, 1);
             assert.equal(doc.querySelector("nav").getAttribute("aria-label"), nav);
             const links = [...doc.querySelectorAll("nav a")];
@@ -114,8 +115,12 @@ test("UK layer renders one native link per destination with hit regions inside i
 test("UK itineraries render only in the UK scene, inside the inert scene surface", () => {
     const stage = readFileSync("src/components/home/AtlasStage.jsx", "utf8");
     const surface = stage.slice(stage.indexOf('<div className="atlas-scene-surface" inert={locked}>'), stage.indexOf("<AtlasCloudTransition"));
-    assert.match(surface, /\{scenes\.scene==='uk' && <UkDestinations map=\{state === "ready" \? mapRef\.current : null\} \/>\}/);
+    assert.match(surface, /\{country && <CountryDestinations key=\{scenes\.scene\} destinations=\{country\.destinations\} navLabelKey=\{country\.keys\.nav\} map=\{state === "ready" \? mapRef\.current : null\} \/>\}/);
+    assert.match(stage, /country=COUNTRY_SCENES\[scenes\.scene\]/);
+    const scenesConfig = readFileSync("src/components/home/atlas/countryScenes.js", "utf8");
+    assert.match(scenesConfig, /uk: \{countryId: 'united-kingdom', previewClass: 'atlas-uk-preview', destinations: UK_DESTINATIONS/);
+    assert.match(scenesConfig, /nav: 'homeMagazine\.atlas\.ukDestinations'/);
     assert.match(surface, /\{scenes\.scene==='europe' && \(state === "ready" \|\| !previewFailed\) && <EuropeDestinations map=\{state === "ready" \? mapRef\.current : null\} onCountrySelect=\{selectCountry\} \/>\}/);
     // Initial UK focus remains on Back.
-    assert.match(stage, /const focus=target==='uk'\?backButton\.current:/);
+    assert.match(stage, /const focus=target!=='europe'\?backButton\.current:/);
 });

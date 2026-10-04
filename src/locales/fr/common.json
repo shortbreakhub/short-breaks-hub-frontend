@@ -26,6 +26,19 @@
         "oxford": "Oxford",
         "edinburgh": "Édimbourg"
       },
+      "franceCaption": "FRANCE",
+      "franceStory": "Là où le temps ralentit, et où la beauté apprend à rester.",
+      "franceMapLabel": "Carte des récits de la France",
+      "francePreviewAlt": "Carte illustrée des récits de la France",
+      "franceDestinations": "Explorer les itinéraires en France",
+      "francePlaces": {
+        "paris": "Paris",
+        "nice": "Nice",
+        "lyon": "Lyon",
+        "bordeaux": "Bordeaux",
+        "strasbourg": "Strasbourg",
+        "marseille": "Marseille"
+      },
       "travelling": "Voyage à travers l’atlas…",
       "sceneFailed": "La carte du pays n’a pas pu s’ouvrir. Vous pouvez à nouveau explorer l’Europe.",
       "countryExplore": "Explorer les escapades",
