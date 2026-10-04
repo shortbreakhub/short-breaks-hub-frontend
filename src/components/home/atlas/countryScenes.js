@@ -1,6 +1,7 @@
 import {UK_DESTINATIONS} from './ukDestinations.js';
 import {FRANCE_DESTINATIONS} from './franceDestinations.js';
 import {SPAIN_DESTINATIONS} from './spainDestinations.js';
+import {PORTUGAL_DESTINATIONS} from './portugalDestinations.js';
 
 // Country Story Maps keyed by scene id. countryId is the Europe destination that
 // opens the scene and receives focus again on the way back. Artwork URLs live in
@@ -15,6 +16,9 @@ export const COUNTRY_SCENES = {
     spain: {countryId: 'spain', previewClass: 'atlas-spain-preview', destinations: SPAIN_DESTINATIONS, keys: {
         mapLabel: 'homeMagazine.atlas.spainMapLabel', previewAlt: 'homeMagazine.atlas.spainPreviewAlt',
         caption: 'homeMagazine.atlas.spainCaption', story: 'homeMagazine.atlas.spainStory', nav: 'homeMagazine.atlas.spainDestinations'}},
+    portugal: {countryId: 'portugal', previewClass: 'atlas-portugal-preview', destinations: PORTUGAL_DESTINATIONS, keys: {
+        mapLabel: 'homeMagazine.atlas.portugalMapLabel', previewAlt: 'homeMagazine.atlas.portugalPreviewAlt',
+        caption: 'homeMagazine.atlas.portugalCaption', story: 'homeMagazine.atlas.portugalStory', nav: 'homeMagazine.atlas.portugalDestinations'}},
 };
 export function sceneForCountry(countryId) {
     return Object.keys(COUNTRY_SCENES).find(scene => COUNTRY_SCENES[scene].countryId === countryId);
