@@ -45,18 +45,11 @@ try {
             }).map(el => ({src: new URL(el.currentSrc).pathname, alt: el.alt, width: el.clientWidth, height: el.clientHeight})),
         }));
         assert.ok(layout.scrollWidth <= width, `${width}/${language}: horizontal overflow`);
-        assert.equal(layout.visibleLandmarks, width < 768 ? 4 : 6);
+        assert.equal(layout.visibleLandmarks, 0);
         assert.equal(layout.unlabelledControls, 0); assert.equal(layout.undersizedActions, 0);
         await page.screenshot({path: `/tmp/issue38-home-${width}-${language}.png`, fullPage: true});
         await page.locator(".home-hero").screenshot({path: `/tmp/issue38-hero-${width}-${language}.png`});
         await page.locator(".home-picks").screenshot({path: `/tmp/issue38-picks-${width}-${language}.png`});
-        const atlasLink = page.locator(".atlas-destination a").filter({visible: true}).first();
-        await atlasLink.focus();
-        await page.keyboard.press("Shift+Tab"); await page.keyboard.press("Tab");
-        const atlasFocus = await atlasLink.evaluate(el => ({active: document.activeElement === el, style: getComputedStyle(el).outlineStyle, width: parseFloat(getComputedStyle(el).outlineWidth)}));
-        assert.equal(atlasFocus.active, true); assert.equal(atlasFocus.style, "solid"); assert.ok(atlasFocus.width >= 2);
-        await page.keyboard.press("Tab");
-        assert.equal(await page.evaluate(() => document.activeElement.matches(".atlas-destination a")), true);
         const region = page.locator("#home-region"), country = page.locator("#home-country");
         assert.equal(await country.isDisabled(), true);
         await region.selectOption("east-asia");

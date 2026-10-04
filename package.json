@@ -15,7 +15,10 @@
     "ui:dev": "vite --open /src/dev/index.html",
     "ui:verify": "node scripts/verify-editorial-ui.mjs",
     "homepage:refresh": "node scripts/sync-homepage-content.mjs",
-    "homepage:verify": "node scripts/verify-homepage.mjs"
+    "homepage:verify": "node scripts/verify-homepage.mjs",
+    "atlas:verify": "node scripts/verify-atlas.mjs",
+    "atlas:measure": "node scripts/measure-atlas-runtime.mjs",
+    "atlas:prepare": "node scripts/prepare-atlas-geography.mjs"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
@@ -25,6 +28,7 @@
     "i18next": "^26.3.6",
     "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",
+    "maplibre-gl": "6.11.2",
     "openmeteo": "^1.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

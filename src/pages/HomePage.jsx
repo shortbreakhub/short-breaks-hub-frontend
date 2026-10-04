@@ -48,7 +48,7 @@ export default function HomePage() {
                             <p className="home-intro">{t("homeMagazine.hero.description")}</p>
                             <a href="#editors-picks" className="home-story-jump">{t("homeMagazine.hero.stories")} <span aria-hidden="true">↘</span></a>
                         </div>
-                        <AtlasStage destinations={stories} />
+                        <AtlasStage />
                     </div>
                     <HomeDiscovery />
                 </Container>

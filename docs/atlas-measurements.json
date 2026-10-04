@@ -1,0 +1,2746 @@
+{
+  "date": "2026-10-03",
+  "branch": "feature/40-naked-interactive-world-map",
+  "measurement": "decimal bytes; Node gzip9; cold uncompressed local response bodies; external integrations blocked; no affiliate clicks",
+  "before": {
+    "sourceAssetBytes": 1481851015,
+    "productionBytes": 1385064325,
+    "initialJsRaw": 491613,
+    "initialJsGzip": 159775,
+    "initialFiles": [
+      "assets/index-he7OHD7C.js"
+    ],
+    "chunks": [
+      {
+        "file": "assets/loading-animation-CYG5ZAmk.js",
+        "raw": 843287,
+        "gzip": 138491
+      },
+      {
+        "file": "assets/index-he7OHD7C.js",
+        "raw": 491613,
+        "gzip": 159775
+      },
+      {
+        "file": "assets/loadItineraryImage-DyOPMh9c.js",
+        "raw": 124284,
+        "gzip": 36735
+      },
+      {
+        "file": "assets/index-B4ZzJnoA.css",
+        "raw": 79994,
+        "gzip": 14847
+      },
+      {
+        "file": "assets/WeatherPage-DH0O1zYd.js",
+        "raw": 53157,
+        "gzip": 13787
+      },
+      {
+        "file": "assets/ItineraryPage-MvHcjoLu.js",
+        "raw": 51127,
+        "gzip": 12814
+      },
+      {
+        "file": "assets/communityPages-B29uB7tj.js",
+        "raw": 50307,
+        "gzip": 12304
+      },
+      {
+        "file": "assets/GoogleMap-HmJzuSve.js",
+        "raw": 20755,
+        "gzip": 7736
+      },
+      {
+        "file": "assets/accountPages-CUq228NS.js",
+        "raw": 18315,
+        "gzip": 4692
+      },
+      {
+        "file": "assets/CountryCard-Cx4Lltc1.js",
+        "raw": 5348,
+        "gzip": 2280
+      },
+      {
+        "file": "assets/BrowsePage-6B-2hUhC.js",
+        "raw": 4749,
+        "gzip": 1856
+      },
+      {
+        "file": "assets/ItineraryDayAccordion-DeZM5hyA.js",
+        "raw": 2476,
+        "gzip": 1019
+      },
+      {
+        "file": "assets/RegionPage-DWJl1oZr.js",
+        "raw": 1701,
+        "gzip": 931
+      },
+      {
+        "file": "assets/ItineraryCard-BzOvy61G.js",
+        "raw": 1446,
+        "gzip": 794
+      },
+      {
+        "file": "assets/toast-nTgtsiRk.js",
+        "raw": 793,
+        "gzip": 490
+      }
+    ],
+    "largestImages": [
+      {
+        "file": "assets/san-miguel-Bh5t66dI.jpg",
+        "bytes": 15239178
+      },
+      {
+        "file": "assets/grand-central-market-BPbnDFuR.jpg",
+        "bytes": 12586808
+      },
+      {
+        "file": "assets/3-days-phnom-penh-where-history-speaks-softly-DrNwpmU8.jpg",
+        "bytes": 11535252
+      },
+      {
+        "file": "assets/3-days-ha-long-bay-where-stone-rises-from-water-MN7LPR63.jpg",
+        "bytes": 11156464
+      },
+      {
+        "file": "assets/vietnam-BxAUTqB6.jpg",
+        "bytes": 10922932
+      },
+      {
+        "file": "assets/3-days-zermatt-altitude-silence-and-effort-B1Oog7OV.jpg",
+        "bytes": 8631491
+      },
+      {
+        "file": "assets/5-days-tasmania-isolation-weather-and-attention-BGG0l5ou.jpg",
+        "bytes": 8496788
+      },
+      {
+        "file": "assets/4-days-taipei-where-everyday-life-feels-kind-Begh-tSa.jpg",
+        "bytes": 8376739
+      },
+      {
+        "file": "assets/boqueria-C0QlXSM5.jpg",
+        "bytes": 7936831
+      },
+      {
+        "file": "assets/brazil-p1whkcdd.jpg",
+        "bytes": 7400647
+      }
+    ],
+    "prerenderedPages": 258
+  },
+  "after": {
+    "sourceAssetBytes": 1482031725,
+    "productionBytes": 1386775687,
+    "initialJsRaw": 493537,
+    "initialJsGzip": 160016,
+    "initialFiles": [
+      "assets/index-CZ603J0P.js"
+    ],
+    "chunks": [
+      {
+        "file": "assets/createAtlasMap-otfTq5kD.js",
+        "raw": 1017972,
+        "gzip": 277066
+      },
+      {
+        "file": "assets/loading-animation-B89x-7GT.js",
+        "raw": 843287,
+        "gzip": 138491
+      },
+      {
+        "file": "assets/maplibre-gl-worker-uoo319Tl.js",
+        "raw": 508068,
+        "gzip": 147239
+      },
+      {
+        "file": "assets/index-CZ603J0P.js",
+        "raw": 493537,
+        "gzip": 160016
+      },
+      {
+        "file": "assets/loadItineraryImage-DyOPMh9c.js",
+        "raw": 124284,
+        "gzip": 36735
+      },
+      {
+        "file": "assets/index-Be54IGTQ.css",
+        "raw": 82124,
+        "gzip": 15189
+      },
+      {
+        "file": "assets/WeatherPage-DLIIiTwE.js",
+        "raw": 53157,
+        "gzip": 13785
+      },
+      {
+        "file": "assets/ItineraryPage-DOQn4nCL.js",
+        "raw": 51127,
+        "gzip": 12815
+      },
+      {
+        "file": "assets/communityPages-DBKiVbIq.js",
+        "raw": 50307,
+        "gzip": 12304
+      },
+      {
+        "file": "assets/GoogleMap-BXi7CgA2.js",
+        "raw": 20755,
+        "gzip": 7739
+      },
+      {
+        "file": "assets/accountPages-CXju3aeW.js",
+        "raw": 18315,
+        "gzip": 4692
+      },
+      {
+        "file": "assets/CountryCard-BG6ElgG3.js",
+        "raw": 5348,
+        "gzip": 2280
+      },
+      {
+        "file": "assets/BrowsePage-CMqfze9u.js",
+        "raw": 4749,
+        "gzip": 1856
+      },
+      {
+        "file": "assets/ItineraryDayAccordion-Dd7fI1rf.js",
+        "raw": 2476,
+        "gzip": 1019
+      },
+      {
+        "file": "assets/RegionPage-DH8fy_5u.js",
+        "raw": 1701,
+        "gzip": 933
+      },
+      {
+        "file": "assets/ItineraryCard-Go4RXHtA.js",
+        "raw": 1446,
+        "gzip": 795
+      },
+      {
+        "file": "assets/toast-nTgtsiRk.js",
+        "raw": 793,
+        "gzip": 490
+      }
+    ],
+    "largestImages": [
+      {
+        "file": "assets/san-miguel-Bh5t66dI.jpg",
+        "bytes": 15239178
+      },
+      {
+        "file": "assets/grand-central-market-BPbnDFuR.jpg",
+        "bytes": 12586808
+      },
+      {
+        "file": "assets/3-days-phnom-penh-where-history-speaks-softly-DrNwpmU8.jpg",
+        "bytes": 11535252
+      },
+      {
+        "file": "assets/3-days-ha-long-bay-where-stone-rises-from-water-MN7LPR63.jpg",
+        "bytes": 11156464
+      },
+      {
+        "file": "assets/vietnam-BxAUTqB6.jpg",
+        "bytes": 10922932
+      },
+      {
+        "file": "assets/3-days-zermatt-altitude-silence-and-effort-B1Oog7OV.jpg",
+        "bytes": 8631491
+      },
+      {
+        "file": "assets/5-days-tasmania-isolation-weather-and-attention-BGG0l5ou.jpg",
+        "bytes": 8496788
+      },
+      {
+        "file": "assets/4-days-taipei-where-everyday-life-feels-kind-Begh-tSa.jpg",
+        "bytes": 8376739
+      },
+      {
+        "file": "assets/boqueria-C0QlXSM5.jpg",
+        "bytes": 7936831
+      },
+      {
+        "file": "assets/brazil-p1whkcdd.jpg",
+        "bytes": 7400647
+      }
+    ],
+    "prerenderedPages": 258
+  },
+  "initialCss": {
+    "before": {
+      "raw": 79994,
+      "gzip": 14847
+    },
+    "after": {
+      "raw": 82124,
+      "gzip": 15189
+    }
+  },
+  "mapEngine": {
+    "package": "maplibre-gl",
+    "version": "6.11.2",
+    "loading": "explicit activation; not in initial graph",
+    "artifacts": [
+      {
+        "file": "assets/createAtlasMap-otfTq5kD.js",
+        "raw": 1017972,
+        "gzip": 277066
+      },
+      {
+        "file": "assets/maplibre-gl-worker-uoo319Tl.js",
+        "raw": 508068,
+        "gzip": 147239
+      }
+    ],
+    "total": {
+      "raw": 1526040,
+      "gzip": 424305
+    },
+    "targetGzip": 60000,
+    "targetMet": false,
+    "regressionCeilingGzip": 500000
+  },
+  "geography": {
+    "source": {
+      "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/693f11422f4e08d2da4566b854dda53eb7c39fb3/geojson/ne_110m_land.geojson",
+      "sourceCommit": "693f11422f4e08d2da4566b854dda53eb7c39fb3",
+      "dataset": "Natural Earth 1:110m land",
+      "license": "Public domain",
+      "terms": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
+      "features": 127,
+      "processing": "Strip attributes/bboxes; round lon/lat to 4 decimals; preserve all polygons. Preview projects the same data to spherical Mercator, clamps poles to ±85.051129°. No manually drawn geography."
+    },
+    "geojson": {
+      "raw": 106656,
+      "gzip": 39056
+    },
+    "preview": {
+      "raw": 73387,
+      "gzip": 30539
+    },
+    "combinedGzip": 69595,
+    "targetGzip": 75000,
+    "targetMet": true,
+    "selfHosted": true
+  },
+  "homepageBefore": [
+    {
+      "name": "home-desktop",
+      "route": "/",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "initial": {
+        "total": 870849,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 28638
+          },
+          {
+            "url": "/assets/index-B4ZzJnoA.css",
+            "bytes": 79994
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/index-he7OHD7C.js",
+            "bytes": 491613
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "bytes": 44326
+          }
+        ]
+      },
+      "scrolled": {
+        "total": 870849,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 28638
+          },
+          {
+            "url": "/assets/index-B4ZzJnoA.css",
+            "bytes": 79994
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/index-he7OHD7C.js",
+            "bytes": 491613
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "bytes": 44326
+          }
+        ]
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:37387/assets/logo-icon-224-C8wnferF.png",
+          "width": 64,
+          "height": 64,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/english-flag-ChPF0WU8.png",
+          "width": 24,
+          "height": 24,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/logo-icon-224-C8wnferF.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/english-flag-ChPF0WU8.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/shanghai-960-CGj8AkGu.webp",
+          "width": 719,
+          "height": 575,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/paris-480-x6jttU_v.webp",
+          "width": 449,
+          "height": 281,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/tokyo-480-D4AlBPsF.webp",
+          "width": 449,
+          "height": 281,
+          "naturalWidth": 380,
+          "naturalHeight": 251,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/newYork-480-B51go_ei.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/sydney-480-CgB7jBNX.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/marrakech-480-CdB5aC9x.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 258,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/southeast-480-gWtXtvvZ.webp",
+          "width": 406,
+          "height": 304,
+          "naturalWidth": 389,
+          "naturalHeight": 259,
+          "loading": "lazy"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "home-mobile",
+      "route": "/",
+      "width": 390,
+      "height": 844,
+      "dpr": 2,
+      "initial": {
+        "total": 982547,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 28638
+          },
+          {
+            "url": "/assets/index-B4ZzJnoA.css",
+            "bytes": 79994
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/index-he7OHD7C.js",
+            "bytes": 491613
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "bytes": 156024
+          }
+        ]
+      },
+      "scrolled": {
+        "total": 982547,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 28638
+          },
+          {
+            "url": "/assets/index-B4ZzJnoA.css",
+            "bytes": 79994
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/index-he7OHD7C.js",
+            "bytes": 491613
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "bytes": 156024
+          }
+        ]
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:37387/assets/logo-icon-224-C8wnferF.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/english-flag-ChPF0WU8.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/logo-icon-224-C8wnferF.png",
+          "width": 64,
+          "height": 64,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/english-flag-ChPF0WU8.png",
+          "width": 24,
+          "height": 24,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/shanghai-960-CGj8AkGu.webp",
+          "width": 358,
+          "height": 286,
+          "naturalWidth": 358,
+          "naturalHeight": 239,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/paris-480-x6jttU_v.webp",
+          "width": 171,
+          "height": 107,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/tokyo-480-D4AlBPsF.webp",
+          "width": 171,
+          "height": 107,
+          "naturalWidth": 171,
+          "naturalHeight": 113,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/newYork-480-B51go_ei.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/sydney-480-CgB7jBNX.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/marrakech-480-CdB5aC9x.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 116,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:37387/assets/southeast-960-BelmNk9R.webp",
+          "width": 320,
+          "height": 240,
+          "naturalWidth": 358,
+          "naturalHeight": 239,
+          "loading": "lazy"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "homepageAfter": [
+    {
+      "name": "home-desktop",
+      "route": "/",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "initial": {
+        "total": 942815,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 23163
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "bytes": 82124
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "bytes": 73387
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "bytes": 493537
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "bytes": 44326
+          }
+        ]
+      },
+      "scrolled": {
+        "total": 942815,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 23163
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "bytes": 82124
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "bytes": 73387
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "bytes": 493537
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "bytes": 44326
+          }
+        ]
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:40927/assets/logo-icon-224-C8wnferF.png",
+          "width": 64,
+          "height": 64,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/english-flag-ChPF0WU8.png",
+          "width": 24,
+          "height": 24,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/logo-icon-224-C8wnferF.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/english-flag-ChPF0WU8.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/world-preview-CbgluL-J.svg",
+          "width": 918,
+          "height": 918,
+          "naturalWidth": 150,
+          "naturalHeight": 150,
+          "loading": "eager"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/shanghai-960-CGj8AkGu.webp",
+          "width": 719,
+          "height": 575,
+          "naturalWidth": 720,
+          "naturalHeight": 480,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/paris-480-x6jttU_v.webp",
+          "width": 449,
+          "height": 281,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/tokyo-480-D4AlBPsF.webp",
+          "width": 449,
+          "height": 281,
+          "naturalWidth": 380,
+          "naturalHeight": 251,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/newYork-480-B51go_ei.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/sydney-480-CgB7jBNX.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 253,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/marrakech-480-CdB5aC9x.webp",
+          "width": 384,
+          "height": 240,
+          "naturalWidth": 380,
+          "naturalHeight": 258,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/southeast-480-gWtXtvvZ.webp",
+          "width": 406,
+          "height": 304,
+          "naturalWidth": 389,
+          "naturalHeight": 259,
+          "loading": "lazy"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "home-mobile",
+      "route": "/",
+      "width": 390,
+      "height": 844,
+      "dpr": 2,
+      "initial": {
+        "total": 1054513,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 23163
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "bytes": 82124
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "bytes": 73387
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "bytes": 493537
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "bytes": 156024
+          }
+        ]
+      },
+      "scrolled": {
+        "total": 1054513,
+        "assets": [
+          {
+            "url": "/",
+            "bytes": 23163
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "bytes": 82124
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "bytes": 12257
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "bytes": 4599
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "bytes": 73387
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "bytes": 493537
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "bytes": 63208
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "bytes": 41168
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "bytes": 18292
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "bytes": 19992
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "bytes": 28922
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "bytes": 37840
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "bytes": 156024
+          }
+        ]
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:40927/assets/logo-icon-224-C8wnferF.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/english-flag-ChPF0WU8.png",
+          "width": 0,
+          "height": 0,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/logo-icon-224-C8wnferF.png",
+          "width": 64,
+          "height": 64,
+          "naturalWidth": 224,
+          "naturalHeight": 224,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/english-flag-ChPF0WU8.png",
+          "width": 24,
+          "height": 24,
+          "naturalWidth": 250,
+          "naturalHeight": 250,
+          "loading": "auto"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/world-preview-CbgluL-J.svg",
+          "width": 435,
+          "height": 435,
+          "naturalWidth": 150,
+          "naturalHeight": 150,
+          "loading": "eager"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/shanghai-960-CGj8AkGu.webp",
+          "width": 358,
+          "height": 286,
+          "naturalWidth": 358,
+          "naturalHeight": 239,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/paris-480-x6jttU_v.webp",
+          "width": 171,
+          "height": 107,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/tokyo-480-D4AlBPsF.webp",
+          "width": 171,
+          "height": 107,
+          "naturalWidth": 171,
+          "naturalHeight": 113,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/newYork-480-B51go_ei.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/sydney-480-CgB7jBNX.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 114,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/marrakech-480-CdB5aC9x.webp",
+          "width": 152,
+          "height": 152,
+          "naturalWidth": 171,
+          "naturalHeight": 116,
+          "loading": "lazy"
+        },
+        {
+          "src": "http://127.0.0.1:40927/assets/southeast-960-BelmNk9R.webp",
+          "width": 320,
+          "height": 240,
+          "naturalWidth": 358,
+          "naturalHeight": 239,
+          "loading": "lazy"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "productionActivation": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "before": {
+        "raw": 942815,
+        "gzipEstimate": 482066,
+        "assets": [
+          {
+            "url": "/",
+            "raw": 23163,
+            "gzip": 5878
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "raw": 82124,
+            "gzip": 15189
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "raw": 12257,
+            "gzip": 11863
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "raw": 4599,
+            "gzip": 4612
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "raw": 73387,
+            "gzip": 30539
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "raw": 493537,
+            "gzip": 160016
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "raw": 63208,
+            "gzip": 63246
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "raw": 41168,
+            "gzip": 41201
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "raw": 18292,
+            "gzip": 18320
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "raw": 28922,
+            "gzip": 28950
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "raw": 19992,
+            "gzip": 20020
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "raw": 37840,
+            "gzip": 37873
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "raw": 44326,
+            "gzip": 44359
+          }
+        ]
+      },
+      "after": {
+        "raw": 2575511,
+        "gzipEstimate": 945427,
+        "assets": [
+          {
+            "url": "/",
+            "raw": 23163,
+            "gzip": 5878
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "raw": 82124,
+            "gzip": 15189
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "raw": 12257,
+            "gzip": 11863
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "raw": 4599,
+            "gzip": 4612
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "raw": 73387,
+            "gzip": 30539
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "raw": 493537,
+            "gzip": 160016
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "raw": 63208,
+            "gzip": 63246
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "raw": 41168,
+            "gzip": 41201
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "raw": 18292,
+            "gzip": 18320
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "raw": 28922,
+            "gzip": 28950
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "raw": 19992,
+            "gzip": 20020
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "raw": 37840,
+            "gzip": 37873
+          },
+          {
+            "url": "/assets/southeast-480-gWtXtvvZ.webp",
+            "raw": 44326,
+            "gzip": 44359
+          },
+          {
+            "url": "/assets/createAtlasMap-otfTq5kD.js",
+            "raw": 1017972,
+            "gzip": 277066
+          },
+          {
+            "url": "/assets/world-land-DO4kaogb.geojson",
+            "raw": 106656,
+            "gzip": 39056
+          },
+          {
+            "url": "/assets/maplibre-gl-worker-uoo319Tl.js",
+            "raw": 508068,
+            "gzip": 147239
+          }
+        ]
+      },
+      "atlasRequests": [
+        {
+          "url": "/assets/createAtlasMap-otfTq5kD.js",
+          "raw": 1017972,
+          "gzip": 277066
+        },
+        {
+          "url": "/assets/world-land-DO4kaogb.geojson",
+          "raw": 106656,
+          "gzip": 39056
+        },
+        {
+          "url": "/assets/maplibre-gl-worker-uoo319Tl.js",
+          "raw": 508068,
+          "gzip": 147239
+        }
+      ],
+      "incrementRaw": 1632696,
+      "incrementGzipEstimate": 463361,
+      "externalAtlas": [],
+      "aboveFold": [
+        {
+          "src": "http://127.0.0.1:42695/assets/logo-icon-224-C8wnferF.png",
+          "alt": "Travel Explorer Logo"
+        },
+        {
+          "src": "http://127.0.0.1:42695/assets/english-flag-ChPF0WU8.png",
+          "alt": "British flag"
+        }
+      ],
+      "fallbacks": "geography retry, worker/engine reload and missing-preview enhancement passed",
+      "errors": []
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "dpr": 2,
+      "before": {
+        "raw": 1054513,
+        "gzipEstimate": 593799,
+        "assets": [
+          {
+            "url": "/",
+            "raw": 23163,
+            "gzip": 5878
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "raw": 82124,
+            "gzip": 15189
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "raw": 12257,
+            "gzip": 11863
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "raw": 4599,
+            "gzip": 4612
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "raw": 73387,
+            "gzip": 30539
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "raw": 493537,
+            "gzip": 160016
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "raw": 63208,
+            "gzip": 63246
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "raw": 18292,
+            "gzip": 18320
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "raw": 41168,
+            "gzip": 41201
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "raw": 19992,
+            "gzip": 20020
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "raw": 28922,
+            "gzip": 28950
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "raw": 37840,
+            "gzip": 37873
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "raw": 156024,
+            "gzip": 156092
+          }
+        ]
+      },
+      "after": {
+        "raw": 2687209,
+        "gzipEstimate": 1057160,
+        "assets": [
+          {
+            "url": "/",
+            "raw": 23163,
+            "gzip": 5878
+          },
+          {
+            "url": "/assets/index-Be54IGTQ.css",
+            "raw": 82124,
+            "gzip": 15189
+          },
+          {
+            "url": "/assets/logo-icon-224-C8wnferF.png",
+            "raw": 12257,
+            "gzip": 11863
+          },
+          {
+            "url": "/assets/english-flag-ChPF0WU8.png",
+            "raw": 4599,
+            "gzip": 4612
+          },
+          {
+            "url": "/assets/world-preview-CbgluL-J.svg",
+            "raw": 73387,
+            "gzip": 30539
+          },
+          {
+            "url": "/assets/index-CZ603J0P.js",
+            "raw": 493537,
+            "gzip": 160016
+          },
+          {
+            "url": "/assets/shanghai-960-CGj8AkGu.webp",
+            "raw": 63208,
+            "gzip": 63246
+          },
+          {
+            "url": "/assets/paris-480-x6jttU_v.webp",
+            "raw": 18292,
+            "gzip": 18320
+          },
+          {
+            "url": "/assets/tokyo-480-D4AlBPsF.webp",
+            "raw": 41168,
+            "gzip": 41201
+          },
+          {
+            "url": "/assets/newYork-480-B51go_ei.webp",
+            "raw": 19992,
+            "gzip": 20020
+          },
+          {
+            "url": "/assets/sydney-480-CgB7jBNX.webp",
+            "raw": 28922,
+            "gzip": 28950
+          },
+          {
+            "url": "/assets/marrakech-480-CdB5aC9x.webp",
+            "raw": 37840,
+            "gzip": 37873
+          },
+          {
+            "url": "/assets/southeast-960-BelmNk9R.webp",
+            "raw": 156024,
+            "gzip": 156092
+          },
+          {
+            "url": "/assets/createAtlasMap-otfTq5kD.js",
+            "raw": 1017972,
+            "gzip": 277066
+          },
+          {
+            "url": "/assets/world-land-DO4kaogb.geojson",
+            "raw": 106656,
+            "gzip": 39056
+          },
+          {
+            "url": "/assets/maplibre-gl-worker-uoo319Tl.js",
+            "raw": 508068,
+            "gzip": 147239
+          }
+        ]
+      },
+      "atlasRequests": [
+        {
+          "url": "/assets/createAtlasMap-otfTq5kD.js",
+          "raw": 1017972,
+          "gzip": 277066
+        },
+        {
+          "url": "/assets/world-land-DO4kaogb.geojson",
+          "raw": 106656,
+          "gzip": 39056
+        },
+        {
+          "url": "/assets/maplibre-gl-worker-uoo319Tl.js",
+          "raw": 508068,
+          "gzip": 147239
+        }
+      ],
+      "incrementRaw": 1632696,
+      "incrementGzipEstimate": 463361,
+      "externalAtlas": [],
+      "aboveFold": [
+        {
+          "src": "http://127.0.0.1:42695/assets/logo-icon-224-C8wnferF.png",
+          "alt": "Travel Explorer Logo"
+        },
+        {
+          "src": "http://127.0.0.1:42695/assets/english-flag-ChPF0WU8.png",
+          "alt": "British flag"
+        }
+      ],
+      "fallbacks": "geography retry, worker/engine reload and missing-preview enhancement passed",
+      "errors": []
+    }
+  ],
+  "atlasVerification": [
+    {
+      "width": 1440,
+      "language": "en",
+      "initial": {
+        "center": [
+          10,
+          20
+        ],
+        "zoom": 0.8434869574993252,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001261,
+          48.85659999999933
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000302,
+          31.23039999999969
+        ],
+        "parisPixel": [
+          394.48273956049496,
+          136.31467256813434
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          17.773916730050587,
+          20
+        ],
+        "zoom": 1.3434869574993251,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000000105,
+          48.856600000000384
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000154,
+          31.23040000000033
+        ],
+        "parisPixel": [
+          358.34168494013664,
+          98.54447325642414
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          -16.583804528123807,
+          20.00000000000297
+        ],
+        "zoom": 1.3434869574993251,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999999897,
+          48.85659999999996
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000069,
+          31.23039999999976
+        ],
+        "parisPixel": [
+          482.3416849401474,
+          98.54447325643548
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          10,
+          20
+        ],
+        "zoom": 0.8427517013681189,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001858,
+          48.85660000000084
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000274,
+          31.230400000000728
+        ],
+        "parisPixel": [
+          394.49268381683305,
+          136.3611324836058
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1480,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "www.googletagmanager.com",
+        "images.unsplash.com"
+      ],
+      "touch": "not emulated",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "language": "fr",
+      "initial": {
+        "center": [
+          10,
+          20
+        ],
+        "zoom": 0.8434869574993252,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001261,
+          48.85659999999933
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000302,
+          31.23039999999969
+        ],
+        "parisPixel": [
+          394.48273956049496,
+          136.31467256813434
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          17.773916730050587,
+          20
+        ],
+        "zoom": 1.3434869574993251,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000000105,
+          48.856600000000384
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000154,
+          31.23040000000033
+        ],
+        "parisPixel": [
+          358.34168494013664,
+          98.54447325642414
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          -16.583804528123807,
+          20.00000000000297
+        ],
+        "zoom": 1.3434869574993251,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999999897,
+          48.85659999999996
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000069,
+          31.23039999999976
+        ],
+        "parisPixel": [
+          482.3416849401474,
+          98.54447325643548
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1440,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          10,
+          20
+        ],
+        "zoom": 0.8427517013681189,
+        "min": 0.6934869574993252,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001858,
+          48.85660000000084
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000274,
+          31.230400000000728
+        ],
+        "parisPixel": [
+          394.49268381683305,
+          136.3611324836058
+        ],
+        "width": 828,
+        "viewportScale": 1,
+        "innerWidth": 1480,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "www.googletagmanager.com",
+        "images.unsplash.com"
+      ],
+      "touch": "not emulated",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "width": 768,
+      "language": "en",
+      "initial": {
+        "center": [
+          15,
+          18
+        ],
+        "zoom": 0.675855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001062,
+          48.856600000000356
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000029,
+          31.230400000000202
+        ],
+        "parisPixel": [
+          332.2634196755315,
+          112.51118316777452
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          21.11246066768217,
+          17.99999999999997
+        ],
+        "zoom": 1.175855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999998419,
+          48.85659999999967
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999734,
+          31.23039999999915
+        ],
+        "parisPixel": [
+          300.71990024782184,
+          76.89344902345081
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          -12.499098709950289,
+          18.000000000004206
+        ],
+        "zoom": 1.175855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999999499,
+          48.85660000000024
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000029,
+          31.23039999999979
+        ],
+        "parisPixel": [
+          408.7199002478365,
+          76.89344902346518
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          12.735532050819415,
+          18
+        ],
+        "zoom": 0.7488406212341147,
+        "min": 0.568965513675944,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3521999999985894,
+          48.85660000000021
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999916,
+          31.230400000000202
+        ],
+        "parisPixel": [
+          355.1842336291047,
+          118.54911376066369
+        ],
+        "width": 760,
+        "viewportScale": 1,
+        "innerWidth": 808,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "images.unsplash.com",
+        "www.googletagmanager.com"
+      ],
+      "touch": "not emulated",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "width": 768,
+      "language": "fr",
+      "initial": {
+        "center": [
+          15,
+          18
+        ],
+        "zoom": 0.675855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001062,
+          48.856600000000356
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000029,
+          31.230400000000202
+        ],
+        "parisPixel": [
+          332.2634196755315,
+          112.51118316777452
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          21.11246066768217,
+          17.99999999999997
+        ],
+        "zoom": 1.175855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999998419,
+          48.85659999999967
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999734,
+          31.23039999999915
+        ],
+        "parisPixel": [
+          300.71990024782184,
+          76.89344902345081
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          -12.499098709950289,
+          18.000000000004206
+        ],
+        "zoom": 1.175855026887171,
+        "min": 0.495855026887171,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999999499,
+          48.85660000000024
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000029,
+          31.23039999999979
+        ],
+        "parisPixel": [
+          408.7199002478365,
+          76.89344902346518
+        ],
+        "width": 722,
+        "viewportScale": 1,
+        "innerWidth": 768,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          12.735532050819415,
+          18
+        ],
+        "zoom": 0.7488406212341147,
+        "min": 0.568965513675944,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3521999999985894,
+          48.85660000000021
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999916,
+          31.230400000000202
+        ],
+        "parisPixel": [
+          355.1842336291047,
+          118.54911376066369
+        ],
+        "width": 760,
+        "viewportScale": 1,
+        "innerWidth": 808,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "images.unsplash.com",
+        "www.googletagmanager.com"
+      ],
+      "touch": "not emulated",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "initial": {
+        "center": [
+          25,
+          28
+        ],
+        "zoom": -0.23618422273574358,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000000105,
+          48.85659999999899
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000024,
+          31.230399999998895
+        ],
+        "parisPixel": [
+          151.65392844665791,
+          110.44264129784345
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          31.75261689183685,
+          27.999999999999986
+        ],
+        "zoom": 0.2638157772642564,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000029664,
+          48.85659999999962
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000257,
+          31.230399999999563
+        ],
+        "parisPixel": [
+          128.79610516584083,
+          96.95694176836444
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          0.7147442245005493,
+          27.999999999999503
+        ],
+        "zoom": 0.2638157772642564,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352200000001062,
+          48.85659999999962
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000063,
+          31.230399999999563
+        ],
+        "parisPixel": [
+          181.79610516582807,
+          96.95694176836356
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          15.188775203773957,
+          27.999999999999986
+        ],
+        "zoom": -0.0833753794563512,
+        "min": -0.3633753794563512,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3521999999981063,
+          48.856600000000526
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999694,
+          31.23040000000063
+        ],
+        "parisPixel": [
+          181.76869619350362,
+          122.80494758810529
+        ],
+        "width": 398,
+        "viewportScale": 1,
+        "innerWidth": 430,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "www.googletagmanager.com",
+        "images.unsplash.com"
+      ],
+      "touch": "scroll/pinch/pan passed",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "width": 390,
+      "language": "fr",
+      "initial": {
+        "center": [
+          25,
+          28
+        ],
+        "zoom": -0.23618422273574358,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000000105,
+          48.85659999999899
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000024,
+          31.230399999998895
+        ],
+        "parisPixel": [
+          151.65392844665791,
+          110.44264129784345
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "zoomed": {
+        "center": [
+          31.75261689183685,
+          27.999999999999986
+        ],
+        "zoom": 0.2638157772642564,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3522000000029664,
+          48.85659999999962
+        ],
+        "shanghaiRoundTrip": [
+          121.47370000000257,
+          31.230399999999563
+        ],
+        "parisPixel": [
+          128.79610516584083,
+          96.95694176836444
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "panned": {
+        "center": [
+          0.7147442244858837,
+          27.99999999999953
+        ],
+        "zoom": 0.2638157772642564,
+        "min": -0.5161842227357436,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.352199999998902,
+          48.8565999999995
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999785,
+          31.230399999999563
+        ],
+        "parisPixel": [
+          181.7961051658531,
+          96.95694176836356
+        ],
+        "width": 358,
+        "viewportScale": 1,
+        "innerWidth": 390,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "resized": {
+        "center": [
+          15.188775203773957,
+          27.999999999999986
+        ],
+        "zoom": -0.0833753794563512,
+        "min": -0.3633753794563512,
+        "max": 3.25,
+        "layers": [
+          "background",
+          "fill"
+        ],
+        "sources": [
+          "land"
+        ],
+        "worldCopies": false,
+        "parisRoundTrip": [
+          2.3521999999981063,
+          48.856600000000526
+        ],
+        "shanghaiRoundTrip": [
+          121.47369999999694,
+          31.23040000000063
+        ],
+        "parisPixel": [
+          181.76869619350362,
+          122.80494758810529
+        ],
+        "width": 398,
+        "viewportScale": 1,
+        "innerWidth": 430,
+        "canvasTouchAction": "pan-x pan-y",
+        "overflow": false
+      },
+      "focus": {
+        "style": "solid",
+        "width": 3
+      },
+      "external": [
+        "www.googletagmanager.com",
+        "images.unsplash.com"
+      ],
+      "touch": "scroll/pinch/pan passed",
+      "fallback": "geography failure/retry passed",
+      "errors": []
+    },
+    {
+      "failure": "webgl",
+      "fallback": "geographic preview and semantic discovery remain usable"
+    },
+    {
+      "failure": "timeout",
+      "fallback": "geographic preview and semantic discovery remain usable"
+    }
+  ],
+  "seo": {
+    "routes": 258,
+    "inventoryUnchanged": true,
+    "pages": [
+      {
+        "path": "index.html",
+        "title": "Short Breaks Hub – Curated City Breaks & Weekend Getaways",
+        "meta": [
+          "<meta name=\"description\" content=\"Discover curated city breaks and weekend getaways with destination ideas and practical 2–5 day itineraries for your next trip.\">",
+          "<meta name=\"robots\" content=\"index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1\">",
+          "<meta name=\"theme-color\" content=\"#FFD700\">",
+          "<meta name=\"twitter:card\" content=\"summary_large_image\">",
+          "<meta name=\"twitter:description\" content=\"Discover curated city breaks and weekend getaways with destination ideas and practical 2–5 day itineraries for your next trip.\">",
+          "<meta name=\"twitter:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta name=\"twitter:title\" content=\"Short Breaks Hub – Curated City Breaks &amp; Weekend Getaways\">",
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+          "<meta property=\"og:description\" content=\"Discover curated city breaks and weekend getaways with destination ideas and practical 2–5 day itineraries for your next trip.\">",
+          "<meta property=\"og:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta property=\"og:image:alt\" content=\"Collage of city break scenes from Asia and Europe\">",
+          "<meta property=\"og:image:type\" content=\"image/png\">",
+          "<meta property=\"og:title\" content=\"Short Breaks Hub – Curated City Breaks &amp; Weekend Getaways\">",
+          "<meta property=\"og:type\" content=\"website\">",
+          "<meta property=\"og:url\" content=\"https://www.shortbreakhub.com/\">"
+        ],
+        "canonical": "https://www.shortbreakhub.com/",
+        "jsonld": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/",
+            "logo": "https://www.shortbreakhub.com/favicon.png",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "email": "contact@shortbreakhub.com",
+                "availableLanguage": [
+                  "en"
+                ]
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/"
+          }
+        ],
+        "headings": [
+          "Short Breaks. Big Stories."
+        ],
+        "links": 37,
+        "status": "SEO unchanged; SSR content present"
+      },
+      {
+        "path": "europe/index.html",
+        "title": "Short Breaks in Europe | Regional Itineraries | Short Breaks Hub",
+        "meta": [
+          "<meta name=\"description\" content=\"Explore countries and curated short-break itineraries across Europe, with destination highlights and trip plans for your next getaway.\">",
+          "<meta name=\"robots\" content=\"index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1\">",
+          "<meta name=\"theme-color\" content=\"#FFD700\">",
+          "<meta name=\"twitter:card\" content=\"summary_large_image\">",
+          "<meta name=\"twitter:description\" content=\"Explore countries and curated short-break itineraries across Europe, with destination highlights and trip plans for your next getaway.\">",
+          "<meta name=\"twitter:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta name=\"twitter:title\" content=\"Short Breaks in Europe | Regional Itineraries | Short Breaks Hub\">",
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+          "<meta property=\"og:description\" content=\"Explore countries and curated short-break itineraries across Europe, with destination highlights and trip plans for your next getaway.\">",
+          "<meta property=\"og:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta property=\"og:image:alt\" content=\"Collage of city break scenes from Asia and Europe\">",
+          "<meta property=\"og:image:type\" content=\"image/png\">",
+          "<meta property=\"og:title\" content=\"Short Breaks in Europe | Regional Itineraries | Short Breaks Hub\">",
+          "<meta property=\"og:type\" content=\"website\">",
+          "<meta property=\"og:url\" content=\"https://www.shortbreakhub.com/europe\">"
+        ],
+        "canonical": "https://www.shortbreakhub.com/europe",
+        "jsonld": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/",
+            "logo": "https://www.shortbreakhub.com/favicon.png",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "email": "contact@shortbreakhub.com",
+                "availableLanguage": [
+                  "en"
+                ]
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/"
+          }
+        ],
+        "headings": [
+          "Discover Europe"
+        ],
+        "links": 60,
+        "status": "SEO unchanged; SSR content present"
+      },
+      {
+        "path": "browse/china/index.html",
+        "title": "Short Breaks in China | Short Breaks Hub",
+        "meta": [
+          "<meta name=\"description\" content=\"Discover curated short-break itineraries in China — days, highlights, and prices in one place.\">",
+          "<meta name=\"robots\" content=\"index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1\">",
+          "<meta name=\"theme-color\" content=\"#FFD700\">",
+          "<meta name=\"twitter:card\" content=\"summary_large_image\">",
+          "<meta name=\"twitter:description\" content=\"Discover curated short-break itineraries in China — days, highlights, and prices in one place.\">",
+          "<meta name=\"twitter:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta name=\"twitter:title\" content=\"Short Breaks in China | Short Breaks Hub\">",
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+          "<meta property=\"og:description\" content=\"Discover curated short-break itineraries in China — days, highlights, and prices in one place.\">",
+          "<meta property=\"og:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta property=\"og:image:alt\" content=\"Collage of city break scenes from Asia and Europe\">",
+          "<meta property=\"og:image:type\" content=\"image/png\">",
+          "<meta property=\"og:title\" content=\"Short Breaks in China | Short Breaks Hub\">",
+          "<meta property=\"og:type\" content=\"website\">",
+          "<meta property=\"og:url\" content=\"https://www.shortbreakhub.com/browse/china\">"
+        ],
+        "canonical": "https://www.shortbreakhub.com/browse/china",
+        "jsonld": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/",
+            "logo": "https://www.shortbreakhub.com/favicon.png",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "email": "contact@shortbreakhub.com",
+                "availableLanguage": [
+                  "en"
+                ]
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/"
+          }
+        ],
+        "headings": [
+          "Short Breaks In — China"
+        ],
+        "links": 24,
+        "status": "SEO unchanged; SSR content present"
+      },
+      {
+        "path": "itinerary/4-days-shanghai-where-the-future-never-waits/index.html",
+        "title": "Shanghai in 4 Days: Where the Future Never Waits | China | Short Breaks Hub",
+        "meta": [
+          "<meta name=\"description\" content=\"This 4-day Shanghai itinerary explores China’s most dynamic city through its skyline, historic concessions, river life, and everyday neighbourhoods. Designed to balance speed with observation, the itinerary moves between iconic modern spaces and quieter streets, allowing Shanghai’s sense of momentum and reinvention to reveal itself naturally.\">",
+          "<meta name=\"robots\" content=\"index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1\">",
+          "<meta name=\"theme-color\" content=\"#FFD700\">",
+          "<meta name=\"twitter:card\" content=\"summary_large_image\">",
+          "<meta name=\"twitter:description\" content=\"This 4-day Shanghai itinerary explores China’s most dynamic city through its skyline, historic concessions, river life, and everyday neighbourhoods. Designed to balance speed with observation, the itinerary moves between iconic modern spaces and quieter streets, allowing Shanghai’s sense of momentum and reinvention to reveal itself naturally.\">",
+          "<meta name=\"twitter:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta name=\"twitter:title\" content=\"Shanghai in 4 Days: Where the Future Never Waits | China | Short Breaks Hub\">",
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+          "<meta property=\"og:description\" content=\"This 4-day Shanghai itinerary explores China’s most dynamic city through its skyline, historic concessions, river life, and everyday neighbourhoods. Designed to balance speed with observation, the itinerary moves between iconic modern spaces and quieter streets, allowing Shanghai’s sense of momentum and reinvention to reveal itself naturally.\">",
+          "<meta property=\"og:image\" content=\"https://www.shortbreakhub.com/og-cover.png\">",
+          "<meta property=\"og:image:alt\" content=\"Collage of city break scenes from Asia and Europe\">",
+          "<meta property=\"og:image:type\" content=\"image/png\">",
+          "<meta property=\"og:title\" content=\"Shanghai in 4 Days: Where the Future Never Waits | China | Short Breaks Hub\">",
+          "<meta property=\"og:type\" content=\"website\">",
+          "<meta property=\"og:url\" content=\"https://www.shortbreakhub.com/itinerary/4-days-shanghai-where-the-future-never-waits\">"
+        ],
+        "canonical": "https://www.shortbreakhub.com/itinerary/4-days-shanghai-where-the-future-never-waits",
+        "jsonld": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/",
+            "logo": "https://www.shortbreakhub.com/favicon.png",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "email": "contact@shortbreakhub.com",
+                "availableLanguage": [
+                  "en"
+                ]
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Short Breaks Hub",
+            "url": "https://www.shortbreakhub.com/"
+          }
+        ],
+        "headings": [
+          "Shanghai in 4 Days: Where the Future Never Waits"
+        ],
+        "links": 15,
+        "status": "SEO unchanged; SSR content present"
+      }
+    ],
+    "shanghai": {
+      "destinationKey": "china--shanghai",
+      "name": "Shanghai",
+      "provider": "TRIP_COM",
+      "entityType": "CITY",
+      "status": "MAPPED",
+      "externalId": "2"
+    }
+  },
+  "otherRouteSmoke": {
+    "spa": {
+      "route": "/itinerary/4-days-paris-where-icons-meet-everyday-grace",
+      "errors": [],
+      "documentRequests": 1
+    },
+    "secondary": [
+      {
+        "route": "/login",
+        "errors": []
+      },
+      {
+        "route": "/register",
+        "errors": []
+      },
+      {
+        "route": "/community-itineraries/region",
+        "errors": []
+      },
+      {
+        "route": "/live-weather",
+        "errors": []
+      }
+    ]
+  },
+  "tests": {
+    "full": 625,
+    "focused": 25,
+    "failures": 0,
+    "skipped": 0
+  },
+  "runtimeExternalAtlasRequests": [],
+  "routeCount": 258
+}
