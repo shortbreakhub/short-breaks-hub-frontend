@@ -39,6 +39,20 @@
         "strasbourg": "Strasbourg",
         "marseille": "Marseille"
       },
+      "spainCaption": "ESPAGNE",
+      "spainStory": "Là où le soleil s’attarde, et où chaque soir recommence.",
+      "spainMapLabel": "Carte des récits de l’Espagne",
+      "spainPreviewAlt": "Carte illustrée des récits de l’Espagne",
+      "spainDestinations": "Explorer les itinéraires en Espagne",
+      "spainPlaces": {
+        "barcelona": "Barcelona",
+        "madrid": "Madrid",
+        "valencia": "Valencia",
+        "cordoba": "Córdoba",
+        "seville": "Seville",
+        "granada": "Granada",
+        "malaga": "Málaga"
+      },
       "travelling": "Voyage à travers l’atlas…",
       "sceneFailed": "La carte du pays n’a pas pu s’ouvrir. Vous pouvez à nouveau explorer l’Europe.",
       "countryExplore": "Explorer les escapades",

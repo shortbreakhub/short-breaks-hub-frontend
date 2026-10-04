@@ -3,6 +3,7 @@ import {createServer} from 'vite';
 import {chromium} from 'playwright';
 import {UK_DESTINATIONS} from '../src/components/home/atlas/ukDestinations.js';
 import {FRANCE_DESTINATIONS} from '../src/components/home/atlas/franceDestinations.js';
+import {SPAIN_DESTINATIONS} from '../src/components/home/atlas/spainDestinations.js';
 const ukHref=id=>'/itinerary/'+UK_DESTINATIONS.find(d=>d.id===id).slug;
 const regionPoint=(box,area)=>({x:box.x+area.artworkPosition.x*box.width,y:box.y+area.artworkPosition.y*box.height});
 // isVisible() ignores opacity; require the faded-in callout before asserting or capturing it.
@@ -70,36 +71,42 @@ async function checkUkItineraries(page,width){
         await page.evaluate(y=>scrollTo(0,y),before);await cdp.detach();
     }
 }
-// Issue #44: France loads only on selection, under cover, and reuses the UK interaction contract.
-const franceHref=id=>'/itinerary/'+FRANCE_DESTINATIONS.find(d=>d.id===id).slug;
-async function checkFranceScene(browser,origin,width){
+// Issues #44/#46: on-demand country scenes (France, Spain) share one check; the UK keeps its own section above.
+const COUNTRY_CHECKS={
+    france:{name:'France',destinations:FRANCE_DESTINATIONS,story:'FRANCE Where time slows, and beauty learns to stay.',nav:'Explore France itineraries',shots:'issue44-france',
+        hoverShots:['paris','strasbourg'],armedShots:['nice','marseille','paris','strasbourg'],pair:['marseille','nice'],drag:'nice',desktopNav:'paris',mobileNav:'marseille'},
+    spain:{name:'Spain',destinations:SPAIN_DESTINATIONS,story:'SPAIN Where the sun lingers, and every evening begins again.',nav:'Explore Spain itineraries',shots:'issue46-spain',
+        hoverShots:['barcelona','valencia','cordoba'],armedShots:['cordoba','seville','malaga','granada','barcelona'],pair:['cordoba','seville'],drag:'granada',desktopNav:'barcelona',mobileNav:'seville'},
+};
+async function checkCountryScene(browser,origin,width,scene){
+    const cfg=COUNTRY_CHECKS[scene],countryHref=id=>'/itinerary/'+cfg.destinations.find(d=>d.id===id).slug,count=cfg.destinations.length;
     const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390});
     await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
-    const page=await context.newPage(),errors=[],franceRequests=[];page.on('pageerror',error=>errors.push(error.message));
+    const page=await context.newPage(),errors=[],artRequests=[];page.on('pageerror',error=>errors.push(error.message));
     // Vite dev serves a tiny ?import JS module for the asset URL; only real image fetches count.
-    page.on('request',request=>{if(request.url().includes('france-atlas')&&request.resourceType()==='image')franceRequests.push(request.url());});
+    page.on('request',request=>{if(request.url().includes(scene+'-atlas')&&request.resourceType()==='image')artRequests.push(request.url());});
     await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
     await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(1200);
-    assert.deepEqual(franceRequests,[],'France artwork is not requested before France is selected');
-    const stage=page.locator('.atlas-stage'),paper=page.locator('.atlas-paper'),france=page.locator('[data-country="france"]');
+    assert.deepEqual(artRequests,[],cfg.name+' artwork is not requested before '+cfg.name+' is selected');
+    const stage=page.locator('.atlas-stage'),paper=page.locator('.atlas-paper'),country=page.locator('[data-country="'+scene+'"]');
     const heroTop=()=>page.locator('.home-copy').evaluate(el=>el.getBoundingClientRect().top+scrollY),topBefore=await heroTop();
-    if(width===390){await france.tap();assert.equal(await france.getAttribute('data-revealed'),'true');await france.tap();}else await france.click();
+    if(width===390){await country.tap();assert.equal(await country.getAttribute('data-revealed'),'true');await country.tap();}else await country.click();
     await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
-    assert.equal(await stage.getAttribute('data-atlas-scene'),'europe','France never shows before cover');
+    assert.equal(await stage.getAttribute('data-atlas-scene'),'europe',cfg.name+' never shows before cover');
     await page.locator('.atlas-stage[data-atlas-transition="covered"]').waitFor();
     assert.equal(await stage.getAttribute('data-atlas-scene'),'europe');assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true);
-    await page.locator('.atlas-stage[data-atlas-scene="france"][data-atlas-transition="idle"]').waitFor({timeout:12000});
-    assert.ok(franceRequests.length>=1,'France artwork loads on selection');
-    assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable in France');
+    await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor({timeout:12000});
+    assert.ok(artRequests.length>=1,cfg.name+' artwork loads on selection');
+    assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable in '+cfg.name);
     await page.waitForFunction(()=>document.activeElement?.classList.contains('atlas-back'));
-    assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),'FRANCE Where time slows, and beauty learns to stay.');
+    assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),cfg.story);
     const back=page.locator('.atlas-back'),backBox=await back.boundingBox(),box=await paper.boundingBox();
     assert.ok(backBox.y>=box.y+box.height,'Back stays outside the artwork');
-    const nav=page.getByRole('navigation',{name:'Explore France itineraries'});assert.equal(await nav.count(),1);
-    assert.equal(await nav.locator('a.atlas-itinerary').count(),6);assert.equal(await page.locator('.atlas-country').count(),0);
-    for(const d of FRANCE_DESTINATIONS){
+    const nav=page.getByRole('navigation',{name:cfg.nav});assert.equal(await nav.count(),1);
+    assert.equal(await nav.locator('a.atlas-itinerary').count(),count);assert.equal(await page.locator('.atlas-country').count(),0);
+    for(const d of cfg.destinations){
         const link=page.locator('[data-destination="'+d.id+'"]');
-        assert.equal(await link.getAttribute('href'),franceHref(d.id));assert.match(await link.getAttribute('aria-label'),/ — View itinerary$/);
+        assert.equal(await link.getAttribute('href'),countryHref(d.id));assert.match(await link.getAttribute('aria-label'),/ — View itinerary$/);
         assert.equal(await link.locator('a,button,[tabindex]').count(),0);
         for(const area of d.hitAreas){const {x,y}=regionPoint(box,area);
             assert.equal(await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.closest('.atlas-itinerary')?.dataset.destination,[x,y]),d.id,area.id+' resolves to '+d.id+' at '+width+'px');}
@@ -112,66 +119,86 @@ async function checkFranceScene(browser,origin,width){
     await page.evaluate(()=>{window.__countryClicks=[];window.__blockCountryClicks=true;window.addEventListener('click',event=>{const link=event.target.closest?.('.atlas-itinerary');if(!link||!window.__blockCountryClicks)return;window.__countryClicks.push({id:link.dataset.destination,prevented:event.defaultPrevented});event.preventDefault();});});
     const clicks=()=>page.evaluate(()=>window.__countryClicks.splice(0));
     if(width===1440){
-        for(const d of FRANCE_DESTINATIONS)for(const area of d.hitAreas){const {x,y}=regionPoint(box,area);await page.mouse.click(x,y);}
-        assert.deepEqual(await clicks(),FRANCE_DESTINATIONS.flatMap(d=>d.hitAreas.map(()=>({id:d.id,prevented:false}))),'every landmark and plate activates natively');
-        for(const d of FRANCE_DESTINATIONS){const {x,y}=regionPoint(box,d.hitAreas[0]);await page.mouse.move(x,y);await calloutInside(d.id);
-            if(['paris','strasbourg'].includes(d.id))await page.screenshot({path:'/tmp/issue44-france-hover-'+d.id+'-1440.png'});}
-        assert.equal((await page.locator('[data-destination="paris"] .atlas-itinerary-callout').textContent()).replace(/\s+/g,' ').trim(),'Paris · View itinerary →');
+        for(const d of cfg.destinations)for(const area of d.hitAreas){const {x,y}=regionPoint(box,area);await page.mouse.click(x,y);}
+        assert.deepEqual(await clicks(),cfg.destinations.flatMap(d=>d.hitAreas.map(()=>({id:d.id,prevented:false}))),'every landmark and plate activates natively');
+        for(const d of cfg.destinations){const {x,y}=regionPoint(box,d.hitAreas[0]);await page.mouse.move(x,y);await calloutInside(d.id);
+            if(cfg.hoverShots.includes(d.id))await page.screenshot({path:'/tmp/'+cfg.shots+'-hover-'+d.id+'-1440.png'});}
+        for(const d of cfg.destinations)assert.match((await page.locator('[data-destination="'+d.id+'"] .atlas-itinerary-callout').textContent()).replace(/\s+/g,' ').trim(),/^\S.* · View itinerary →$/);
         await page.mouse.move(box.x+5,box.y+5);await back.focus();const order=[];
-        for(let i=0;i<6;i++){await page.keyboard.press('Shift+Tab');order.unshift(await page.evaluate(()=>document.activeElement.dataset.destination));}
-        assert.deepEqual(order,FRANCE_DESTINATIONS.map(d=>d.id));
+        for(let i=0;i<count;i++){await page.keyboard.press('Shift+Tab');order.unshift(await page.evaluate(()=>document.activeElement.dataset.destination));}
+        assert.deepEqual(order,cfg.destinations.map(d=>d.id));
         const first=page.locator('[data-destination="'+order[0]+'"]');
         assert.equal(await first.evaluate(el=>el===document.activeElement&&el.matches(':focus-visible')),true);await calloutInside(order[0]);
         await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>document.activeElement.classList.contains('atlas-itinerary')),false);
         await back.focus();await page.keyboard.press('Enter');
     } else {
-        for(const d of FRANCE_DESTINATIONS)for(const area of d.hitAreas){
+        for(const d of cfg.destinations)for(const area of d.hitAreas){
             const {x,y}=regionPoint(box,area);await page.touchscreen.tap(x,y);
             assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),[d.id],area.id+' arms only '+d.id);
             assert.deepEqual(await clicks(),[{id:d.id,prevented:true}],'first tap does not navigate');
             if(area.kind==='landmark')await calloutInside(d.id);
-            if(area.kind==='landmark'&&['nice','marseille','paris','strasbourg'].includes(d.id))await page.screenshot({path:'/tmp/issue44-france-armed-'+d.id+'-390.png'});
+            if(area.kind==='landmark'&&cfg.armedShots.includes(d.id))await page.screenshot({path:'/tmp/'+cfg.shots+'-armed-'+d.id+'-390.png'});
             await page.locator('.atlas-country-story').tap();assert.equal(await page.locator('.atlas-itinerary[data-revealed="true"]').count(),0,'tapping elsewhere disarms');
         }
-        // Nice and Marseille arm independently of each other, in either order.
-        const tapId=async id=>{const {x,y}=regionPoint(box,FRANCE_DESTINATIONS.find(d=>d.id===id).hitAreas[0]);await page.touchscreen.tap(x,y);};
-        await tapId('marseille');await tapId('nice');
-        assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),['nice']);
-        await tapId('marseille');assert.deepEqual(await clicks(),[{id:'marseille',prevented:true},{id:'nice',prevented:true},{id:'marseille',prevented:true}]);
-        await tapId('marseille');assert.deepEqual(await clicks(),[{id:'marseille',prevented:false}],'second tap navigates natively');
+        // The closest pair (France: Marseille/Nice; Spain: Córdoba/Seville) arm independently.
+        const [first,second]=cfg.pair;
+        const tapId=async id=>{const {x,y}=regionPoint(box,cfg.destinations.find(d=>d.id===id).hitAreas[0]);await page.touchscreen.tap(x,y);};
+        await tapId(first);await tapId(second);
+        assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),[second]);
+        await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:true},{id:second,prevented:true},{id:first,prevented:true}]);
+        await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:false}],'second tap navigates natively');
         await page.locator('.atlas-country-story').tap();
-        const cdp=await context.newCDPSession(page),nice=regionPoint(box,FRANCE_DESTINATIONS.find(d=>d.id==='nice').hitAreas[0]);
+        const cdp=await context.newCDPSession(page),dragFrom=regionPoint(box,cfg.destinations.find(d=>d.id===cfg.drag).hitAreas[0]);
         const before=await page.evaluate(()=>scrollY),touch=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
-        await touch('touchStart',[nice]);for(let i=1;i<=6;i++)await touch('touchMove',[{x:nice.x,y:nice.y-i*20}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
-        assert.ok(await page.evaluate(()=>scrollY)>before,'one finger scrolls the page from a France destination');
+        await touch('touchStart',[dragFrom]);for(let i=1;i<=6;i++)await touch('touchMove',[{x:dragFrom.x,y:dragFrom.y-i*20}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
+        assert.ok(await page.evaluate(()=>scrollY)>before,'one finger scrolls the page from a '+cfg.name+' destination');
         assert.equal(await page.locator('.atlas-itinerary[data-revealed="true"]').count(),0);assert.deepEqual(await clicks(),[]);
         await page.evaluate(y=>scrollTo(0,y),before);await cdp.detach();
         await back.tap();
     }
     await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
-    assert.equal(await page.locator('.atlas-itinerary').count(),6);assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true,'France itineraries are inert while clouds travel');
+    assert.equal(await page.locator('.atlas-itinerary').count(),count);assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true,cfg.name+' itineraries are inert while clouds travel');
     assert.equal(await back.isDisabled(),true,'Back is disabled during travel');
     await page.locator('.atlas-stage[data-atlas-scene="europe"][data-atlas-transition="idle"]').waitFor();
     assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),9);
-    await page.waitForFunction(()=>document.activeElement?.dataset.country==='france');
-    assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable after France');
+    await page.waitForFunction(id=>document.activeElement?.dataset.country===id,scene);
+    assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable after '+cfg.name);
     await page.emulateMedia({reducedMotion:'reduce'});
-    if(width===390){await france.tap();await france.tap();}else await france.click();const reducedStart=Date.now();
-    await page.locator('.atlas-stage[data-atlas-scene="france"][data-atlas-transition="idle"]').waitFor();
-    assert.ok(Date.now()-reducedStart<500,'reduced-motion France swap remains near instant');
+    if(width===390){await country.tap();await country.tap();}else await country.click();const reducedStart=Date.now();
+    await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor();
+    assert.ok(Date.now()-reducedStart<500,'reduced-motion '+cfg.name+' swap remains near instant');
     assert.equal(await page.locator('.atlas-cloud-transition').count(),0);
     await page.evaluate(()=>{window.__blockCountryClicks=false;});
     if(width===1440){
-        const [tab]=await Promise.all([context.waitForEvent('page'),page.locator('[data-destination="paris"]').click({modifiers:['ControlOrMeta']})]);
-        await tab.waitForURL('**'+franceHref('paris'));assert.equal(new URL(page.url()).pathname,'/');await tab.close();
-        await page.locator('[data-destination="paris"]').click();await page.waitForURL('**'+franceHref('paris'));
+        const [tab]=await Promise.all([context.waitForEvent('page'),page.locator('[data-destination="'+cfg.desktopNav+'"]').click({modifiers:['ControlOrMeta']})]);
+        await tab.waitForURL('**'+countryHref(cfg.desktopNav));assert.equal(new URL(page.url()).pathname,'/');await tab.close();
+        await page.locator('[data-destination="'+cfg.desktopNav+'"]').click();await page.waitForURL('**'+countryHref(cfg.desktopNav));
     } else {
-        const link=page.locator('[data-destination="marseille"]');await link.tap();assert.equal(new URL(page.url()).pathname,'/');
-        await link.tap();await page.waitForURL('**'+franceHref('marseille'));
+        const link=page.locator('[data-destination="'+cfg.mobileNav+'"]');await link.tap();assert.equal(new URL(page.url()).pathname,'/');
+        await link.tap();await page.waitForURL('**'+countryHref(cfg.mobileNav));
     }
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-    assert.deepEqual(errors,[]);console.log(width+': France scene, on-demand artwork, interaction and navigation to '+new URL(page.url()).pathname+' passed');
+    assert.deepEqual(errors,[]);console.log(width+': '+cfg.name+' scene, on-demand artwork, interaction and navigation to '+new URL(page.url()).pathname+' passed');
     await context.close();
+}
+// A failed country image restores Europe under cover, announces it, refocuses the country and stays retryable.
+async function checkSceneFailure(browser,origin,scene){
+    const context=await browser.newContext({viewport:{width:1440,height:900}});
+    const block=route=>route.request().resourceType()==='image'?route.abort():route.continue();
+    await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
+    await context.route('**/*'+scene+'-atlas*',block);
+    const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+    await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
+    const country=page.locator('[data-country="'+scene+'"]');await country.click();
+    await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
+    await page.locator('.atlas-stage[data-atlas-scene="europe"][data-atlas-transition="idle"]').waitFor({timeout:15000});
+    assert.equal(await page.getByRole('alert').filter({hasText:'The country map could not open. Europe is ready to explore again.'}).count(),1);
+    await page.waitForFunction(id=>document.activeElement?.dataset.country===id,scene);
+    assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),9);
+    await context.unroute('**/*'+scene+'-atlas*',block);await country.click();
+    await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor({timeout:15000});
+    assert.equal(await page.getByRole('alert').count(),0,'retry clears the failure alert');
+    assert.deepEqual(errors,[]);console.log('1440: '+scene+' image failure restored Europe, refocused the country and retried successfully');await context.close();
 }
 // Real navigation and native modified clicks, isolated from the transition checks above.
 async function checkUkNavigation(browser,origin,width){
@@ -290,6 +317,8 @@ try {
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
         await checkUkNavigation(browser,origin,width);
-        await checkFranceScene(browser,origin,width);
+        await checkCountryScene(browser,origin,width,'france');
+        await checkCountryScene(browser,origin,width,'spain');
+        if(width===1440)await checkSceneFailure(browser,origin,'spain');
     }
 } finally {await browser?.close();await vite.close();}
