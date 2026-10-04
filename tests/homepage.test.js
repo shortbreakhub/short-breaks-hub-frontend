@@ -42,9 +42,9 @@ test("homepage renders semantic, localized discovery and replaceable atlas scene
             assert.ok(doc.querySelector("#home-country").disabled);
             assert.ok(doc.querySelector('button[type="submit"]').disabled);
             assert.ok(doc.querySelector("form").getAttribute("aria-label"));
-            assert.equal(doc.querySelectorAll(".atlas-destinations a[href]").length, 6);
+            assert.equal(doc.querySelectorAll(".atlas-destinations,.atlas-landmark,.atlas-pin,.atlas-label").length, 0);
             for (const svg of doc.querySelectorAll(".atlas-stage svg")) assert.equal(svg.getAttribute("aria-hidden"), "true");
-            const images = [...doc.querySelectorAll("main img")];
+            const images = [...doc.querySelectorAll(".home-editorial img")];
             assert.equal(images.length, 7);
             for (const image of images) {
                 assert.ok(image.alt); assert.equal(image.loading || image.getAttribute("loading"), "lazy");
@@ -55,15 +55,28 @@ test("homepage renders semantic, localized discovery and replaceable atlas scene
             }
             assert.doesNotMatch(doc.body.textContent, /homeMagazine\.|undefined|Loading countries|Chargement des pays/);
         });
-        await t.test("atlas scenery and landmark artwork can be replaced independently of links", () => {
-            const doc = render(React.createElement(Atlas, {destinations: stories,
-                visualLayer: React.createElement("div", {"data-replacement": "world"}),
-                renderLandmark: key => React.createElement("span", {"data-replacement-landmark": key})}));
-            assert.ok(doc.querySelector('[data-replacement="world"]'));
-            assert.equal(doc.querySelectorAll(".atlas-visual,.atlas-landmark").length, 0);
-            assert.equal(doc.querySelectorAll("[data-replacement-landmark]").length, 6);
-            assert.equal(doc.querySelectorAll("a[href^='/itinerary/']").length, 6);
-            assert.equal(doc.querySelectorAll("button").length, 0, "no pretend map controls");
+        await t.test("naked atlas prerenders real geography and an accessible activation boundary", () => {
+            const doc = render(React.createElement(Atlas));
+            assert.equal(doc.querySelector('[data-atlas-stage="illustrated-europe"]').getAttribute("data-atlas-state"), "preview");
+            const controls = [...doc.querySelectorAll('.atlas-country')];
+            assert.equal(controls.length,9);
+            assert.equal(new Set(controls.map(a=>a.getAttribute('href'))).size,9);
+            for (const control of controls) {
+                assert.match(control.getAttribute('href'), /^\/browse\//);
+                assert.ok(control.getAttribute('aria-label'));
+                assert.equal(control.getAttribute('draggable'),'false');
+                for(const hit of control.querySelectorAll('[data-hit-area]')){
+                    assert.equal(hit.tagName,'SPAN');assert.equal(hit.getAttribute('aria-hidden'),'true');
+                    assert.equal(hit.hasAttribute('tabindex'),false);
+                }
+                assert.ok(control.querySelector('.atlas-country-callout strong').textContent);
+            }
+            const preview = doc.querySelector(".atlas-preview");
+            assert.ok(preview.alt); assert.match(preview.getAttribute("src"), /europe-atlas\.png/);
+            assert.equal(preview.getAttribute("loading"), "eager");
+            assert.ok(doc.querySelector("button[type=button]"));
+            assert.equal(doc.querySelectorAll("canvas,.atlas-destinations,.atlas-landmark,.atlas-pin,.atlas-label").length, 0);
+            assert.ok(doc.querySelector('.atlas-map[role="region"][aria-describedby="atlas-gestures"]'));
         });
     } finally {for (const dom of doms) dom.window.close(); await vite.close();}
 });

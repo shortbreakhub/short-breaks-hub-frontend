@@ -8,9 +8,25 @@
       "stories": "Trouvez votre prochaine histoire"
     },
     "atlas": {
-      "caption": "Le monde, une escapade à la fois",
+      "countryExplore": "Explorer les escapades",
+      "mapLabel": "Atlas interactif de l’Europe",
+      "previewUnavailable": "Un monde d’histoires vous attend. Découvrez les destinations ci-dessous.",
+      "previewAlt": "Atlas de voyage illustré de l’Europe",
+      "reload": "Recharger la page",
+      "explore": "Explorer la carte",
+      "failed": "La carte interactive est indisponible. Vous pouvez toujours découvrir les destinations ci-dessous.",
+      "loading": "Ouverture de l’atlas européen…",
+      "controls": "Commandes de la carte",
+      "zoomIn": "Agrandir la carte",
+      "zoomOut": "Réduire la carte",
+      "reset": "Rétablir la vue de l’Europe",
+      "gestures": "Faites glisser pour déplacer la carte. Zoomez avec Ctrl/⌘ + défilement, ou utilisez deux doigts sur écran tactile.",
+      "wheelHint": "Utilisez Ctrl + défilement pour zoomer sur la carte",
+      "wheelHintMac": "Utilisez ⌘ + défilement pour zoomer sur la carte",
+      "touchHint": "Utilisez deux doigts pour déplacer la carte",
+      "caption": "L’Europe, une escapade à la fois",
       "hint": "Choisissez une destination à découvrir",
-      "destinations": "Une sélection de destinations dans le monde"
+      "destinations": "Explorer les destinations d’Europe"
     },
     "discovery": {
       "kicker": "Votre prochain chapitre",
