@@ -4,6 +4,7 @@ import {chromium} from 'playwright';
 import {UK_DESTINATIONS} from '../src/components/home/atlas/ukDestinations.js';
 import {FRANCE_DESTINATIONS} from '../src/components/home/atlas/franceDestinations.js';
 import {SPAIN_DESTINATIONS} from '../src/components/home/atlas/spainDestinations.js';
+import {PORTUGAL_DESTINATIONS} from '../src/components/home/atlas/portugalDestinations.js';
 const ukHref=id=>'/itinerary/'+UK_DESTINATIONS.find(d=>d.id===id).slug;
 const regionPoint=(box,area)=>({x:box.x+area.artworkPosition.x*box.width,y:box.y+area.artworkPosition.y*box.height});
 // isVisible() ignores opacity; require the faded-in callout before asserting or capturing it.
@@ -71,12 +72,14 @@ async function checkUkItineraries(page,width){
         await page.evaluate(y=>scrollTo(0,y),before);await cdp.detach();
     }
 }
-// Issues #44/#46: on-demand country scenes (France, Spain) share one check; the UK keeps its own section above.
+// Issues #44/#46/#48: on-demand country scenes (France, Spain, Portugal) share one check; the UK keeps its own section above.
 const COUNTRY_CHECKS={
     france:{name:'France',destinations:FRANCE_DESTINATIONS,story:'FRANCE Where time slows, and beauty learns to stay.',nav:'Explore France itineraries',shots:'issue44-france',
         hoverShots:['paris','strasbourg'],armedShots:['nice','marseille','paris','strasbourg'],pair:['marseille','nice'],drag:'nice',desktopNav:'paris',mobileNav:'marseille'},
     spain:{name:'Spain',destinations:SPAIN_DESTINATIONS,story:'SPAIN Where the sun lingers, and every evening begins again.',nav:'Explore Spain itineraries',shots:'issue46-spain',
         hoverShots:['barcelona','valencia','cordoba'],armedShots:['cordoba','seville','malaga','granada','barcelona'],pair:['cordoba','seville'],drag:'granada',desktopNav:'barcelona',mobileNav:'seville'},
+    portugal:{name:'Portugal',asset:'portugal_atlas',destinations:PORTUGAL_DESTINATIONS,story:'PORTUGAL Where the land ends, and the horizon begins.',nav:'Explore Portugal itineraries',shots:'issue48-portugal',
+        hoverShots:['porto','sintra','lagos'],armedShots:['porto','sintra','lisbon','lagos','faro'],pairs:[['sintra','lisbon'],['lagos','faro']],drag:'lisbon',desktopNav:'porto',mobileNav:'faro'},
 };
 async function checkCountryScene(browser,origin,width,scene){
     const cfg=COUNTRY_CHECKS[scene],countryHref=id=>'/itinerary/'+cfg.destinations.find(d=>d.id===id).slug,count=cfg.destinations.length;
@@ -84,7 +87,7 @@ async function checkCountryScene(browser,origin,width,scene){
     await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
     const page=await context.newPage(),errors=[],artRequests=[];page.on('pageerror',error=>errors.push(error.message));
     // Vite dev serves a tiny ?import JS module for the asset URL; only real image fetches count.
-    page.on('request',request=>{if(request.url().includes(scene+'-atlas')&&request.resourceType()==='image')artRequests.push(request.url());});
+    page.on('request',request=>{if(request.url().includes(cfg.asset||scene+'-atlas')&&request.resourceType()==='image')artRequests.push(request.url());});
     await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
     await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(1200);
     assert.deepEqual(artRequests,[],cfg.name+' artwork is not requested before '+cfg.name+' is selected');
@@ -140,14 +143,15 @@ async function checkCountryScene(browser,origin,width,scene){
             if(area.kind==='landmark'&&cfg.armedShots.includes(d.id))await page.screenshot({path:'/tmp/'+cfg.shots+'-armed-'+d.id+'-390.png'});
             await page.locator('.atlas-country-story').tap();assert.equal(await page.locator('.atlas-itinerary[data-revealed="true"]').count(),0,'tapping elsewhere disarms');
         }
-        // The closest pair (France: Marseille/Nice; Spain: Córdoba/Seville) arm independently.
-        const [first,second]=cfg.pair;
+        // The closest pairs (France: Marseille/Nice; Spain: Córdoba/Seville; Portugal: Sintra/Lisbon, Lagos/Faro) arm independently.
         const tapId=async id=>{const {x,y}=regionPoint(box,cfg.destinations.find(d=>d.id===id).hitAreas[0]);await page.touchscreen.tap(x,y);};
-        await tapId(first);await tapId(second);
-        assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),[second]);
-        await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:true},{id:second,prevented:true},{id:first,prevented:true}]);
-        await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:false}],'second tap navigates natively');
-        await page.locator('.atlas-country-story').tap();
+        for(const [first,second] of cfg.pairs||[cfg.pair]){
+            await tapId(first);await tapId(second);
+            assert.deepEqual(await page.locator('.atlas-itinerary[data-revealed="true"]').evaluateAll(els=>els.map(el=>el.dataset.destination)),[second]);
+            await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:true},{id:second,prevented:true},{id:first,prevented:true}]);
+            await tapId(first);assert.deepEqual(await clicks(),[{id:first,prevented:false}],'second tap navigates natively');
+            await page.locator('.atlas-country-story').tap();
+        }
         const cdp=await context.newCDPSession(page),dragFrom=regionPoint(box,cfg.destinations.find(d=>d.id===cfg.drag).hitAreas[0]);
         const before=await page.evaluate(()=>scrollY),touch=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
         await touch('touchStart',[dragFrom]);for(let i=1;i<=6;i++)await touch('touchMove',[{x:dragFrom.x,y:dragFrom.y-i*20}]);await touch('touchEnd',[]);await page.waitForTimeout(200);
@@ -183,10 +187,11 @@ async function checkCountryScene(browser,origin,width,scene){
 }
 // A failed country image restores Europe under cover, announces it, refocuses the country and stays retryable.
 async function checkSceneFailure(browser,origin,scene){
+    const asset=COUNTRY_CHECKS[scene].asset||scene+'-atlas';
     const context=await browser.newContext({viewport:{width:1440,height:900}});
     const block=route=>route.request().resourceType()==='image'?route.abort():route.continue();
     await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
-    await context.route('**/*'+scene+'-atlas*',block);
+    await context.route('**/*'+asset+'*',block);
     const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.atlas-preview:not([hidden])').evaluate(image=>image.decode());
     const country=page.locator('[data-country="'+scene+'"]');await country.click();
@@ -195,7 +200,7 @@ async function checkSceneFailure(browser,origin,scene){
     assert.equal(await page.getByRole('alert').filter({hasText:'The country map could not open. Europe is ready to explore again.'}).count(),1);
     await page.waitForFunction(id=>document.activeElement?.dataset.country===id,scene);
     assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),9);
-    await context.unroute('**/*'+scene+'-atlas*',block);await country.click();
+    await context.unroute('**/*'+asset+'*',block);await country.click();
     await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor({timeout:15000});
     assert.equal(await page.getByRole('alert').count(),0,'retry clears the failure alert');
     assert.deepEqual(errors,[]);console.log('1440: '+scene+' image failure restored Europe, refocused the country and retried successfully');await context.close();
@@ -319,6 +324,7 @@ try {
         await checkUkNavigation(browser,origin,width);
         await checkCountryScene(browser,origin,width,'france');
         await checkCountryScene(browser,origin,width,'spain');
-        if(width===1440)await checkSceneFailure(browser,origin,'spain');
+        await checkCountryScene(browser,origin,width,'portugal');
+        if(width===1440){await checkSceneFailure(browser,origin,'spain');await checkSceneFailure(browser,origin,'portugal');}
     }
 } finally {await browser?.close();await vite.close();}

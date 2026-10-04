@@ -53,6 +53,18 @@
         "granada": "Granada",
         "malaga": "Málaga"
       },
+      "portugalCaption": "PORTUGAL",
+      "portugalStory": "Where the land ends, and the horizon begins.",
+      "portugalMapLabel": "Portugal story map",
+      "portugalPreviewAlt": "Illustrated Portugal country story map",
+      "portugalDestinations": "Explore Portugal itineraries",
+      "portugalPlaces": {
+        "porto": "Porto",
+        "sintra": "Sintra",
+        "lisbon": "Lisbon",
+        "lagos": "Lagos",
+        "faro": "Faro"
+      },
       "travelling": "Travelling through the atlas…",
       "sceneFailed": "The country map could not open. Europe is ready to explore again.",
       "countryExplore": "Explore short breaks",
