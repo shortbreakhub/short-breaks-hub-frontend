@@ -5,6 +5,11 @@ import {UK_DESTINATIONS} from '../src/components/home/atlas/ukDestinations.js';
 import {FRANCE_DESTINATIONS} from '../src/components/home/atlas/franceDestinations.js';
 import {SPAIN_DESTINATIONS} from '../src/components/home/atlas/spainDestinations.js';
 import {PORTUGAL_DESTINATIONS} from '../src/components/home/atlas/portugalDestinations.js';
+import {GERMANY_DESTINATIONS} from '../src/components/home/atlas/germanyDestinations.js';
+import {GREECE_DESTINATIONS} from '../src/components/home/atlas/greeceDestinations.js';
+import {ITALY_DESTINATIONS} from '../src/components/home/atlas/italyDestinations.js';
+import {NETHERLANDS_DESTINATIONS} from '../src/components/home/atlas/netherlandsDestinations.js';
+import {SWITZERLAND_DESTINATIONS} from '../src/components/home/atlas/switzerlandDestinations.js';
 const ukHref=id=>'/itinerary/'+UK_DESTINATIONS.find(d=>d.id===id).slug;
 const regionPoint=(box,area)=>({x:box.x+area.artworkPosition.x*box.width,y:box.y+area.artworkPosition.y*box.height});
 // isVisible() ignores opacity; require the faded-in callout before asserting or capturing it.
@@ -80,6 +85,16 @@ const COUNTRY_CHECKS={
         hoverShots:['barcelona','valencia','cordoba'],armedShots:['cordoba','seville','malaga','granada','barcelona'],pair:['cordoba','seville'],drag:'granada',desktopNav:'barcelona',mobileNav:'seville'},
     portugal:{name:'Portugal',asset:'portugal_atlas',destinations:PORTUGAL_DESTINATIONS,story:'PORTUGAL Where the land ends, and the horizon begins.',nav:'Explore Portugal itineraries',shots:'issue48-portugal',
         hoverShots:['porto','sintra','lagos'],armedShots:['porto','sintra','lisbon','lagos','faro'],pairs:[['sintra','lisbon'],['lagos','faro']],drag:'lisbon',desktopNav:'porto',mobileNav:'faro'},
+    germany:{name:'Germany',destinations:GERMANY_DESTINATIONS,story:'GERMANY Where old worlds endure, and new stories take their place.',nav:'Explore Germany itineraries',shots:'issue52-germany',
+        hoverShots:['hamburg','berlin','heidelberg'],armedShots:['hamburg','berlin','munich'],pairs:[['cologne','heidelberg']],drag:'berlin',desktopNav:'hamburg',mobileNav:'munich'},
+    greece:{name:'Greece',destinations:GREECE_DESTINATIONS,story:'GREECE Where the sea remembers, and old stories never quite end.',nav:'Explore Greece itineraries',shots:'issue52-greece',
+        hoverShots:['thessaloniki','rhodes','crete'],armedShots:['athens','santorini','crete','rhodes'],pairs:[['santorini','crete']],drag:'athens',desktopNav:'athens',mobileNav:'crete'},
+    italy:{name:'Italy',destinations:ITALY_DESTINATIONS,story:'ITALY Where history lives on, and every region tells a story.',nav:'Explore Italy itineraries',shots:'issue52-italy',
+        hoverShots:['milan','venice','palermo'],armedShots:['florence','naples','palermo'],pairs:[['venice','florence'],['rome','naples']],drag:'rome',desktopNav:'milan',mobileNav:'palermo'},
+    netherlands:{name:'Netherlands',destinations:NETHERLANDS_DESTINATIONS,story:'NETHERLANDS Where water shapes the land, and ideas flow further.',nav:'Explore Netherlands itineraries',shots:'issue52-netherlands',
+        hoverShots:['haarlem','amsterdam','utrecht'],armedShots:['haarlem','amsterdam','the-hague','rotterdam'],pairs:[['haarlem','amsterdam'],['the-hague','rotterdam']],drag:'amsterdam',desktopNav:'amsterdam',mobileNav:'rotterdam'},
+    switzerland:{name:'Switzerland',destinations:SWITZERLAND_DESTINATIONS,story:'SWITZERLAND Mountains, lakes, and timeless moments at every turn.',nav:'Explore Switzerland itineraries',shots:'issue52-switzerland',
+        hoverShots:['zurich','geneva','zermatt'],armedShots:['lucerne','interlaken','geneva','zermatt'],pairs:[['zurich','lucerne'],['bern','interlaken']],drag:'bern',desktopNav:'zurich',mobileNav:'geneva'},
 };
 async function checkCountryScene(browser,origin,width,scene){
     const cfg=COUNTRY_CHECKS[scene],countryHref=id=>'/itinerary/'+cfg.destinations.find(d=>d.id===id).slug,count=cfg.destinations.length;
@@ -116,6 +131,7 @@ async function checkCountryScene(browser,origin,width,scene){
     }
     assert.equal(await page.locator('.atlas-itinerary-callout:visible').count(),0,'no permanent callouts');
     // Callouts must stay inside the clipped frame (Paris/Strasbourg top edge, Strasbourg right edge).
+    await page.screenshot({path:'/tmp/'+cfg.shots+'-default-'+width+'.png'});
     const calloutInside=async id=>{const link=page.locator('[data-destination="'+id+'"]');assert.equal(await calloutShown(link),true,id+' callout shows');
         const c=await link.locator('.atlas-itinerary-callout').boundingBox();
         assert.ok(c.x>=box.x-1&&c.y>=box.y-1&&c.x+c.width<=box.x+box.width+1&&c.y+c.height<=box.y+box.height+1,id+' callout stays inside the artwork at '+width+'px');};
@@ -169,9 +185,13 @@ async function checkCountryScene(browser,origin,width,scene){
     assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable after '+cfg.name);
     await page.emulateMedia({reducedMotion:'reduce'});
     if(width===390){await country.tap();await country.tap();}else await country.click();const reducedStart=Date.now();
-    await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor();
+    // Measure scene readiness per frame, rather than locator retry backoff.
+    await page.waitForFunction(id=>{const stage=document.querySelector('.atlas-stage');return stage?.dataset.atlasScene===id&&stage.dataset.atlasTransition==='idle';},scene,{polling:'raf'});
     assert.ok(Date.now()-reducedStart<500,'reduced-motion '+cfg.name+' swap remains near instant');
     assert.equal(await page.locator('.atlas-cloud-transition').count(),0);
+    // Completion restores focus on the next animation frame, after idle is rendered.
+    // Wait for that existing readiness signal before testing native modified clicks.
+    await page.waitForFunction(()=>document.activeElement?.classList.contains('atlas-back'));
     await page.evaluate(()=>{window.__blockCountryClicks=false;});
     if(width===1440){
         const [tab]=await Promise.all([context.waitForEvent('page'),page.locator('[data-destination="'+cfg.desktopNav+'"]').click({modifiers:['ControlOrMeta']})]);
@@ -322,9 +342,7 @@ try {
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
         await checkUkNavigation(browser,origin,width);
-        await checkCountryScene(browser,origin,width,'france');
-        await checkCountryScene(browser,origin,width,'spain');
-        await checkCountryScene(browser,origin,width,'portugal');
-        if(width===1440){await checkSceneFailure(browser,origin,'spain');await checkSceneFailure(browser,origin,'portugal');}
+        for(const scene of Object.keys(COUNTRY_CHECKS))await checkCountryScene(browser,origin,width,scene);
+        if(width===1440)for(const scene of ['spain','portugal','germany','greece','italy','netherlands','switzerland'])await checkSceneFailure(browser,origin,scene);
     }
 } finally {await browser?.close();await vite.close();}
