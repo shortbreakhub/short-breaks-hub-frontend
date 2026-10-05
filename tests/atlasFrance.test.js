@@ -94,10 +94,11 @@ test("France and UK scenes share one configuration-driven layer", async t => {
         const {default: CountryDestinations} = await vite.ssrLoadModule("/src/components/home/atlas/CountryDestinations.jsx");
         const {COUNTRY_SCENES, sceneForCountry} = await vite.ssrLoadModule("/src/components/home/atlas/countryScenes.js");
         const {SCENE_ASSETS} = await vite.ssrLoadModule("/src/components/home/atlas/useAtlasScene.js");
-        assert.deepEqual(Object.keys(COUNTRY_SCENES), ["uk", "france", "spain", "portugal"]);
-        assert.deepEqual(Object.keys(SCENE_ASSETS), ["europe", "uk", "france", "spain", "portugal"]);
+        assert.deepEqual(Object.keys(COUNTRY_SCENES), ["uk", "france", "spain", "portugal", "germany", "greece", "italy", "netherlands", "switzerland"]);
+        assert.deepEqual(Object.keys(SCENE_ASSETS), ["europe", "uk", "france", "spain", "portugal", "germany", "greece", "italy", "netherlands", "switzerland"]);
         assert.equal(sceneForCountry("france"), "france"); assert.equal(sceneForCountry("united-kingdom"), "uk");
-        assert.equal(sceneForCountry("italy"), undefined);
+        assert.equal(sceneForCountry("italy"), "italy");
+        assert.equal(sceneForCountry("austria"), undefined);
         assert.equal(COUNTRY_SCENES.uk.destinations.length, UK_DESTINATIONS.length);
         for (const [language, nav, action] of [["en", "Explore France itineraries", "View itinerary"], ["fr", "Explorer les itinéraires en France", "Voir l’itinéraire"]]) await t.test(language, async () => {
             await i18n.changeLanguage(language);
