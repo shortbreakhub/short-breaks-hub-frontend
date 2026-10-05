@@ -7,7 +7,7 @@ import {
 import {Auth} from "../auth.js";
 import {useTranslation} from "react-i18next";
 
-export default function Comments({ itineraryId }) {
+export default function Comments({ itineraryId, headingLevel = 3 }) {
 
     const [showComposer, setShowComposer] = React.useState(false);
     const [body, setBody] = React.useState("");
@@ -22,6 +22,7 @@ export default function Comments({ itineraryId }) {
     const [showModal, setShowModal] = useState(null);
     const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false);
     const { t } = useTranslation();
+    const CommentsHeading = headingLevel === 2 ? "h2" : "h3";
 
     function loadComments(p = 0) {
         getCommentList(itineraryId).then((res) => {
@@ -131,9 +132,9 @@ export default function Comments({ itineraryId }) {
     return (
         <section id="comments" className="mt-10">
             <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold">
+                <CommentsHeading className="text-lg font-semibold">
                     {t("comments.comments")} {commentCount > 0 && <span className="text-slate-500">({commentCount})</span>}
-                </h3>
+                </CommentsHeading>
                 <button
                     className="px-3 py-2 rounded border hover:bg-slate-50 cursor-pointer"
                     onClick={() => setShowComposer(s => !s)}

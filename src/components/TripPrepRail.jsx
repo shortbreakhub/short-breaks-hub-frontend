@@ -6,16 +6,16 @@ function ProgressBar({ done, total }) {
     const pct = total === 0 ? 0 : Math.round((done / total) * 100);
     const { t } = useTranslation();
     return (
-        <div className="mt-2">
+        <div className="itinerary-prep-rail__progress mt-2">
             <div className="flex items-center justify-between text-xs text-gray-600">
         <span>
           {done}/{total}  {t("tripPrepRail.progressBar.done")}
         </span>
                 <span>{pct}%</span>
             </div>
-            <div className="mt-1 h-2 w-full rounded-full bg-gray-200">
+            <div className="itinerary-prep-rail__progress-track mt-1 h-2 w-full rounded-full bg-gray-200">
                 <div
-                    className="h-2 rounded-full bg-gray-900 transition-all"
+                    className="itinerary-prep-rail__progress-fill h-2 rounded-full bg-gray-900 transition-all"
                     style={{ width: `${pct}%` }}
                 />
             </div>
@@ -27,7 +27,7 @@ function StatusPill({ done }) {
     const { t } = useTranslation();
     return (
         <span
-            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
+            className={`itinerary-prep-rail__status inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                 done ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
             }`}
 
@@ -50,7 +50,7 @@ function PrimaryButton({ children, onClick, disabled, className = "" }) {
             disabled={disabled}
             onClick={onClick}
             className={[
-                "inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition",
+                "itinerary-prep-rail__button-primary inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition",
                 disabled
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                     : "bg-gray-900 text-white hover:bg-black",
@@ -69,7 +69,7 @@ function SecondaryButton({ children, onClick, disabled, className = "" }) {
             disabled={disabled}
             onClick={onClick}
             className={[
-                "inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium transition",
+                "itinerary-prep-rail__button-secondary inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium transition",
                 disabled
                     ? "border-gray-200 text-gray-400 cursor-not-allowed"
                     : "border-gray-300 text-gray-800 hover:bg-gray-50",
@@ -434,15 +434,15 @@ export default function TripPrepRail({
 
     return (
         <>
-            <aside className="space-y-4">
+            <aside className="itinerary-prep-rail space-y-4">
 
-                <div className="bg-white rounded-xl shadow p-4">
+                <div className="itinerary-prep-rail__panel itinerary-prep-rail__overview bg-white rounded-xl shadow p-4">
                     <div className="flex items-start justify-between gap-3">
                         <div>
                             <h3 className="text-lg font-semibold">{t("tripPrepRail.mainFrame.tripPrep")}</h3>
                             <p className="text-sm text-gray-600">
                                 {city ? `${city}${country ? `, ${country}` : ""}` : t("tripPrepRail.mainFrame.progress")}
-                                {days ? ` · ${days} days` : ""}
+                                {days ? ` · ${days} ${t("itineraryPage.days")}` : ""}
                             </p>
                         </div>
 
@@ -460,13 +460,13 @@ export default function TripPrepRail({
                 </div>
 
 
-                <div className="bg-white rounded-xl shadow p-4">
+                <div className="itinerary-prep-rail__panel itinerary-prep-rail__next bg-white rounded-xl shadow p-4">
                     <div className="flex items-center justify-between">
                         <h4 className="text-sm font-semibold text-gray-900">{t("tripPrepRail.mainFrame.nextUp")}</h4>
                         <span className="text-xs text-gray-600">{remaining} {t("tripPrepRail.mainFrame.remaining")}</span>
                     </div>
 
-                    <div className="mt-3 rounded-lg border border-gray-200 p-3">
+                    <div className="itinerary-prep-rail__next-content mt-3 rounded-lg border border-gray-200 p-3">
                         {nextUp ? (
                             <div>
                                 <div className="flex items-center gap-2">
@@ -502,7 +502,7 @@ export default function TripPrepRail({
                 </div>
 
 
-                <div className="bg-white rounded-xl shadow p-4">
+                <div className="itinerary-prep-rail__panel itinerary-prep-rail__tasks bg-white rounded-xl shadow p-4">
                     <h4 className="text-sm font-semibold text-gray-900">{t("tripPrepRail.mainFrame.beforeYouGo")}</h4>
                     <p className="text-sm text-gray-600">{t("tripPrepRail.mainFrame.filtersOpen")}</p>
 
@@ -513,7 +513,7 @@ export default function TripPrepRail({
                                 : "border-amber-200 bg-amber-50";
 
                             return (
-                                <div key={item.id} className={`rounded-lg border p-3 ${cardStyle}`}>
+                                <div key={item.id} data-done={item.done ? "true" : "false"} className={`itinerary-prep-rail__task rounded-lg border p-3 ${cardStyle}`}>
                                     <div className="flex items-center gap-2">
                                         <p className="font-medium text-gray-900">{item.title}</p>
                                         <StatusPill done={item.done} />
@@ -627,5 +627,3 @@ export default function TripPrepRail({
         </>
     );
 }
-
-

@@ -1,20 +1,13 @@
 import { useParams } from "react-router-dom";
-import ItineraryDayAccordion from "../components/ItineraryDayAccordion";
 import React, {useState, useMemo, useEffect, useContext, useRef} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
-import CommentsSection from "../components/Comments";
-import {loadSubFolderImages} from "../utils/loadItineraryImage.js";
 import {isExpired} from "../utils/jwtParser.js";
 import getCurrencyCode from "../utils/countryToCurrency.js";
 import axios from "axios";
-import TravelTips from "../components/TravelTips.jsx";
-import FoodRecommendations from "../components/FoodRecommendations";
-import TransportTips from "../components/TransportTips.jsx"
-import CurrencyConverter from "../components/CurrencyConverter.jsx";
-import TripPrepRail from "../components/TripPrepRail";
+import ItineraryStoryPage from "../components/itinerary/ItineraryStoryPage.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
 import PageMetadata from "../components/PageMetadata.jsx";
@@ -325,124 +318,30 @@ export default function ItineraryPage() {
             <PageCanonical segments={["itinerary", data?.slug || slug]} />
             <PageMetadata canonicalSegments={["itinerary", data?.slug || slug]} {...pageMetadata} />
 
-            <main className="min-h-screen bg-gray-50">
-
-                <section
-                    className="relative h-[42vh] md:h-[55vh] bg-center bg-cover"
-                    style={{ backgroundImage: `url(${loadSubFolderImages(data.hero.split("/")[3] + "/"+data.hero.split("/")[4],data.hero.split("/")[5].split(".")[0])})` }}
-                >
-                    <div className="absolute inset-0 bg-black/40" />
-                    <div className="relative z-10 h-full flex items-center">
-                        <div className="max-w-screen-xl mx-auto px-4 md:px-6 pb-8 mt-[12vh]">
-                            <h1 className="text-white text-3xl md:text-5xl font-extrabold drop-shadow">
-                                {data.title}
-                            </h1>
-                            <p className="text-white/90 mt-8">
-                                {data.country} · {data.days} {t("itineraryPage.days")} · {t("itineraryPage.from")} ${data.priceFrom} {t("itineraryPage.perPerson")}
-                            </p>
-
-                            <p className="text-white/70 text-sm mt-2">
-                                {t("itineraryPage.excludes")}
-                            </p>
-
-                        </div>
-                    </div>
-                </section>
-
-                <section className="max-w-screen-xl mx-auto px-4 md:px-6 py-10 grid md:grid-cols-3 gap-8">
-                    <article className="md:col-span-2">
-
-                        <div className="mt-2 flex items-center gap-3">
-                            <h2 className="text-xl font-bold mb-3">{t("itineraryPage.highlights")}</h2>
-                            <button
-                                type="button"
-                                onClick={toggleLike}
-                                disabled={likes.saving}
-                                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 mb-3 text-sm transition
-                                          ${likes.liked ? "border-rose-300 text-rose-600" : "border-slate-300 text-slate-600"}
-                                          ${likes.saving ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50 cursor-pointer"}`}
-                                aria-pressed={likes.liked}
-                                aria-label={likes.liked ? "Unlike this itinerary" : "Like this itinerary"}
-                                title={likes.liked ? "Unlike" : "Like"}
-                            >
-                                <span aria-hidden="true">{likes.liked ? "♥" : "♡"}</span>
-                                <span>{likes.count}</span>
-                            </button>
-
-                            <span className="text-xs text-slate-500 mb-3">{t("itineraryPage.like")}</span>
-                        </div>
-
-
-                        <ul className="list-disc pl-6 text-gray-700 space-y-1">
-                            {data.highlights?.map((h) => <li key={h}>{h}</li>)}
-                        </ul>
-
-                        {
-                            planning && <div className="mt-3 pt-4 border-t border-slate-300">
-                            <TravelTips data={planning} defaultOpen={false} />
-                        </div>
-                        }
-
-                        <div className="mt-3">
-                            <TransportTips data={transport} defaultOpen={false} />
-                        </div>
-
-                        <div className="mt-3">
-                            <CurrencyConverter defaultOpen={false}
-                                               data={data}
-                                               fromAmount = {fromAmount}
-                                               userCurrency = {userCurrency}
-                                               userCurrencyValue = {userCurrencyValue}
-                                               convertRate = {convertRate}
-                            />
-                        </div>
-
-                        <div className="mt-3 pb-4 border-b border-slate-300">
-                            <FoodRecommendations
-                                defaultOpen={false}
-                                mustTry={data.mustTry}
-                                areas={data.areas}
-                                places={data.places}
-                            />
-                        </div>
-
-
-                        <h2 className="text-xl font-bold mt-8 mb-3">{t("itineraryPage.overview")}</h2>
-                        <p className="text-gray-700 leading-relaxed">
-                            {data.summary}
-                        </p>
-
-                        <h3 className="text-lg font-semibold mt-8 mb-3">{t("itineraryPage.dayByDay")}</h3>
-                        <ItineraryDayAccordion schedule={data.schedule} />
-                        <div className="space-y-8">
-                            <CommentsSection itineraryId={data.id} />
-                        </div>
-                    </article>
-
-
-                    <aside>
-                        <TripPrepRail
-                            city={city}
-                            country={data.country}
-                            days={data.days}
-                            hotelDestination={data.hotelDestination}
-                            hotelBooking={hotelValues}
-                            onHotelOpen={() => setHotelState(previous => initializeHotelBooking(previous,
-                                {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
-                            onHotelChange={(field, value) => setHotelState(previous => changeHotelBooking(previous, field, value, data.days))}
-                            onHotelReset={() => setHotelState(initializeHotelBooking(null,
-                                {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
-                            items={tripPrepItems}
-                            onMarkDone={markPrepDone}
-                            onReset={resetPrep}
-                            onMarkAllDone={markAllPrepDone}
-                            showSmartSuggestions={showSmartSuggestions}
-                            onToggleSmartSuggestions={setShowSmartSuggestions}
-                        />
-                    </aside>
-
-                </section>
-            </main>
+            <ItineraryStoryPage
+                data={data}
+                planning={planning}
+                transport={transport}
+                city={city}
+                likes={likes}
+                onToggleLike={toggleLike}
+                fromAmount={fromAmount}
+                userCurrency={userCurrency}
+                userCurrencyValue={userCurrencyValue}
+                convertRate={convertRate}
+                hotelBooking={hotelValues}
+                onHotelOpen={() => setHotelState(previous => initializeHotelBooking(previous,
+                    {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
+                onHotelChange={(field, value) => setHotelState(previous => changeHotelBooking(previous, field, value, data.days))}
+                onHotelReset={() => setHotelState(initializeHotelBooking(null,
+                    {slug, city, days: data.days, hotelDestination: data.hotelDestination}))}
+                tripPrepItems={tripPrepItems}
+                onMarkDone={markPrepDone}
+                onReset={resetPrep}
+                onMarkAllDone={markAllPrepDone}
+                showSmartSuggestions={showSmartSuggestions}
+                onToggleSmartSuggestions={setShowSmartSuggestions}
+            />
         </>
     );
 }

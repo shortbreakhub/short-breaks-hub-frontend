@@ -290,8 +290,11 @@
     "excludes": "Vols et hébergement non inclus",
     "highlights": "Points forts du voyage",
     "like": "Personnes ayant aimé cet itinéraire",
+    "likeAria": "Aimer cet itinéraire",
+    "unlikeAria": "Ne plus aimer cet itinéraire",
     "overview": "Vue d’ensemble",
     "dayByDay": "Jour par jour",
+    "practicalInformation": "Informations pratiques",
     "hotelHint": "Vérifiez l’adresse, les conditions d’arrivée et la politique d’annulation.",
     "findHotels": "Trouver un hôtel",
     "flightsHint": "Vérifiez les itinéraires, les règles relatives aux bagages et le choix des sièges.",
@@ -341,7 +344,8 @@
   },
   "itineraryDayAccordion": {
     "day": "Jour",
-    "viewDetails": "Voir les détails"
+    "viewDetails": "Voir les détails",
+    "emptySchedule": "Le programme jour par jour n’est pas encore disponible."
   },
   "dayDetailModal": {
     "day": "Jour",

@@ -290,8 +290,11 @@
     "excludes": "Excludes flights and accommodation",
     "highlights": "Trip Highlights",
     "like": "People who liked this",
+    "likeAria": "Like this itinerary",
+    "unlikeAria": "Unlike this itinerary",
     "overview": "Overview",
     "dayByDay": "Day by Day",
+    "practicalInformation": "Practical Information",
     "hotelHint":"Confirm address, check-in policy, and cancellation.",
     "findHotels":"Find hotels",
     "flightsHint":"Check routes, baggage rules, and seat selection.",
@@ -341,7 +344,8 @@
   },
   "itineraryDayAccordion": {
     "day": "Day",
-    "viewDetails": "View details"
+    "viewDetails": "View details",
+    "emptySchedule": "The day-by-day schedule is not available yet."
   },
   "dayDetailModal":{
     "day": "Day",
