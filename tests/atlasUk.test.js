@@ -120,7 +120,8 @@ test("UK itineraries render only in the UK scene, inside the inert scene surface
     const scenesConfig = readFileSync("src/components/home/atlas/countryScenes.js", "utf8");
     assert.match(scenesConfig, /uk: \{countryId: 'united-kingdom', previewClass: 'atlas-uk-preview', destinations: UK_DESTINATIONS/);
     assert.match(scenesConfig, /nav: 'homeMagazine\.atlas\.ukDestinations'/);
-    assert.match(surface, /\{scenes\.scene==='europe' && \(state === "ready" \|\| !previewFailed\) && <EuropeDestinations map=\{state === "ready" \? mapRef\.current : null\} onCountrySelect=\{selectCountry\} \/>\}/);
-    // Initial UK focus remains on Back.
-    assert.match(stage, /const focus=target!=='europe'\?backButton\.current:/);
+    assert.match(surface, /REGION_SCENES\[scenes\.scene\]/);
+    assert.match(surface, /destinations=\{region\.destinations\}/);
+    // Only country scenes move focus to Back; regional return restores its country.
+    assert.match(stage, /COUNTRY_SCENES\[target\]\?backButton\.current:/);
 });

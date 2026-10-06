@@ -161,6 +161,7 @@
 .atlas-country-callout strong { display: block; font-size: 0.8125rem; line-height: 1.35; }
 .atlas-country-callout > span { display: block; font-size: 0.6875rem; line-height: 1.4; margin-top: 0.15rem; }
 .atlas-country[data-label-align="start"] .atlas-country-callout { left: 0; transform: translateY(3px); }
+.atlas-country[data-label-placement="below"] .atlas-country-callout { bottom: auto; top: calc(100% + 6px); }
 .atlas-country[data-label-align="end"] .atlas-country-callout { left: auto; right: 0; transform: translateY(3px); }
 .atlas-country:focus-visible .atlas-country-callout, .atlas-country[data-revealed="true"] .atlas-country-callout { opacity: 1; visibility: visible; transform: translateX(-50%); }
 .atlas-country[data-label-align]:focus-visible .atlas-country-callout, .atlas-country[data-label-align][data-revealed="true"] .atlas-country-callout { transform: none; }
@@ -214,3 +215,9 @@
     .atlas-back { max-width: 8.5rem; min-height: 44px; padding-inline: 0.35rem; font-size: 0.875rem; white-space: normal; }
     .atlas-scene-status { height: 2.75rem; font-size: 0.6875rem; }
 }
+
+/* Region navigation stays in the accepted caption strip, outside the artwork. */
+.atlas-region-control { flex: 0 0 auto; }
+.atlas-region-control select { min-height: 44px; max-width: 10rem; padding: 0.4rem 0.6rem; border: 0; border-bottom: 2px solid #8b6a2b; background: transparent; color: #384838; font: 700 0.875rem/1.2 var(--sbh-font-body); cursor: pointer; }
+.atlas-region-control select:focus-visible { outline: 3px solid #285c69; outline-offset: 2px; }
+.atlas-region-control select:disabled { opacity: 0.65; cursor: default; }

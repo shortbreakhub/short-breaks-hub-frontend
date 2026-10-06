@@ -123,7 +123,7 @@ test('all nine country scenes use one generic layer; five new scenes have locali
         const {SCENE_ASSETS}=await vite.ssrLoadModule('/src/components/home/atlas/useAtlasScene.js');
         const {default:Layer}=await vite.ssrLoadModule('/src/components/home/atlas/CountryDestinations.jsx');
         const {default:Stage}=await vite.ssrLoadModule('/src/components/home/AtlasStage.jsx');
-        assert.equal(Object.keys(COUNTRY_SCENES).length,9);
+        assert.equal(Object.values(COUNTRY_SCENES).filter(scene=>!scene.region).length,9);
         for(const language of ['en','fr']){
             await i18n.changeLanguage(language);
             const stage=new JSDOM(renderToStaticMarkup(React.createElement(Stage))).window.document;

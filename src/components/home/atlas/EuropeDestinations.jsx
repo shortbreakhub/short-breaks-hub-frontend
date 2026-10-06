@@ -5,7 +5,7 @@ import {EUROPE_DESTINATIONS} from './europeDestinations.js';
 import {artworkCoordinate} from './atlasConfig.js';
 import {getCountryBrowsePath} from '../../../utils/publicNavigation.js';
 
-export default function EuropeDestinations({map, onCountrySelect}) {
+export default function EuropeDestinations({map, onCountrySelect, destinations=EUROPE_DESTINATIONS, navLabelKey='homeMagazine.atlas.destinations'}) {
     const {t} = useTranslation();
     const links = useRef(new Map()), pointer = useRef(null);
     const [armed, setArmed] = useState(null);
@@ -21,7 +21,7 @@ export default function EuropeDestinations({map, onCountrySelect}) {
         if (!frame) return;
         const project = () => {
             const point = (x,y) => map ? map.project(artworkCoordinate(x,y)) : {x:x*frame.clientWidth,y:y*frame.clientHeight};
-            for (const destination of EUROPE_DESTINATIONS) {
+            for (const destination of destinations) {
                 const link = links.current.get(destination.id);
                 if (!link) continue;
                 const primary = destination.hitAreas[0], {x,y} = primary.artworkPosition;
@@ -43,12 +43,12 @@ export default function EuropeDestinations({map, onCountrySelect}) {
         project(); map?.on('render',project); map?.on('resize',project); map?.on('movestart',dismiss);
         return () => {observer.disconnect();map?.off('render',project);map?.off('resize',project);map?.off('movestart',dismiss);};
     });
-    const layer = <nav className="atlas-country-layer" aria-label={t('homeMagazine.atlas.destinations')}>
-        {EUROPE_DESTINATIONS.map(destination => {
+    const layer = <nav className="atlas-country-layer" aria-label={t(navLabelKey)}>
+        {destinations.map(destination => {
             const {x,y} = destination.artworkPosition;
             const label = t(destination.labelKey);
             return <a key={destination.id} ref={node => {if(node) links.current.set(destination.id,node);else links.current.delete(destination.id);}}
-                className="atlas-country" data-country={destination.id} data-hit-area={destination.hitAreas[0].id} data-revealed={armed === destination.id} data-label-align={destination.labelAlign}
+                className="atlas-country" data-country={destination.id} data-hit-area={destination.hitAreas[0].id} data-revealed={armed === destination.id} data-label-align={destination.labelAlign} data-label-placement={destination.labelPlacement}
                 href={getCountryBrowsePath(destination.country)} aria-label={`${label} — ${t('homeMagazine.atlas.countryExplore')}`} draggable={false}
                 style={{left:`${x*100}%`,top:`${y*100}%`,width:`${destination.hitArea.width*100}%`,height:`${destination.hitArea.height*100}%`}}
                 onFocus={event => {
