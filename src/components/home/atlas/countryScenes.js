@@ -1,3 +1,4 @@
+import {SOUTHEAST_ASIA_COUNTRY_SCENES} from './southeastAsiaScenes.js';
 import {CHINA_DESTINATIONS} from './chinaDestinations.js';
 import {JAPAN_DESTINATIONS} from './japanDestinations.js';
 import {SOUTH_KOREA_DESTINATIONS} from './southkoreaDestinations.js';
@@ -67,6 +68,7 @@ export const COUNTRY_SCENES = {
     'macau': {region: 'east-asia', countryId: 'macau', previewClass: 'atlas-macau-preview', destinations: MACAU_DESTINATIONS, keys: {
         mapLabel: 'homeMagazine.atlas.macauMapLabel', previewAlt: 'homeMagazine.atlas.macauPreviewAlt',
         caption: 'homeMagazine.atlas.macauCaption', story: 'homeMagazine.atlas.macauStory', nav: 'homeMagazine.atlas.macauDestinations'}},
+    ...SOUTHEAST_ASIA_COUNTRY_SCENES,
 };
 export function sceneForCountry(countryId) {
     return Object.keys(COUNTRY_SCENES).find(scene => COUNTRY_SCENES[scene].countryId === countryId);

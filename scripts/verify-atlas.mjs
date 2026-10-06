@@ -1,3 +1,16 @@
+import {readFileSync} from 'node:fs';
+import {SOUTHEAST_ASIA_DESTINATIONS} from '../src/components/home/atlas/southeastAsiaDestinations.js';
+import {artworkFramePoint} from '../src/components/home/atlas/artworkFrame.js';
+import {REGION_SCENES} from '../src/components/home/atlas/regionScenes.js';
+import {CAMBODIA_DESTINATIONS} from '../src/components/home/atlas/cambodiaDestinations.js';
+import {INDONESIA_DESTINATIONS} from '../src/components/home/atlas/indonesiaDestinations.js';
+import {LAOS_DESTINATIONS} from '../src/components/home/atlas/laosDestinations.js';
+import {MALAYSIA_DESTINATIONS} from '../src/components/home/atlas/malaysiaDestinations.js';
+import {MYANMAR_DESTINATIONS} from '../src/components/home/atlas/myanmarDestinations.js';
+import {PHILIPPINES_DESTINATIONS} from '../src/components/home/atlas/philippinesDestinations.js';
+import {SINGAPORE_DESTINATIONS} from '../src/components/home/atlas/singaporeDestinations.js';
+import {THAILAND_DESTINATIONS} from '../src/components/home/atlas/thailandDestinations.js';
+import {VIETNAM_DESTINATIONS} from '../src/components/home/atlas/vietnamDestinations.js';
 import {CHINA_DESTINATIONS} from '../src/components/home/atlas/chinaDestinations.js';
 import {JAPAN_DESTINATIONS} from '../src/components/home/atlas/japanDestinations.js';
 import {SOUTH_KOREA_DESTINATIONS} from '../src/components/home/atlas/southkoreaDestinations.js';
@@ -117,6 +130,24 @@ const COUNTRY_CHECKS={
         hoverShots:["hong-kong"],armedShots:["hong-kong"],pairs:[],drag:'hong-kong',desktopNav:'hong-kong',mobileNav:'hong-kong'},
     'macau':{parent:'east-asia',name:"Macau",destinations:MACAU_DESTINATIONS,story:"MACAU Where time changes language.",nav:"Explore Macau itineraries",shots:'issue54-macau',
         hoverShots:["macau"],armedShots:["macau"],pairs:[],drag:'macau',desktopNav:'macau',mobileNav:'macau'},
+    'cambodia':{parent:'southeast-asia',name:"Cambodia",destinations:CAMBODIA_DESTINATIONS,artworkSize:[1536, 1024],contextPoints:[[220, 400], [1400, 650]],story:"CAMBODIA Ancient wonders, gentle journeys.",nav:"Explore Cambodia itineraries",shots:'issue56-cambodia',
+        hoverShots:["siem-reap", "phnom-penh", "kampot", "mondulkiri"],armedShots:["siem-reap", "phnom-penh", "kampot", "mondulkiri"],pairs:[["siem-reap", "phnom-penh"]],drag:'siem-reap',desktopNav:'siem-reap',mobileNav:'mondulkiri'},
+    'indonesia':{parent:'southeast-asia',name:"Indonesia",destinations:INDONESIA_DESTINATIONS,artworkSize:[1536, 1024],contextPoints:[[1300, 820], [470, 310]],story:"INDONESIA Islands of culture, nature and warm encounters.",nav:"Explore Indonesia itineraries",shots:'issue56-indonesia',
+        hoverShots:["bali", "jakarta", "yogyakarta", "bandung"],armedShots:["bali", "jakarta", "yogyakarta", "bandung"],pairs:[["bali", "jakarta"]],drag:'bali',desktopNav:'bali',mobileNav:'bandung'},
+    'laos':{parent:'southeast-asia',name:"Laos",destinations:LAOS_DESTINATIONS,artworkSize:[1536, 1024],contextPoints:[[50, 400]],story:"LAOS Rivers, temples and timeless calm.",nav:"Explore Laos itineraries",shots:'issue56-laos',
+        hoverShots:["luang-prabang", "vientiane", "vang-vieng"],armedShots:["luang-prabang", "vientiane", "vang-vieng"],pairs:[["luang-prabang", "vientiane"]],drag:'luang-prabang',desktopNav:'luang-prabang',mobileNav:'vang-vieng'},
+    'malaysia':{parent:'southeast-asia',name:"Malaysia",destinations:MALAYSIA_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[1230, 420], [690, 780]],story:"MALAYSIA Diverse lands, endless discoveries.",nav:"Explore Malaysia itineraries",shots:'issue56-malaysia',
+        hoverShots:["kuala-lumpur", "george-town", "langkawi", "malacca", "ipoh", "johor-bahru"],armedShots:["kuala-lumpur", "george-town", "langkawi", "malacca", "ipoh", "johor-bahru"],pairs:[["kuala-lumpur", "george-town"]],drag:'kuala-lumpur',desktopNav:'kuala-lumpur',mobileNav:'johor-bahru'},
+    'myanmar':{parent:'southeast-asia',name:"Myanmar",destinations:MYANMAR_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[1220, 450], [650, 70]],story:"MYANMAR Golden pagodas, timeless landscapes.",nav:"Explore Myanmar itineraries",shots:'issue56-myanmar',
+        hoverShots:["yangon", "mandalay", "bagan"],armedShots:["yangon", "mandalay", "bagan"],pairs:[["yangon", "mandalay"]],drag:'yangon',desktopNav:'yangon',mobileNav:'bagan'},
+    'philippines':{parent:'southeast-asia',name:"Philippines",destinations:PHILIPPINES_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[190, 440], [1500, 660]],story:"PHILIPPINES Islands of adventure, oceans of warmth.",nav:"Explore Philippines itineraries",shots:'issue56-philippines',
+        hoverShots:["manila", "cebu", "palawan", "bohol"],armedShots:["manila", "cebu", "palawan", "bohol"],pairs:[["manila", "cebu"]],drag:'manila',desktopNav:'manila',mobileNav:'bohol'},
+    'singapore':{parent:'southeast-asia',name:"Singapore",destinations:SINGAPORE_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[1300, 140], [1100, 800]],story:"SINGAPORE A city of gardens, cultures and possibilities.",nav:"Explore Singapore itineraries",shots:'issue56-singapore',
+        hoverShots:["singapore"],armedShots:["singapore"],pairs:[],drag:'singapore',desktopNav:'singapore',mobileNav:'singapore'},
+    'thailand':{parent:'southeast-asia',name:"Thailand",destinations:THAILAND_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[480, 300], [1300, 500]],story:"THAILAND Land of smiles, temples and turquoise seas.",nav:"Explore Thailand itineraries",shots:'issue56-thailand',
+        hoverShots:["bangkok", "chiang-mai", "pattaya", "chiang-rai", "pai", "sukhothai"],armedShots:["bangkok", "chiang-mai", "pattaya", "chiang-rai", "pai", "sukhothai"],pairs:[["bangkok", "chiang-mai"]],drag:'bangkok',desktopNav:'bangkok',mobileNav:'sukhothai'},
+    'vietnam':{parent:'southeast-asia',name:"Vietnam",destinations:VIETNAM_DESTINATIONS,artworkSize:[1672, 941],contextPoints:[[490, 450], [750, 620]],story:"VIETNAM Timeless landscapes, rich cultures.",nav:"Explore Vietnam itineraries",shots:'issue56-vietnam',
+        hoverShots:["ho-chi-minh-city", "hoi-an", "hue", "hanoi", "ha-long-bay"],armedShots:["ho-chi-minh-city", "hoi-an", "hue", "hanoi", "ha-long-bay"],pairs:[["ho-chi-minh-city", "hoi-an"]],drag:'ho-chi-minh-city',desktopNav:'ho-chi-minh-city',mobileNav:'ha-long-bay'},
 };
 
 async function enterRegion(page,region){
@@ -125,17 +156,20 @@ async function enterRegion(page,region){
     await page.waitForFunction(()=>document.activeElement?.matches('.atlas-region-control select'));
     await page.locator('.atlas-preview:not([hidden])').evaluate(img=>img.decode());
 }
-async function checkEastAsiaRegion(browser,origin,width){
+async function checkRegion(browser,origin,width,regionId='east-asia'){
+    const destinations=regionId==='east-asia'?EAST_ASIA_DESTINATIONS:SOUTHEAST_ASIA_DESTINATIONS;
+    const inactive=regionId==='east-asia'?['north-korea']:['brunei','timor-leste'];
+    const points=regionId==='east-asia'?[[1080,295],[1430,800]]:[[885,555],[1160,930]];
     const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390});
     await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
     const page=await context.newPage(),art=[];
-    page.on('request',r=>{if(r.resourceType()==='image'&&/countries\/(china|japan|south-korea|mongolia|taiwan|hong-kong|macau)\//.test(r.url()))art.push(r.url());});
-    await page.goto(origin,{waitUntil:'domcontentloaded'});await enterRegion(page,'east-asia');
+    page.on('request',r=>{if(r.resourceType()==='image'&&destinations.some(d=>r.url().includes('/countries/'+d.id+'/')))art.push(r.url());});
+    await page.goto(origin,{waitUntil:'domcontentloaded'});await enterRegion(page,regionId);
     assert.deepEqual(art,[],'regional entry does not load country PNGs');
     const paper=page.locator('.atlas-paper'),box=await paper.boundingBox();
-    assert.equal(await page.locator('.atlas-country').count(),7);
-    assert.equal(await page.locator('[data-country="north-korea"]').count(),0);
-    for(const d of EAST_ASIA_DESTINATIONS){
+    assert.equal(await page.locator('.atlas-country').count(),destinations.length);
+    for(const id of inactive)assert.equal(await page.locator('[data-country="'+id+'"]').count(),0);
+    for(const d of destinations){
         const link=page.locator('[data-country="'+d.id+'"]');
         assert.equal(await link.getAttribute('href'),'/browse/'+d.id);
         assert.equal(await link.locator('a,button,[tabindex]').count(),0);
@@ -147,12 +181,36 @@ async function checkEastAsiaRegion(browser,origin,width){
         assert.ok(c.x>=box.x-1&&c.y>=box.y-1&&c.x+c.width<=box.x+box.width+1&&c.y+c.height<=box.y+box.height+1,d.id+' regional callout contained');
         if(width===390)await page.locator('.atlas-caption').tap();else await page.locator('.atlas-caption').click();
     }
-    for(const [x,y]of [[1080,295],[1430,800]])assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('a'),[box.x+x/1536*box.width,box.y+y/1024*box.height]),false,'North Korea/ocean do not navigate');
-    await page.screenshot({path:'/tmp/issue54-east-asia-default-'+width+'.png'});
+    for(const [x,y]of points)assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('a'),[box.x+x/1536*box.width,box.y+y/1024*box.height]),false,'inactive country/ocean context does not navigate');
+    await page.screenshot({path:'/tmp/'+(regionId==='east-asia'?'issue54':'issue56')+'-'+regionId+'-default-'+width+'.png'});
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     await enterRegion(page,'europe');assert.equal(await page.locator('.atlas-country').count(),9);
-    console.log(width+': East Asia seven native regional targets, callouts, inert North Korea, on-demand loading and Europe return passed');
+    console.log(width+': '+regionId+' '+destinations.length+' native regional targets, callouts, inactive context, on-demand loading and Europe return passed');
     await context.close();
+}
+
+// Check new deferred copy through the actual language control, including mobile wrapping.
+async function checkSoutheastAsiaFrench(page,cfg,scene,width){
+    const common=JSON.parse(readFileSync('src/locales/fr/common.json','utf8')).homeMagazine.atlas;
+    const copy=JSON.parse(readFileSync('src/locales/fr/atlas-southeast-asia.json','utf8'));
+    const before=await page.evaluate(()=>scrollY);
+    const language=async(label,target)=>{await page.getByRole('button',{name:new RegExp(label)}).click();await page.getByRole('menuitem',{name:target}).click();await page.evaluate(y=>scrollTo(0,y),before);};
+    await language('English','Français');
+    assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),common[scene+'Caption']+' '+copy[scene+'Story']);
+    assert.match(await page.locator('.atlas-back').innerText(),/Retour en Asie du Sud-Est/i);
+    assert.equal(await page.getByRole('navigation',{name:common[scene+'Destinations']}).count(),1);
+    const frame=await page.locator('.atlas-paper').boundingBox();
+    await page.keyboard.press('Tab');
+    for(const d of cfg.destinations){
+        const link=page.locator('[data-destination="'+d.id+'"]');await link.focus();
+        assert.equal(await link.getAttribute('aria-label'),copy[scene+'Places'][d.id]+' — '+common.viewItinerary);
+        assert.equal(await calloutShown(link),true);
+        const c=await link.locator('.atlas-itinerary-callout').boundingBox();
+        assert.ok(c.x>=frame.x-1&&c.y>=frame.y-1&&c.x+c.width<=frame.x+frame.width+1&&c.y+c.height<=frame.y+frame.height+1,d.id+' French callout contained');
+    }
+    await page.screenshot({path:'/tmp/issue56-'+scene+'-fr-'+width+'.png'});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await language('Français','English');await page.locator('.atlas-back').focus();await page.mouse.move(0,0);
 }
 
 async function checkCountryScene(browser,origin,width,scene){
@@ -178,7 +236,9 @@ async function checkCountryScene(browser,origin,width,scene){
     assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable in '+cfg.name);
     await page.waitForFunction(()=>document.activeElement?.classList.contains('atlas-back'));
     assert.equal((await page.locator('.atlas-country-story').innerText()).replace(/\s+/g,' ').trim(),cfg.story);
-    const back=page.locator('.atlas-back'),backBox=await back.boundingBox(),box=await paper.boundingBox();
+    const back=page.locator('.atlas-back'),backBox=await back.boundingBox(),frameBox=await paper.boundingBox(),size=cfg.artworkSize||[1536,1024];
+    const start=artworkFramePoint(0,0,frameBox.width,frameBox.height,size),end=artworkFramePoint(1,1,frameBox.width,frameBox.height,size);
+    const box={x:frameBox.x+start.x,y:frameBox.y+start.y,width:end.x-start.x,height:end.y-start.y};
     assert.ok(backBox.y>=box.y+box.height,'Back stays outside the artwork');
     const nav=page.getByRole('navigation',{name:cfg.nav});assert.equal(await nav.count(),1);
     assert.equal(await nav.locator('a.atlas-itinerary').count(),count);assert.equal(await page.locator('.atlas-country').count(),0);
@@ -193,13 +253,15 @@ async function checkCountryScene(browser,origin,width,scene){
     // A real hover is expected there; move away to test the unengaged state.
     if(width===1440)await page.mouse.move(0,0);
     const inertPoints={china:[[50,50],[1310,330]],japan:[[50,50],[310,333]],'south-korea':[[50,50],[480,73]],mongolia:[[50,50],[1400,824]],taiwan:[[50,50],[150,350]],'hong-kong':[[50,50],[747,125]],macau:[[225,124],[150,550]]};
-    for(const [x,y]of inertPoints[scene]||[])assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('.atlas-itinerary'),[box.x+x/1536*box.width,box.y+y/1024*box.height]),false,'contextual scenery has no itinerary target');
+    for(const [x,y]of cfg.contextPoints||inertPoints[scene]||[])assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('.atlas-itinerary'),[box.x+x/size[0]*box.width,box.y+y/size[1]*box.height]),false,'contextual scenery has no itinerary target');
     assert.equal(await page.locator('.atlas-itinerary-callout:visible').count(),0,'no permanent callouts');
     // Callouts must stay inside the clipped frame (Paris/Strasbourg top edge, Strasbourg right edge).
     await page.screenshot({path:'/tmp/'+cfg.shots+'-default-'+width+'.png'});
+    if(parent==='southeast-asia')await checkSoutheastAsiaFrench(page,cfg,scene,width);
     const calloutInside=async id=>{const link=page.locator('[data-destination="'+id+'"]');assert.equal(await calloutShown(link),true,id+' callout shows');
         const c=await link.locator('.atlas-itinerary-callout').boundingBox();
-        assert.ok(c.x>=box.x-1&&c.y>=box.y-1&&c.x+c.width<=box.x+box.width+1&&c.y+c.height<=box.y+box.height+1,id+' callout stays inside the artwork at '+width+'px');};
+        // Letterboxed scenes may use the cream paper around the image; the paper is the clipping boundary.
+        assert.ok(c.x>=frameBox.x-1&&c.y>=frameBox.y-1&&c.x+c.width<=frameBox.x+frameBox.width+1&&c.y+c.height<=frameBox.y+frameBox.height+1,id+' callout stays inside the Atlas frame at '+width+'px');};
     await page.evaluate(()=>{window.__countryClicks=[];window.__blockCountryClicks=true;window.addEventListener('click',event=>{const link=event.target.closest?.('.atlas-itinerary');if(!link||!window.__blockCountryClicks)return;window.__countryClicks.push({id:link.dataset.destination,prevented:event.defaultPrevented});event.preventDefault();});});
     const clicks=()=>page.evaluate(()=>window.__countryClicks.splice(0));
     if(width===1440){
@@ -245,7 +307,7 @@ async function checkCountryScene(browser,origin,width,scene){
     assert.equal(await page.locator('.atlas-itinerary').count(),count);assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),true,cfg.name+' itineraries are inert while clouds travel');
     assert.equal(await back.isDisabled(),true,'Back is disabled during travel');
     await page.locator('.atlas-stage[data-atlas-scene="'+parent+'"][data-atlas-transition="idle"]').waitFor();
-    assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),parent==='europe'?9:7);
+    assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),parent==='southeast-asia'?SOUTHEAST_ASIA_DESTINATIONS.length:REGION_SCENES[parent].destinations.length);
     await page.waitForFunction(id=>document.activeElement?.dataset.country===id,scene);
     assert.ok(Math.abs(await heroTop()-topBefore)<=1,'hero stays stable after '+cfg.name);
     await page.emulateMedia({reducedMotion:'reduce'});
@@ -286,14 +348,40 @@ async function checkSceneFailure(browser,origin,scene){
     const country=page.locator('[data-country="'+scene+'"]');await country.click();
     await page.locator('.atlas-stage[data-atlas-transition="covering"]').waitFor();
     await page.locator('.atlas-stage[data-atlas-scene="'+parent+'"][data-atlas-transition="idle"]').waitFor({timeout:15000});
-    assert.equal(await page.getByRole('alert').filter({hasText:parent==='europe'?'The country map could not open. Europe is ready to explore again.':'The story map could not open. East Asia is ready to explore again.'}).count(),1);
+    assert.equal(await page.getByRole('alert').filter({hasText:parent==='europe'?'The country map could not open. Europe is ready to explore again.':'The story map could not open. '+(parent==='east-asia'?'East Asia':'Southeast Asia')+' is ready to explore again.'}).count(),1);
     await page.waitForFunction(id=>document.activeElement?.dataset.country===id,scene);
-    assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),parent==='europe'?9:7);
+    assert.equal(await page.locator('.atlas-itinerary').count(),0);assert.equal(await page.locator('.atlas-country').count(),parent==='southeast-asia'?SOUTHEAST_ASIA_DESTINATIONS.length:REGION_SCENES[parent].destinations.length);
     await context.unroute('**/*'+asset+'*',block);await country.click();
     await page.locator('.atlas-stage[data-atlas-scene="'+scene+'"][data-atlas-transition="idle"]').waitFor({timeout:15000});
     assert.equal(await page.getByRole('alert').count(),0,'retry clears the failure alert');
     assert.deepEqual(errors,[]);console.log('1440: '+scene+' image failure restored '+parent+', refocused the country and retried successfully');await context.close();
 }
+// Lazy rendering code must fail into the existing parent scene, never unmount the homepage.
+async function checkSceneChunkFailure(browser,origin,moduleName){
+    const context=await browser.newContext({viewport:{width:1440,height:900}});
+    await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(origin).origin?r.continue():r.abort());
+    const pattern='**/*'+moduleName+'*',block=r=>r.abort();await context.route(pattern,block);
+    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+    await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.atlas-preview:not([hidden])').evaluate(img=>img.decode());
+    const cloud=moduleName==='AtlasCloudTransition.jsx',parent=cloud?'europe':'southeast-asia';
+    if(cloud)await page.getByRole('combobox',{name:'Atlas region'}).selectOption('southeast-asia');
+    else{await enterRegion(page,'southeast-asia');await page.locator('[data-country="cambodia"]').click();}
+    await page.locator('.atlas-scene-status [role="alert"]').waitFor({timeout:15000});
+    await page.locator('.atlas-stage[data-atlas-scene="'+parent+'"][data-atlas-transition="idle"]').waitFor();
+    assert.equal(await page.locator('.atlas-country').count(),9);
+    assert.equal(await page.locator('.atlas-scene-surface').evaluate(el=>el.inert),false);
+    assert.equal(await page.getByRole('combobox',{name:'Atlas region'}).isEnabled(),true);
+    assert.equal(await page.locator('.home-copy').isVisible(),true);assert.deepEqual(errors,[]);
+    await context.unroute(pattern,block);
+    // Browsers cache failed ES-module imports; refresh establishes a fresh module graph.
+    await page.reload({waitUntil:'domcontentloaded'});await enterRegion(page,'southeast-asia');
+    await page.locator('[data-country="cambodia"]').click();
+    await page.locator('.atlas-stage[data-atlas-scene="cambodia"][data-atlas-transition="idle"]').waitFor({timeout:15000});
+    assert.equal(await page.locator('.atlas-itinerary').count(),4);assert.deepEqual(errors,[]);
+    console.log('1440: '+moduleName+' failure preserved parent/homepage; refresh recovered successfully');
+    await context.close();
+}
+
 // Real navigation and native modified clicks, isolated from the transition checks above.
 async function checkUkNavigation(browser,origin,width){
     const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390,reducedMotion:'reduce'});
@@ -313,17 +401,18 @@ async function checkUkNavigation(browser,origin,width){
     }
     console.log(width+': UK itinerary navigation reached '+new URL(page.url()).pathname);await context.close();
 }
-const vite=await createServer({server:{host:'127.0.0.1',port:0,open:false,hmr:false,watch:null},logLevel:'error'});
+const vite=await createServer({cacheDir:`/tmp/shortbreakhub-atlas-verify-${process.pid}`,server:{host:'127.0.0.1',port:0,open:false,hmr:false,watch:null},logLevel:'error'});
 let browser;
 try {
     await vite.listen();const origin=vite.resolvedUrls.local[0];
     browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
     for(const width of [1440,390]) {
         // Optional targeted iteration; the default command still verifies every scene.
-        if(process.env.ATLAS_REGION==='east-asia'){
-            await checkEastAsiaRegion(browser,origin,width);
-            for(const scene of Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent==='east-asia'&&(!process.env.ATLAS_COUNTRIES||process.env.ATLAS_COUNTRIES.split(',').includes(id))))await checkCountryScene(browser,origin,width,scene);
-            if(width===1440)for(const scene of Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent==='east-asia'&&(!process.env.ATLAS_COUNTRIES||process.env.ATLAS_COUNTRIES.split(',').includes(id))))await checkSceneFailure(browser,origin,scene);
+        if(['east-asia','southeast-asia'].includes(process.env.ATLAS_REGION)){
+            await checkRegion(browser,origin,width,process.env.ATLAS_REGION);
+            for(const scene of Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent===process.env.ATLAS_REGION&&(!process.env.ATLAS_COUNTRIES||process.env.ATLAS_COUNTRIES.split(',').includes(id))))await checkCountryScene(browser,origin,width,scene);
+            if(width===1440)for(const scene of Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent===process.env.ATLAS_REGION&&(!process.env.ATLAS_COUNTRIES||process.env.ATLAS_COUNTRIES.split(',').includes(id))))await checkSceneFailure(browser,origin,scene);
+            if(width===1440 && process.env.ATLAS_REGION==='southeast-asia'){await checkSceneChunkFailure(browser,origin,'CountryDestinations.jsx');await checkSceneChunkFailure(browser,origin,'AtlasCloudTransition.jsx');}
             continue;
         }
         const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390});
@@ -417,9 +506,11 @@ try {
         }
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
-        await checkEastAsiaRegion(browser,origin,width);
+        await checkRegion(browser,origin,width);
+        await checkRegion(browser,origin,width,'southeast-asia');
         await checkUkNavigation(browser,origin,width);
         for(const scene of Object.keys(COUNTRY_CHECKS))await checkCountryScene(browser,origin,width,scene);
-        if(width===1440)for(const scene of ['spain','portugal','germany','greece','italy','netherlands','switzerland',...Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent==='east-asia')])await checkSceneFailure(browser,origin,scene);
+        if(width===1440)for(const scene of ['spain','portugal','germany','greece','italy','netherlands','switzerland',...Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent && COUNTRY_CHECKS[id].parent!=='europe')])await checkSceneFailure(browser,origin,scene);
+        if(width===1440){await checkSceneChunkFailure(browser,origin,'CountryDestinations.jsx');await checkSceneChunkFailure(browser,origin,'AtlasCloudTransition.jsx');}
     }
 } finally {await browser?.close();await vite.close();}

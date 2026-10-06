@@ -1,0 +1,65 @@
+{
+  "cambodiaStory": "Merveilles anciennes, voyages paisibles.",
+  "cambodiaPlaces": {
+    "siem-reap": "Siem Reap",
+    "phnom-penh": "Phnom Penh",
+    "kampot": "Kampot",
+    "mondulkiri": "Mondulkiri"
+  },
+  "indonesiaStory": "Des îles de culture, de nature et de rencontres chaleureuses.",
+  "indonesiaPlaces": {
+    "bali": "Bali",
+    "jakarta": "Jakarta",
+    "yogyakarta": "Yogyakarta",
+    "bandung": "Bandung"
+  },
+  "laosStory": "Fleuves, temples et calme intemporel.",
+  "laosPlaces": {
+    "luang-prabang": "Luang Prabang",
+    "vientiane": "Vientiane",
+    "vang-vieng": "Vang Vieng"
+  },
+  "malaysiaStory": "Des terres variées, des découvertes sans fin.",
+  "malaysiaPlaces": {
+    "kuala-lumpur": "Kuala Lumpur",
+    "george-town": "George Town",
+    "langkawi": "Langkawi",
+    "malacca": "Malacca",
+    "ipoh": "Ipoh",
+    "johor-bahru": "Johor Bahru"
+  },
+  "myanmarStory": "Pagodes dorées, paysages intemporels.",
+  "myanmarPlaces": {
+    "yangon": "Yangon",
+    "mandalay": "Mandalay",
+    "bagan": "Bagan"
+  },
+  "philippinesStory": "Des îles d’aventure, des océans de chaleur.",
+  "philippinesPlaces": {
+    "manila": "Manila",
+    "cebu": "Cebu",
+    "palawan": "Palawan",
+    "bohol": "Bohol"
+  },
+  "singaporeStory": "Une ville de jardins, de cultures et de possibilités.",
+  "singaporePlaces": {
+    "singapore": "Singapour"
+  },
+  "thailandStory": "Le pays des sourires, des temples et des mers turquoise.",
+  "thailandPlaces": {
+    "bangkok": "Bangkok",
+    "chiang-mai": "Chiang Mai",
+    "pattaya": "Pattaya",
+    "chiang-rai": "Chiang Rai",
+    "pai": "Pai",
+    "sukhothai": "Sukhothai"
+  },
+  "vietnamStory": "Paysages intemporels, cultures riches.",
+  "vietnamPlaces": {
+    "ho-chi-minh-city": "Ho Chi Minh City",
+    "hoi-an": "Hoi An",
+    "hue": "Huế",
+    "hanoi": "Hanoi",
+    "ha-long-bay": "Ha Long Bay"
+  }
+}

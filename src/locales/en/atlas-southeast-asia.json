@@ -1,0 +1,65 @@
+{
+  "cambodiaStory": "Ancient wonders, gentle journeys.",
+  "cambodiaPlaces": {
+    "siem-reap": "Siem Reap",
+    "phnom-penh": "Phnom Penh",
+    "kampot": "Kampot",
+    "mondulkiri": "Mondulkiri"
+  },
+  "indonesiaStory": "Islands of culture, nature and warm encounters.",
+  "indonesiaPlaces": {
+    "bali": "Bali",
+    "jakarta": "Jakarta",
+    "yogyakarta": "Yogyakarta",
+    "bandung": "Bandung"
+  },
+  "laosStory": "Rivers, temples and timeless calm.",
+  "laosPlaces": {
+    "luang-prabang": "Luang Prabang",
+    "vientiane": "Vientiane",
+    "vang-vieng": "Vang Vieng"
+  },
+  "malaysiaStory": "Diverse lands, endless discoveries.",
+  "malaysiaPlaces": {
+    "kuala-lumpur": "Kuala Lumpur",
+    "george-town": "George Town",
+    "langkawi": "Langkawi",
+    "malacca": "Malacca",
+    "ipoh": "Ipoh",
+    "johor-bahru": "Johor Bahru"
+  },
+  "myanmarStory": "Golden pagodas, timeless landscapes.",
+  "myanmarPlaces": {
+    "yangon": "Yangon",
+    "mandalay": "Mandalay",
+    "bagan": "Bagan"
+  },
+  "philippinesStory": "Islands of adventure, oceans of warmth.",
+  "philippinesPlaces": {
+    "manila": "Manila",
+    "cebu": "Cebu",
+    "palawan": "Palawan",
+    "bohol": "Bohol"
+  },
+  "singaporeStory": "A city of gardens, cultures and possibilities.",
+  "singaporePlaces": {
+    "singapore": "Singapore"
+  },
+  "thailandStory": "Land of smiles, temples and turquoise seas.",
+  "thailandPlaces": {
+    "bangkok": "Bangkok",
+    "chiang-mai": "Chiang Mai",
+    "pattaya": "Pattaya",
+    "chiang-rai": "Chiang Rai",
+    "pai": "Pai",
+    "sukhothai": "Sukhothai"
+  },
+  "vietnamStory": "Timeless landscapes, rich cultures.",
+  "vietnamPlaces": {
+    "ho-chi-minh-city": "Ho Chi Minh City",
+    "hoi-an": "Hoi An",
+    "hue": "Huế",
+    "hanoi": "Hanoi",
+    "ha-long-bay": "Ha Long Bay"
+  }
+}

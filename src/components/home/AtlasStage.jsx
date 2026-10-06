@@ -1,11 +1,12 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, lazy, Suspense} from "react";
 import {useTranslation} from "react-i18next";
 import {REGION_SCENES} from "./atlas/regionScenes.js";
 import EuropeDestinations from "./atlas/EuropeDestinations.jsx";
-import CountryDestinations from "./atlas/CountryDestinations.jsx";
+const loadCountryLayer = () => import("./atlas/CountryDestinations.jsx");
+const CountryDestinations = lazy(loadCountryLayer);
 import {COUNTRY_SCENES, sceneForCountry} from "./atlas/countryScenes.js";
 import useAtlasScene, {SCENE_ASSETS} from "./atlas/useAtlasScene.js";
-import AtlasCloudTransition from "./atlas/AtlasCloudTransition.jsx";
+const AtlasCloudTransition = lazy(() => import("./atlas/AtlasCloudTransition.jsx"));
 import {initialCamera} from "./atlas/atlasConfig.js";
 
 // The surrounding hero stays independent of the renderer. onMapReady exposes the
@@ -131,13 +132,13 @@ export default function AtlasStage({onMapReady, onCountrySelect, initialRegion='
         <div className="atlas-paper" ref={frame} aria-busy={locked}>
             <div className="atlas-scene-surface" inert={locked}>
             {Object.entries(REGION_SCENES).map(([id, scene]) => <img key={id} ref={images[id]} onLoad={() => {if(id===initialRegion)setPreviewFailed(false);}} onError={() => {if(id===initialRegion)setPreviewFailed(true);}} className="atlas-preview" src={SCENE_ASSETS[id]} width={1536} height={1024} alt={t(scene.keys.previewAlt)} loading={id===initialRegion?'eager':'lazy'} hidden={state==='ready' || scenes.scene!==id || (id===initialRegion && previewFailed)} />)}
-            {Object.entries(COUNTRY_SCENES).map(([id, scene]) => <img key={id} ref={images[id]} className={`atlas-preview ${scene.previewClass}`} src={SCENE_ASSETS[id]} width={1536} height={1024} alt={t(scene.keys.previewAlt)} loading="lazy" hidden={state==='ready' || scenes.scene!==id} />)}
+            {Object.entries(COUNTRY_SCENES).map(([id, scene]) => <img key={id} ref={images[id]} className={`atlas-preview ${scene.previewClass}`} src={SCENE_ASSETS[id]} width={scene.artworkSize?.[0] || 1536} height={scene.artworkSize?.[1] || 1024} alt={t(scene.keys.previewAlt)} loading="lazy" hidden={state==='ready' || scenes.scene!==id} />)}
             {REGION_SCENES[scenes.scene] && state !== "ready" && scenes.scene===initialRegion && previewFailed && <p className="atlas-preview-unavailable">{t("homeMagazine.atlas.previewUnavailable")}</p>}
             <div ref={host} className="atlas-map" role="region" aria-label={t(country?.keys.mapLabel || region.keys.mapLabel)} hidden={state === "preview" || state === "failed"} />
             {REGION_SCENES[scenes.scene] && (state === "ready" || scenes.scene!==initialRegion || !previewFailed) && <EuropeDestinations key={scenes.scene} destinations={region.destinations} navLabelKey={region.keys.nav} map={state === "ready" ? mapRef.current : null} onCountrySelect={selectCountry} />}
-            {country && <CountryDestinations key={scenes.scene} destinations={country.destinations} navLabelKey={country.keys.nav} map={state === "ready" ? mapRef.current : null} />}
+            {country && <Suspense fallback={null}><CountryDestinations key={scenes.scene} destinations={country.destinations} artworkSize={country.artworkSize} navLabelKey={country.keys.nav} map={state === "ready" ? mapRef.current : null} /></Suspense>}
             </div>
-            <AtlasCloudTransition phase={scenes.phase} reducedMotion={scenes.reducedMotion} />
+            {locked && scenes.cloudReady && <Suspense fallback={null}><AtlasCloudTransition phase={scenes.phase} reducedMotion={scenes.reducedMotion} /></Suspense>}
         </div>
         <figcaption id="atlas-caption" className="atlas-caption">
             {country ? <div className="atlas-country-story">
