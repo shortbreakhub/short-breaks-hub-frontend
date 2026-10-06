@@ -115,7 +115,7 @@ test("UK layer renders one native link per destination with hit regions inside i
 test("UK itineraries render only in the UK scene, inside the inert scene surface", () => {
     const stage = readFileSync("src/components/home/AtlasStage.jsx", "utf8");
     const surface = stage.slice(stage.indexOf('<div className="atlas-scene-surface" inert={locked}>'), stage.indexOf("<AtlasCloudTransition"));
-    assert.match(surface, /\{country && <CountryDestinations key=\{scenes\.scene\} destinations=\{country\.destinations\} navLabelKey=\{country\.keys\.nav\} map=\{state === "ready" \? mapRef\.current : null\} \/>\}/);
+    assert.match(surface, /\{country && <Suspense fallback=\{null\}><CountryDestinations key=\{scenes\.scene\} destinations=\{country\.destinations\} artworkSize=\{country\.artworkSize\} navLabelKey=\{country\.keys\.nav\} map=\{state === "ready" \? mapRef\.current : null\} \/><\/Suspense>\}/);
     assert.match(stage, /country=COUNTRY_SCENES\[scenes\.scene\]/);
     const scenesConfig = readFileSync("src/components/home/atlas/countryScenes.js", "utf8");
     assert.match(scenesConfig, /uk: \{countryId: 'united-kingdom', previewClass: 'atlas-uk-preview', destinations: UK_DESTINATIONS/);

@@ -1,3 +1,4 @@
+import {artworkFramePoint} from './artworkFrame.js';
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {useTranslation} from 'react-i18next';
@@ -18,7 +19,7 @@ const calloutBelow = ([anchor, ...areas]) => {
     return {top: `calc(${50 + (bottom - anchor.artworkPosition.y) / anchor.hitArea.height * 100}% + 6px)`, bottom: 'auto'};
 };
 
-export default function CountryDestinations({destinations, navLabelKey, map}) {
+export default function CountryDestinations({destinations, navLabelKey, map, artworkSize}) {
     const {t} = useTranslation();
     const links = useRef(new Map()), pointer = useRef(null);
     const [armed, setArmed] = useState(null);
@@ -33,7 +34,10 @@ export default function CountryDestinations({destinations, navLabelKey, map}) {
         const frame = links.current.values().next().value?.closest('.atlas-paper');
         if (!frame) return;
         const project = () => {
-            const point = (x,y) => map ? map.project(artworkCoordinate(x,y)) : {x:x*frame.clientWidth,y:y*frame.clientHeight};
+            const point = (x,y) => {
+                const contained=artworkFramePoint(x,y,frame.clientWidth,frame.clientHeight,artworkSize);
+                return map ? map.project(artworkCoordinate(contained.x/frame.clientWidth,contained.y/frame.clientHeight)) : contained;
+            };
             for (const destination of destinations) {
                 const link = links.current.get(destination.id), anchor = destination.hitAreas[0];
                 if (!link) continue;
