@@ -27,22 +27,32 @@ export default function CountryDestinations({destinations, navLabelKey, map}) {
         document.addEventListener('pointerdown',dismiss);
         return () => document.removeEventListener('pointerdown',dismiss);
     }, []);
-    // Percentages already match the static preview; a live renderer needs projection.
+    // Match the regional layer's border-aware projection for static and live artwork.
+    // Percentage children otherwise drift inside a thin anchor's 1px border.
     useLayoutEffect(() => {
-        if (!map) return;
+        const frame = links.current.values().next().value?.closest('.atlas-paper');
+        if (!frame) return;
         const project = () => {
-            const point = (x,y) => map.project(artworkCoordinate(x,y));
+            const point = (x,y) => map ? map.project(artworkCoordinate(x,y)) : {x:x*frame.clientWidth,y:y*frame.clientHeight};
             for (const destination of destinations) {
                 const link = links.current.get(destination.id), anchor = destination.hitAreas[0];
                 if (!link) continue;
                 const {x,y} = anchor.artworkPosition, center = point(x,y);
                 const corner = point(x+anchor.hitArea.width/2,y+anchor.hitArea.height/2);
-                Object.assign(link.style,{left:`${center.x}px`,top:`${center.y}px`,width:`${2*(corner.x-center.x)}px`,height:`${2*(corner.y-center.y)}px`});
+                const width=2*(corner.x-center.x),height=2*(corner.y-center.y);
+                Object.assign(link.style,{left:`${center.x}px`,top:`${center.y}px`,width:`${width}px`,height:`${height}px`});
+                for(const area of destination.hitAreas.slice(1)){
+                    const hit=link.querySelector(`[data-hit-area="${area.id}"]`),{x,y}=area.artworkPosition;
+                    const centerHit=point(x,y),cornerHit=point(x+area.hitArea.width/2,y+area.hitArea.height/2);
+                    Object.assign(hit.style,{left:`${centerHit.x-center.x+width/2-link.clientLeft}px`,top:`${centerHit.y-center.y+height/2-link.clientTop}px`,
+                        width:`${2*(cornerHit.x-centerHit.x)}px`,height:`${2*(cornerHit.y-centerHit.y)}px`});
+                }
             }
         };
         const dismiss = () => setArmed(null);
-        project(); map.on('render',project); map.on('resize',project); map.on('movestart',dismiss);
-        return () => {map.off('render',project);map.off('resize',project);map.off('movestart',dismiss);};
+        const observer=new ResizeObserver(project);observer.observe(frame);
+        project(); map?.on('render',project); map?.on('resize',project); map?.on('movestart',dismiss);
+        return () => {observer.disconnect();map?.off('render',project);map?.off('resize',project);map?.off('movestart',dismiss);};
     });
     const layer = <nav className="atlas-itinerary-layer" aria-label={t(navLabelKey)}>
         {destinations.map(destination => {
@@ -64,7 +74,7 @@ export default function CountryDestinations({destinations, navLabelKey, map}) {
                 }}>
                 {areas.map(area => <span key={area.id} className="atlas-itinerary-hit" data-hit-area={area.id} aria-hidden="true" style={relative(area,anchor)} />)}
                 <span className="atlas-itinerary-callout" aria-hidden="true" style={destination.calloutPlacement === 'below' ? calloutBelow(destination.hitAreas) : undefined}>
-                    <strong>{label}</strong> · {action} →
+                    <strong>{t(destination.calloutLabelKey || destination.labelKey)}</strong> · {action} →
                 </span>
             </a>;
         })}

@@ -40,8 +40,8 @@ function pause(duration,signal) {
     });
 }
 // Only scene orchestration; no routing, map engine, or destination geometry here.
-export function createAtlasSceneTransition({loadArtwork,loadCloud,swapScene,onPhase,onScene,onError,onComplete,wait=pause,scenes=['europe','uk']}) {
-    let scene='europe', phase='idle', busy=false;
+export function createAtlasSceneTransition({loadArtwork,loadCloud,swapScene,onPhase,onScene,onError,onComplete,wait=pause,scenes=['europe','uk'],initialScene='europe'}) {
+    let scene=initialScene, phase='idle', busy=false;
     const lifetime=new AbortController();
     const updatePhase=value=>{phase=value;if(!lifetime.signal.aborted)onPhase(value);};
     return {
