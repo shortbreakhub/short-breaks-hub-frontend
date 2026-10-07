@@ -52,10 +52,11 @@ export default function LanguageSwitcher() {
     }
 
     return (
-        <div ref={containerRef} className="ml-12 relative">
+        <div ref={containerRef} className="relative">
             <button
                 type="button"
                 onClick={() => setIsOpen((previous) => !previous)}
+                aria-label={currentLanguage.label}
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
                 className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
