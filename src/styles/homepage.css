@@ -72,16 +72,7 @@
 .home-planning h3 { margin: 0; font-size: 1rem; font-weight: 600; }
 .home-planning li p { margin: 0.4rem 0 0; }
 .home-page .home-planning a:focus-visible { outline-color: #f4bb42; }
-/* Only the existing homepage shell receives visual integration. */
-.home-nav { background: #faf7f2; border-color: #e5dfd2; }
-.home-nav nav { height: 72px; }
-.home-nav img[alt="Travel Explorer Logo"] { height: 64px; }
-.home-nav :where(a, button) { min-height: 44px; }
-.home-nav :where(a, button):focus-visible { outline: 3px solid #285c69; outline-offset: 3px; }
 @media (min-width: 768px) and (max-width: 1023px) {
-    .home-nav nav:first-child { display: none; }
-    .home-nav nav:nth-child(2) { display: grid; }
-    .home-nav > div { display: block; }
     .home-opening { grid-template-columns: 1fr; }
     .home-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
     .home-copy .sbh-kicker { grid-column: 1 / -1; }

@@ -29,6 +29,24 @@ test("Navbar/Footer expose crawlable routes and preserve SPA, modified-click and
         const prerender = new JSDOM(html);
         try {
             const doc = prerender.window.document;
+            const brand = doc.querySelector('.journey-brand');
+            assert.equal(brand.getAttribute('href'), '/');
+            // Branding is painted in the responsive mastheads; the home link has its own accessible name.
+            assert.equal(brand.getAttribute('aria-label'), 'Short Break Hub');
+            assert.equal(brand.querySelector('img'), null);
+            assert.ok(!html.includes('data:image/gif'));
+            assert.ok(!html.includes('shortbreakhub-logo-mobile'));
+            assert.match(doc.querySelector('.journey-scenery-frame source[media="(max-width: 767px)"]').getAttribute('srcset'), /masthead-mobile/);
+            assert.ok(!html.includes('shortbreakhub-logo-desktop') && !html.includes('shortbreakhub-logo-mark'));
+            const scenery = doc.querySelector('.journey-scenery');
+            assert.match(scenery.getAttribute('src'), /shortbreakhub-navbar-masthead/);
+            assert.match(scenery.parentElement.querySelector('source').getAttribute('srcset'), /masthead-compact/);
+            assert.equal(scenery.parentElement.querySelector('source').getAttribute('media'), '(min-width: 768px) and (max-width: 1279px)');
+            assert.equal(scenery.alt, '');
+            assert.equal(scenery.getAttribute('aria-hidden'), 'true');
+            assert.ok(!html.includes('navbar-reference') && !html.includes('navbar-mobile-reference'));
+            assert.ok(doc.querySelector('[aria-current="location"]'));
+
             for (const route of ["/contact", "/live-weather", "/community-itineraries/region", "/login"]) {
                 assert.ok(doc.querySelector(`nav a[href="${route}"]`));
                 assert.ok(doc.querySelector(`footer a[href="${route}"]`));
@@ -59,11 +77,26 @@ test("Navbar/Footer expose crawlable routes and preserve SPA, modified-click and
         await React.act(async () => document.querySelector('footer a[href="/terms"]').click());
         assert.equal(pathname, "/terms");
         await React.act(async () => document.querySelector('button[aria-label="Open navigation menu"]').click());
+        assert.equal(document.querySelector('.journey-menu-toggle').getAttribute('aria-expanded'), 'true');
+        assert.equal(document.querySelectorAll('.journey-menu-icon > span').length, 3);
+        assert.equal(document.querySelector('.journey-menu-icon').getAttribute('aria-hidden'), 'true');
+        assert.equal(document.querySelector('.journey-menu-motto').textContent, 'Short Breaks. Big Stories.');
+        await React.act(async () => document.querySelector('.journey-menu-toggle').dispatchEvent(new window.KeyboardEvent('keydown', {key: 'Escape', bubbles: true})));
+        assert.equal(document.querySelector('.journey-menu-toggle').getAttribute('aria-expanded'), 'false');
+        assert.equal(document.activeElement, document.querySelector('.journey-menu-toggle'));
+        await React.act(async () => document.querySelector('.journey-menu-toggle').click());
         const mobileContact = [...document.querySelectorAll('header a[href="/contact"]')].at(-1);
         assert.equal(document.querySelectorAll('header a[href="/contact"]').length, 2);
         await React.act(async () => mobileContact.click());
         assert.equal(pathname, "/contact");
         assert.equal(document.querySelectorAll('header a[href="/contact"]').length, 1, "mobile menu closes after navigation");
+        await React.act(async () => document.querySelector('[aria-haspopup="menu"]').click());
+        assert.equal(document.querySelector('[aria-haspopup="menu"]').getAttribute('aria-expanded'), 'true');
+        await React.act(async () => [...document.querySelectorAll('[role="menuitem"]')].find(button => button.textContent.includes('Français')).click());
+        assert.equal(document.querySelector('[aria-haspopup="menu"]').getAttribute('aria-label'), 'Français');
+        assert.equal(document.querySelector('[aria-haspopup="menu"]').getAttribute('aria-expanded'), 'false');
+        assert.ok([...document.querySelectorAll('header a')].some(link => link.textContent === i18n.t('navbar.contact')));
+        await React.act(async () => i18n.changeLanguage('en'));
         localStorage.setItem("authToken", "fixture");
         await React.act(async () => document.querySelector('footer a[href="/terms"]').click());
         assert.ok(document.querySelector('nav a[href="/profile"]'));
