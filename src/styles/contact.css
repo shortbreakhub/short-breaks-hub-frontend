@@ -1,0 +1,39 @@
+/* Vintage stationery belongs only to /contact. Shared approved pages are untouched. */
+.contact-journal { --contact-paper: url("../assets/footer/footer-editorial-clean-master.png"); background: #f4e9d9 var(--contact-paper) center top / 400% repeat-y; color: #25474a; padding: clamp(2rem, 5vw, 5rem) 1.5rem; }
+.contact-composition { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(2rem, 4vw, 4rem); max-width: 1240px; margin: auto; align-items: center; }
+.contact-introduction { font: 1.0625rem/1.65 Georgia, serif; }
+.contact-kicker { font: 700 .75rem/1.5 var(--sbh-font-body, sans-serif); letter-spacing: .25em; text-transform: uppercase; color: #76510d; }
+.contact-introduction h1 { font: italic 400 clamp(2.75rem, 4vw, 4.5rem)/1.12 Georgia, serif; margin: 1rem 0 1.75rem; }
+.contact-introduction h1::after { content: ""; display: block; width: 70%; height: 3px; background: #af883f; margin-top: 1.5rem; transform: rotate(-2deg); }
+.contact-lede { font-size: 1.375rem; line-height: 1.4; margin-bottom: 1.5rem; }
+.contact-postcard { position: relative; min-width: 0; padding: clamp(1.5rem, 4vw, 3.5rem); padding-bottom: 2.5rem; border: 10px solid transparent; border-image: url("../assets/contact/postcard-border.svg") 10 round; background: #f6ecd9 var(--contact-paper) center top / 500% repeat-y; box-shadow: 0 4px 14px #614b2812; }
+.contact-postmarks { display: block; width: 230px; height: 115px; background: url("../assets/contact/postal-marks.svg") center / contain no-repeat; margin: -1rem -1rem 1rem auto; pointer-events: none; }
+.contact-postcard h2 { margin: 0 0 1.75rem; }
+.contact-postcard fieldset { min-width: 0; padding: 0; border: 0; margin: 0; }
+.contact-address { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.25rem; }
+.contact-address > div + div { border-left: 1px solid #aa946a55; padding-left: 2rem; }
+.contact-postcard label { display: block; font-size: .875rem; margin-bottom: .35rem; }
+.contact-postcard :is(input, textarea) { width: 100%; min-width: 0; border: 0; border-bottom: 1px solid #ae9974; border-radius: 0; padding: .65rem .15rem; background: transparent; color: #25474a; font: inherit; min-height: 44px; }
+.contact-postcard textarea { line-height: 1.7; resize: vertical; }
+.contact-postcard :is(input, textarea)::placeholder { color: #665f51; opacity: 1; }
+.contact-postcard :is(input, textarea, button):focus-visible { outline: 3px solid #285c69; outline-offset: 4px; }
+.contact-hint { font-size: .75rem; color: #665f51; line-height: 1.5; }
+.contact-hint { margin: .5rem 0 0; }
+.contact-postcard button { display: inline-flex; gap: 1.5rem; align-items: center; min-height: 46px; padding: .75rem 1.5rem; border: 1px solid #947136; background: #876020; color: #fff; font-weight: 700; cursor: pointer; margin-top: 1.5rem; }
+.contact-postcard button:hover:not(:disabled) { background: #714c19; }
+.contact-postcard button:disabled { color: #665f51; background: #e2d6bf; border-color: #b4a488; cursor: default; }
+.contact-feedback { min-height: 3rem; font-size: .875rem; line-height: 1.5; margin-top: 1rem; }
+.contact-feedback:empty { min-height: 0; margin-top: 0; }
+.contact-feedback[role="alert"] { color: #894032; }
+@media (max-width: 900px) {
+ .contact-composition { grid-template-columns: 1fr; max-width: 720px; }
+ .contact-introduction { max-width: 38rem; }
+ .contact-introduction h1 { margin-bottom: 1rem; }
+}
+@media (max-width: 480px) {
+ .contact-journal { padding: 2rem 1rem; }
+ .contact-postcard { padding: 1.25rem; border-width: 8px; }
+ .contact-postmarks { width: 160px; height: 80px; margin: -.5rem -.5rem .5rem auto; }
+ .contact-address { grid-template-columns: 1fr; gap: 1rem; }
+ .contact-address > div + div { border: 0; padding: 0; }
+}
