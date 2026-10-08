@@ -103,7 +103,7 @@ test("pre-rendered Contact HTML contains route metadata and real Contact page co
         description: "Contact Short Breaks Hub",
         canonical: "https://www.shortbreakhub.com/contact",
     });
-    assert.match(routes.contact, /<h1[^>]*>Contact<\/h1>/);
+    assert.match(routes.contact, /<h1[^>]*>Let’s keep in touch\.<\/h1>/);
     assert.match(routes.contact, /name="message"/);
 });
 
@@ -113,7 +113,8 @@ test("pre-rendered Europe HTML contains route metadata and current real Region p
         description: "Explore countries and curated short-break itineraries across Europe",
         canonical: "https://www.shortbreakhub.com/europe",
     });
-    assert.match(routes.europe, /<h1[^>]*>[\s\S]*?Discover[\s\S]*?Europe[\s\S]*?<\/h1>/);
+    assert.match(routes.europe, /<h1[^>]*class="sr-only"[^>]*>Europe<\/h1>/);
+    assert.doesNotMatch(routes.europe, /Discover Europe|bg-cover|europe-banner/);
     assert.match(routes.europe, />France<\/h2>/);
     assert.match(routes.europe, /href="\/browse\/france"/);
     assert.match(routes.europe, /href="\/itinerary\//);

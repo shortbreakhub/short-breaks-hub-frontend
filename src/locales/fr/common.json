@@ -784,20 +784,21 @@
     "daysFrom": "jours • À partir de"
   },
   "contactPage": {
-    "contact": "Contact",
-    "description": "Une question, une idée ou une proposition de partenariat ? N'hésitez pas à nous écrire.",
+    "description": "Une question, une idée, un partenariat ? Écrivez-nous.",
     "name": "Nom",
     "namePlaceholder": "Jean Dupont",
     "email": "Adresse e-mail",
     "emailPlaceholder": "jean@example.com",
     "message": "Message",
     "messagePlaceholder": "Parlez-nous de votre projet…",
-    "messageHint": "Minimum 50 caractères et maximum 2 000 caractères.",
-    "send": "Envoyer",
-    "messageSent": "Message envoyé avec succès",
-    "thanks": "Merci de nous avoir contactés !",
-    "response": "Nous vous répondrons dans les plus brefs délais.",
-    "ok": "OK"
+    "messageHint": "51 à 2 000 caractères.",
+    "send": "Envoyer le message",
+    "messageSent": "Message reçu. Merci !",
+    "heading": "Gardons le contact.",
+    "story": "Chaque beau voyage commence par une conversation.",
+    "nameHint": "2–30 lettres sans accent et espaces.",
+    "sending": "Envoi en cours…",
+    "error": "Message non envoyé. Réessayez."
   },
   "weatherSearchBar": {
     "placeSearch": "Saisissez un lieu",

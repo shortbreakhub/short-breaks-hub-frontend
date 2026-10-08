@@ -784,20 +784,21 @@
     "daysFrom":"days • From"
   },
   "contactPage": {
-    "contact": "Contact",
-    "description":"Questions, ideas, or partnership enquiries? Drop us a note.",
+    "description": "Questions, ideas or partnerships? Drop us a note.",
     "name": "Name",
-    "namePlaceholder":"Jane Doe",
+    "namePlaceholder": "Jane Doe",
     "email": "Email",
-    "emailPlaceholder":"jane@example.com",
-    "message":"Message",
-    "messagePlaceholder":"Tell us what you’re planning…",
-    "messageHint": "Min 50 characters and keep it under 2000 characters please.",
-    "send": "Send",
-    "messageSent":"Message Sent Successfully",
-    "thanks":"Thanks for contact us!",
-    "response": "We will get back to you soon.",
-    "ok": "Ok"
+    "emailPlaceholder": "jane@example.com",
+    "message": "Message",
+    "messagePlaceholder": "Tell us what you’re planning…",
+    "messageHint": "51–2,000 characters.",
+    "send": "Send message",
+    "messageSent": "Message received. Thank you.",
+    "heading": "Let’s keep in touch.",
+    "story": "Every great journey begins with a conversation.",
+    "nameHint": "2–30 unaccented letters and spaces.",
+    "sending": "Sending…",
+    "error": "Message not sent. Try again."
   },
   "weatherSearchBar": {
     "placeSearch": "Enter a Place Name",
