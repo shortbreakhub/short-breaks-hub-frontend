@@ -315,10 +315,16 @@
     "bridge": "A world of possibilities.",
     "bridgeEnd": "A few days to make them yours.",
     "picks": {
-      "eyebrow": "From our collection",
-      "title": "Editor’s Picks",
-      "description": "Different cities. Different rhythms. Stories that stay with you.",
-      "action": "Explore East Asia"
+      "eyebrow": "STORIES WORTH THE JOURNEY",
+      "title": "Curated short breaks for meaningful days.",
+      "description": "From vibrant cities to coastal escapes, explore hand-picked itineraries and find your next unforgettable short break.",
+      "action": "Explore East Asia",
+      "storyLink": "Explore the story",
+      "notes": {
+        "shanghai": "Modern skyline\nTimeless charm",
+        "paris": "Iconic sights\nLocal moments",
+        "tokyo": "Neon nights\nEndless discoveries"
+      }
     },
     "itineraries": {
       "eyebrow": "Made for a little time away",

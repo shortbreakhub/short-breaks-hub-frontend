@@ -11,23 +11,23 @@ import {homepageImages} from "../utils/homepageImages.js";
 import {optimizedImages} from "../utils/optimizedImages.js";
 import {Action, Container, EditorialSurface, Media, Metadata, SectionHeader} from "../components/ui/EditorialUI.jsx";
 import AtlasStage from "../components/home/AtlasStage.jsx";
+import TravelJournalChapters from "../components/home/TravelJournalChapters.jsx";
 import HomeDiscovery from "../components/home/HomeDiscovery.jsx";
 import "../styles/homepage.css";
 
-function Story({item, feature = false}) {
+function Story({item}) {
     const {t, i18n} = useTranslation();
     const copy = item.copy[i18n.resolvedLanguage === "fr" ? "fr" : "en"];
     const image = homepageImages[item.key];
     const dimensions = item.variants.at(-1);
-    return <article className={`home-story ${feature ? "home-story-feature" : ""}`}>
+    return <article className="home-story">
         <Link to={getOfficialItineraryPath(item.slug)} className="story-image-link" tabIndex={-1}>
             <Media {...image} alt={t(`homeMagazine.photos.${item.key}`)} width={dimensions.width} height={dimensions.height}
-                ratio={feature ? "5 / 4" : "16 / 10"} sizes={feature ? "(min-width: 1024px) 720px, (min-width: 768px) 60vw, 92vw" : "(min-width: 1024px) 380px, (min-width: 768px) 40vw, 44vw"} />
+                ratio="16 / 10" sizes="(min-width: 1024px) 380px, (min-width: 768px) 40vw, 44vw" />
         </Link>
         <div className="home-story-copy">
             <p className="sbh-kicker">{item.city} <span aria-hidden="true">/</span> {t(`itinerarySearchBar.countries.${item.country}`)}</p>
             <h3><Link to={getOfficialItineraryPath(item.slug)}>{copy.title}</Link></h3>
-            {feature && <p className="story-excerpt">{copy.summary.split(/(?<=\.)\s/)[0]}</p>}
             <Metadata items={[t("homeMagazine.duration", {count: item.days}), t("homeMagazine.curated")]} />
         </div>
     </article>;
@@ -54,16 +54,7 @@ export default function HomePage() {
                 </Container>
             </section>
             <div className="home-bridge"><Container><p>{t("homeMagazine.bridge")} <span aria-hidden="true">✦</span> {t("homeMagazine.bridgeEnd")}</p></Container></div>
-            <section id="editors-picks" className="home-editorial home-picks" aria-labelledby="picks-title">
-                <Container>
-                    <SectionHeader id="picks-title" eyebrow={t("homeMagazine.picks.eyebrow")} title={t("homeMagazine.picks.title")}
-                        description={t("homeMagazine.picks.description")} action={<Action to="/east-asia" variant="quiet">{t("homeMagazine.picks.action")}</Action>} />
-                    <div className="home-picks-layout">
-                        <Story item={stories[0]} feature />
-                        <div className="home-supporting-stories"><Story item={stories[1]} /><Story item={stories[2]} /></div>
-                    </div>
-                </Container>
-            </section>
+            <TravelJournalChapters items={stories.slice(0, 3)} />
             <section className="home-editorial home-itineraries" aria-labelledby="itineraries-title">
                 <Container>
                     <SectionHeader id="itineraries-title" eyebrow={t("homeMagazine.itineraries.eyebrow")} title={t("homeMagazine.itineraries.title")}

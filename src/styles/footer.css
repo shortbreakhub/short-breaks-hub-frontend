@@ -13,4 +13,9 @@
 
 @media (min-width: 1280px) {
  .journal-pages { grid-template-columns: 1.5fr 1fr 1fr 1.3fr; }
+ /* Columns sit 63px lower; the illustration band gives the same 63px back so the artwork,
+    closing line and overall footer height stay exactly where they were. */
+ .journal-pages { margin-top: 63px; }
+ .journal-closing { padding-top: calc(100vw * 450 / 1536 + 40px - 63px); }
+ .journal-paper { top: calc(-100vw * 150 / 1536 - 63px); }
 }

@@ -315,10 +315,16 @@
     "bridge": "Un monde de possibilités.",
     "bridgeEnd": "Quelques jours pour les vivre.",
     "picks": {
-      "eyebrow": "Dans notre collection",
-      "title": "Les choix de la rédaction",
-      "description": "Des villes différentes. Des rythmes différents. Des histoires qui vous accompagnent.",
-      "action": "Explorer l’Asie de l’Est"
+      "eyebrow": "DES HISTOIRES QUI MÉRITENT LE VOYAGE",
+      "title": "Des escapades choisies pour des journées riches de sens.",
+      "description": "Des villes vibrantes aux escapades côtières, découvrez des itinéraires choisis avec soin et trouvez votre prochaine escapade inoubliable.",
+      "action": "Explorer l’Asie de l’Est",
+      "storyLink": "Explorer l’histoire",
+      "notes": {
+        "shanghai": "Horizons modernes\nCharme intemporel",
+        "paris": "Lieux emblématiques\nInstants du quotidien",
+        "tokyo": "Nuits de néon\nDécouvertes infinies"
+      }
     },
     "itineraries": {
       "eyebrow": "Pour quelques jours ailleurs",
