@@ -1,0 +1,16 @@
+.journal-footer { background: #f4e9d9 var(--journal-paper) 50% 0 / 400% repeat-y; color: #25474a; padding: 64px 24px 20px; }
+.journal-paper { position: absolute; top: calc(-100vw * 150 / 1536); left: 0; width: 100%; mask: linear-gradient(#0000, #000 20px calc(100% - 20px), #0000); }
+.journal-footer h3, .journal-signup { border-bottom: 1px solid #bc9457; }
+.journal-footer :focus-visible { outline: 3px solid #285c69; outline-offset: 3px; }
+.journal-closing { margin-inline: -24px; padding: calc(100vw * 450 / 1536 + 40px) 0 28px; }
+.journal-closing p { margin-inline: 24px; padding: 24px 0 12px; border-top: 1px solid #bc9457; }
+@media (max-width: 639px) {
+ .journal-footer { padding-top: 40px; }
+ .journal-paper { top: 0; width: 640px; max-width: none; }
+ .journal-closing { padding-top: 290px; }
+ .journal-closing p { font-size: 20px; }
+}
+
+@media (min-width: 1280px) {
+ .journal-pages { grid-template-columns: 1.5fr 1fr 1fr 1.3fr; }
+}

@@ -29,6 +29,23 @@ test("Navbar/Footer expose crawlable routes and preserve SPA, modified-click and
         const prerender = new JSDOM(html);
         try {
             const doc = prerender.window.document;
+            const footer = doc.querySelector('.journal-footer');
+            assert.ok(footer);
+            assert.equal(footer.querySelectorAll('a').length, 9, 'all existing footer routes remain');
+            const email = footer.querySelector('input[type="email"]');
+            assert.equal(email.getAttribute('aria-label'), i18n.t('footer.emailPlaceholder'));
+            assert.equal(footer.querySelector('.journal-signup button').type, 'button', 'existing signup remains non-submitting');
+            assert.equal(footer.querySelectorAll('img').length, 1);
+            assert.match(footer.querySelector('img').getAttribute('src'), /footer-editorial-clean-master/);
+            assert.ok(!footer.innerHTML.includes('mediterranean-coast') && !footer.innerHTML.includes('rustic-signpost'), 'scenery is integrated only once');
+            for (const image of footer.querySelectorAll('img')) {
+                assert.equal(image.alt, '');
+                assert.equal(image.getAttribute('aria-hidden'), 'true');
+                assert.equal(image.getAttribute('loading'), 'lazy');
+                assert.ok(image.width && image.height);
+            }
+            assert.ok(!footer.innerHTML.includes('footer-editorial-reference'));
+            assert.equal(footer.querySelector('.journal-closing p').textContent, 'Short Breaks. Big Stories.');
             const brand = doc.querySelector('.journey-brand');
             assert.equal(brand.getAttribute('href'), '/');
             // Branding is painted in the responsive mastheads; the home link has its own accessible name.
@@ -96,6 +113,9 @@ test("Navbar/Footer expose crawlable routes and preserve SPA, modified-click and
         assert.equal(document.querySelector('[aria-haspopup="menu"]').getAttribute('aria-label'), 'Français');
         assert.equal(document.querySelector('[aria-haspopup="menu"]').getAttribute('aria-expanded'), 'false');
         assert.ok([...document.querySelectorAll('header a')].some(link => link.textContent === i18n.t('navbar.contact')));
+        assert.equal(document.querySelector('.journal-footer h3').textContent, i18n.t('footer.explore'));
+        assert.equal(document.querySelector('.journal-signup input').getAttribute('aria-label'), i18n.t('footer.emailPlaceholder'));
+        assert.equal(document.querySelector('.journal-closing p').textContent, `${i18n.t('homeMagazine.hero.lineOne')} ${i18n.t('homeMagazine.hero.lineTwo')}`);
         await React.act(async () => i18n.changeLanguage('en'));
         localStorage.setItem("authToken", "fixture");
         await React.act(async () => document.querySelector('footer a[href="/terms"]').click());

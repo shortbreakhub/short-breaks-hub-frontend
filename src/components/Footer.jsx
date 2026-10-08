@@ -1,5 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import paper from "../assets/footer/footer-editorial-clean-master.png";
+import "../styles/footer.css";
 import {getRegionPath} from "../utils/publicNavigation.js";
 
 export default function Footer() {
@@ -30,186 +32,45 @@ export default function Footer() {
         navigateAndScroll(pathname, 'region-countries');
     };
 
-    return (
-        <footer
-            className="relative bg-cover bg-center text-white"
-            style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-        >
+    const groups = [
+        {title: "explore", links: [["southeastAsia", "southeast-asia"], ["europe", "europe"], ["theAmericas", "americas"]]},
+        {title: "planAndDiscover", links: [["communityTrips", "/community-itineraries/region"], ["liveWeather", "/live-weather"], ["yourFavourites", "/login"], ["contact", "/contact"]]},
+    ];
 
-            <div className="absolute inset-0 bg-slate-950/80" />
-
-            <div className="relative">
-                <div className="max-w-7xl mx-auto px-6 py-14">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-14">
-
-                        {/* Brand */}
-                        <div className="lg:col-span-1">
-                            <h2 className="text-xl font-bold tracking-tight">
-                                Short Break Hub
-                            </h2>
-
-                            <p className="mt-4 text-sm leading-6 text-white/70 max-w-sm">
-                                {t("footer.description")}
-                            </p>
-
-                            <p className="mt-5 text-xs uppercase tracking-[0.18em] text-amber-300">
-                                {t("footer.slogan")}
-                            </p>
-                        </div>
-
-                        {/* Explore */}
-                        <div>
-                            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-white">
-                                {t("footer.explore")}
-                            </h3>
-
-                            <ul className="mt-5 space-y-3 text-sm text-white/70">
-                                <li>
-                                    <button
-                                        onClick={() => navigateAndScroll("/",'explore')}
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.allDestinations")}
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to={getRegionPath("southeast-asia")}
-                                        onClick={(event) => handleRegionLinkClick(event, "/southeast-asia")}
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.southeastAsia")}
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to={getRegionPath("europe")}
-                                        onClick={(event) => handleRegionLinkClick(event, "/europe")}
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.europe")}
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to={getRegionPath("americas")}
-                                        onClick={(event) => handleRegionLinkClick(event, "/americas")}
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.theAmericas")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                        <div>
-                            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-white">
-                                {t("footer.planAndDiscover")}
-                            </h3>
-
-                            <ul className="mt-5 space-y-3 text-sm text-white/70">
-                                <li>
-                                    <Link
-                                        to="/community-itineraries/region"
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.communityTrips")}
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to="/live-weather"
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.liveWeather")}
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to="/login"
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.yourFavourites")}
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        to="/contact"
-                                        className="hover:text-amber-300 transition-colors"
-                                    >
-                                        {t("footer.contact")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                        <div>
-                            <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-white">
-                                {t("footer.stayInspired")}
-                            </h3>
-
-                            <p className="mt-5 text-sm leading-6 text-white/70">
-                                {t("footer.newsletterDescription")}
-                            </p>
-
-                            <div className="mt-5 flex">
-                                <input
-                                    type="email"
-                                    placeholder={t("footer.emailPlaceholder")}
-                                    className="min-w-0 flex-1 rounded-l-md border border-white/20
-                                       bg-white/10 px-3 py-2.5 text-sm text-white
-                                       placeholder:text-white/45 outline-none
-                                       focus:border-amber-300"
-                                />
-
-                                <button
-                                    type="button"
-                                    className="rounded-r-md bg-amber-400 px-4 py-2.5
-                                       text-sm font-semibold text-slate-950
-                                       hover:bg-amber-300 transition-colors"
-                                >
-                                    {t("footer.subscribe")}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="border-t border-white/10">
-                    <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col
-                            sm:flex-row items-center justify-between gap-4
-                            text-xs text-white/55">
-
-                        <p>
-                            {t("footer.copyright")}
-                        </p>
-
-                        <div className="flex items-center gap-6">
-                            <Link className="hover:text-white transition-colors" to="/privacy">
-                                {t("footer.privacy")}
-                            </Link>
-
-                            <Link className="hover:text-white transition-colors" to="/terms">
-                                {t("footer.terms")}
-                            </Link>
-
-                        </div>
-                    </div>
-                </div>
+    return <footer className="journal-footer overflow-hidden" style={{"--journal-paper": `url("${paper}")`}}>
+        <div className="journal-pages grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            <div className="journal-identity">
+                <h2 className="font-serif text-4xl md:text-5xl mb-5">Short Break Hub</h2>
+                <p className="font-serif text-lg leading-relaxed">{t("footer.description")}</p>
+                <small className="block mt-5 text-xs font-semibold tracking-widest uppercase">{t("footer.slogan")}</small>
             </div>
-        </footer>
-    );
+            {groups.map(group => <nav className="font-serif text-lg" key={group.title} aria-labelledby={`footer-${group.title}`}>
+                <h3 className="mb-3 pb-3 text-xs font-semibold tracking-widest uppercase" id={`footer-${group.title}`}>{t(`footer.${group.title}`)}</h3>
+                <ul className="list-none p-0 m-0">
+                    {group.title === "explore" && <li><button type="button" className="inline-flex items-center min-h-11 hover:underline cursor-pointer" onClick={() => navigateAndScroll("/", "explore")}>{t("footer.allDestinations")}</button></li>}
+                    {group.links.map(([label, route]) => <li key={label}><Link className="inline-flex items-center min-h-11 hover:underline"
+                        to={group.title === "explore" ? getRegionPath(route) : route}
+                        onClick={group.title === "explore" ? event => handleRegionLinkClick(event, getRegionPath(route)) : undefined}
+                    >{t(`footer.${label}`)}</Link></li>)}
+                </ul>
+            </nav>)}
+            <section aria-labelledby="footer-newsletter">
+                <h3 className="mb-3 pb-3 text-xs font-semibold tracking-widest uppercase" id="footer-newsletter">{t("footer.stayInspired")}</h3>
+                <p className="font-serif text-base leading-relaxed">{t("footer.newsletterDescription")}</p>
+                <div className="journal-signup flex mt-5">
+                    <input className="min-w-0 w-full bg-transparent py-3 text-sm" type="email" aria-label={t("footer.emailPlaceholder")} placeholder={t("footer.emailPlaceholder")}/>
+                    <button type="button" className="inline-flex items-center min-h-11 px-2 text-sm font-semibold hover:underline cursor-pointer">{t("footer.subscribe")}</button>
+                </div>
+            </section>
+        </div>
+        <div className="journal-closing relative overflow-hidden text-center font-serif">
+            <img className="journal-paper pointer-events-none" src={paper} width="1536" height="707" alt="" aria-hidden="true" loading="lazy" decoding="async"/>
+            <p className="relative text-2xl leading-relaxed tracking-widest uppercase">{t("homeMagazine.hero.lineOne")} {t("homeMagazine.hero.lineTwo")}</p>
+            <svg className="relative mx-auto max-w-full" width="320" height="22" viewBox="0 0 320 22" aria-hidden="true"><path d="M3 16 Q85 -3 161 12 T317 6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>
+        </div>
+        <div className="journal-colophon max-w-7xl mx-auto flex flex-col items-start sm:flex-row sm:items-center justify-between gap-5">
+            <p className="text-xs">{t("footer.copyright")}</p>
+            <nav className="flex flex-wrap gap-6 text-xs" aria-label={t("footer.legal")}><Link className="inline-flex items-center min-h-11 hover:underline" to="/privacy">{t("footer.privacy")}</Link><Link className="inline-flex items-center min-h-11 hover:underline" to="/terms">{t("footer.terms")}</Link></nav>
+        </div>
+    </footer>;
 }
