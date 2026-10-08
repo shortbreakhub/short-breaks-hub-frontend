@@ -46,6 +46,29 @@ test("homepage renders semantic, localized discovery and replaceable atlas scene
                 const titleLink = [...doc.querySelectorAll("h3 a")].find(a => a.textContent === story.copy[language].title);
                 assert.equal(titleLink?.getAttribute("href"), `/itinerary/${story.slug}`);
             }
+            const journal = doc.querySelector("#editors-picks");
+            const chapters = [...journal.querySelectorAll("ol > li > article")];
+            assert.equal(chapters.length, 3, "three equally ranked editorial chapters");
+            assert.equal(journal.querySelector("h2").textContent, i18n.t("homeMagazine.picks.title"));
+            for (const [index, chapter] of chapters.entries()) {
+                const story = stories[index];
+                assert.equal(chapter.getAttribute("aria-labelledby"), chapter.querySelector("h3").id);
+                assert.equal(chapter.querySelector("h3").textContent, story.copy[language].title);
+                assert.equal(chapter.querySelector(".sbh-kicker").textContent,
+                    story.city + " / " + i18n.t("itinerarySearchBar.countries." + story.country));
+                assert.ok(chapter.textContent.includes(story.copy[language].summary.split(/(?<=\.)\s/)[0]));
+                const action = chapter.querySelector(".chapter-action");
+                assert.equal(action.getAttribute("href"), "/itinerary/" + story.slug);
+                assert.equal(action.getAttribute("aria-describedby"), chapter.querySelector("h3").id);
+                assert.ok(action.textContent.includes(i18n.t("homeMagazine.picks.storyLink")));
+                assert.equal(chapter.querySelectorAll('a:not([tabindex="-1"])').length, 1,
+                    "one keyboard story entry, without duplicate photo/title tab stops");
+                assert.ok(chapter.querySelector(".sbh-metadata").textContent.includes(i18n.t("homeMagazine.duration", {count: story.days})));
+                assert.equal(chapter.querySelector("figure").firstElementChild.getAttribute("aria-hidden"), "true");
+                assert.match(chapter.querySelector("figure a").getAttribute("style"), /mask-image/);
+            }
+            assert.equal(journal.querySelectorAll(".home-story-feature,.home-supporting-stories").length, 0);
+            assert.doesNotMatch(journal.innerHTML, /homepage-travel-journal-chapters-reference/);
             for (const control of doc.querySelectorAll("select")) assert.equal(control.labels.length, 1);
             assert.ok(doc.querySelector("#home-country").disabled);
             assert.ok(doc.querySelector('button[type="submit"]').disabled);

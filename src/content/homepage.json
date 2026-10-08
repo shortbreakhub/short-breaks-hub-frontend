@@ -58,22 +58,22 @@
       }
     },
     "source": "src/assets/itineraries/france/4-days-paris-where-icons-meet-everyday-grace.jpg",
-    "sourceBytes": 4141742,
-    "sourceSha256": "920c683972bd9887d4eec7d2b3193ae77e818cb890d658f4fc6e22a3cf3c2eed",
-    "width": 5376,
-    "height": 3584,
+    "sourceBytes": 798398,
+    "sourceSha256": "b44f6bbc6e828ee04f05c604b2060835240a6c6cec020708838c7ac7f50187e6",
+    "width": 1774,
+    "height": 887,
     "variants": [
       {
         "file": "paris-480.webp",
         "width": 480,
-        "height": 320,
-        "bytes": 18292
+        "height": 240,
+        "bytes": 33780
       },
       {
         "file": "paris-960.webp",
         "width": 960,
-        "height": 640,
-        "bytes": 69982
+        "height": 480,
+        "bytes": 112400
       }
     ]
   },

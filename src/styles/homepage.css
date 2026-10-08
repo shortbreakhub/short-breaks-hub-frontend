@@ -34,17 +34,12 @@
 .home-bridge p { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 0; font-size: 0.75rem; color: var(--sbh-secondary); letter-spacing: 0.04em; }
 .home-bridge span { color: #946a1e; }
 .home-editorial { padding-block: 4.5rem; }
-.home-picks .sbh-section-header { margin-bottom: 2rem; }
-.home-picks-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 3rem; }
-.home-supporting-stories { display: grid; gap: 2rem; }
 .home-page .home-story .sbh-media { border-radius: 0.375rem; }
 .home-story-copy { padding-top: 1rem; }
 .home-story-copy .sbh-kicker { font-size: 0.6875rem; margin: 0 0 0.5rem; }
 .home-story h3 { font: 400 1.375rem/1.25 var(--sbh-font-heading); letter-spacing: -0.02em; margin: 0 0 0.75rem; }
 .home-story h3 a { display: block; min-height: 44px; text-decoration: none; }
 .home-story h3 a:hover { text-decoration: underline; text-underline-offset: 0.15em; }
-.home-story-feature h3 { font-size: clamp(1.75rem, 2.5vw, 2.5rem); max-width: 26ch; }
-.story-excerpt { max-width: 60ch; color: var(--sbh-secondary); margin-block: 0.75rem 1rem; font-size: 0.9375rem; }
 .home-itineraries { background: #efede5; }
 .home-itinerary-layout { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
 .home-story-number { display: block; font: italic 1.25rem var(--sbh-font-heading); color: #76510d; margin-bottom: 0.75rem; }
@@ -82,7 +77,6 @@
     .atlas-paper { max-width: 850px; margin-inline: auto; }
     .home-discovery { grid-template-columns: 1fr 1fr auto; padding: 1.5rem; }
     .discovery-intro { grid-column: 1 / -1; }
-    .home-picks-layout { grid-template-columns: 1.35fr 1fr; gap: 1.5rem; }
     .home-region-layout, .home-planning-layout { gap: 2rem; }
 }
 @media (max-width: 767px) {
@@ -102,11 +96,7 @@
     .home-bridge p { gap: 0.5rem; text-align: center; font-size: 0.6875rem; }
     .home-bridge span { display: none; }
     .home-editorial, .home-planning { padding-block: 3rem; }
-    .home-picks-layout, .home-itinerary-layout, .home-region-layout, .home-planning-layout { grid-template-columns: 1fr; gap: 2rem; }
-    .home-supporting-stories { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .home-supporting-stories .home-story h3 { font-size: 1.125rem; }
-    .home-supporting-stories .sbh-kicker { font-size: 0.625rem; }
-    .home-supporting-stories .sbh-metadata { font-size: 0.75rem; }
+    .home-itinerary-layout, .home-region-layout, .home-planning-layout { grid-template-columns: 1fr; gap: 2rem; }
     .home-itinerary-layout > div:nth-child(2) { padding-top: 0; }
     .home-itinerary-layout .home-story { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1rem; align-items: center; }
     .home-itinerary-layout .home-story-copy { padding-top: 0; }
@@ -212,3 +202,6 @@
 .atlas-region-control select { min-height: 44px; max-width: 10rem; padding: 0.4rem 0.6rem; border: 0; border-bottom: 2px solid #8b6a2b; background: transparent; color: #384838; font: 700 0.875rem/1.2 var(--sbh-font-body); cursor: pointer; }
 .atlas-region-control select:focus-visible { outline: 3px solid #285c69; outline-offset: 2px; }
 .atlas-region-control select:disabled { opacity: 0.65; cursor: default; }
+
+/* Approved Travel Journal Chapters; all other homepage compositions stay unchanged. */
+.home-picks { background: #f4e9d9 var(--journal-paper) 50% 0 / 400% repeat-y; }
