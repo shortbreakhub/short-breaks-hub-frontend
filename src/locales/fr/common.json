@@ -614,6 +614,8 @@
     "cancel": "Annuler"
   },
   "loginPage": {
+    "introduction": "Connectez-vous à votre compte Short Break Hub",
+    "signingIn": "Connexion en cours…",
     "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
     "unauthorizedLogin": "Accès non autorisé. Veuillez d’abord vous connecter.",
     "welcomeBack": "Bon retour",
@@ -627,6 +629,12 @@
     "register": "Inscrivez-vous ici"
   },
   "registerPage": {
+    "heading": "Créer un compte",
+    "introduction": "Rejoignez Short Break Hub et préparez votre prochaine aventure.",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "creatingAccount": "Création du compte…",
     "accountCreatedMessage": "Inscription réussie ! Redirection vers la page de connexion...",
     "errorEmailExist": "Cette adresse e-mail est déjà enregistrée.",
     "errorStatus": "Échec de la requête (statut : ",

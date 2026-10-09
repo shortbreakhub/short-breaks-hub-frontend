@@ -1,0 +1,52 @@
+/* Login stationery; a scoped foundation for the later Register phase. */
+.auth-journal { --auth-compass: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%20stroke%3D%22%239b7842%22%20stroke-width%3D%221.4%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2217%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2212%22/%3E%3Cpath%20d%3D%22M32%202v60M2%2032h60M10%2010l44%2044M10%2054l44-44M32%208l5%2019%2019%205-19%205-5%2019-5-19-19-5%2019-5Z%22/%3E%3Cpath%20d%3D%22m32%208%205%2019-5%205Z%22%20fill%3D%22%239b7842%22/%3E%3C/svg%3E"); --auth-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23936e3e' opacity='.12' filter='url(%23paper)' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); padding: clamp(28px, 5vw, 64px) 16px; color: #25474a; background: #f5ebd9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23987c56' opacity='.065' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E"); font-family: Georgia, serif; }
+.auth-postcard { position: relative; isolation: isolate; max-width: 640px; margin: auto; padding: 56px 64px 36px; border: 7px solid transparent; border-radius: 9px; background: linear-gradient(#f9efdde8, #f9efdde8) padding-box, repeating-linear-gradient(135deg, #a86851 0 11px, #ede1c9 11px 23px, #7c9496 23px 34px, #ede1c9 34px 46px) border-box; box-shadow: 0 3px 12px #614b2812; }
+.auth-postcard::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 3px; background: var(--auth-grain), radial-gradient(ellipse at 45% 38%, #fcf3e1, #f2dfbd); }
+.auth-postage { position: absolute; width: 96px; height: auto; top: 16px; right: 12px; pointer-events: none; }
+.auth-postmark { position: absolute; width: 116px; height: auto; top: 24px; left: 12px; color: #a68a61; opacity: .65; pointer-events: none; }
+.auth-introduction { text-align: center; margin-bottom: 28px; }
+.auth-introduction h1 { font-size: clamp(30px, 4vw, 40px); font-weight: 600; line-height: 1.2; margin: 0 0 12px; }
+.auth-introduction p { font-size: 18px; line-height: 1.4; margin: 14px 0 0; }
+.auth-heading-rule { display: flex; align-items: center; gap: 12px; width: 64%; margin: auto; color: #9b7842; }
+.auth-heading-rule::before, .auth-heading-rule::after { content: ""; height: 1px; flex: 1; background: #c1a472; }
+.auth-heading-rule span { display: block; width: 28px; height: 28px; font-size: 0; background: var(--auth-compass) center / contain no-repeat; }
+.auth-postcard fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.auth-field { margin-bottom: 16px; }
+.auth-field label { display: block; font-size: 17px; margin-bottom: 6px; }
+.auth-field input { width: 100%; min-height: 46px; min-width: 0; padding: 10px 12px; border: 1px solid #ae8a56; border-radius: 4px; background: #fffaf0a6; color: #25474a; font: 16px/1.4 Georgia, serif; }
+.auth-submit { width: 100%; min-height: 46px; padding: 10px 14px; border: 1px solid #715027; border-radius: 4px; background: #805629; color: #fff9ed; font: 18px/1.4 Georgia, serif; cursor: pointer; }
+.auth-submit:hover { background: #5b3f20; }
+.auth-postcard fieldset:disabled { opacity: .7; }
+.auth-postcard fieldset:disabled button { cursor: wait; }
+.auth-postcard :is(input, button, a):focus-visible { outline: 2px solid #276363; outline-offset: 4px; }
+.auth-feedback { color: #8b352d; font: 14px/1.5 var(--sbh-font-body, sans-serif); }
+.auth-feedback p { margin: 16px 0 0; }
+.auth-navigation { border-top: 1px solid #d7c6a5; margin-top: 26px; padding-top: 12px; text-align: center; font-size: 16px; line-height: 1.5; }
+.auth-navigation p { margin: 4px 0; }
+.auth-navigation a { display: inline-flex; align-items: center; min-height: 44px; color: #715027; text-decoration: underline; text-underline-offset: 3px; }
+.auth-navigation a:hover { color: #25474a; }
+@media (max-width: 767px) {
+    .auth-postcard { padding: 82px 20px 24px; }
+    .auth-postage { width: 70px; top: 8px; right: 8px; }
+    .auth-postmark { width: 90px; top: 12px; left: 8px; }
+    .auth-introduction { margin-bottom: 24px; }
+    .auth-introduction p { font-size: 16px; }
+}
+
+/* Stationery details remain decorative and local to authentication. */
+.auth-postcard form { max-width: 450px; margin-inline: auto; }
+.auth-navigation { position: relative; border-top: 0; padding-top: 22px; }
+.auth-navigation::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, #c1a472 15%, #c1a472 85%, transparent); }
+.auth-postcard:not(.auth-register-postcard) .auth-navigation::after { content: ""; position: absolute; width: 66px; height: 66px; right: -48px; bottom: -14px; opacity: .5; background: var(--auth-compass) center / contain no-repeat; pointer-events: none; }
+@media (max-width: 767px) {
+    .auth-postcard:not(.auth-register-postcard) .auth-navigation::after { display: none; }
+}
+
+.auth-field label[for$="email"] { padding-left: 24px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23715027%22%20stroke-width%3D%221.6%22%3E%3Crect%20x%3D%223%22%20y%3D%225%22%20width%3D%2218%22%20height%3D%2214%22%20rx%3D%221%22/%3E%3Cpath%20d%3D%22m3%206%209%207%209-7%22/%3E%3C/svg%3E") left center / 15px 15px no-repeat; }
+
+.auth-field label[for$="password"], .auth-field label[for$="confirm"] { padding-left: 24px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23715027%22%20stroke-width%3D%221.6%22%3E%3Crect%20x%3D%225%22%20y%3D%2210%22%20width%3D%2214%22%20height%3D%2211%22%20rx%3D%221%22/%3E%3Cpath%20d%3D%22M8%2010V6a4%204%200%200%201%208%200v4M12%2014v3%22/%3E%3C/svg%3E") left center / 15px 15px no-repeat; }
+
+.auth-field label[for$="display-name"] { padding-left: 24px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23715027%22%20stroke-width%3D%221.6%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%226%22%20r%3D%224%22/%3E%3Cpath%20d%3D%22M4%2022v-4a8%208%200%200%201%2016%200v4Z%22/%3E%3C/svg%3E") left center / 15px 15px no-repeat; }
+
+.auth-postcard:not(.auth-register-postcard)::after { content: ""; position: absolute; width: 80px; height: 88px; left: 12px; bottom: 18px; opacity: .45; pointer-events: none; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20110%22%20fill%3D%22none%22%20stroke%3D%22%23b28e56%22%20stroke-width%3D%221%22%3E%3Ccircle%20cx%3D%2249%22%20cy%3D%2247%22%20r%3D%2233%22/%3E%3Cellipse%20cx%3D%2249%22%20cy%3D%2247%22%20rx%3D%2218%22%20ry%3D%2233%22/%3E%3Cpath%20d%3D%22M17%2047h65M23%2028h52M23%2066h52M15%2012a48%2048%200%200%200%2067%2067M49%2084v13M28%20102h43M24%2014l8%205%203%2012%2013%206%206-5%209%207-6%209-10%203-8%2019-8-10%201-16-9-9M61%2023l9%209-7%209-9-10Z%22/%3E%3C/svg%3E") center / contain no-repeat; }
+@media (max-width: 767px) { .auth-postcard:not(.auth-register-postcard)::after { display: none; } }
