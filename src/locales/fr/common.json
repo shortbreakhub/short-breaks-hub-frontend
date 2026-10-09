@@ -868,6 +868,17 @@
     "Sat": "Sam",
     "Sun": "Dim"
   },
+  "communityJournal": {
+    "identity": "Short Break Hub · Carnet de la communauté",
+    "heading": "Chaque voyage a une histoire",
+    "introduction": "Découvrez de vrais voyages dans la région {{region}}, partagés par d’autres voyageurs.",
+    "emptyHeading": "Le premier chapitre attend d’être écrit.",
+    "emptyDescription": "Aucun voyage n’a encore été partagé dans cette région. Le vôtre pourrait être le premier.",
+    "share": "Partagez votre voyage",
+    "closing": "De vrais voyageurs. De vraies expériences. De vraies inspirations.",
+    "failed": "Impossible de charger les voyages de cette région. Veuillez réessayer.",
+    "read": "Lire le récit"
+  },
   "communityTripsPage": {
     "exploreByRegion": "Explorer par région",
     "southeastAsia": {
