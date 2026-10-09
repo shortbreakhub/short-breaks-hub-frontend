@@ -614,6 +614,8 @@
     "cancel":"Cancel"
   },
   "loginPage":{
+    "introduction": "Log in to your Short Break Hub account",
+    "signingIn": "Signing in…",
     "sessionExpired":"Session expired. Please log in again",
     "unauthorizedLogin":"Unauthorized. Please log in first",
     "welcomeBack": "Welcome back",
@@ -627,6 +629,12 @@
     "register": "Register here"
   },
   "registerPage": {
+    "heading": "Create an account",
+    "introduction": "Join Short Break Hub and start planning your next adventure.",
+    "haveAccount": "Already have an account?",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "creatingAccount": "Creating account…",
     "accountCreatedMessage": "Registration successful ! Redirecting to login...",
     "errorEmailExist":"Email Already Registered",
     "errorStatus": "Request failed with status: ",

@@ -1,15 +1,20 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { postUserLogin } from "../api.js";
 import {Auth} from "../auth.js";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { toast } from 'react-toastify';
 import {showToast} from "../utils/toast.js";
 import {useTranslation} from "react-i18next";
+import postageStamp from "../assets/auth/auth-postage-stamp.png";
+import "../styles/auth-journal.css";
+import "../styles/auth-login-heading.css";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [out, setOut] = useState(null);
+    const [pending, setPending] = useState(false);
+    const submitting = useRef(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
@@ -31,6 +36,9 @@ export default function LoginPage() {
 
     const submit = (e) => {
         e.preventDefault();
+        if (submitting.current || !e.currentTarget.checkValidity()) return;
+        submitting.current = true;
+        setPending(true);
         setOut(null);
         postUserLogin(email, password).then((res) => {
             Auth.save(res.token,res.emailVerified);
@@ -38,55 +46,50 @@ export default function LoginPage() {
             toast.success(`${t("loginPage.welcomeBack")}, ${res?.displayName || t("loginPage.traveler")} !`);
             navigate("/");
         }).catch((err) => {
-            setOut(err.response?.data ? { error: t("loginPage.incorrectEmailOrPassword") } : null);
+            setOut({error: err.response?.data ? "loginPage.incorrectEmailOrPassword" : "registerPage.networkError"});
+        }).finally(() => {
+            submitting.current = false;
+            setPending(false);
         });
     };
 
     return (
-        <div className="container mx-auto max-w-md p-4">
-            <h1 className="text-2xl font-semibold mb-4">{t("loginPage.login")}</h1>
-            <form onSubmit={submit} className="space-y-3">
-                <div>
-                    <label className="block mb-1">{t("loginPage.email")}</label>
-                    <input
-                        className="w-full border p-2 rounded-md"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
+        <main className="auth-journal" aria-labelledby="login-title">
+            <section className="auth-postcard">
+                <img className="auth-postage" src={postageStamp} width="715" height="650" alt="" aria-hidden="true" decoding="async"/>
+                <svg className="auth-postmark" viewBox="0 0 160 80" fill="none" stroke="currentColor" aria-hidden="true">
+                    <circle cx="36" cy="38" r="30"/><circle cx="36" cy="38" r="25" strokeDasharray="2 4"/>
+                    <path d="m20 40 10-3 14-14 4 1-7 17 10 7-2 3-13-6-6 10-3-1 1-12-8 1Z"/>
+                    <path d="M70 20q20-8 40 0t40 0M70 32q20-8 40 0t40 0M70 44q20-8 40 0t40 0M70 56q20-8 40 0t40 0"/>
+                </svg>
+                <header className="auth-introduction">
+                    <h1 id="login-title">{t("loginPage.welcomeBack")}</h1>
+                    <div className="auth-heading-rule" aria-hidden="true"><span>✧</span></div>
+                    <p>{t("loginPage.introduction")}</p>
+                </header>
+                <form onSubmit={submit} aria-busy={pending}>
+                    <fieldset disabled={pending}>
+                        <div className="auth-field">
+                            <label htmlFor="login-email">{t("loginPage.email")}</label>
+                            <input id="login-email" name="email" type="email" autoComplete="username"
+                                value={email} onChange={e => setEmail(e.target.value)} required/>
+                        </div>
+                        <div className="auth-field">
+                            <label htmlFor="login-password">{t("loginPage.password")}</label>
+                            <input id="login-password" name="password" type="password" autoComplete="current-password"
+                                value={password} onChange={e => setPassword(e.target.value)} required/>
+                        </div>
+                        <button className="auth-submit" type="submit">{t(pending ? "loginPage.signingIn" : "loginPage.login")}</button>
+                    </fieldset>
+                    <div className="auth-feedback" aria-live="polite">
+                        {out?.error && <p role="alert">{t(out.error)}</p>}
+                    </div>
+                </form>
+                <div className="auth-navigation">
+                    <p><Link to="/forgot-password">{t("loginPage.forgotPassword")}</Link></p>
+                    <p>{t("loginPage.noAccount")} <Link to="/register">{t("loginPage.register")}</Link></p>
                 </div>
-                <div>
-                    <label className="block mb-1">{t("loginPage.password")}</label>
-                    <input
-                        className="w-full border p-2 rounded-md"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button className="bg-black text-white px-4 py-2 rounded cursor-pointer">{t("loginPage.login")}</button>
-                <p className="mt-3 text-sm text-gray-600">
-                    <Link
-                        to="/forgot-password"
-                        className="text-blue-600 hover:underline"
-                    >
-                        {t("loginPage.forgotPassword")}
-                    </Link>
-                </p>
-
-            </form>
-
-            <p className="mt-4 text-sm text-gray-600">
-                {t("loginPage.noAccount")}{" "}
-                <Link to="/register" className="text-blue-600 hover:underline">
-                    {t("loginPage.register")}
-                </Link>
-            </p>
-            {out && out.error ? (
-                <p className="text-red-500 mt-3 text-[14px]">{out.error}</p>
-            ): null}
-        </div>
-    )
+            </section>
+        </main>
+    );
 }

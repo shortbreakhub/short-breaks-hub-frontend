@@ -1,0 +1,35 @@
+.auth-register-journal { padding-top: calc(clamp(28px, 5vw, 64px) + 18px); padding-bottom: clamp(36px, 5vw, 64px); }
+.auth-register-postcard { padding-bottom: 44px; }
+.auth-register-postcard form { max-width: 400px; }
+.auth-register-postcard .auth-introduction h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-style: italic; font-size: clamp(34px, 3.667vw, 44px); line-height: clamp(33.6px, 3.6vw, 43.2px); letter-spacing: -.015em; }
+.auth-register-postcard .auth-introduction p { max-width: 380px; margin-inline: auto; }
+.auth-register-postcard .auth-submit:disabled { opacity: .6; cursor: not-allowed; }
+@media (min-width: 768px) {
+    .auth-register-journal { padding-top: 34px; }
+    .auth-register-postcard { padding-top: 48px; padding-bottom: 40px; }
+    .auth-register-postcard .auth-introduction { margin-bottom: 20px; }
+    .auth-register-postcard .auth-introduction h1 { margin-bottom: 8px; }
+    .auth-register-postcard .auth-introduction p { margin-top: 8px; }
+    .auth-register-postcard .auth-field { margin-bottom: 10px; }
+    .auth-register-postcard .auth-field label { margin-bottom: 4px; }
+    .auth-register-postcard .auth-navigation { margin-top: 18px; padding-top: 18px; }
+}
+.auth-password-field { position: relative; }
+.auth-password-field input { padding-right: 52px; }
+.auth-password-field button { position: absolute; inset: 1px 2px 1px auto; width: 44px; min-height: 44px; display: grid; place-items: center; color: #715027; cursor: pointer; border-radius: 3px; }
+.auth-password-field svg { width: 22px; height: 22px; }
+.auth-checks { padding: 0; margin: 8px 0 0; list-style: none; font: 13px/1.5 var(--sbh-font-body, sans-serif); }
+.auth-check-pass { color: #315e50; }
+.auth-check-fail { color: #8b352d; }
+.auth-register-success { padding: 20px; border: 1px solid #b99c70; border-radius: 4px; line-height: 1.6; }
+.auth-register-success p { margin: 0 0 12px; }
+.auth-register-success button { min-height: 44px; text-decoration: underline; color: #715027; cursor: pointer; }
+.auth-register-art { position: absolute; inset: auto -42px -16px; pointer-events: none; }
+.auth-register-art img { position: absolute; bottom: 0; height: auto; object-fit: contain; }
+.auth-suitcase { left: 0; width: 145px; }
+.auth-globe { right: 0; bottom: 8px; width: 84px; }
+.auth-register-art::before { content: ""; position: absolute; width: 80px; height: 116px; left: -14px; bottom: 65px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2090%20130%22%20fill%3D%22none%22%20stroke%3D%22%238b8d59%22%20stroke-width%3D%221.5%22%3E%3Cpath%20d%3D%22M70%20124Q40%2075%2027%2010%22/%3E%3Cpath%20d%3D%22M54%2095Q14%2086%2014%2062q29%205%2040%2033ZM43%2068Q9%2059%2012%2036q25%207%2031%2032ZM34%2042Q14%2024%2025%206q18%2014%209%2036ZM47%2076q-3-32%2023-41%203%2027-23%2041ZM62%20108q-2-28%2022-36%204%2023-22%2036Z%22%20fill%3D%22%23a2a36c%22%20fill-opacity%3D%22.35%22/%3E%3C/svg%3E") center / contain no-repeat; opacity: .65; }
+@media (max-width: 767px) {
+    .auth-register-art { display: none; }
+    .auth-register-postcard { padding-bottom: 24px; }
+}

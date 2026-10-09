@@ -1,0 +1,4 @@
+/* Cormorant Garamond, Google Fonts Latin subset, 600 italic. SIL OFL 1.1:
+   /licenses/Cormorant-Garamond-OFL.txt. Self-hosted; no runtime font service. */
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 600; font-display: swap; src: url("../assets/auth/fonts/cormorant-garamond-semibold-italic-latin.woff2") format("woff2"); }
+.auth-introduction #login-title { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-style: italic; font-size: clamp(34px, 4vw, 44px); line-height: 1.12; letter-spacing: -.015em; }
