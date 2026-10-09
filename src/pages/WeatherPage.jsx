@@ -2,16 +2,18 @@ import {useEffect, useState} from "react";
 import abstractGeolocationApi from "../utils/abstractGeolocationApi.js";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
-import Header from "../components/Header.jsx";
 import openMeteoApi from "../utils/openMeteoApi.js";
 import getWeatherDescriptionAndEmoji from "../utils/weatherCodesTable.js";
 import DetailsCard from "../components/DetailCard.jsx";
 import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
-import DailySummaryCard from "../components/DailySummaryCard.jsx";
+import DailySummaryCard, {PrecipitationIcon} from "../components/DailySummaryCard.jsx";
 import WeatherFooter from "../components/WeatherFooter.jsx";
-import DatePicker from "../components/DatePicker.jsx";
-import SearchBar from "../components/SearchBar.jsx";
 import {useTranslation} from "react-i18next";
+import WeatherSearchPanel from "../components/WeatherSearchPanel.jsx";
+import "../styles/weather-journal.css";
+import "../styles/weather-hero.css";
+import "../styles/weather-layout.css";
+import "../styles/weather-forecast.css";
 
 
 export default function WeatherPage(){
@@ -42,6 +44,7 @@ export default function WeatherPage(){
             sunset: dayWeatherSummary.sunset,
             windSpeed: dayWeatherSummary.windSpeedMax,
             emoji: dayWeatherSummary.emoji,
+            weatherCode: dayWeatherSummary.weatherCode,
             uxIndex: dayWeatherSummary.uxIndexMax,
             temperatureMin: dayWeatherSummary.temperatureMin,
         }));
@@ -69,6 +72,7 @@ export default function WeatherPage(){
             const selectedDateWeatherSummary = {
                 "day": rawWeatherData.daily.time[dayIndex].toString().split(" ")[0],
                 "time": rawWeatherData.daily.time[dayIndex].toString().match(timeRegexPattern)[0],
+                "weatherCode": rawWeatherData.daily.weather_code[dayIndex],
                 "emoji": getWeatherDescriptionAndEmoji(rawWeatherData.daily.weather_code[dayIndex]).emoji,
                 "temperatureMax": Math.round(rawWeatherData.daily.temperature_2m_max[dayIndex]),
                 "temperatureMin": Math.round(rawWeatherData.daily.temperature_2m_min[dayIndex]),
@@ -157,6 +161,7 @@ export default function WeatherPage(){
                     windSpeed: Math.round(response.current.wind_speed_10m),
                     sunrise: response.daily.sunrise.toString().split(" ")[4].slice(0,5),
                     sunset: response.daily.sunset.toString().split(" ")[4].slice(0,5),
+                    weatherCode: response.current.weather_code,
                     description: getWeatherDescriptionAndEmoji(response.current.weather_code).description,
                     emoji: getWeatherDescriptionAndEmoji(response.current.weather_code).emoji,
                     uxIndex: response.hourly.uv_index[currentHour].toFixed(2),
@@ -183,6 +188,7 @@ export default function WeatherPage(){
                             {
                                 "day": response.daily.time[i].toString().split(" ")[0],
                                 "time": response.daily.time[i].toString().match(timeRegexPattern)[0],
+                                "weatherCode": response.daily.weather_code[i],
                                 "emoji": getWeatherDescriptionAndEmoji(response.daily.weather_code[i]).emoji,
                                 "temperatureMax": Math.round(response.daily.temperature_2m_max[i]),
                                 "temperatureMin": Math.round(response.daily.temperature_2m_min[i]),
@@ -200,6 +206,7 @@ export default function WeatherPage(){
                                 {
                                     "day": response.daily.time[i].toString().split(" ")[0],
                                     "time": response.daily.time[i].toString().match(timeRegexPattern)[0],
+                                    "weatherCode": response.daily.weather_code[i],
                                     "emoji": getWeatherDescriptionAndEmoji(response.daily.weather_code[i]).emoji,
                                     "temperatureMax": Math.round(response.daily.temperature_2m_max[i]),
                                     "temperatureMin": Math.round(response.daily.temperature_2m_min[i]),
@@ -243,45 +250,31 @@ export default function WeatherPage(){
     }
 
     return (
-        <>
-            <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
+        <div className="weather-journal">
+            <div className="weather-dashboard-row">
+            <WeatherSearchPanel
+                locationQuery={locationQuery} setLocationQuery={setLocationQuery}
+                noLocationQueryResults={noLocationQueryResults} handleLocationSearch={handleLocationSearch}
+                isDataFetching={isDataFetching} minDate={minDate} maxDate={maxDate}
+                invalidDatePicked={invalidDatePicked} setSelectedDate={setSelectedDate}
+                handleDateChange={handleDateChange} selectedDate={selectedDate}
+                isCelsius={isCelsius} setIsCelsius={setIsCelsius}
+            />
+            <DetailsCard
+                currentWeatherData={currentWeatherData}
+                isCelsius={isCelsius}
+                displayWeatherData={displayWeatherData}
+                isFutureDateSelected={isFutureDateSelected}
+                handleBackToCurrentWeather={handleBackToCurrentWeather}
+                dailyHigh={rawWeatherData?.daily.temperature_2m_max?.[0]}
+                dailyLow={rawWeatherData?.daily.temperature_2m_min?.[0]}
+            />
+            </div>
+            <div className="weather-forecast-row">
 
-                <SearchBar
-                    locationQuery={locationQuery}
-                    setLocationQuery={setLocationQuery}
-                    noLocationQueryResults={noLocationQueryResults}
-                    handleLocationSearch={handleLocationSearch}
-                    isDataFetching={isDataFetching}
-                />
-
-                <DatePicker
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    invalidDatePicked={invalidDatePicked}
-                    setSelectedDate={setSelectedDate}
-                    handleDateChange={handleDateChange}
-                    selectedDate={selectedDate}
-                />
-
-                <Header
-                    currentWeatherData={currentWeatherData}
-                    handleBackToCurrentWeather={handleBackToCurrentWeather}
-                    country={currentWeatherData.country}
-                    isCelsius={isCelsius}
-                    setIsCelsius={setIsCelsius}
-                    isFutureDateSelected={isFutureDateSelected}
-                />
-
-                <DetailsCard
-                    currentWeatherData={currentWeatherData}
-                    isCelsius={isCelsius}
-                    displayWeatherData={displayWeatherData}
-                    isFutureDateSelected={isFutureDateSelected}
-                />
-
-                <div className="px-4 pb-4">
-                    <p className="text-xs font-medium text-slate-500 mb-2">{t("weatherPage.hourly")}</p>
-                    <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
+                <section className="weather-forecast-panel" aria-labelledby="weather-hourly-heading">
+                    <h2 id="weather-hourly-heading" >{t("weatherPage.hourly")}</h2>
+                    <ol className="weather-hour-grid">
                         {twelveHoursWeatherSummary && twelveHoursWeatherSummary.map((eachHour)=>
                             (
                                 <
@@ -293,12 +286,15 @@ export default function WeatherPage(){
                                     isCelsius ={isCelsius}
                                 />
                             ))}
-                    </div>
-                </div>
+                    </ol>
+                </section>
 
-                <div className="px-4 pb-4">
-                    <p className="text-xs font-medium text-slate-500 mb-2">{t("weatherPage.daily")}</p>
-                    <ul className="divide-y divide-slate-400 rounded-xl border border-slate-400 overflow-hidden">
+                <section className="weather-forecast-panel" aria-labelledby="weather-daily-heading">
+                    <div className="weather-day-header">
+                        <h2 id="weather-daily-heading">{t("weatherPage.daily")}</h2>
+                        <p id="weather-precipitation-legend" className="weather-day-legend"><PrecipitationIcon/><span>{t("weatherDetailsCard.precipitation")}</span></p>
+                    </div>
+                    <ul className="weather-day-list" aria-describedby="weather-precipitation-legend">
                         {sevenDaysWeatherSummary && sevenDaysWeatherSummary.map((eachDay)=>(
                             <
                                 DailySummaryCard
@@ -309,11 +305,9 @@ export default function WeatherPage(){
                             />
                         ))}
                     </ul>
-                </div>
-
-                <WeatherFooter />
-
-            </section>
-        </>
+                </section>
+            </div>
+            <div className="weather-source-row"><WeatherFooter /></div>
+        </div>
     )
 }

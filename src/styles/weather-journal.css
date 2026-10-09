@@ -1,0 +1,41 @@
+.weather-journal {
+    padding: 24px 0 32px;
+    background-color: #f5ebd9;
+    --weather-paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23987c56' opacity='.065' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+    background-image: var(--weather-paper-grain);
+}
+.weather-postcard {
+    position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(190px, .85fr) minmax(0, 2fr) 150px; align-items: center; gap: 28px;
+    max-width: 1220px; margin: 0 auto; width: calc(100% - 48px); padding: 28px 30px; border: 7px solid transparent; border-radius: 8px;
+    background: var(--weather-paper-grain) padding-box, linear-gradient(#f8efde, #f8efde) padding-box, repeating-linear-gradient(135deg, #a86851 0 11px, #ede1c9 11px 23px, #7c9496 23px 34px, #ede1c9 34px 46px) border-box;
+    color: #244443; box-shadow: 0 2px 5px #68492512;
+}
+.weather-postcard-intro h1 { font-family: "Segoe Print", "Bradley Hand", cursive; font-style: italic; font-size: clamp(25px, 2.3vw, 34px); font-weight: 400; line-height: 1.35; margin: 0 0 10px; }
+.weather-postcard-intro p { font-family: Georgia, serif; font-size: 14px; line-height: 1.6; margin: 0; }
+.weather-postcard-intro svg { width: 145px; height: 24px; margin-top: 8px; color: #788f89; }
+.weather-postcard-controls > div:not(.weather-units) { padding: 0; margin: 0 0 16px; }
+.weather-postcard-controls label { color: #244443; font: 15px Georgia, serif; margin-bottom: 7px; }
+.weather-postcard-controls input { min-width: 0; min-height: 44px; background: #fffaf04d; border: 1px solid #cdbfa6; border-radius: 5px; color: #344443; }
+.weather-postcard-controls button { flex-shrink: 0; min-height: 44px; min-width: 86px; background: #715027; color: #fff9ed; font: 16px Georgia, serif; border-radius: 5px; cursor: pointer; }
+.weather-postcard-controls button:disabled { opacity: .6; cursor: wait; }
+.weather-postcard-controls :is(input, button):focus-visible { outline: 2px solid #276363; outline-offset: 3px; }
+.weather-postcard-controls button:hover:not(:disabled) { background: #5b3f20; }
+.weather-units { display: flex; justify-content: flex-end; }
+.weather-units button { min-width: 54px; border: 1px solid #cdbfa6; border-radius: 0 5px 5px 0; background: #fff9ec; color: #594324; }
+.weather-units button:first-child { border-radius: 5px 0 0 5px; }
+.weather-units button[aria-pressed="true"] { background: #715027; color: #fff9ed; }
+.weather-postal-decoration { align-self: start; color: #a68a61; pointer-events: none; }
+.weather-postal-decoration svg { width: 100%; }
+.weather-postal-decoration p { font: italic 18px/1.5 "Segoe Print", "Bradley Hand", cursive; text-align: center; margin: 12px 0 0; }
+@media (max-width: 1023px) {
+    .weather-postcard { grid-template-columns: minmax(190px, 1fr) minmax(0, 2fr); gap: 24px; padding: 24px; }
+    .weather-postal-decoration { display: none; }
+}
+@media (max-width: 767px) {
+    .weather-journal { padding-top: 16px; }
+    .weather-postcard { width: calc(100% - 24px); grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 22px 16px; }
+    .weather-postcard-intro h1 { font-size: 27px; max-width: 320px; }
+    .weather-postcard-intro svg { display: none; }
+    .weather-postcard-controls button { min-width: 72px; }
+    .weather-units button { min-width: 54px; }
+}

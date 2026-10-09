@@ -834,6 +834,8 @@
     "invalidDateMessage": "Date invalide. Les prévisions ne sont disponibles que pour les 14 prochains jours."
   },
   "weatherDetailsCard": {
+    "high": "Max.",
+    "low": "Min.",
     "feelsLike": "Température ressentie",
     "windSpeed": "Vitesse du vent",
     "humidity": "Humidité",
@@ -843,6 +845,9 @@
     "UVIndex": "Indice UV"
   },
   "weatherPage": {
+    "journalHeading": "La météo de votre prochaine escapade",
+    "journalIntro": "Un lieu, une date, un regard sur le temps à venir.",
+    "journalNote": "Le beau temps fait les beaux jours.",
     "hourly": "12 prochaines heures",
     "daily": "7 prochains jours"
   },

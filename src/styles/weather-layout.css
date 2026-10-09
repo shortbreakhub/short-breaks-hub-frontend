@@ -1,0 +1,36 @@
+.weather-dashboard-row, .weather-forecast-row, .weather-source-row { width: calc(100% - 48px); max-width: 1220px; margin: 0 auto; }
+.weather-dashboard-row { display: grid; gap: 20px; }
+.weather-dashboard-row > :is(.weather-postcard, .weather-hero) { width: 100%; margin: 0; min-width: 0; }
+.weather-forecast-row { display: grid; align-items: start; gap: 20px; margin-top: 20px; }
+@media (min-width: 1000px) {
+    .weather-forecast-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* A 320px search panel and a 600px hero fit with the gap and page gutters at 1000px. */
+@media (min-width: 1000px) {
+    .weather-dashboard-row { grid-template-columns: minmax(0, 35fr) minmax(0, 65fr); align-items: stretch; }
+    .weather-dashboard-row .weather-postcard { grid-template-columns: minmax(0, 1fr); padding: 20px; gap: 12px; grid-template-rows: repeat(4, auto); align-content: space-between; }
+    .weather-dashboard-row .weather-postcard-controls { display: contents; }
+    .weather-dashboard-row .weather-postcard-controls > div:not(.weather-units) { margin: 0; }
+    .weather-dashboard-row .weather-postcard-intro h1 { font-size: 22px; line-height: 1.25; margin-bottom: 8px; }
+    .weather-dashboard-row .weather-postcard-intro p { font-size: 13px; line-height: 1.5; }
+    .weather-dashboard-row .weather-postcard-intro svg { display: none; }
+    .weather-dashboard-row .weather-postal-decoration { position: absolute; right: 16px; bottom: 17px; width: 86px; }
+    .weather-dashboard-row .weather-postal-decoration p { display: none; }
+    .weather-dashboard-row .weather-units { justify-content: flex-start; }
+    .weather-dashboard-row .weather-hero { padding: 22px; gap: 16px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+    .weather-dashboard-row .weather-hero-village { transform: scale(1.3); transform-origin: right top; }
+    .weather-dashboard-row .weather-hero h2 { font-size: 32px; margin-top: 8px; }
+    .weather-dashboard-row .weather-hero-condition { margin-top: 12px; gap: 10px; }
+    .weather-dashboard-row .weather-hero-temperature { font-size: 56px; }
+    .weather-dashboard-row .weather-hero-description { font-size: 20px; }
+    .weather-dashboard-row .weather-hero-metrics { gap: 14px 16px; padding-top: 16px; }
+}
+@media (max-width: 767px) {
+    .weather-dashboard-row, .weather-forecast-row, .weather-source-row { width: calc(100% - 24px); }
+}
+
+/* Keep the control-panel heading subordinate at stacked widths too. */
+@media (max-width: 999px) {
+    .weather-dashboard-row .weather-postcard-intro h1 { font-size: 23px; line-height: 1.25; margin-bottom: 8px; }
+    .weather-dashboard-row .weather-postcard-intro p { font-size: 13px; line-height: 1.5; }
+}
