@@ -1,12 +1,14 @@
+import {useId} from "react";
 import {useTranslation} from "react-i18next";
 
 export default function WeatherSearchBar ({locationQuery, setLocationQuery,noLocationQueryResults,handleLocationSearch,isDataFetching}) {
     const { t } = useTranslation();
+    const inputId = useId();
     return (
         <div className="px-4 pb-4 mt-5">
-            <label className="text-xs font-medium text-slate-500 mb-1 block">{t("weatherSearchBar.placeSearch")}</label>
+            <label htmlFor={inputId} className="text-xs font-medium text-slate-500 mb-1 block">{t("weatherSearchBar.placeSearch")}</label>
             <div className="flex gap-2">
-                <input
+                <input id={inputId}
                     type="text"
                     value={locationQuery}
                     onChange={(e) => setLocationQuery(e.target.value)}

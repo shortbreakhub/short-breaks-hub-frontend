@@ -834,15 +834,20 @@
     "invalidDateMessage":"Invalid Date Picked, Forecast Only Available Up To 14 Days From Today."
   },
   "weatherDetailsCard": {
+    "high": "High",
+    "low": "Low",
     "feelsLike":"Feels Like",
     "windSpeed": "Wind Speed",
     "humidity": "Humidity",
     "precipitation": "Precipitation Probability",
     "sunriseTime": "Sunrise Time",
     "sunsetTime": "Sunset Time",
-    "UXIndex": "UX Index"
+    "UVIndex": "UV Index"
   },
   "weatherPage": {
+    "journalHeading": "Find the weather for your next trip",
+    "journalIntro": "A place, a date, a little foresight for the journey.",
+    "journalNote": "Good weather brings good days.",
     "hourly":"Next 12 hours",
     "daily": "Next 7 days"
   },

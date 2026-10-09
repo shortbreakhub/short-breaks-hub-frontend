@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 
-export default function Header({currentWeatherData,isCelsius,setIsCelsius,handleBackToCurrentWeather,isFutureDateSelected}) {
+export default function Header({currentWeatherData,isCelsius,setIsCelsius,handleBackToCurrentWeather,isFutureDateSelected, showTemperatureControl = true}) {
     const { t } = useTranslation();
     return (
         <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
@@ -24,7 +24,7 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                 </button>
             )}
 
-            <div className="inline-flex rounded-lg border border-slate-500 overflow-hidden">
+            {showTemperatureControl && <div className="inline-flex rounded-lg border border-slate-500 overflow-hidden">
                 <button
                     type="button"
                     aria-pressed={isCelsius}
@@ -46,7 +46,7 @@ export default function Header({currentWeatherData,isCelsius,setIsCelsius,handle
                 >
                     °F
                 </button>
-            </div>
+            </div>}
         </header>
     )
 }

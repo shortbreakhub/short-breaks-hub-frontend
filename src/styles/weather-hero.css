@@ -1,0 +1,40 @@
+.weather-hero { container: weather-hero / inline-size; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 20px 32px; width: calc(100% - 48px); max-width: 1220px; margin: 24px auto 0; padding: 30px; border: 1px solid #d7c6a5; border-radius: 10px; background: var(--weather-paper-grain), #f8efde; color: #244443; font-family: Georgia, serif; }
+.weather-hero-story { min-width: 0; }
+.weather-hero-location { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #79552e; font-size: 15px; }
+.weather-hero-location p { margin: 0; }
+.weather-hero-location button { min-height: 44px; padding: 8px 16px; border: 1px solid #bba37e; border-radius: 4px; cursor: pointer; }
+.weather-hero-location button:focus-visible { outline: 2px solid #276363; outline-offset: 3px; }
+.weather-hero-location button:hover { background: #ede1c9; }
+.weather-hero h2 { margin: 12px 0 6px; font-size: clamp(28px, 3vw, 44px); line-height: 1.16; overflow-wrap: anywhere; }
+.weather-hero-date { margin: 0; font-size: 15px; line-height: 1.5; }
+.weather-hero-condition { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
+.weather-hero-condition img { width: 32%; height: auto; flex-shrink: 0; }
+.weather-hero-condition > div { min-width: 0; }
+.weather-hero-temperature { margin: 0; font-size: clamp(52px, 5.5vw, 78px); line-height: 1.05; font-weight: 700; white-space: nowrap; }
+.weather-hero-description { font-size: 22px; line-height: 1.35; margin: 8px 0; }
+.weather-hero-range { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 15px; margin: 0; }
+.weather-hero-village { width: 100%; height: auto; align-self: center; pointer-events: none; }
+.weather-hero-metrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 24px; border-top: 1px solid #d7c6a5; padding-top: 20px; margin: 4px 0 0; }
+.weather-hero-metric dt { display: flex; align-items: flex-start; gap: 10px; }
+.weather-hero-metric svg { width: 25px; height: 25px; flex-shrink: 0; color: #986b35; }
+.weather-hero-metric dt { font-size: 14px; line-height: 1.4; }
+.weather-hero-metric dd { font-size: 18px; font-weight: 700; line-height: 1.5; margin: 3px 0 0 35px; }
+@media (max-width: 767px) {
+    .weather-hero { width: calc(100% - 24px); grid-template-columns: minmax(0, 1fr); padding: 22px 16px; gap: 16px; }
+    .weather-hero-condition { gap: 12px; }
+    .weather-hero-temperature { font-size: clamp(48px, 13vw, 64px); }
+    .weather-hero-description { font-size: 20px; }
+    .weather-hero-village { max-width: 480px; justify-self: center; }
+    .weather-hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+    .weather-hero-metric dt { gap: 7px; }
+    .weather-hero-metric dd { font-size: 16px; margin-left: 32px; }
+}
+
+/* Six columns need at least 720px inside the card, independently of viewport width. */
+@container weather-hero (min-width: 720px) {
+    .weather-hero-metrics { grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 12px; row-gap: 6px; }
+    .weather-hero-metric { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+    .weather-hero-metric dt { flex-direction: column; gap: 5px; font-size: 12px; line-height: 1.4; }
+    .weather-hero-metric svg { width: 20px; height: 20px; }
+    .weather-hero-metric dd { font-size: 16px; line-height: 1.4; margin: 0; }
+}
