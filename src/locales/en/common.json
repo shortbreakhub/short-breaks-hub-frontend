@@ -868,6 +868,17 @@
     "Sat": "Sat",
     "Sun": "Sun"
   },
+  "communityJournal": {
+    "identity": "Short Break Hub · Community Journal",
+    "heading": "Every Journey Has a Story",
+    "introduction": "Discover real journeys through {{region}}, shared by fellow travellers.",
+    "emptyHeading": "The first chapter is waiting to be written.",
+    "emptyDescription": "No journeys have been shared in this region yet. Yours could be the first.",
+    "share": "Share Your Journey",
+    "closing": "Real travellers. Real experiences. Real inspiration.",
+    "failed": "We could not load the journeys for this region. Please try again.",
+    "read": "Read the journey"
+  },
   "communityTripsPage": {
     "exploreByRegion": "Explore by Region",
     "southeastAsia": {

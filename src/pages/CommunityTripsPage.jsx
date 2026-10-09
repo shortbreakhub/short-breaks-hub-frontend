@@ -4,16 +4,13 @@ import europeCommunityImg from "../assets/europe-community.jpg";
 import americasCommunityImg from "../assets/americas-community.jpg";
 import anzCommunityImg from "../assets/anz-community.jpg";
 import africaCommunityImg from "../assets/africa-community.jpg"
-import {useNavigate} from "react-router-dom";
 import RegionCard from "../components/RegionCard.jsx";
-import {useRef} from "react";
 import {useTranslation} from "react-i18next";
+import "../styles/community-journal.css";
 
 
 export default function CommunityTripsPage() {
 
-    const exploreRef = useRef(null);
-    const navigate = useNavigate();
     const { t } = useTranslation();
 
     const regions = [
@@ -57,9 +54,9 @@ export default function CommunityTripsPage() {
 
     return (
         <>
-            <section id="explore" className="scroll-mt-20">
-                <div ref={exploreRef} className="py-16 px-6 bg-white">
-                    <h2 className="text-3xl font-bold text-center mb-10">{t("communityTripsPage.exploreByRegion")}</h2>
+            <main id="explore" className="community-landing scroll-mt-20">
+                <div className="py-16 px-6">
+                    <h1 className="text-3xl font-bold text-center mb-10">{t("communityTripsPage.exploreByRegion")}</h1>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         { regions.map((item, index) => (
                             <RegionCard
@@ -67,12 +64,12 @@ export default function CommunityTripsPage() {
                                 image={item.image}
                                 title={item.title}
                                 description={item.description}
-                                onClick={() => navigate(item.onClick)}
+                                to={`/community-itineraries/region/${item.onClick}`}
                             />
                         ))}
                     </div>
                 </div>
-            </section>
+            </main>
         </>
     );
 }
