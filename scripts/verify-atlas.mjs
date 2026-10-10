@@ -1,5 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {SOUTHEAST_ASIA_DESTINATIONS} from '../src/components/home/atlas/southeastAsiaDestinations.js';
+import {NORTH_AMERICA_DESTINATIONS} from '../src/components/home/atlas/northAmericaDestinations.js';
 import {artworkFramePoint} from '../src/components/home/atlas/artworkFrame.js';
 import {REGION_SCENES} from '../src/components/home/atlas/regionScenes.js';
 import {CAMBODIA_DESTINATIONS} from '../src/components/home/atlas/cambodiaDestinations.js';
@@ -157,16 +158,18 @@ async function enterRegion(page,region){
     await page.locator('.atlas-preview:not([hidden])').evaluate(img=>img.decode());
 }
 async function checkRegion(browser,origin,width,regionId='east-asia'){
-    const destinations=regionId==='east-asia'?EAST_ASIA_DESTINATIONS:SOUTHEAST_ASIA_DESTINATIONS;
-    const inactive=regionId==='east-asia'?['north-korea']:['brunei','timor-leste'];
-    const points=regionId==='east-asia'?[[1080,295],[1430,800]]:[[885,555],[1160,930]];
+    const destinations=regionId==='north-america'?NORTH_AMERICA_DESTINATIONS:regionId==='east-asia'?EAST_ASIA_DESTINATIONS:SOUTHEAST_ASIA_DESTINATIONS;
+    const inactive=regionId==='north-america'?['greenland','cuba']:regionId==='east-asia'?['north-korea']:['brunei','timor-leste'];
+    const points=regionId==='north-america'?[[120,470],[1440,230],[1130,820],[1240,90]]:regionId==='east-asia'?[[1080,295],[1430,800]]:[[885,555],[1160,930]];
     const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width===390?2:1,hasTouch:width===390});
     await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
     const page=await context.newPage(),art=[];
     page.on('request',r=>{if(r.resourceType()==='image'&&destinations.some(d=>r.url().includes('/countries/'+d.id+'/')))art.push(r.url());});
     await page.goto(origin,{waitUntil:'domcontentloaded'});await enterRegion(page,regionId);
     assert.deepEqual(art,[],'regional entry does not load country PNGs');
-    const paper=page.locator('.atlas-paper'),box=await paper.boundingBox();
+    const paper=page.locator('.atlas-paper');
+    await paper.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+    const box=await paper.boundingBox();
     assert.equal(await page.locator('.atlas-country').count(),destinations.length);
     for(const id of inactive)assert.equal(await page.locator('[data-country="'+id+'"]').count(),0);
     for(const d of destinations){
@@ -175,17 +178,67 @@ async function checkRegion(browser,origin,width,regionId='east-asia'){
         assert.equal(await link.locator('a,button,[tabindex]').count(),0);
         for(const area of d.hitAreas){const {x,y}=regionPoint(box,area);
             assert.equal(await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.closest('.atlas-country')?.dataset.country,[x,y]),d.id,area.id+' regional hit');}
-        if(width===1440)await link.hover();else await link.tap();
+        if(width>=768)await link.hover();else await link.tap();
         await page.waitForFunction(id=>{const s=document.querySelector('[data-country="'+id+'"] .atlas-country-callout');return s&&getComputedStyle(s).opacity==='1';},d.id);
         const c=await link.locator('.atlas-country-callout').boundingBox();
         assert.ok(c.x>=box.x-1&&c.y>=box.y-1&&c.x+c.width<=box.x+box.width+1&&c.y+c.height<=box.y+box.height+1,d.id+' regional callout contained');
-        if(width===390)await page.locator('.atlas-caption').tap();else await page.locator('.atlas-caption').click();
+        if(width<768)await page.locator('.atlas-caption').tap();else await page.locator('.atlas-caption').click();
     }
     for(const [x,y]of points)assert.equal(await page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest('a'),[box.x+x/1536*box.width,box.y+y/1024*box.height]),false,'inactive country/ocean context does not navigate');
-    await page.screenshot({path:'/tmp/'+(regionId==='east-asia'?'issue54':'issue56')+'-'+regionId+'-default-'+width+'.png'});
+    await page.screenshot({path:'/tmp/'+(regionId==='north-america'?'issue80':regionId==='east-asia'?'issue54':'issue56')+'-'+regionId+'-default-'+width+'.png'});
+    if(regionId==='north-america'){
+        await page.getByRole('button',{name:/English/}).click();await page.getByRole('menuitem',{name:'Français'}).click();
+        await page.getByRole('combobox',{name:'Région de l’atlas'}).waitFor();
+        for(const [id,label]of [['canada','Canada'],['united-states','États-Unis'],['mexico','Mexique']])assert.match(await page.locator(`[data-country="${id}"]`).getAttribute('aria-label'),new RegExp(label));
+        await paper.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+        await page.screenshot({path:`/tmp/issue80-north-america-fr-${width}.png`});
+        await page.getByRole('button',{name:/Français/}).click();await page.getByRole('menuitem',{name:'English'}).click();
+    }
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     await enterRegion(page,'europe');assert.equal(await page.locator('.atlas-country').count(),9);
     console.log(width+': '+regionId+' '+destinations.length+' native regional targets, callouts, inactive context, on-demand loading and Europe return passed');
+    await context.close();
+}
+
+async function checkNorthAmericaNavigation(browser,origin,width){
+    const bootstrap=file=>JSON.parse(readFileSync(file,'utf8').match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+    const countries=Object.fromEntries(NORTH_AMERICA_DESTINATIONS.map(d=>[d.id,bootstrap(`dist/browse/${d.id}/index.html`)]));
+    const context=await browser.newContext({viewport:{width,height:900},hasTouch:width<768,reducedMotion:'reduce'});
+    await context.route('**/*',route=>{
+        const url=new URL(route.request().url());
+        // Use genuine prerendered inventories; never require live API traffic.
+        if(url.pathname.startsWith('/api/itineraries/region/'))return route.fulfill({json:countries.canada.countryNames});
+        if(url.pathname.startsWith('/api/itineraries/browse/')){
+            const country=NORTH_AMERICA_DESTINATIONS.find(d=>d.country===decodeURIComponent(url.pathname.split('/').at(-1)));
+            if(country)return route.fulfill({json:countries[country.id].items});
+        }
+        if(url.pathname.startsWith('/api/itineraries/slug/'))return route.fulfill({json:bootstrap(`dist/itinerary/${url.pathname.split('/').at(-1)}/index.html`).detail});
+        return url.origin===new URL(origin).origin?route.continue():route.abort();
+    });
+    const page=await context.newPage(),errors=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    for(const d of NORTH_AMERICA_DESTINATIONS){
+        await page.goto(origin);await enterRegion(page,'north-america');
+        const link=page.locator(`[data-country="${d.id}"]`);
+        await link.focus();assert.equal(await link.evaluate(el=>el.matches(':focus-visible')),true);
+        assert.notEqual(await link.evaluate(el=>getComputedStyle(el).outlineStyle),'none');
+        if(width>=768 && d.id==='canada'){
+            const [tab]=await Promise.all([context.waitForEvent('page'),link.click({modifiers:['Control']})]);
+            await tab.waitForLoadState('domcontentloaded');
+            assert.equal(new URL(tab.url()).pathname,'/browse/canada');await tab.close();
+            assert.equal(new URL(page.url()).pathname,'/','modified click keeps the Atlas open');
+        }
+        if(width<768){
+            await link.tap();assert.equal(await link.getAttribute('data-revealed'),'true');
+            await page.locator('.atlas-caption').tap();assert.equal(await link.getAttribute('data-revealed'),'false');
+            await link.tap();
+            await Promise.all([page.waitForURL('**/browse/'+d.id),link.tap()]);
+        }else await Promise.all([page.waitForURL('**/browse/'+d.id),page.keyboard.press('Enter')]);
+        await page.getByRole('heading',{name:new RegExp(d.country+'$')}).waitFor();
+        assert.ok(await page.locator('a[href^="/itinerary/"]').count()>0,'real country itineraries render');
+    }
+    assert.deepEqual(errors,[]);
+    console.log(width+': North America keyboard/native navigation, touch arm/outside disarm, reduced motion and real country inventories passed');
     await context.close();
 }
 
@@ -406,8 +459,13 @@ let browser;
 try {
     await vite.listen();const origin=vite.resolvedUrls.local[0];
     browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-    for(const width of [1440,390]) {
+    for(const width of process.env.ATLAS_WIDTHS?process.env.ATLAS_WIDTHS.split(',').map(Number):[1440,390]) {
         // Optional targeted iteration; the default command still verifies every scene.
+        if(process.env.ATLAS_REGION==='north-america'){
+            await checkRegion(browser,origin,width,'north-america');
+            await checkNorthAmericaNavigation(browser,origin,width);
+            continue;
+        }
         if(['east-asia','southeast-asia'].includes(process.env.ATLAS_REGION)){
             await checkRegion(browser,origin,width,process.env.ATLAS_REGION);
             for(const scene of Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent===process.env.ATLAS_REGION&&(!process.env.ATLAS_COUNTRIES||process.env.ATLAS_COUNTRIES.split(',').includes(id))))await checkCountryScene(browser,origin,width,scene);
@@ -508,6 +566,8 @@ try {
         assert.deepEqual(errors,[]);console.log(width+': static illustration, country transition, timing, caption geometry and responsive checks passed');await context.close();
         await checkRegion(browser,origin,width);
         await checkRegion(browser,origin,width,'southeast-asia');
+        await checkRegion(browser,origin,width,'north-america');
+        await checkNorthAmericaNavigation(browser,origin,width);
         await checkUkNavigation(browser,origin,width);
         for(const scene of Object.keys(COUNTRY_CHECKS))await checkCountryScene(browser,origin,width,scene);
         if(width===1440)for(const scene of ['spain','portugal','germany','greece','italy','netherlands','switzerland',...Object.keys(COUNTRY_CHECKS).filter(id=>COUNTRY_CHECKS[id].parent && COUNTRY_CHECKS[id].parent!=='europe')])await checkSceneFailure(browser,origin,scene);
