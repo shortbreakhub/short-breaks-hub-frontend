@@ -68,6 +68,12 @@ export default function Navbar() {
             return;
         }
 
+        if (item.type === 'scroll' && item.id === 'home') {
+            if (location.pathname !== '/') navigate('/');
+            window.scrollTo({top: 0, left: 0, behavior: 'instant'});
+            return;
+        }
+
         const scrollToSection = () => {
             const el = document.getElementById(item.id);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });

@@ -28,6 +28,7 @@
 .discovery-intro p { font-family: var(--sbh-font-heading); font-size: 1.375rem; margin: 0.25rem 0; line-height: 1.25; }
 .discovery-intro .sbh-kicker { font-size: 0.6875rem; }
 .home-discovery .sbh-control { border: 0; border-bottom: 1px solid var(--sbh-control-border); border-radius: 0; padding-inline: 0; }
+.home-page .home-discovery #home-country:disabled { background: #faf7f0; border-color: #d8cdb9; color: #877e70; }
 .home-discovery .sbh-label { font-size: 0.75rem; color: var(--sbh-secondary); }
 .discovery-feedback { grid-column: 1 / -1; }
 .home-bridge { padding-block: 1.25rem; border-bottom: 1px solid #e5dfd2; background: #f5f0e5; }
@@ -67,6 +68,11 @@
 .home-planning h3 { margin: 0; font-size: 1rem; font-weight: 600; }
 .home-planning li p { margin: 0.4rem 0 0; }
 .home-page .home-planning a:focus-visible { outline-color: #f4bb42; }
+@media (min-width: 1280px) {
+    .home-page .home-hero { padding-top: 0.75rem; }
+    .home-discovery { margin-top: 0.5rem; padding-block: 0.75rem; }
+    .atlas-stage figcaption.atlas-caption { height: auto; min-height: 0; padding-block: 0.25rem; }
+}
 @media (min-width: 768px) and (max-width: 1023px) {
     .home-opening { grid-template-columns: 1fr; }
     .home-copy { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
