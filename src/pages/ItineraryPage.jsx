@@ -10,6 +10,7 @@ import axios from "axios";
 import ItineraryStoryPage from "../components/itinerary/ItineraryStoryPage.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import useItineraryScroll from "../hooks/useItineraryScroll.js";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {getItineraryPageMetadata} from "../utils/pageMetadata.js";
 
@@ -29,6 +30,7 @@ export default function ItineraryPage() {
     const [data,setData] = useState(() => bootstrapRef.current?.detail || {});
     const [loading, setLoading] = useState(() => !bootstrapRef.current);
     const [loadError, setLoadError] = useState("");
+    useItineraryScroll(!loading);
     const [retry, setRetry] = useState(0);
     const [hotelState, setHotelState] = useState(null);
     useEffect(() => { setHotelState(null); }, [slug]);
