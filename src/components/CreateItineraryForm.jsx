@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import DayPlanTextArea from "./DayPlanTextArea.jsx";
 import {
     postUserItineraryPhoto, postUserItinerary, getUserDraftCount, postUserDraftItinerary, postDraftPhoto,
@@ -25,6 +25,14 @@ export default function CreateItineraryForm() {
     const navigate = useNavigate();
     const [isSavingDraft, setIsSavingDraft] = useState(false);
     const [searchParams] = useSearchParams()
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [draftUnavailable, setDraftUnavailable] = useState(false);
+    const [isLoadingDraft, setIsLoadingDraft] = useState(Boolean(searchParams.get("draftId")));
+    const uploadedCover = useRef(null);
+    const persistedCover = useRef("");
+    const operationPending = useRef(false);
+    const requestOptions = {preserveFormOnUnauthorized: true};
+    const busy = isSavingDraft || isPublishing || isLoadingDraft || draftUnavailable;
     const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false);
     const [itineraryContent, setItineraryContent] = useState({
         title: "",
@@ -73,13 +81,48 @@ export default function CreateItineraryForm() {
         }));
     }
 
-    function handlePhotoPreview(e){
-        const selectedPhoto = e.target.files?.[0];
-        if(selectedPhoto){
-            setFile(selectedPhoto);
-            setPreviewUrl(URL.createObjectURL(selectedPhoto));
-        }
+    function showWorkflowError(error, action) {
+        const status = error?.response?.status;
+        const msg = status === 401 || status === 403 || axios.isCancel(error)
+            ? "Your session is unavailable. Sign in again before retrying. Your form has not been cleared."
+            : status === 404
+                ? "The draft or cover image is unavailable. Check your draft access and select a fresh cover image before retrying. Your form has not been cleared."
+                : !error?.response
+                    ? "The request could not be completed. Check your connection and retry. Your form has not been cleared."
+                    : "The request failed. Please retry. Your form has not been cleared.";
+        setShowModal({msgTitle: action + " failed", msg});
+    }
 
+    function validPhoto(photo) {
+        return photo && photo.size > 0 && ["image/jpeg", "image/png"].includes(photo.type);
+    }
+
+    function handlePhotoPreview(e) {
+        const selectedPhoto = e.target.files?.[0];
+        if (!selectedPhoto) return;
+        if (!validPhoto(selectedPhoto)) {
+            e.target.value = "";
+            setShowModal({msgTitle: "Cover image required", msg: "Select a non-empty JPG or PNG image. Your existing cover has not been changed."});
+            return;
+        }
+        if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+        uploadedCover.current = null;
+        setFile(selectedPhoto);
+        setPreviewUrl(URL.createObjectURL(selectedPhoto));
+    }
+
+    async function uploadCover(publishing) {
+        if (uploadedCover.current?.file === file) return uploadedCover.current.url;
+        if (!validPhoto(file)) throw new Error("Select a valid cover image");
+        const url = publishing
+            ? await postUserItineraryPhoto(file, requestOptions)
+            : draftId && persistedCover.current
+                ? await postUpdateDraftCoverPhoto(file, persistedCover.current, requestOptions)
+                : await postDraftPhoto(file, requestOptions);
+        if (typeof url !== "string" || !url.trim()) throw new Error("Missing upload URL");
+        uploadedCover.current = {file, url};
+        setItineraryContent(current => ({...current, coverPhoto: url}));
+        return url;
     }
 
     function handleEmailVerificationRequest(){
@@ -113,68 +156,44 @@ export default function CreateItineraryForm() {
 
     }
 
-    function handleSaveDraft(){
-
-        getUserDraftCount().then((res) => {
-            if( res.count === 3 && !draftId){
-                setShowModal({"msgTitle": "Draft Limit Reached","msg":"You can only have <span class=\"font-bold\">up to 3 itinerary drafts</span>.\n" +
-                        "                                <br />\n" +
-                        "                                Please delete an existing draft before creating a new one."});
-            }
-            else {
-                const plan = dayPlan.map((eachDayPlan,index) =>({...eachDayPlan, day: index + 1}));
-                const payload = {...itineraryContent,region: itineraryContent.region.toUpperCase(),userDayPlan:plan,draftId:draftId};
-                if(payload.title.trim().length === 0){
-                    setShowModal({"msgTitle": "Itinerary Title Missing",
-                        "msg":"Please enter a <span class=\"font-bold\">Title</span> before saving your draft."});
+    async function handleSaveDraft() {
+        if (busy || operationPending.current) return;
+        if (!itineraryContent.title.trim()) {
+            setShowModal({msgTitle: "Itinerary Title Missing", msg: "Please enter a Title before saving your draft."});
+            return;
+        }
+        operationPending.current = true;
+        setIsSavingDraft(true);
+        try {
+            if (!draftId) {
+                const {count} = await getUserDraftCount(requestOptions);
+                if (count >= 3) {
+                    setShowModal({msgTitle: "Draft Limit Reached", msg: "You can only have up to 3 itinerary drafts. Please delete an existing draft before creating a new one."});
                     return;
                 }
-                if (payload.draftId === null){
-                    setIsSavingDraft(true);
-                    if(file){
-                        postDraftPhoto(file).then((res) => {
-                            payload.coverPhoto = res;
-                            postUserDraftItinerary(payload).then((res) => {
-                                setShowSuccessDraftSaveModal(true);
-                                setDraftId(res.draftId);
-                            })
-                        }).catch(() => {
-                            setShowModal({"msgTitle": "Save Failed", "msg":"Something went wrong. Please try again."});
-                        }).finally(() => {
-                            setIsSavingDraft(false);
-                        })
-                    }
-                    else {
-                        postUserDraftItinerary(payload).then((res) => {
-                            setShowSuccessDraftSaveModal(true);
-                            setDraftId(res.draftId);
-                        }).catch(() => {
-                            setShowModal({"msgTitle": "Save Failed", "msg":"Something went wrong. Please try again."});
-                        }).finally(() => {
-                            setIsSavingDraft(false);
-                        })
-                    }
-                }
-                else{
-                    setIsSavingDraft(true);
-                    if(previewUrl !== itineraryContent.coverPhoto && file){
-                        postUpdateDraftCoverPhoto(file,itineraryContent.coverPhoto).then(() => {
-                            updateDraft(draftId,payload).then(() => {
-                                setShowModal({"msgTitle": "Draft Update", "msg":"Draft Updated Successfully."});
-                            });
-                        }).finally(() => {setIsSavingDraft(false);})
-                    }
-                    else {
-                        updateDraft(draftId,payload).then(() => {
-                            setShowModal({"msgTitle": "Draft Update", "msg":"Draft Updated Successfully."});
-                        }).finally(() => {setIsSavingDraft(false);});
-                    }
-                }
             }
-        })
+            const coverPhoto = file ? await uploadCover(false) : itineraryContent.coverPhoto;
+            const payload = {...itineraryContent, coverPhoto, region: itineraryContent.region.toUpperCase(),
+                userDayPlan: dayPlan.map((day, index) => ({...day, day: index + 1})), draftId};
+            if (draftId) {
+                await updateDraft(draftId, payload, requestOptions);
+                setShowModal({msgTitle: "Draft Update", msg: "Draft Updated Successfully.", icon: "success"});
+            } else {
+                const saved = await postUserDraftItinerary(payload, requestOptions);
+                setDraftId(saved.draftId);
+                setShowSuccessDraftSaveModal(true);
+            }
+            persistedCover.current = coverPhoto;
+        } catch (error) {
+            showWorkflowError(error, "Save");
+        } finally {
+            operationPending.current = false;
+            setIsSavingDraft(false);
+        }
     }
 
-    function handleSubmitItinerary() {
+    async function handleSubmitItinerary() {
+        if (busy || operationPending.current) return;
         if(!Auth.isEmailVerified()){
             setShowEmailVerificationModal(true);
             return;
@@ -204,36 +223,37 @@ export default function CreateItineraryForm() {
         if (!isValid)  return;
 
 
-        postUserItineraryPhoto(file)
-            .then((res) => {
-               itineraryContent.coverPhoto = res;
-               const plan = dayPlan.map((eachDayPlan,index) =>({...eachDayPlan, day: index + 1}));
-               const payload = {...itineraryContent,region: itineraryContent.region.toUpperCase(),userDayPlan:plan};
-               postUserItinerary(payload).then(() => {
-                   setCountdown(5);
-                   setShowSuccessModal(true);
-                   }
-               )
-            })
-            .catch((err) => console.error("Upload failed:", err));
-
-        if (previewUrl) {
-            if(typeof previewUrl === "string"){
-                URL.revokeObjectURL(previewUrl);
-            }
-            setPreviewUrl(null);
+        if (!validPhoto(file) && !uploadedCover.current) {
+            setShowModal({msgTitle: "Fresh cover image required", msg: draftId
+                ? "Please upload a cover image before publishing this older draft. Your existing draft and image will remain available."
+                : "Select a non-empty JPG or PNG cover image before publishing."});
+            return;
+        }
+        operationPending.current = true;
+        setIsPublishing(true);
+        try {
+            const coverPhoto = await uploadCover(true);
+            const payload = {...itineraryContent, coverPhoto, region: itineraryContent.region.toUpperCase(),
+                userDayPlan: dayPlan.map((day, index) => ({...day, day: index + 1}))};
+            await postUserItinerary(payload, requestOptions);
+            setCountdown(5);
+            setShowSuccessModal(true);
+        } catch (error) {
+            showWorkflowError(error, "Publish");
+        } finally {
+            operationPending.current = false;
+            setIsPublishing(false);
         }
     }
 
     function handleDeleteDraft() {
         setShowConfirmationModal(false);
-        deleteDraft(draftId).then(() => {
+        deleteDraft(draftId, requestOptions).then(() => {
             setShowModal({"msgTitle": "Draft Delete", "msg":"Draft Delete Successfully."});
 
-        }).finally(() => {
             navigate("/create-itinerary");
             window.location.reload();
-        });
+        }).catch(error => showWorkflowError(error, "Delete"));
     }
 
 
@@ -276,11 +296,16 @@ export default function CreateItineraryForm() {
         if(searchParams){
             const parameterDraftId = searchParams.get("draftId");
             if(parameterDraftId){
-                getDraftByDraftId(parameterDraftId).then(data => {
+                getDraftByDraftId(parameterDraftId, requestOptions).then(data => {
                     setItineraryContent(current => ({...current,...data}))
                     setDraftId(parameterDraftId)
                     setPreviewUrl(data.coverPhoto);
-                })
+                    persistedCover.current = data.coverPhoto || "";
+                    if (Array.isArray(data.schedule)) setDayPlan(data.schedule.map(day => ({title: day.title || "", details: day.details || ""})));
+                }).catch(error => {
+                    setDraftUnavailable(true);
+                    showWorkflowError(error, "Load draft");
+                }).finally(() => setIsLoadingDraft(false));
             }
         }
     },[])
@@ -316,7 +341,7 @@ export default function CreateItineraryForm() {
                 </div>
 
                 {/* Card */}
-                <div className="bg-white border border-slate-400 rounded-lg shadow-sm">
+                <fieldset disabled={busy} className="min-w-0 bg-white border border-slate-400 rounded-lg shadow-sm">
                     {/* Basic info */}
                     <section className="p-6 border-b border-slate-300">
                         <h2 className="text-base font-medium mb-4">Basic info</h2>
@@ -508,7 +533,7 @@ export default function CreateItineraryForm() {
                                        className="mt-1 py-1 px-3 border-2 w-full rounded-md border-slate-300 focus:border-slate-400 focus:ring-0"
                                        onChange={(e)=>
                                            setItineraryContent(current => ({...current, highlights: e.target.value}))}
-                                       data-field="tags" />
+                                       data-field="tags" value={itineraryContent.highlights} />
                                 <p className="text-xs text-slate-500 mt-1">Comma-separated. E.g. “family, foodie, budget”.</p>
                             </div>
 
@@ -528,18 +553,18 @@ export default function CreateItineraryForm() {
                             </div>
                         </div>
                     </section>
-                </div>
+                </fieldset>
 
                 {/* WeatherFooter actions */}
                 <div className="flex items-center justify-end gap-2 mt-6">
                     <button type="button" className="px-4 py-2 rounded-md border border-slate-300 hover:bg-slate-50"
-                            data-action="discard" onClick={()=> setShowConfirmationModal(true)}>Discard</button>
+                            data-action="discard" disabled={busy || !draftId} onClick={()=> setShowConfirmationModal(true)}>Discard</button>
                     <button type="button" className="px-4 py-2 rounded-md border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                            data-action="save-draft" disabled={isSavingDraft} onClick={handleSaveDraft}>
+                            data-action="save-draft" disabled={busy} onClick={handleSaveDraft}>
                         { isSavingDraft ? 'Saving' : 'Save Draft' }
                     </button>
                     <button type="button" className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
-                            data-action="publish" onClick={handleSubmitItinerary}>Publish</button>
+                            data-action="publish" disabled={busy} onClick={handleSubmitItinerary}>{isPublishing ? "Publishing" : "Publish"}</button>
                 </div>
             </div>
 
