@@ -996,5 +996,75 @@
     "resetFailed":"Reset Password Request Failed",
     "technicalProblem":"Due to a technical problem, we couldn't process your request.",
     "tryLaterHint":"Please try it again later or contact us if problem persists."
+  },
+  "travelJournal": {
+    "title": "My Travel Journal",
+    "subtitle": "Your journeys, memories and saved places.",
+    "navigation": "My Travel Journal sections",
+    "sections": {
+      "overview": "Overview",
+      "favorites": "Favorites",
+      "published-itineraries": "Published Itineraries",
+      "draft-itineraries": "Draft Itineraries",
+      "settings": "Settings"
+    },
+    "create": "Create New Itinerary",
+    "closing": "Small journeys. Big memories.",
+    "welcome": "Welcome, {{name}}",
+    "welcomeDescription": "Your saved trips and your own journeys, all in one place.",
+    "loading": "Loading your journal…",
+    "failed": "We could not load this part of your journal.",
+    "retry": "Try again",
+    "unavailable": "Unavailable",
+    "official": "Official Trips",
+    "community": "Community Trips",
+    "favoriteType": "Favorite collection",
+    "recentOwned": "Recent Owned Journeys",
+    "continueDraft": "Continue Your Draft",
+    "viewAll": "View all",
+    "account": "Your Account",
+    "avatar": "Your profile picture",
+    "editProfile": "Edit profile",
+    "explore": "Explore New Trips",
+    "untitled": "Untitled itinerary",
+    "days": "{{count}} day",
+    "days_other": "{{count}} days",
+    "updated": "Updated",
+    "privateDetail": "This private journey has no supported detail view yet.",
+    "visibility": {
+      "PUBLIC": "Public",
+      "PRIVATE": "Private"
+    },
+    "pagination": "Collection pages",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{current}} of {{total}}",
+    "continue": "Continue editing",
+    "discard": "Discard",
+    "deleteTitle": "Discard this draft?",
+    "deleteDescription": "“{{title}}” will be removed from your saved drafts.",
+    "deleteFailed": "The draft was not deleted. Please try again.",
+    "cancel": "Keep draft",
+    "deleting": "Deleting…",
+    "confirmDelete": "Delete draft",
+    "saved": "Your profile has been updated.",
+    "saveFailed": "Your changes could not be saved. Please try again.",
+    "groupLimit": "Your travel group cannot exceed 16 people.",
+    "imageLimit": "Choose an image no larger than 3 MB.",
+    "photoSaved": "Your profile picture has been updated.",
+    "empty": {
+      "favorites": {
+        "title": "No favorites yet",
+        "description": "Save trips you love and find them here later."
+      },
+      "published": {
+        "title": "Your first journey is waiting",
+        "description": "Your own published itineraries will appear here."
+      },
+      "drafts": {
+        "title": "No drafts yet",
+        "description": "Start an itinerary and save a draft to continue it later."
+      }
+    }
   }
 }

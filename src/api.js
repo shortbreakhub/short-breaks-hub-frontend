@@ -54,8 +54,11 @@ export const getFavoritesMe = (itineraryId) =>
 export const getCommunityFavoritesMe = (itineraryId) =>
     api.get(`/community-itineraries/${itineraryId}/favorites/me`).then((res) => res.data);
 
-export const getMeFavorites = () =>
-    api.get(`/itineraries/me/favorites`).then((res) => res.data);
+export const getMeFavorites = (params) =>
+    api.get(`/itineraries/me/favorites`, {params}).then((res) => res.data);
+
+export const getMeCommunityFavorites = (params) =>
+    api.get(`/community-itineraries/me/favorites`, {params}).then(res => res.data);
 
 export const getAllItinerariesByCustomSearch = (customSearch) =>
     publicApi.get(`/itineraries/search?${customSearch}`).then((res) => res.data);
@@ -66,8 +69,8 @@ export const getCommentList = (itineraryId) =>
 export const getCommentMe = (itineraryId) =>
     api.get(`/itineraries/${itineraryId}/comments/me`).then((res) => res.data);
 
-export const getMeItineraries = () =>
-    api.get(`/community-itineraries/me`).then((res) => res.data);
+export const getMeItineraries = (params) =>
+    api.get(`/community-itineraries/me`, {params}).then((res) => res.data);
 
 export const getUserItineraryBySlug = (slug) =>
     publicApi.get(`/community-itineraries/slug/${slug}`).then((res) => res.data);
