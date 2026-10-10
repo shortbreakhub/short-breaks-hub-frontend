@@ -87,14 +87,14 @@ export const getQuestionThreadSummary = (itineraryId) =>
 export const getQuestionThread = (itineraryId,threadId) =>
     publicApi.get(`/community-itineraries/${itineraryId}/question-threads/${threadId}`).then((res) => res.data);
 
-export const getUserDraftCount = () =>
-    api.get(`/community-itineraries/draft/count`).then((res) => res.data);
+export const getUserDraftCount = (options = {}) =>
+    api.get(`/community-itineraries/draft/count`, options).then((res) => res.data);
 
 export const getMeSavedDraft = () =>
     api.get(`/community-itineraries/draft/me`).then(res => res.data);
 
-export const getDraftByDraftId = (draftId) =>
-    api.get(`/community-itineraries/draft/${draftId}`).then(res => res.data);
+export const getDraftByDraftId = (draftId, options = {}) =>
+    api.get(`/community-itineraries/draft/${draftId}`, options).then(res => res.data);
 
 export const getResendVerificationEmail = () =>
     api.get('/auth/verify-email-request').then(res => res.data);
@@ -133,20 +133,20 @@ export const postFavorite = (itineraryId) =>
 export const postCommunityFavorite = (itineraryId) =>
     api.post(`/community-itineraries/${itineraryId}/favorite`).then((res) => res.data);
 
-export const postUserItineraryPhoto = (file) => {
+export const postUserItineraryPhoto = (file, options = {}) => {
     const formData = new FormData();
     formData.append("file", file);
-    return api.post("/community-itineraries/upload-itinerary-cover-photo", formData,{headers: { 'Content-Type': 'multipart/form-data' }})
+    return api.post("/community-itineraries/upload-itinerary-cover-photo", formData,{...options, headers: { 'Content-Type': 'multipart/form-data' }})
         .then((res) => res.data
         )
 }
 
-export const postUserItinerary = (userItinerary) => {
-    return api.post("/community-itineraries/publish-itinerary",userItinerary).then((res) => res.data);
+export const postUserItinerary = (userItinerary, options = {}) => {
+    return api.post("/community-itineraries/publish-itinerary",userItinerary, options).then((res) => res.data);
 }
 
-export const postUserDraftItinerary = (userDraftItinerary) => {
-    return api.post("/community-itineraries/draft/save-draft",userDraftItinerary).then((res) => res.data);
+export const postUserDraftItinerary = (userDraftItinerary, options = {}) => {
+    return api.post("/community-itineraries/draft/save-draft",userDraftItinerary, options).then((res) => res.data);
 }
 
 export const postAQuestionOrAnswer = (itineraryId,content) =>{
@@ -160,20 +160,20 @@ export const postQuestionThread = (itineraryId,threadId,content) =>{
         )
 }
 
-export const postDraftPhoto = (file) => {
+export const postDraftPhoto = (file, options = {}) => {
     const formData = new FormData();
     formData.append("file", file);
-    return api.post("community-itineraries/draft/upload-draft-cover-photo", formData,{headers: { 'Content-Type': 'multipart/form-data' }})
+    return api.post("community-itineraries/draft/upload-draft-cover-photo", formData,{...options, headers: { 'Content-Type': 'multipart/form-data' }})
         .then((res) => res.data
         )
 }
 
-export const postUpdateDraftCoverPhoto = (file,existingCoverUrl) =>{
+export const postUpdateDraftCoverPhoto = (file,existingCoverUrl, options = {}) =>{
     const formData = new FormData();
     formData.append("file", file);
     formData.append("existingCoverUrl", existingCoverUrl);
 
-    return api.post("community-itineraries/draft/update-draft-cover-photo", formData,{headers: { 'Content-Type': 'multipart/form-data' }})
+    return api.post("community-itineraries/draft/update-draft-cover-photo", formData,{...options, headers: { 'Content-Type': 'multipart/form-data' }})
         .then((res) => res.data
         )
 }
@@ -198,8 +198,8 @@ export const updateUserPhoto = (payload) =>
         .then((res) =>  res.data || payload
         )
 
-export const updateDraft = (draftId,payload) =>
-    api.put(`community-itineraries/draft/${draftId}`,payload ).then((res) =>  res.data)
+export const updateDraft = (draftId,payload, options = {}) =>
+    api.put(`community-itineraries/draft/${draftId}`,payload, options ).then((res) =>  res.data)
 
 export const deleteFavorite = (itineraryId) =>
     api.delete(`/itineraries/${itineraryId}/favorite`).then((res) => res.data);
@@ -210,15 +210,16 @@ export const deleteCommunityFavorite = (itineraryId) =>
 export const deleteComment = (itineraryId) =>
     api.delete(`/itineraries/${itineraryId}/comments`).then((res) => res.data);
 
-export const deleteDraft = (draftId) =>
-    api.delete(`community-itineraries/draft/${draftId}`).then((res) =>  res.data)
+export const deleteDraft = (draftId, options = {}) =>
+    api.delete(`community-itineraries/draft/${draftId}`, options).then((res) =>  res.data)
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("authToken");
     if (!token || isExpired(token)) {
         localStorage.removeItem("authToken");
         localStorage.setItem("auth:logout", String(Date.now()));
-        window.location.replace("/login?reason=expired");
+        // Cover workflows retain unsaved input; expired credentials still block the request.
+        if (!config.preserveFormOnUnauthorized) window.location.replace("/login?reason=expired");
         localStorage.setItem("auth:toast", "This operation is for user only,please log in first.");
         throw new axios.Cancel("token expired");
     }
@@ -234,7 +235,8 @@ api.interceptors.response.use(
         if (status === 401 || status === 403) {
             localStorage.removeItem("authToken");
             localStorage.setItem("auth:logout", String(Date.now()));
-            if (location.pathname !== "/login") {
+            // Opt-in affects navigation only, never credential invalidation or error rejection.
+            if (!err.config?.preserveFormOnUnauthorized && location.pathname !== "/login") {
                 localStorage.setItem("auth:toast", "Unauthorized. Please log in first.");
                 window.location.replace("/login?reason=unauthorized");
 
