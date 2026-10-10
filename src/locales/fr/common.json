@@ -996,5 +996,75 @@
     "resetFailed": "Échec de la demande de réinitialisation du mot de passe",
     "technicalProblem": "En raison d'un problème technique, votre demande n'a pas pu être envoyée.",
     "tryLaterHint": "Veuillez réessayer plus tard ou nous contacter si le problème persiste."
+  },
+  "travelJournal": {
+    "title": "Mon carnet de voyage",
+    "subtitle": "Vos voyages, vos souvenirs et vos lieux favoris.",
+    "navigation": "Rubriques de mon carnet de voyage",
+    "sections": {
+      "overview": "Vue d’ensemble",
+      "favorites": "Favoris",
+      "published-itineraries": "Itinéraires publiés",
+      "draft-itineraries": "Brouillons",
+      "settings": "Paramètres"
+    },
+    "create": "Créer un itinéraire",
+    "closing": "Petits voyages. Grands souvenirs.",
+    "welcome": "Bienvenue, {{name}}",
+    "welcomeDescription": "Vos voyages favoris et vos propres itinéraires, réunis au même endroit.",
+    "loading": "Chargement de votre carnet…",
+    "failed": "Cette partie de votre carnet n’a pas pu être chargée.",
+    "retry": "Réessayer",
+    "unavailable": "Indisponible",
+    "official": "Voyages officiels",
+    "community": "Voyages de la communauté",
+    "favoriteType": "Collection de favoris",
+    "recentOwned": "Vos itinéraires récents",
+    "continueDraft": "Reprendre votre brouillon",
+    "viewAll": "Tout voir",
+    "account": "Votre compte",
+    "avatar": "Votre photo de profil",
+    "editProfile": "Modifier le profil",
+    "explore": "Explorer de nouveaux voyages",
+    "untitled": "Itinéraire sans titre",
+    "days": "{{count}} jour",
+    "days_other": "{{count}} jours",
+    "updated": "Mis à jour",
+    "privateDetail": "La consultation détaillée de cet itinéraire privé n’est pas encore disponible.",
+    "visibility": {
+      "PUBLIC": "Public",
+      "PRIVATE": "Privé"
+    },
+    "pagination": "Pages de la collection",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {{current}} sur {{total}}",
+    "continue": "Continuer la rédaction",
+    "discard": "Supprimer",
+    "deleteTitle": "Supprimer ce brouillon ?",
+    "deleteDescription": "« {{title}} » sera retiré de vos brouillons enregistrés.",
+    "deleteFailed": "Le brouillon n’a pas été supprimé. Veuillez réessayer.",
+    "cancel": "Conserver le brouillon",
+    "deleting": "Suppression…",
+    "confirmDelete": "Supprimer le brouillon",
+    "saved": "Votre profil a été mis à jour.",
+    "saveFailed": "Vos modifications n’ont pas pu être enregistrées. Veuillez réessayer.",
+    "groupLimit": "Votre groupe ne peut pas dépasser 16 personnes.",
+    "imageLimit": "Choisissez une image de 3 Mo maximum.",
+    "photoSaved": "Votre photo de profil a été mise à jour.",
+    "empty": {
+      "favorites": {
+        "title": "Aucun favori pour le moment",
+        "description": "Enregistrez les voyages qui vous plaisent pour les retrouver ici."
+      },
+      "published": {
+        "title": "Votre premier voyage vous attend",
+        "description": "Vos itinéraires publiés apparaîtront ici."
+      },
+      "drafts": {
+        "title": "Aucun brouillon pour le moment",
+        "description": "Commencez un itinéraire et enregistrez un brouillon pour le reprendre plus tard."
+      }
+    }
   }
 }
