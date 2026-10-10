@@ -8,6 +8,18 @@
       "stories": "Trouvez votre prochaine histoire"
     },
     "atlas": {
+      "northAmericaName": "Amérique du Nord",
+      "northAmericaMapLabel": "Atlas de voyage illustré de l’Amérique du Nord",
+      "northAmericaPreviewAlt": "Atlas aquarelle de l’Amérique du Nord avec le Canada, les États-Unis et le Mexique",
+      "northAmericaCaption": "Amérique du Nord — découvrez votre prochaine histoire",
+      "northAmericaDestinations": "Explorer les destinations d’Amérique du Nord",
+      "backNorthAmerica": "Retour en Amérique du Nord",
+      "northAmericaSceneFailed": "L’atlas n’a pas pu s’ouvrir. Votre région précédente est prête à être explorée.",
+      "northAmericaCountries": {
+        "canada": "Canada",
+        "united-states": "États-Unis",
+        "mexico": "Mexique"
+      },
       "southeastAsiaName": "Asie du Sud-Est",
       "southeastAsiaMapLabel": "Atlas de voyage illustré de l’Asie du Sud-Est",
       "southeastAsiaPreviewAlt": "Atlas aquarelle de l’Asie du Sud-Est avec neuf destinations",

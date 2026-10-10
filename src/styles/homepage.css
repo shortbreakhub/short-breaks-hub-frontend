@@ -208,6 +208,7 @@
 .atlas-region-control select { min-height: 44px; max-width: 10rem; padding: 0.4rem 0.6rem; border: 0; border-bottom: 2px solid #8b6a2b; background: transparent; color: #384838; font: 700 0.875rem/1.2 var(--sbh-font-body); cursor: pointer; }
 .atlas-region-control select:focus-visible { outline: 3px solid #285c69; outline-offset: 2px; }
 .atlas-region-control select:disabled { opacity: 0.65; cursor: default; }
+.atlas-stage[data-atlas-scene="north-america"] .atlas-region-control select { max-width: 13rem; }
 
 /* Approved Travel Journal Chapters; all other homepage compositions stay unchanged. */
 .home-picks { background: #f4e9d9 var(--journal-paper) 50% 0 / 400% repeat-y; }

@@ -8,6 +8,18 @@
       "stories": "Find your next story"
     },
     "atlas": {
+      "northAmericaName": "North America",
+      "northAmericaMapLabel": "Illustrated North America travel atlas",
+      "northAmericaPreviewAlt": "Watercolor North America atlas with Canada, United States and Mexico",
+      "northAmericaCaption": "North America — discover your next story",
+      "northAmericaDestinations": "Explore North America destinations",
+      "backNorthAmerica": "Back to North America",
+      "northAmericaSceneFailed": "The atlas could not open. Your previous region is ready to explore again.",
+      "northAmericaCountries": {
+        "canada": "Canada",
+        "united-states": "United States",
+        "mexico": "Mexico"
+      },
       "southeastAsiaName": "Southeast Asia",
       "southeastAsiaMapLabel": "Illustrated Southeast Asia travel atlas",
       "southeastAsiaPreviewAlt": "Watercolor Southeast Asia atlas with nine destinations",

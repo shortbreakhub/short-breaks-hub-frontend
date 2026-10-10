@@ -1,4 +1,5 @@
 import {southeastAsiaRegion} from './southeastAsiaScenes.js';
+import {northAmericaRegion} from './northAmericaScene.js';
 import {EUROPE_DESTINATIONS} from './europeDestinations.js';
 import {EAST_ASIA_DESTINATIONS} from './eastAsiaDestinations.js';
 // Region configuration reuses the accepted Europe interaction layer and scene controller.
@@ -12,4 +13,7 @@ export const REGION_SCENES = {
     'southeast-asia': {get destinations(){return southeastAsiaRegion.destinations;},get artworkUrl(){return southeastAsiaRegion.artworkUrl;},loadDestinations:southeastAsiaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.southeastAsiaName',
         mapLabel:'homeMagazine.atlas.southeastAsiaMapLabel', previewAlt:'homeMagazine.atlas.southeastAsiaPreviewAlt',
         caption:'homeMagazine.atlas.southeastAsiaCaption', nav:'homeMagazine.atlas.southeastAsiaDestinations', back:'homeMagazine.atlas.backSoutheastAsia', error:'homeMagazine.atlas.southeastAsiaSceneFailed'}},
+    'north-america': {get destinations(){return northAmericaRegion.destinations;},get artworkUrl(){return northAmericaRegion.artworkUrl;},loadDestinations:northAmericaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.northAmericaName',
+        mapLabel:'homeMagazine.atlas.northAmericaMapLabel', previewAlt:'homeMagazine.atlas.northAmericaPreviewAlt',
+        caption:'homeMagazine.atlas.northAmericaCaption', nav:'homeMagazine.atlas.northAmericaDestinations', back:'homeMagazine.atlas.backNorthAmerica', error:'homeMagazine.atlas.northAmericaSceneFailed'}},
 };
