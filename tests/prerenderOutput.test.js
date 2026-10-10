@@ -150,7 +150,11 @@ for (const {onClick: region, title} of REGIONS) {
             canonical: `https://www.shortbreakhub.com/${region}`,
         });
         const heading = getRenderedRoot(html).match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1];
-        assert.ok(heading?.includes("Discover") && heading.includes(title), "expected Region heading");
+        assert.ok(heading?.includes(title), "expected accessible Region identity");
+        assert.match(getRenderedRoot(html), /<h1[^>]*id="region-title"[^>]*class="sr-only"/);
+        const regionContent = getRenderedRoot(html).match(/<main[^>]*id="region-countries"[^>]*>[\s\S]*?<\/main>/)?.[0];
+        assert.ok(regionContent, "expected semantic Region content");
+        assert.doesNotMatch(regionContent, /bg-cover|<h1[^>]*>Discover\b|(?:southeast-asia|east-asia|europe|americas|anzalia-nz|africa)-banner/, "Region heroes are intentionally removed");
         const data = JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
         assert.equal(data.region, region);
         assert.ok(data.countries.length > 0);

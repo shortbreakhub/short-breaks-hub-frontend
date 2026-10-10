@@ -8,3 +8,10 @@ body{
 * {
     box-sizing: border-box;
 }
+
+/* Region-only paper tones; retain existing card geometry and interactions. */
+#region-countries { background-color: #f5f0e5; }
+#region-countries > div > .grid > .bg-white { background-color: #faf7f2; }
+#region-countries .grid > .bg-gray-50:not(:hover) { background-color: #e7ebdd; border-color: #c6ceba; }
+#region-countries .bg-blue-50 { background-color: #e7ebdd; }
+#region-countries .text-blue-600 { color: #315e50; }

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import CountryCard from '../components/CountryCard';
 import {getCountriesByRegion, getItinerariesByRegion} from "../api.js";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {loadImages} from "../utils/loadImage.js";
 import {useTranslation} from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
@@ -9,6 +9,7 @@ import PageMetadata from "../components/PageMetadata.jsx";
 import {formatSlug} from "../utils/formatSlug.js";
 import {getRegionPageMetadata} from "../utils/pageMetadata.js";
 import {PrerenderDataContext} from "../context/PrerenderDataContext.jsx";
+import useRegionScroll from "../hooks/useRegionScroll.js";
 
 function makeRegionCountries(countryList, itineraries) {
     return countryList.map((name) => ({
@@ -20,30 +21,26 @@ function makeRegionCountries(countryList, itineraries) {
     }));
 }
 
-
-
 function RegionPage() {
     const {region} = useParams();
+    const location = useLocation();
+    const anchor = useRef(null);
     const prerenderData = useContext(PrerenderDataContext);
     const matchingPrerenderData = prerenderData?.region === region ? prerenderData : null;
     const prerenderDataRef = useRef(matchingPrerenderData);
-    const [countries, setCountries] = useState(() => matchingPrerenderData
-        ? makeRegionCountries(matchingPrerenderData.countries, matchingPrerenderData.itineraries)
-        : []);
-    const [bannerImage, setBannerImage] = useState(() => matchingPrerenderData
-        ? loadImages(`${region}-banner`)
-        : null);
-    const { t } = useTranslation();
+    const [result, setResult] = useState(() => ({
+        region,
+        countries: matchingPrerenderData
+            ? makeRegionCountries(matchingPrerenderData.countries, matchingPrerenderData.itineraries) : [],
+        ready: !!matchingPrerenderData,
+    }));
+    const [retry, setRetry] = useState(0);
+    const current = result.region === region ? result : {countries: [], ready: false};
+    useRegionScroll(anchor, location.key, current.ready);
+    const {t} = useTranslation();
     const pageMetadata = getRegionPageMetadata(formatSlug(region || ""));
-
-    function titleCase(str) {
-        const splitStr = str.replace("-"," ").split(' ')
-        if (splitStr.length > 1) {
-            return splitStr[0]+splitStr[1][0].toUpperCase() + splitStr[1].slice(1);
-        }
-        return splitStr[0].toLowerCase();
-    }
-
+    const regionLabel = region.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    const labelKey = region.includes("-") ? regionLabel : regionLabel.toLowerCase();
 
     useEffect(() => {
         if (prerenderDataRef.current?.region === region) {
@@ -51,51 +48,40 @@ function RegionPage() {
             prerenderDataRef.current = null;
             return;
         }
+        let active = true;
+        setResult({region, countries: [], ready: false});
+        Promise.all([getCountriesByRegion(region), getItinerariesByRegion(region)])
+            .then(([names, itineraries]) => {
+                if (active) setResult({region, countries: makeRegionCountries(names, itineraries), ready: true});
+            })
+            .catch(() => {
+                if (active) setResult({region, countries: [], ready: true, failed: true});
+            });
+        return () => {active = false;};
+    }, [region, retry]);
 
-        setBannerImage(loadImages(`${region}-banner`));
-        getCountriesByRegion(region).then(
-            (country_list) => {
-                getItinerariesByRegion(region).then(
-                    (itineraries) => {
-                        setCountries(makeRegionCountries(country_list, itineraries));
-                    }
-                )
-            }
-        );
-    },[region]);
-
-
-
-    return (
-        <div id="region-countries" className="bg-gray-50 min-h-screen w-full overflow-x-hidden">
-            <PageCanonical segments={[region]} />
-            <PageMetadata canonicalSegments={[region]} {...pageMetadata} />
-            <div className="relative h-[300px] md:h-[400px] bg-cover bg-center shadow-lg"
-                 style={{ backgroundImage: `url('${bannerImage}')` }}>
-                <div className="absolute inset-0 bg-opacity-40 flex items-center justify-center">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
-                        {t("RegionPage.discover")} {t(`RegionPage.${titleCase(region)}`)}
-                    </h1>
-                </div>
-            </div>
-
-            <div className="max-w-screen-xl mx-auto my-14">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-cols-fr">
-                    {countries.map((country, index) => (
-                        <CountryCard
-                            key={country.name}
-                            name={country.name}
-                            itineraries={country.itineraries}
-                            image={country.image}
-                            loading={index < 3 ? "eager" : "lazy"}
-                            itineraryType={"itinerary"}
-                        />
-                    ))}
-                </div>
+    return <main ref={anchor} id="region-countries" aria-labelledby="region-title" className="bg-gray-50 min-h-screen w-full overflow-x-hidden">
+        <PageCanonical segments={[region]}/>
+        <PageMetadata canonicalSegments={[region]} {...pageMetadata}/>
+        <h1 id="region-title" className="sr-only">{t("RegionPage." + labelKey)}</h1>
+        <div className="max-w-screen-xl mx-auto py-4">
+            {!current.ready && <p className="p-4" role="status">{t("routeLoad.loading")}</p>}
+            {current.failed && <div className="p-4" role="alert">
+                <p>{t("routeLoad.failed")}</p>
+                <button type="button" className="sbh-link min-h-11" onClick={() => setRetry(value => value + 1)}>{t("itineraryLoad.retry")}</button>
+            </div>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-cols-fr">
+                {current.countries.map((country, index) => <CountryCard
+                    key={country.name}
+                    name={country.name}
+                    itineraries={country.itineraries}
+                    image={country.image}
+                    loading={index < 3 ? "eager" : "lazy"}
+                    itineraryType="itinerary"
+                />)}
             </div>
         </div>
-
-    );
+    </main>;
 }
 
 export default RegionPage;
