@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import abstractGeolocationApi from "../utils/abstractGeolocationApi.js";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import openMeteoApi from "../utils/openMeteoApi.js";
@@ -18,7 +17,7 @@ import "../styles/weather-forecast.css";
 
 export default function WeatherPage(){
     const [loading, setLoading] = useState(true);
-    const [currentWeatherData, setCurrentWeatherData] = useState(null);
+    const [currentWeatherData, setCurrentWeatherData] = useState({city: "London", region: "England", country: "United Kingdom", latitude: 51.5074, longitude: -0.1278});
     const [isCelsius,setIsCelsius] = useState(true);
     const [twelveHoursWeatherSummary, setTwelveHoursWeatherSummary] = useState([]);
     const [sevenDaysWeatherSummary, setSevenDaysWeatherSummary] = useState([]);
@@ -132,24 +131,15 @@ export default function WeatherPage(){
     }
 
     useEffect(() => {
-        setLoading(true);
-        abstractGeolocationApi().then((response) => {
-            setCurrentWeatherData(response);
-        }).catch((error) => {
-            console.log(error);
-        }).finally(
-            () => setLoading(false)
-        )
-
-    },[]);
-
-    useEffect(() => {
 
         if(!currentWeatherData?.latitude || !currentWeatherData.longitude) return;
 
+        let active = true;
+        setLoading(true);
         (async () => {
             try {
                 const response = await openMeteoApi(currentWeatherData.latitude, currentWeatherData.longitude);
+                if (!active) return;
                 setRawWeatherData(response)
                 const currentHour = parseInt(response.current.time.toString().split(" ")[4].split(":")[0]);
                 setCurrentWeatherData(current => ({...current,
@@ -229,9 +219,12 @@ export default function WeatherPage(){
 
             }
             catch(error) {
-                console.error(error)
+                if (active) console.error(error)
+            } finally {
+                if (active) setLoading(false);
             }
-        })().finally()
+        })();
+        return () => { active = false; };
 
     },[currentWeatherData?.latitude,currentWeatherData?.longitude]);
 
