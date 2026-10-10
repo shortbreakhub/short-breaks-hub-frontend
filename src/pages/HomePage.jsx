@@ -13,6 +13,7 @@ import {Action, Container, EditorialSurface, Media, Metadata, SectionHeader} fro
 import AtlasStage from "../components/home/AtlasStage.jsx";
 import TravelJournalChapters from "../components/home/TravelJournalChapters.jsx";
 import HomeDiscovery from "../components/home/HomeDiscovery.jsx";
+import useHomeScroll from "../hooks/useHomeScroll.js";
 import "../styles/homepage.css";
 
 function Story({item}) {
@@ -34,6 +35,7 @@ function Story({item}) {
 }
 
 export default function HomePage() {
+    useHomeScroll();
     const {t, i18n} = useTranslation();
     return <EditorialSurface className="home-page" lang={i18n.resolvedLanguage === "fr" ? "fr" : "en"}>
         <PageCanonical segments={[]} />
