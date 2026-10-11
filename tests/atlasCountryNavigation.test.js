@@ -23,7 +23,7 @@ test('every continent country link resolves to a story map in the same continent
         };
         const {REGION_SCENES} = await vite.ssrLoadModule('/src/components/home/atlas/regionScenes.js');
         const {COUNTRY_SCENES, sceneForCountry} = await vite.ssrLoadModule('/src/components/home/atlas/countryScenes.js');
-        assert.deepEqual(Object.keys(REGION_SCENES), ['europe','east-asia','southeast-asia','north-america','south-america','oceania']);
+        assert.deepEqual(Object.keys(REGION_SCENES), ['europe','east-asia','southeast-asia','north-america','south-america','oceania','africa']);
         for (const [region, scene] of Object.entries(REGION_SCENES)) {
             await scene.loadDestinations?.();
             assert.ok(scene.destinations.length > 0, region + ' has country links');
@@ -36,7 +36,7 @@ test('every continent country link resolves to a story map in the same continent
     } finally { if(api)api.defaults.adapter=adapter;await vite.close(); }
 });
 
-test('clicking an Americas or Oceania country starts its story-map transition instead of navigating', async () => {
+test('clicking an Americas, Oceania or Africa country starts its story-map transition instead of navigating', async () => {
     const vite = await ssr();
     const dom = new JSDOM('<div id="root"></div>', {url:'http://localhost:5173/', pretendToBeVisual:true});
     const keys = ['window','document','ResizeObserver','IS_REACT_ACT_ENVIRONMENT','requestAnimationFrame','cancelAnimationFrame','Image'];
@@ -51,7 +51,7 @@ test('clicking an Americas or Oceania country starts its story-map transition in
         api.defaults.adapter = async config => {
             const country=decodeURIComponent(config.url.split('/').at(-1));
             const id=country.toLowerCase().replaceAll(' ','-');
-            const oceania=['australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu'];
+            const oceania=['morocco','egypt','south-africa','kenya','tanzania','ghana','senegal','namibia','rwanda','australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu'];
             const html=oceania.includes(id)?readFileSync(`dist/browse/${id}/index.html`,'utf8'):null;
             const data=html?JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]).items:[];
             return {config,status:200,headers:{},data};
@@ -59,7 +59,7 @@ test('clicking an Americas or Oceania country starts its story-map transition in
         const {REGION_SCENES} = await vite.ssrLoadModule('/src/components/home/atlas/regionScenes.js');
         const {default:Stage} = await vite.ssrLoadModule('/src/components/home/AtlasStage.jsx');
         const {createRoot} = await import('react-dom/client');
-        for (const [region, countries] of [['north-america',['canada','united-states','mexico']], ['south-america',['brazil','argentina','peru','colombia','chile']], ['oceania',['australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu']], ['europe',['france']]]) {
+        for (const [region, countries] of [['north-america',['canada','united-states','mexico']], ['south-america',['brazil','argentina','peru','colombia','chile']], ['oceania',['australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu']], ['africa',['morocco','egypt','south-africa','kenya','tanzania','ghana','senegal','namibia','rwanda']], ['europe',['france']]]) {
             for (const country of countries) {
                 await REGION_SCENES[region].loadDestinations?.();
                 root = createRoot(document.getElementById('root'));
