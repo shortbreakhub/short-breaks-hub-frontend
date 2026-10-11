@@ -8,6 +8,14 @@
       "stories": "Find your next story"
     },
     "atlas": {
+      "oceaniaName": "Oceania",
+      "oceaniaMapLabel": "Illustrated Oceania travel atlas",
+      "oceaniaPreviewAlt": "Watercolor Oceania atlas",
+      "oceaniaCaption": "Oceania — discover your next story",
+      "oceaniaDestinations": "Explore Oceania destinations",
+      "backOceania": "Back to Oceania",
+      "oceaniaSceneFailed": "The atlas could not open. Your previous region is ready to explore again.",
+      "oceaniaCountries": {"australia": "Australia", "new-zealand": "New Zealand", "fiji": "Fiji", "french-polynesia": "French Polynesia", "new-caledonia": "New Caledonia", "papua-new-guinea": "Papua New Guinea", "samoa": "Samoa", "tonga": "Tonga", "vanuatu": "Vanuatu"},
       "southAmericaName": "South America",
       "southAmericaMapLabel": "Illustrated South America travel atlas",
       "southAmericaPreviewAlt": "Watercolor South America atlas",

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import React from 'react';
+import {readFileSync} from 'node:fs';
 import {createServer} from 'vite';
 import {JSDOM} from 'jsdom';
 
@@ -10,10 +11,19 @@ const ssr = () => createServer({appType:'custom',logLevel:'error',server:{middle
 
 test('every continent country link resolves to a story map in the same continent', async () => {
     const vite = await ssr();
+    let api,adapter;
     try {
+        api=(await vite.ssrLoadModule('/src/api.js')).publicApi;adapter=api.defaults.adapter;
+        api.defaults.adapter=async config=>{
+            const country=decodeURIComponent(config.url.split('/').at(-1));
+            const id=country.toLowerCase().replaceAll(' ','-');
+            const html=readFileSync(`dist/browse/${id}/index.html`,'utf8');
+            const data=JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+            return {config,status:200,headers:{},data:data.items};
+        };
         const {REGION_SCENES} = await vite.ssrLoadModule('/src/components/home/atlas/regionScenes.js');
         const {COUNTRY_SCENES, sceneForCountry} = await vite.ssrLoadModule('/src/components/home/atlas/countryScenes.js');
-        assert.deepEqual(Object.keys(REGION_SCENES), ['europe','east-asia','southeast-asia','north-america','south-america']);
+        assert.deepEqual(Object.keys(REGION_SCENES), ['europe','east-asia','southeast-asia','north-america','south-america','oceania']);
         for (const [region, scene] of Object.entries(REGION_SCENES)) {
             await scene.loadDestinations?.();
             assert.ok(scene.destinations.length > 0, region + ' has country links');
@@ -23,10 +33,10 @@ test('every continent country link resolves to a story map in the same continent
                 assert.equal(COUNTRY_SCENES[country].region || 'europe', region, `${destination.id} returns to ${region}`);
             }
         }
-    } finally { await vite.close(); }
+    } finally { if(api)api.defaults.adapter=adapter;await vite.close(); }
 });
 
-test('clicking a North or South America country starts the story-map transition instead of navigating', async () => {
+test('clicking an Americas or Oceania country starts its story-map transition instead of navigating', async () => {
     const vite = await ssr();
     const dom = new JSDOM('<div id="root"></div>', {url:'http://localhost:5173/', pretendToBeVisual:true});
     const keys = ['window','document','ResizeObserver','IS_REACT_ACT_ENVIRONMENT','requestAnimationFrame','cancelAnimationFrame','Image'];
@@ -38,11 +48,18 @@ test('clicking a North or South America country starts the story-map transition 
         await vite.ssrLoadModule('/src/i18n.js');
         api = (await vite.ssrLoadModule('/src/api.js')).publicApi; adapter = api.defaults.adapter;
         // No live network: country inventories resolve to an empty fixture.
-        api.defaults.adapter = async config => ({config, status:200, headers:{}, data:[]});
+        api.defaults.adapter = async config => {
+            const country=decodeURIComponent(config.url.split('/').at(-1));
+            const id=country.toLowerCase().replaceAll(' ','-');
+            const oceania=['australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu'];
+            const html=oceania.includes(id)?readFileSync(`dist/browse/${id}/index.html`,'utf8'):null;
+            const data=html?JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]).items:[];
+            return {config,status:200,headers:{},data};
+        };
         const {REGION_SCENES} = await vite.ssrLoadModule('/src/components/home/atlas/regionScenes.js');
         const {default:Stage} = await vite.ssrLoadModule('/src/components/home/AtlasStage.jsx');
         const {createRoot} = await import('react-dom/client');
-        for (const [region, countries] of [['north-america',['canada','united-states','mexico']], ['south-america',['brazil','argentina','peru','colombia','chile']], ['europe',['france']]]) {
+        for (const [region, countries] of [['north-america',['canada','united-states','mexico']], ['south-america',['brazil','argentina','peru','colombia','chile']], ['oceania',['australia','new-zealand','fiji','french-polynesia','new-caledonia','papua-new-guinea','samoa','tonga','vanuatu']], ['europe',['france']]]) {
             for (const country of countries) {
                 await REGION_SCENES[region].loadDestinations?.();
                 root = createRoot(document.getElementById('root'));

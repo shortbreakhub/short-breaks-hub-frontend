@@ -15,7 +15,7 @@ const relative = (area, anchor) => ({
 });
 // Top-edge destinations open their callout beneath the artwork name plate.
 const calloutBelow = ([anchor, ...areas]) => {
-    const bottom = Math.max(...areas.map(area => area.artworkPosition.y + area.hitArea.height / 2));
+    const bottom = Math.max(...(areas.length ? areas : [anchor]).map(area => area.artworkPosition.y + area.hitArea.height / 2));
     return {top: `calc(${50 + (bottom - anchor.artworkPosition.y) / anchor.hitArea.height * 100}% + 6px)`, bottom: 'auto'};
 };
 
@@ -45,7 +45,7 @@ export default function CountryDestinations({destinations, navLabelKey, map, art
                 const corner = point(x+anchor.hitArea.width/2,y+anchor.hitArea.height/2);
                 const width=2*(corner.x-center.x),height=2*(corner.y-center.y);
                 Object.assign(link.style,{left:`${center.x}px`,top:`${center.y}px`,width:`${width}px`,height:`${height}px`});
-                for(const area of destination.hitAreas.slice(1)){
+                for(const area of destination.hitAreas.filter((area,index)=>index>0 || area.outline)){
                     const hit=link.querySelector(`[data-hit-area="${area.id}"]`),{x,y}=area.artworkPosition;
                     const centerHit=point(x,y),cornerHit=point(x+area.hitArea.width/2,y+area.hitArea.height/2);
                     Object.assign(hit.style,{left:`${centerHit.x-center.x+width/2-link.clientLeft}px`,top:`${centerHit.y-center.y+height/2-link.clientTop}px`,
@@ -65,7 +65,7 @@ export default function CountryDestinations({destinations, navLabelKey, map, art
             return <a key={destination.id} ref={node => {if(node) links.current.set(destination.id,node);else links.current.delete(destination.id);}}
                 className="atlas-itinerary" data-destination={destination.id} data-hit-area={anchor.id} data-revealed={armed === destination.id} data-callout-align={destination.calloutAlign}
                 href={getOfficialItineraryPath(destination.slug)} aria-label={`${label} — ${action}`} draggable={false}
-                style={{left:`${x*100}%`,top:`${y*100}%`,width:`${anchor.hitArea.width*100}%`,height:`${anchor.hitArea.height*100}%`}}
+                style={{pointerEvents:anchor.outline?'none':undefined,minWidth:anchor.outline?0:undefined,minHeight:anchor.outline?0:undefined,left:`${x*100}%`,top:`${y*100}%`,width:`${anchor.hitArea.width*100}%`,height:`${anchor.hitArea.height*100}%`}}
                 onPointerDown={event => {pointer.current={type:event.pointerType,x:event.clientX,y:event.clientY};}}
                 onKeyDown={event => {if(event.key==='Escape'){setArmed(null);event.currentTarget.blur();}}}
                 onClick={event => {
@@ -76,7 +76,7 @@ export default function CountryDestinations({destinations, navLabelKey, map, art
                     // First tap reveals; the armed destination's second tap navigates natively.
                     if(touch && armed !== destination.id){event.preventDefault();setArmed(destination.id);}
                 }}>
-                {areas.map(area => <span key={area.id} className="atlas-itinerary-hit" data-hit-area={area.id} aria-hidden="true" style={relative(area,anchor)} />)}
+                {destination.hitAreas.filter((area,index)=>index>0 || area.outline).map(area => <span key={area.id} className="atlas-itinerary-hit" data-hit-area={area.id} aria-hidden="true" style={{...relative(area,anchor),pointerEvents:area.outline?'auto':undefined,borderRadius:area.outline?0:undefined,clipPath:area.outline ? `polygon(${area.outline.map(([px,py])=>`${(px-area.artworkPosition.x+area.hitArea.width/2)/area.hitArea.width*100}% ${(py-area.artworkPosition.y+area.hitArea.height/2)/area.hitArea.height*100}%`).join(',')})` : undefined}} />)}
                 <span className="atlas-itinerary-callout" aria-hidden="true" style={destination.calloutPlacement === 'below' ? calloutBelow(destination.hitAreas) : undefined}>
                     <strong>{t(destination.calloutLabelKey || destination.labelKey)}</strong> · {action} →
                 </span>

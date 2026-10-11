@@ -1,3 +1,4 @@
+import {OCEANIA_COUNTRY_SCENES} from './oceaniaScenes.js';
 import {SOUTH_AMERICA_COUNTRY_SCENES} from './southAmericaScenes.js';
 import {NORTH_AMERICA_COUNTRY_SCENES} from './northAmericaScene.js';
 import {SOUTHEAST_ASIA_COUNTRY_SCENES} from './southeastAsiaScenes.js';
@@ -73,6 +74,7 @@ export const COUNTRY_SCENES = {
     ...SOUTHEAST_ASIA_COUNTRY_SCENES,
     ...SOUTH_AMERICA_COUNTRY_SCENES,
     ...NORTH_AMERICA_COUNTRY_SCENES,
+    ...OCEANIA_COUNTRY_SCENES,
 };
 export function sceneForCountry(countryId) {
     return Object.keys(COUNTRY_SCENES).find(scene => COUNTRY_SCENES[scene].countryId === countryId);

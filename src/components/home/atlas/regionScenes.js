@@ -1,3 +1,4 @@
+import {oceaniaRegion} from './oceaniaScenes.js';
 import {southAmericaRegion} from './southAmericaScenes.js';
 import {southeastAsiaRegion} from './southeastAsiaScenes.js';
 import {northAmericaRegion} from './northAmericaScene.js';
@@ -20,4 +21,5 @@ export const REGION_SCENES = {
     'south-america': {get destinations(){return southAmericaRegion.destinations;},get artworkUrl(){return southAmericaRegion.artworkUrl;},loadDestinations:southAmericaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.southAmericaName',
         mapLabel:'homeMagazine.atlas.southAmericaMapLabel', previewAlt:'homeMagazine.atlas.southAmericaPreviewAlt',
         caption:'homeMagazine.atlas.southAmericaCaption', nav:'homeMagazine.atlas.southAmericaDestinations', back:'homeMagazine.atlas.backSouthAmerica', error:'homeMagazine.atlas.southAmericaSceneFailed'}},
+    oceania: {get destinations(){return oceaniaRegion.destinations;},get artworkUrl(){return oceaniaRegion.artworkUrl;},loadDestinations:oceaniaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.oceaniaName',mapLabel:'homeMagazine.atlas.oceaniaMapLabel',previewAlt:'homeMagazine.atlas.oceaniaPreviewAlt',caption:'homeMagazine.atlas.oceaniaCaption',nav:'homeMagazine.atlas.oceaniaDestinations',back:'homeMagazine.atlas.backOceania',error:'homeMagazine.atlas.oceaniaSceneFailed'}},
 };
