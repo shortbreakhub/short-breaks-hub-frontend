@@ -16,8 +16,10 @@ import {postUserRenewToken} from "./api.js";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/TermsOfService.jsx";
 import RouteRobots from "./components/RouteRobots.jsx";
+import useRouteScroll from "./hooks/useRouteScroll.js";
 
 function App({pages = lazyPages}) {
+    useRouteScroll();
     const {RegionPage, ItineraryPage, BrowsePage, RegisterPage, LoginPage, ProfilePage, CreateItineraryPage, WeatherPage, VerifyEmailPage, CommunityItineraryPage, CommunityTripsPage, CommunityRegionPage, ForgotPasswordPage, ResetPasswordPage, GoogleMap} = pages;
     const {pathname} = useLocation();
     const {t} = useTranslation();

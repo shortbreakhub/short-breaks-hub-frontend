@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Auth} from "../auth.js";
+import "../styles/journal-editor.css";
 
 export default function CreateItineraryForm() {
 
@@ -333,175 +334,143 @@ export default function CreateItineraryForm() {
 
     return (
         <>
-            <div className="max-w-3xl mx-auto px-4 py-8">
+            <div className="sbh-editorial journal-editor">
                 {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-2xl font-semibold">Create Itinerary</h1>
-                    <p className="text-sm mt-2 text-slate-500">Share your short break with the community.</p>
+                <div className="journal-editor__intro">
+                    <h1 className="journal-editor__title">Create Itinerary</h1>
+                    <p className="journal-editor__lede">Share your short break with the community.</p>
                 </div>
 
                 {/* Card */}
-                <fieldset disabled={busy} className="min-w-0 bg-white border border-slate-400 rounded-lg shadow-sm">
+                <fieldset disabled={busy} className="journal-editor__form">
+                    {/* Landscape workspace: Basic info beside the Day-by-Day plan. */}
+                    <div className="journal-editor__workspace">
                     {/* Basic info */}
-                    <section className="p-6 border-b border-slate-300">
-                        <h2 className="text-base font-medium mb-4">Basic info</h2>
+                    <section className="journal-panel journal-panel--basic">
+                        <h2 className="journal-panel__title">Basic info</h2>
 
 
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="md:col-span-2">
-                                <label htmlFor="title" className="block text-sm font-medium text-slate-700">Title</label>
+                        <div className="journal-fields">
+                            <div className="journal-fields__wide">
+                                <label htmlFor="title" className="journal-label">Title</label>
                                 <input id="title" type="text" placeholder="3 Days in Singapore: Food & Culture"
                                        onChange={(e)=> {
                                            setItineraryContent(current => ({...current, title: e.target.value}));
                                        }}
                                        value={itineraryContent.title}
-                                       className={`mt-1 py-1 px-3 border-2 w-full rounded-md 
+                                       className={`journal-input
                                        ${submitted ? (itineraryContent.title && itineraryContent.title.length >=10) ? 
                                            "border-slate-300" : "border-red-700":"border-slate-300" }  
-                                           focus:border-slate-400 focus:ring-0`}
+                                          `}
                                        data-field="title" minLength={5}/>
                                 {
                                     submitted ? (itineraryContent.title && itineraryContent.title.length >=10) ? null :
-                                        (<p className="text-red-700 mt-2">Please give your itinerary a title (Minimum 10 characters)</p>) : null
+                                        (<p className="journal-error text-red-700">Please give your itinerary a title (Minimum 10 characters)</p>) : null
                                 }
 
                             </div>
 
-                            <div>
-                                <label htmlFor="country" className="block text-sm font-medium text-slate-700">Country</label>
+                            <div className="journal-field--country">
+                                <label htmlFor="country" className="journal-label">Country</label>
                                 <input id="country" type="text" placeholder="Singapore" value={itineraryContent.country}
                                        onChange={(e)=> {
                                            setItineraryContent(current => ({...current, country: e.target.value}))
                                            setCountriesSuggestionsOpen(true)
                                        }
                                 }
-                                       className={`mt-1 py-1 px-3 border-2 w-full rounded-md 
+                                       className={`journal-input
                                        ${submitted ? (itineraryContent.country && 
                                            countries.includes(itineraryContent.country[0].toUpperCase()+itineraryContent.country.substring(1))) ? 
-                                           "border-slate-300" : "border-red-700":"border-slate-300"} focus:border-slate-400 focus:ring-0`}
+                                           "border-slate-300" : "border-red-700":"border-slate-300"}`}
                                        data-field="country" />
-                            </div>
-                            { (countriesSuggestionsOpen && suggestions?.length > 0) && (
-                                <ul className="absolute z-10 w-50 bg-white border border-slate-300 rounded-md mt-1 shadow max-h-60 overflow-auto">
-                                    {suggestions.map((country) => (
-                                        <li
-                                            key={country}
-                                            onClick={() => {
-                                                setItineraryContent(current => ({...current, country: country}))
-                                                setCountriesSuggestionsOpen(false)
+                                { (countriesSuggestionsOpen && suggestions?.length > 0) && (
+                                    <ul className="journal-suggestions">
+                                        {suggestions.map((country) => (
+                                            <li
+                                                key={country}
+                                                onClick={() => {
+                                                    setItineraryContent(current => ({...current, country: country}))
+                                                    setCountriesSuggestionsOpen(false)
+                                                    }
                                                 }
-                                            }
-                                            className="px-3 py-2 hover:bg-slate-100 cursor-pointer"
-                                        >
-                                            {country}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                                                className="journal-suggestions__item"
+                                            >
+                                                {country}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
 
                             <div>
-                                <label htmlFor="region" className="block text-sm font-medium text-slate-700">Region</label>
+                                <label htmlFor="region" className="journal-label">Region</label>
                                 <input id="region" type="text" value={itineraryContent.region} disabled
-                                       className="mt-1 py-1 px-3 border-2 w-full rounded-md border-slate-300 focus:border-slate-400 focus:ring-0"
+                                       className="journal-input border-slate-300"
                                        data-field="region" />
                             </div>
 
                             <div>
-                                <label htmlFor="days" className="block text-sm font-medium text-slate-700">Days</label>
-                                <div className="mt-1 flex items-center gap-2">
+                                <label htmlFor="days" className="journal-label">Days</label>
+                                <div className="journal-inline">
                                     <input id="days" type="number" min="1" max="7" placeholder="3"
                                            value={itineraryContent.days}
-                                           className={`w-28 py-1 px-3 border-2 rounded-md ${submitted ? (itineraryContent.days && (itineraryContent.days>=1 && itineraryContent.days<=7)) ?
-                                               "border-slate-300" : "border-red-700":"border-slate-300"} focus:border-slate-400 focus:ring-0`}
+                                           className={`journal-input journal-input--short ${submitted ? (itineraryContent.days && (itineraryContent.days>=1 && itineraryContent.days<=7)) ?
+                                               "border-slate-300" : "border-red-700":"border-slate-300"}`}
                                            data-field="days"
                                            onChange={(e)=> {
                                                setItineraryContent(current => ({...current, days: parseInt(e.target.value)}))
                                            }
                                            }
                                     />
-                                    <span className="text-slate-500 text-sm">days</span>
+                                    <span className="journal-unit">days</span>
                                 </div>
                             </div>
 
                             <div>
-                                <label htmlFor="priceFrom" className="block text-sm font-medium text-slate-700">Estimated from (optional)</label>
-                                <div className="mt-1 flex items-center gap-2">
-                                    <span className="text-slate-500">£</span>
+                                <label htmlFor="priceFrom" className="journal-label">Estimated from (optional)</label>
+                                <div className="journal-inline">
+                                    <span className="journal-unit">£</span>
                                     <input id="priceFrom" type="number" min="0" placeholder="250"
                                            value={itineraryContent.estimatedCost}
-                                           className="w-32 py-1 px-3 border-2 rounded-md border-slate-300 focus:border-slate-400 focus:ring-0"
+                                           className="journal-input journal-input--short border-slate-300"
                                            onChange={(e)=> setItineraryContent(current => ({...current, estimatedCost: e.target.value}))}
                                            data-field="priceFrom" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mt-4">
-                            <label htmlFor="summary" className="block text-sm font-medium text-slate-700">Summary</label>
+                        <div className="journal-fields__wide journal-field--summary">
+                            <label htmlFor="summary" className="journal-label">Summary</label>
                             <textarea id="summary" rows={3} placeholder="Perfect for food lovers and first-time visitors…"
                                       value={itineraryContent.summary}
                                       onChange={(e)=> {
                                           setItineraryContent(current => ({...current, summary: e.target.value}))
                                       }
                                       }
-                                      className={`mt-1 py-1 px-3 border-2 w-full rounded-md ${submitted ? (itineraryContent.summary && itineraryContent.summary.length>=50) ?
-                                          "border-slate-300" : "border-red-700":"border-slate-300"} focus:border-slate-400 focus:ring-0`}
+                                      className={`journal-input ${submitted ? (itineraryContent.summary && itineraryContent.summary.length>=50) ?
+                                          "border-slate-300" : "border-red-700":"border-slate-300"}`}
                                       data-field="summary" minLength={50} maxLength={600}/>
-                            <p className="text-xs text-slate-500 mt-1">Min 50 characters and keep it under 500 characters if possible.</p>
+                            <p className="journal-help">Min 50 characters and keep it under 500 characters if possible.</p>
                         </div>
-                    </section>
-
-                    {/* Hero image */}
-                    <section className="p-6 border-b border-slate-100">
-                        <h2 className="text-base font-medium mb-4">Cover photo</h2>
-                        <div className="flex items-start gap-4">
-                            {
-                                typeof(previewUrl) === "string" ? (
-                                    <div className="h-28 w-44 bg-slate-100 rounded-md border border-dashed border-slate-300 flex items-center justify-center overflow-hidden"
-                                         data-preview="hero">
-                                        <img src={previewUrl} alt="itinerary photo preview" className="object-cover object-center w-full h-full" />
-                                    </div>
-                                ):(
-                                    <div className="h-28 w-44 bg-slate-100 rounded-md border border-dashed border-slate-300 flex items-center justify-center overflow-hidden"
-                                         data-preview="hero">
-                                        <span className="text-slate-400 text-sm">Preview</span>
-                                    </div>
-                                )
-
-                            }
-                            <div className="flex-1">
-                                <label htmlFor="hero" className="block text-sm font-medium text-slate-700">Upload</label>
-                                <input id="hero" type="file" accept="image/*"
-                                       className="mt-1 block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
-                                       data-field="heroFile" onChange={handlePhotoPreview} />
-                                <p className="text-xs text-slate-500 mt-1">Use a wide image (e.g., 1200×600). JPG/PNG only.</p>
-                            </div>
-                        </div>
-                        {
-                            submitted ? (previewUrl) ? null :
-                                (<p className="text-red-700 mt-2">Please upload a cover photo for your itinerary.</p>) : null
-                        }
                     </section>
 
                     {/* Day-by-Day plan */}
-                    <section className="p-6 border-b border-slate-100">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-base font-medium">Day-by-Day plan</h2>
-                            <div className="flex items-center gap-2">
+                    <section className="journal-panel journal-panel--days">
+                        <div className="journal-panel__header">
+                            <h2 className="journal-panel__title">Day-by-Day plan</h2>
+                            <div className="journal-day-controls">
                                 <button type="button" disabled={dayPlan.length >= 7}
-                                        className="px-3 py-1.5 text-sm rounded-md border border-slate-300
-                                        hover:bg-slate-50 disabled:bg-slate-100 disabled:text-slate-400"
+                                        className="journal-button journal-button--small"
                                         data-action="add-day" onClick={()=>handleAddDay()}>+ Add Day</button>
                                 <button type="button" disabled={dayPlan.length === 1}
-                                        className="px-3 py-1.5 text-sm rounded-md border border-slate-300
-                                        hover:bg-slate-50 disabled:bg-slate-100 disabled:text-slate-400"
+                                        className="journal-button journal-button--small"
                                         data-action="remove-day" onClick={()=>handleRemoveDay()}>− Remove Day</button>
                             </div>
                         </div>
 
                         {/* Day item */}
-                        <div className="space-y-4" data-list="days">
+                        <div className="journal-days" data-list="days">
                             {dayPlan.map((day, index) => (
                                 <DayPlanTextArea
                                     key={index}
@@ -515,33 +484,69 @@ export default function CreateItineraryForm() {
                                 />
                             ))}
                         </div>
-                        <p className="text-xs text-slate-500 mt-2">You can add more days later.</p>
+                        <p className="journal-help">You can add more days later.</p>
                         {
                             submitted ? (itineraryContent.days === dayPlan.length) ? null :
-                                (<p className="text-red-700 mt-2">Please make sure the days of your itinerary match the day plan.</p>) : null
+                                (<p className="journal-error text-red-700">Please make sure the days of your itinerary match the day plan.</p>) : null
+                        }
+                    </section>
+
+                    </div>
+
+                    {/* Extras below the workspace: cover photo, highlights and visibility. */}
+                    <div className="journal-editor__extras">
+                    {/* Hero image */}
+                    <section className="journal-panel journal-panel--cover">
+                        <h2 className="journal-panel__title">Cover photo</h2>
+                        <div className="journal-cover">
+                            {
+                                typeof(previewUrl) === "string" ? (
+                                    <div className="journal-cover__preview"
+                                         data-preview="hero">
+                                        <img src={previewUrl} alt="itinerary photo preview" className="journal-cover__image" />
+                                    </div>
+                                ):(
+                                    <div className="journal-cover__preview"
+                                         data-preview="hero">
+                                        <span className="journal-cover__empty">Preview</span>
+                                    </div>
+                                )
+
+                            }
+                            <div className="journal-cover__upload">
+                                <label htmlFor="hero" className="journal-label">Upload</label>
+                                <input id="hero" type="file" accept="image/*"
+                                       className="journal-file"
+                                       data-field="heroFile" onChange={handlePhotoPreview} />
+                                <p className="journal-help">Use a wide image (e.g., 1200×600). JPG/PNG only.</p>
+                            </div>
+                        </div>
+                        {
+                            submitted ? (previewUrl) ? null :
+                                (<p className="journal-error text-red-700">Please upload a cover photo for your itinerary.</p>) : null
                         }
                     </section>
 
                     {/* Tags / visibility */}
-                    <section className="p-6">
-                        <h2 className="text-base font-medium mb-4">Extras</h2>
+                    <section className="journal-panel journal-panel--extras">
+                        <h2 className="journal-panel__title">Extras</h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="journal-fields">
                             <div>
-                                <label htmlFor="tags" className="block text-sm font-medium text-slate-700">Highlights (optional)</label>
+                                <label htmlFor="tags" className="journal-label">Highlights (optional)</label>
                                 <input id="tags" type="text" placeholder="family, food, beach"
-                                       className="mt-1 py-1 px-3 border-2 w-full rounded-md border-slate-300 focus:border-slate-400 focus:ring-0"
+                                       className="journal-input border-slate-300"
                                        onChange={(e)=>
                                            setItineraryContent(current => ({...current, highlights: e.target.value}))}
                                        data-field="tags" value={itineraryContent.highlights} />
-                                <p className="text-xs text-slate-500 mt-1">Comma-separated. E.g. “family, foodie, budget”.</p>
+                                <p className="journal-help">Comma-separated. E.g. “family, foodie, budget”.</p>
                             </div>
 
                             <div>
-                                <label htmlFor="visibility" className="block text-sm font-medium text-slate-700">Visibility</label>
+                                <label htmlFor="visibility" className="journal-label">Visibility</label>
                                 <select id="visibility"
                                         value={itineraryContent.visibility}
-                                        className="mt-1 py-1 px-3 border-2 w-full rounded-md border-slate-300 focus:border-slate-400 focus:ring-0"
+                                        className="journal-input border-slate-300"
                                         onChange={(e)=>
                                         {
                                             setItineraryContent(current=> ({...current, visibility: e.target.value}))}
@@ -553,17 +558,18 @@ export default function CreateItineraryForm() {
                             </div>
                         </div>
                     </section>
+                    </div>
                 </fieldset>
 
                 {/* WeatherFooter actions */}
-                <div className="flex items-center justify-end gap-2 mt-6">
-                    <button type="button" className="px-4 py-2 rounded-md border border-slate-300 hover:bg-slate-50"
+                <div className="journal-actions">
+                    <button type="button" className="journal-button journal-button--discard"
                             data-action="discard" disabled={busy || !draftId} onClick={()=> setShowConfirmationModal(true)}>Discard</button>
-                    <button type="button" className="px-4 py-2 rounded-md border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                    <button type="button" className="journal-button journal-button--draft"
                             data-action="save-draft" disabled={busy} onClick={handleSaveDraft}>
                         { isSavingDraft ? 'Saving' : 'Save Draft' }
                     </button>
-                    <button type="button" className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
+                    <button type="button" className="journal-button journal-button--publish"
                             data-action="publish" disabled={busy} onClick={handleSubmitItinerary}>{isPublishing ? "Publishing" : "Publish"}</button>
                 </div>
             </div>
