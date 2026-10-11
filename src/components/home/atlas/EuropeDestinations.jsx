@@ -28,6 +28,7 @@ export default function EuropeDestinations({map, onCountrySelect, destinations=E
                 const center = point(x,y), corner = point(x+primary.hitArea.width/2,y+primary.hitArea.height/2);
                 const width = Math.max(44,2*(corner.x-center.x)), height = Math.max(44,2*(corner.y-center.y));
                 Object.assign(link.style,{left:`${center.x}px`,top:`${center.y}px`,width:`${width}px`,height:`${height}px`});
+                if(destination.clipHitArea) link.querySelector('[data-primary-target]').style.clipPath=destination.clipHitArea({center,width,height,point});
                 for (const area of destination.hitAreas.slice(1)) {
                     const hit = link.querySelector(`[data-hit-area="${area.id}"]`);
                     const {x,y} = area.artworkPosition, centerHit = point(x,y), cornerHit = point(x+area.hitArea.width/2,y+area.hitArea.height/2);
@@ -50,7 +51,7 @@ export default function EuropeDestinations({map, onCountrySelect, destinations=E
             return <a key={destination.id} ref={node => {if(node) links.current.set(destination.id,node);else links.current.delete(destination.id);}}
                 className="atlas-country" data-country={destination.id} data-hit-area={destination.hitAreas[0].id} data-revealed={armed === destination.id} data-label-align={destination.labelAlign} data-label-placement={destination.labelPlacement}
                 href={getCountryBrowsePath(destination.country)} aria-label={`${label} — ${t('homeMagazine.atlas.countryExplore')}`} draggable={false}
-                style={{left:`${x*100}%`,top:`${y*100}%`,width:`${destination.hitArea.width*100}%`,height:`${destination.hitArea.height*100}%`}}
+                style={{pointerEvents:destination.clipHitArea?'none':undefined,left:`${x*100}%`,top:`${y*100}%`,width:`${destination.hitArea.width*100}%`,height:`${destination.hitArea.height*100}%`}}
                 onFocus={event => {
                     // A keyboard user can reach a destination outside the zoomed window.
                     if (!map || !event.currentTarget.matches(':focus-visible')) return;
@@ -69,6 +70,7 @@ export default function EuropeDestinations({map, onCountrySelect, destinations=E
                     // Keep native modified clicks/new-tab behavior for real links.
                     if(onCountrySelect && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey){if(onCountrySelect(destination)!==false)event.preventDefault();}
                 }}>
+                {destination.clipHitArea && <span data-primary-target aria-hidden="true" style={{position:'absolute',inset:0,pointerEvents:'auto'}} />}
                 {destination.hitAreas.slice(1).map(area => <span key={area.id} data-hit-area={area.id} aria-hidden="true"
                     style={{position:'absolute',pointerEvents:'auto',touchAction:'pan-x pan-y',transform:'translate(-50%, -50%)',
                         left:`${50+(area.artworkPosition.x-x)/destination.hitArea.width*100}%`,top:`${50+(area.artworkPosition.y-y)/destination.hitArea.height*100}%`,
