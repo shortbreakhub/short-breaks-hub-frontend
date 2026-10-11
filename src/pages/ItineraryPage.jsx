@@ -19,7 +19,7 @@ import {getOfficialBootstrap, getItineraryPlanning, getItineraryTransport} from 
 
 import {initializeHotelBooking, resolveHotelBooking, changeHotelBooking, validateHotelSearch, buildTripComHotelUrl} from "../utils/hotelBooking.js";
 
-const defaultPreparation = {hotel: false, flights: false, insurance: false, airport: false, localTransport: false, car: false, docs: false};
+import useTripPrepProgress from "../hooks/useTripPrepProgress.js";
 
 export default function ItineraryPage() {
     const { slug } = useParams();
@@ -45,8 +45,7 @@ export default function ItineraryPage() {
         saving: false,
     });
     const [showSmartSuggestions, setShowSmartSuggestions] = React.useState(true);
-    const [prepDone, setPrepDone] = useState(defaultPreparation);
-    const [prepRestored, setPrepRestored] = useState(false);
+    const {prepDone, markPrepDone, resetPrep, markAllPrepDone} = useTripPrepProgress(slug);
     const planning = useMemo(() => getItineraryPlanning(data), [data]);
     const transport = useMemo(() => getItineraryTransport(data), [data]);
 
@@ -89,34 +88,6 @@ export default function ItineraryPage() {
 
 
     }
-
-    function markPrepDone(id) {
-        setPrepDone((prev) => ({ ...prev, [id]: true }));
-
-    }
-
-    function resetPrep() {
-        setPrepDone({
-            hotel: false,
-            flights: false,
-            insurance: false,
-            airport: false,
-            localTransport: false,
-            docs: false,
-        });
-    }
-
-    function markAllPrepDone() {
-        setPrepDone({
-            hotel: true,
-            flights: true,
-            insurance: true,
-            airport: true,
-            localTransport: true,
-            docs: true,
-        });
-    }
-
 
     const today = new Date();
     const defaultIn = new Date(today);
@@ -193,26 +164,7 @@ export default function ItineraryPage() {
         setUserCurrencyValue((convertRate * 100).toFixed(2));
     },[convertRate])
 
-    useEffect(() => {
-        try {
-            const saved = JSON.parse(localStorage.getItem("tripPrepStatus") || "null");
-            if (saved && typeof saved === "object") {
-                setPrepDone(Object.fromEntries(Object.keys(defaultPreparation)
-                    .map(key => [key, saved[key] === true])));
-            }
-        } catch (error) {
-            console.error("Unable to restore trip preparation", error);
-        }
-        setPrepRestored(true);
-    }, []);
 
-    useEffect(() => {
-        if (!prepRestored) return;
-        localStorage.setItem(
-            "tripPrepStatus",
-            JSON.stringify(prepDone)
-        );
-    }, [prepDone, prepRestored]);
 
 
     const city = data.city;

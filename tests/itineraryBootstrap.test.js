@@ -75,12 +75,13 @@ test("official bootstrap renders without browser storage/network; hydration, res
         dom = new JSDOM("<!doctype html><html><head></head><body></body></html>", {url: "https://www.shortbreakhub.com", pretendToBeVisual: true});
         Object.assign(globalThis, {window: dom.window, document: dom.window.document,
             localStorage: dom.window.localStorage, IS_REACT_ACT_ENVIRONMENT: true});
-        const saved = {hotel: true, flights: true};
-        localStorage.setItem("tripPrepStatus", JSON.stringify(saved));
+        const progressKey = `tripPrep:v1:${slugs[0]}`;
+        const saved = {version: 1, updatedAt: Date.now(), done: {hotel: true, flights: true, insurance: false, airport: false, car: false, localTransport: false, docs: false}};
+        localStorage.setItem(progressKey, JSON.stringify(saved));
         const writes = [];
         const originalSet = dom.window.Storage.prototype.setItem;
         dom.window.Storage.prototype.setItem = function(key, value) {
-            if (key === "tripPrepStatus") writes.push(JSON.parse(value));
+            if (key === progressKey) writes.push(JSON.parse(value));
             return originalSet.call(this, key, value);
         };
         const start = markup.indexOf('<div id="page">');
@@ -91,12 +92,13 @@ test("official bootstrap renders without browser storage/network; hydration, res
             root = hydrateRoot(document.getElementById("mount"), tree, {onRecoverableError: error => errors.push(error.message)});
         });
         assert.deepEqual(errors, [], "hydration must agree with deterministic server state");
-        assert.ok(writes.length > 0 && writes.every(value => value.hotel && value.flights), "saved preparation must never be overwritten by defaults");
+        assert.equal(writes.length, 0, "hydration/restoration must not rewrite progress or extend retention");
+        assert.deepEqual(JSON.parse(localStorage.getItem(progressKey)), saved);
         assert.equal(requests.filter(config => config.url.startsWith("/itineraries/slug/")).length, 0);
         const reset = [...document.querySelectorAll("button")].find(button => button.textContent === "Reset");
         assert.ok(reset);
         await React.act(async () => reset.click());
-        assert.equal(JSON.parse(localStorage.getItem("tripPrepStatus")).hotel, false, "normal preparation persistence continues after restoration");
+        assert.equal(JSON.parse(localStorage.getItem(progressKey)).done.hotel, false, "normal preparation persistence continues after restoration");
         assert.ok(requests.some(config => config.url.includes("exchangerate-api")), "bootstrap must still enrich currency after mount");
         const settle = async () => {await React.act(async () => {await new Promise(resolve => setTimeout(resolve, 20));});};
         await React.act(async () => navigate(`/itinerary/${slugs[1]}`));
