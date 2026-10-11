@@ -47,17 +47,21 @@ export default function ItineraryStoryPage({
     return (
         <EditorialSurface className="itinerary-story" lang={i18n.resolvedLanguage ?? "en"}>
             <main className="itinerary-story__main">
-                <section className="itinerary-story__hero" aria-labelledby="itinerary-story-title">
+                <section className={`itinerary-story__hero${heroImage ? "" : " itinerary-story__hero--no-image"}`} aria-labelledby="itinerary-story-title">
+                    {/* The photograph is the only thing inside the frame; all itinerary text follows below it. */}
                     {heroImage && (
-                        <Media
-                            src={heroImage}
-                            alt=""
-                            loading="eager"
-                            ratio="3 / 2"
-                            className="itinerary-story__hero-media"
-                        />
+                        <figure className="itinerary-story__frame">
+                            <div className="itinerary-story__frame-mat">
+                                <Media
+                                    src={heroImage}
+                                    alt=""
+                                    loading="eager"
+                                    ratio="16 / 9"
+                                    className="itinerary-story__hero-media"
+                                />
+                            </div>
+                        </figure>
                     )}
-                    <div className="itinerary-story__hero-shade" aria-hidden="true" />
                     <Container className="itinerary-story__hero-content">
                         <p className="itinerary-story__hero-place">{city}{data.country ? `, ${data.country}` : ""}</p>
                         <h1 id="itinerary-story-title">{data.title}</h1>

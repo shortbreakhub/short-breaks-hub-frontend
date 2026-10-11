@@ -7,48 +7,96 @@
   min-width: 0;
 }
 
+/* Hero: a museum-style framed photograph. Only the photo sits inside the frame;
+   destination, title, duration, price and exclusions follow below as plain HTML. */
 .itinerary-story__hero {
+  --frame-black: #252725;
+  --frame-width: clamp(0.625rem, 0.35rem + 1.15vw, 1.375rem);
+  --mat-ivory: #f7f2e8;
+  --mat-width: clamp(0.875rem, 0.2rem + 2.6vw, 2.75rem);
+  /* Width is also bounded by viewport height so the title stays on the first screen. */
+  --hero-width: min(100% - 2 * var(--sbh-gutter), 70rem, 78svh + 6rem);
+  padding: clamp(1.25rem, 0.5rem + 3vw, 3.25rem) 0 0;
+  color: var(--sbh-ink);
+}
+
+.itinerary-story__frame {
   position: relative;
-  isolation: isolate;
-  height: clamp(31rem, 58vw, 46rem);
-  min-height: 31rem;
-  overflow: hidden;
-  color: #fff;
-  background: #45463f;
+  width: var(--hero-width);
+  margin: 0 auto;
+  padding: var(--frame-width);
+  /* Layered molding: a warm matte black with a faint diagonal sheen. */
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 7%) 0%, transparent 28%, transparent 72%, rgb(0 0 0 / 22%) 100%),
+    linear-gradient(180deg, #2e302e 0%, var(--frame-black) 18%, #222422 82%, #1b1d1b 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    inset 1px 0 0 rgb(255 255 255 / 6%),
+    inset 0 -1px 0 rgb(0 0 0 / 55%),
+    inset 0 0 0 1px #121312,
+    /* Rounded molding profile: faces fall off toward the outer edge. */
+    inset 0 0 calc(var(--frame-width) * 0.55) rgb(0 0 0 / 38%),
+    0 1px 1px rgb(30 24 16 / 28%),
+    0 12px 24px -10px rgb(48 38 24 / 38%),
+    0 34px 64px -26px rgb(48 38 24 / 34%);
+}
+
+/* Inner step of the molding, where the frame meets the mat. */
+.itinerary-story__frame::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--frame-width) * 0.42);
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-bottom-color: rgb(0 0 0 / 50%);
+  border-right-color: rgb(0 0 0 / 40%);
+  /* Thin dark lip where the molding steps down to the mat. */
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 30%), inset 0 0 calc(var(--frame-width) * 0.35) rgb(0 0 0 / 22%);
+  pointer-events: none;
+}
+
+.itinerary-story__frame-mat {
+  position: relative;
+  padding: var(--mat-width);
+  background:
+    radial-gradient(120% 90% at 30% 20%, rgb(255 255 255 / 55%), transparent 60%),
+    var(--mat-ivory);
+  /* The frame lip casts a soft shadow onto the board. */
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 38%),
+    inset 0 3px 6px -1px rgb(0 0 0 / 30%),
+    inset 2px 0 5px -2px rgb(0 0 0 / 18%);
 }
 
 .itinerary-story__hero-media {
-  position: absolute !important;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: auto !important;
   border-radius: 0 !important;
+  background: #e9e2d3;
+  /* Bevelled mat cut with an extremely subtle bronze hairline. */
+  box-shadow:
+    0 0 0 1px rgb(255 252 244 / 95%),
+    0 0 0 2px #e4dccb,
+    0 0 0 3px rgb(150 116 66 / 30%),
+    0 1px 3px 3px rgb(60 48 30 / 12%);
 }
 
 .itinerary-story__hero-media img {
   object-position: center 55%;
 }
 
-.itinerary-story__hero-shade {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(0deg, rgb(23 27 25 / 76%) 0%, rgb(23 27 25 / 38%) 38%, rgb(23 27 25 / 4%) 78%);
+/* Text column aligns exactly with the frame (overrides the shared container's width/gutter). */
+.sbh-editorial .itinerary-story__hero .itinerary-story__hero-content {
+  width: var(--hero-width);
+  max-width: none;
+  margin: clamp(1.5rem, 1rem + 2vw, 2.5rem) auto 0;
+  padding: 0;
 }
 
-.itinerary-story__hero-content {
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 1;
-  padding-block: 3rem clamp(2.25rem, 6vw, 5rem);
-  color: #fff;
+.sbh-editorial .itinerary-story__hero--no-image .itinerary-story__hero-content {
+  margin-top: clamp(1rem, 0.5rem + 2vw, 2rem);
 }
 
 .itinerary-story__hero-place {
   margin: 0 0 0.75rem;
-  color: rgb(255 255 255 / 88%);
+  color: var(--sbh-link);
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -57,13 +105,14 @@
 }
 
 .itinerary-story__hero h1 {
-  max-width: 17ch;
+  max-width: 24ch;
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2.75rem, 5.6vw, 5.25rem);
+  color: var(--sbh-ink);
+  font-family: var(--sbh-font-heading);
+  font-size: clamp(2rem, 1.2rem + 3.1vw, 3.875rem);
   font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -71,17 +120,28 @@
 .itinerary-story__hero-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.125rem;
-  margin: 1.5rem 0 0;
+  gap: 0.35rem 0;
+  margin: 1.125rem 0 0;
   padding: 0;
-  color: rgb(255 255 255 / 95%);
+  color: var(--sbh-secondary);
   font-size: 0.9375rem;
   list-style: none;
 }
 
+.itinerary-story__hero-meta li + li::before {
+  content: "·";
+  margin-inline: 0.65rem;
+  color: var(--sbh-control-border);
+}
+
+.itinerary-story__hero-meta li:last-child {
+  color: var(--sbh-ink);
+  font-weight: 600;
+}
+
 .itinerary-story__hero-note {
-  margin: 0.5rem 0 0;
-  color: rgb(255 255 255 / 82%);
+  margin: 0.375rem 0 0;
+  color: var(--sbh-muted);
   font-size: 0.8125rem;
 }
 
@@ -635,22 +695,17 @@
 }
 
 @media (max-width: 639px) {
-  .itinerary-story__hero {
-    height: min(66svh, 37rem);
-    min-height: 28rem;
-  }
-
-  .itinerary-story__hero-content {
-    padding-bottom: 2rem;
+  /* Phones: slimmer frame and mat, and a slightly taller 3:2 window so the photo stays legible. */
+  .itinerary-story__hero-media {
+    aspect-ratio: 3 / 2 !important;
   }
 
   .itinerary-story__hero h1 {
-    max-width: 15ch;
-    font-size: clamp(2.5rem, 11vw, 3.5rem);
+    max-width: none;
+    font-size: clamp(1.875rem, 1.1rem + 4.4vw, 2.5rem);
   }
 
   .itinerary-story__hero-meta {
-    gap: 0.4rem 0.75rem;
     font-size: 0.875rem;
   }
 
