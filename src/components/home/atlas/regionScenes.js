@@ -1,3 +1,4 @@
+import {africaRegion} from './africaScenes.js';
 import {oceaniaRegion} from './oceaniaScenes.js';
 import {southAmericaRegion} from './southAmericaScenes.js';
 import {southeastAsiaRegion} from './southeastAsiaScenes.js';
@@ -22,4 +23,5 @@ export const REGION_SCENES = {
         mapLabel:'homeMagazine.atlas.southAmericaMapLabel', previewAlt:'homeMagazine.atlas.southAmericaPreviewAlt',
         caption:'homeMagazine.atlas.southAmericaCaption', nav:'homeMagazine.atlas.southAmericaDestinations', back:'homeMagazine.atlas.backSouthAmerica', error:'homeMagazine.atlas.southAmericaSceneFailed'}},
     oceania: {get destinations(){return oceaniaRegion.destinations;},get artworkUrl(){return oceaniaRegion.artworkUrl;},loadDestinations:oceaniaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.oceaniaName',mapLabel:'homeMagazine.atlas.oceaniaMapLabel',previewAlt:'homeMagazine.atlas.oceaniaPreviewAlt',caption:'homeMagazine.atlas.oceaniaCaption',nav:'homeMagazine.atlas.oceaniaDestinations',back:'homeMagazine.atlas.backOceania',error:'homeMagazine.atlas.oceaniaSceneFailed'}},
+    africa: {loadDestinations:africaRegion.loadDestinations,artworkSize:[1536,1024],get destinations(){return africaRegion.destinations;},get artworkUrl(){return africaRegion.artworkUrl;},keys:{name:'homeMagazine.atlas.africaName',mapLabel:'homeMagazine.atlas.africaMapLabel',previewAlt:'homeMagazine.atlas.africaPreviewAlt',caption:'homeMagazine.atlas.africaCaption',nav:'homeMagazine.atlas.africaDestinations',back:'homeMagazine.atlas.backAfrica',error:'homeMagazine.atlas.africaSceneFailed'}},
 };

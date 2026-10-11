@@ -77,7 +77,7 @@ export default function CountryDestinations({destinations, navLabelKey, map, art
                     if(touch && armed !== destination.id){event.preventDefault();setArmed(destination.id);}
                 }}>
                 {destination.hitAreas.filter((area,index)=>index>0 || area.outline).map(area => <span key={area.id} className="atlas-itinerary-hit" data-hit-area={area.id} aria-hidden="true" style={{...relative(area,anchor),pointerEvents:area.outline?'auto':undefined,borderRadius:area.outline?0:undefined,clipPath:area.outline ? `polygon(${area.outline.map(([px,py])=>`${(px-area.artworkPosition.x+area.hitArea.width/2)/area.hitArea.width*100}% ${(py-area.artworkPosition.y+area.hitArea.height/2)/area.hitArea.height*100}%`).join(',')})` : undefined}} />)}
-                <span className="atlas-itinerary-callout" aria-hidden="true" style={destination.calloutPlacement === 'below' ? calloutBelow(destination.hitAreas) : undefined}>
+                <span className="atlas-itinerary-callout" aria-hidden="true" style={destination.calloutPlacement === 'below' ? calloutBelow(destination.hitAreas) : destination.calloutPlacement === 'inside' ? {bottom:'0.5rem',top:'auto'} : undefined}>
                     <strong>{t(destination.calloutLabelKey || destination.labelKey)}</strong> · {action} →
                 </span>
             </a>;
