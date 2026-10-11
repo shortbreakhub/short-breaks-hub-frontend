@@ -8,6 +8,14 @@
       "stories": "Find your next story"
     },
     "atlas": {
+      "southAmericaName": "South America",
+      "southAmericaMapLabel": "Illustrated South America travel atlas",
+      "southAmericaPreviewAlt": "Watercolor South America atlas",
+      "southAmericaCaption": "South America — discover your next story",
+      "southAmericaDestinations": "Explore South America destinations",
+      "backSouthAmerica": "Back to South America",
+      "southAmericaSceneFailed": "The atlas could not open. Your previous region is ready to explore again.",
+      "southAmericaCountries": {"brazil": "Brazil", "argentina": "Argentina", "peru": "Peru", "colombia": "Colombia", "chile": "Chile"},
       "northAmericaName": "North America",
       "northAmericaMapLabel": "Illustrated North America travel atlas",
       "northAmericaPreviewAlt": "Watercolor North America atlas with Canada, United States and Mexico",

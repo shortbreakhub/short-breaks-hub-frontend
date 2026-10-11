@@ -1,0 +1,45 @@
+{
+  "canadaMapLabel": "Illustrated Canada story map",
+  "canadaPreviewAlt": "Watercolor Canada story map",
+  "canadaCaption": "Canada",
+  "canadaStory": "Choose your next story.",
+  "canadaDestinations": "Canada itineraries",
+  "canadaPlaces": {
+    "vancouver": "Vancouver",
+    "lake-louise": "Lake Louise",
+    "calgary": "Calgary",
+    "toronto": "Toronto",
+    "ottawa": "Ottawa",
+    "montreal": "Montréal",
+    "quebec-city": "Québec City"
+  },
+  "unitedStatesMapLabel": "Illustrated United States story map",
+  "unitedStatesPreviewAlt": "Watercolor United States story map",
+  "unitedStatesCaption": "United States",
+  "unitedStatesStory": "Choose your next story.",
+  "unitedStatesDestinations": "United States itineraries",
+  "unitedStatesPlaces": {
+    "seattle": "Seattle",
+    "san-francisco": "San Francisco",
+    "las-vegas": "Las Vegas",
+    "los-angeles": "Los Angeles",
+    "chicago": "Chicago",
+    "boston": "Boston",
+    "new-york-city": "New York City",
+    "washington-dc": "Washington, D.C.",
+    "new-orleans": "New Orleans"
+  },
+  "mexicoMapLabel": "Illustrated Mexico story map",
+  "mexicoPreviewAlt": "Watercolor Mexico story map",
+  "mexicoCaption": "Mexico",
+  "mexicoStory": "Choose your next story.",
+  "mexicoDestinations": "Mexico itineraries",
+  "mexicoPlaces": {
+    "guanajuato": "Guanajuato",
+    "san-miguel": "San Miguel de Allende",
+    "mexico-city": "Mexico City",
+    "oaxaca": "Oaxaca",
+    "merida": "Mérida",
+    "tulum": "Tulum"
+  }
+}

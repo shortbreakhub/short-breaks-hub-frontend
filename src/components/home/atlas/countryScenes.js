@@ -1,3 +1,5 @@
+import {SOUTH_AMERICA_COUNTRY_SCENES} from './southAmericaScenes.js';
+import {NORTH_AMERICA_COUNTRY_SCENES} from './northAmericaScene.js';
 import {SOUTHEAST_ASIA_COUNTRY_SCENES} from './southeastAsiaScenes.js';
 import {CHINA_DESTINATIONS} from './chinaDestinations.js';
 import {JAPAN_DESTINATIONS} from './japanDestinations.js';
@@ -69,6 +71,8 @@ export const COUNTRY_SCENES = {
         mapLabel: 'homeMagazine.atlas.macauMapLabel', previewAlt: 'homeMagazine.atlas.macauPreviewAlt',
         caption: 'homeMagazine.atlas.macauCaption', story: 'homeMagazine.atlas.macauStory', nav: 'homeMagazine.atlas.macauDestinations'}},
     ...SOUTHEAST_ASIA_COUNTRY_SCENES,
+    ...SOUTH_AMERICA_COUNTRY_SCENES,
+    ...NORTH_AMERICA_COUNTRY_SCENES,
 };
 export function sceneForCountry(countryId) {
     return Object.keys(COUNTRY_SCENES).find(scene => COUNTRY_SCENES[scene].countryId === countryId);

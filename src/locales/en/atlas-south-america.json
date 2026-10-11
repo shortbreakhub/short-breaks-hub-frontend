@@ -1,0 +1,59 @@
+{
+  "brazilMapLabel": "Illustrated Brazil story map",
+  "brazilPreviewAlt": "Watercolor Brazil story map",
+  "brazilCaption": "Brazil",
+  "brazilStory": "Choose your next story.",
+  "brazilDestinations": "Brazil itineraries",
+  "brazilPlaces": {
+    "rio": "Rio de Janeiro",
+    "sao-paulo": "São Paulo",
+    "salvador": "Salvador",
+    "lencois": "Lençóis Maranhenses",
+    "amazon": "Amazon"
+  },
+  "argentinaMapLabel": "Illustrated Argentina story map",
+  "argentinaPreviewAlt": "Watercolor Argentina story map",
+  "argentinaCaption": "Argentina",
+  "argentinaStory": "Choose your next story.",
+  "argentinaDestinations": "Argentina itineraries",
+  "argentinaPlaces": {
+    "buenos-aires": "Buenos Aires",
+    "mendoza": "Mendoza",
+    "patagonia": "Patagonia",
+    "iguazu": "Iguazú Falls"
+  },
+  "peruMapLabel": "Illustrated Peru story map",
+  "peruPreviewAlt": "Watercolor Peru story map",
+  "peruCaption": "Peru",
+  "peruStory": "Choose your next story.",
+  "peruDestinations": "Peru itineraries",
+  "peruPlaces": {
+    "lima": "Lima",
+    "cusco": "Cusco",
+    "sacred-valley": "Sacred Valley",
+    "machu-picchu": "Machu Picchu",
+    "arequipa": "Arequipa"
+  },
+  "colombiaMapLabel": "Illustrated Colombia story map",
+  "colombiaPreviewAlt": "Watercolor Colombia story map",
+  "colombiaCaption": "Colombia",
+  "colombiaStory": "Choose your next story.",
+  "colombiaDestinations": "Colombia itineraries",
+  "colombiaPlaces": {
+    "bogota": "Bogotá",
+    "medellin": "Medellín",
+    "cartagena": "Cartagena",
+    "coffee-region": "Coffee Region"
+  },
+  "chileMapLabel": "Illustrated Chile story map",
+  "chilePreviewAlt": "Watercolor Chile story map",
+  "chileCaption": "Chile",
+  "chileStory": "Choose your next story.",
+  "chileDestinations": "Chile itineraries",
+  "chilePlaces": {
+    "santiago": "Santiago",
+    "valparaiso": "Valparaíso",
+    "atacama": "San Pedro de Atacama",
+    "torres-del-paine": "Torres del Paine"
+  }
+}

@@ -1,3 +1,4 @@
+import {southAmericaRegion} from './southAmericaScenes.js';
 import {southeastAsiaRegion} from './southeastAsiaScenes.js';
 import {northAmericaRegion} from './northAmericaScene.js';
 import {EUROPE_DESTINATIONS} from './europeDestinations.js';
@@ -16,4 +17,7 @@ export const REGION_SCENES = {
     'north-america': {get destinations(){return northAmericaRegion.destinations;},get artworkUrl(){return northAmericaRegion.artworkUrl;},loadDestinations:northAmericaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.northAmericaName',
         mapLabel:'homeMagazine.atlas.northAmericaMapLabel', previewAlt:'homeMagazine.atlas.northAmericaPreviewAlt',
         caption:'homeMagazine.atlas.northAmericaCaption', nav:'homeMagazine.atlas.northAmericaDestinations', back:'homeMagazine.atlas.backNorthAmerica', error:'homeMagazine.atlas.northAmericaSceneFailed'}},
+    'south-america': {get destinations(){return southAmericaRegion.destinations;},get artworkUrl(){return southAmericaRegion.artworkUrl;},loadDestinations:southAmericaRegion.loadDestinations, keys:{name:'homeMagazine.atlas.southAmericaName',
+        mapLabel:'homeMagazine.atlas.southAmericaMapLabel', previewAlt:'homeMagazine.atlas.southAmericaPreviewAlt',
+        caption:'homeMagazine.atlas.southAmericaCaption', nav:'homeMagazine.atlas.southAmericaDestinations', back:'homeMagazine.atlas.backSouthAmerica', error:'homeMagazine.atlas.southAmericaSceneFailed'}},
 };
