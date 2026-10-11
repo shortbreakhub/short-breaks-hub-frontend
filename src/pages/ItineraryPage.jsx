@@ -5,7 +5,7 @@ import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import {showToast} from "../utils/toast.js";
 import {isExpired} from "../utils/jwtParser.js";
-import getCurrencyCode from "../utils/countryToCurrency.js";
+import {getCurrencyBaseCode} from "../utils/countryToCurrency.js";
 import axios from "axios";
 import ItineraryStoryPage from "../components/itinerary/ItineraryStoryPage.jsx";
 import { useTranslation } from "react-i18next";
@@ -90,10 +90,6 @@ export default function ItineraryPage() {
 
     }
 
-    function unslug(s) {
-        return s.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
-    }
-
     function markPrepDone(id) {
         setPrepDone((prev) => ({ ...prev, [id]: true }));
 
@@ -156,8 +152,11 @@ export default function ItineraryPage() {
     useEffect(() => {
         if (!data?.id) return;
         let ignore = false;
+        // Never request rates for an unknown or malformed local currency code.
+        const localCurrency = getCurrencyBaseCode(data.country);
+        if (!localCurrency) return;
         async function enrichCurrency() {
-            const res = await axios.get(`https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGERATE_API_KEY}/latest/${getCurrencyCode(unslug(data.region), data.country)["Base Code"]}`);
+            const res = await axios.get(`https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_EXCHANGERATE_API_KEY}/latest/${localCurrency}`);
             const profile = localStorage.getItem("authToken") ? await getMe() : null;
             if (ignore) return;
             const currency = profile?.currency || "USD";

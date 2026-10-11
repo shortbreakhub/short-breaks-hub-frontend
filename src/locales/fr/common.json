@@ -8,6 +8,14 @@
       "stories": "Trouvez votre prochaine histoire"
     },
     "atlas": {
+      "southAmericaName": "Amérique du Sud",
+      "southAmericaMapLabel": "Atlas de voyage illustré — Amérique du Sud",
+      "southAmericaPreviewAlt": "Atlas aquarelle de l’Amérique du Sud",
+      "southAmericaCaption": "Amérique du Sud — découvrez votre prochaine histoire",
+      "southAmericaDestinations": "Explorer les destinations d’Amérique du Sud",
+      "backSouthAmerica": "Retour en Amérique du Sud",
+      "southAmericaSceneFailed": "L’atlas n’a pas pu s’ouvrir. Votre région précédente est prête à être explorée.",
+      "southAmericaCountries": {"brazil": "Brésil", "argentina": "Argentine", "peru": "Pérou", "colombia": "Colombie", "chile": "Chili"},
       "northAmericaName": "Amérique du Nord",
       "northAmericaMapLabel": "Atlas de voyage illustré de l’Amérique du Nord",
       "northAmericaPreviewAlt": "Atlas aquarelle de l’Amérique du Nord avec le Canada, les États-Unis et le Mexique",

@@ -210,7 +210,8 @@ async function checkNorthAmericaNavigation(browser,origin,width){
         if(url.pathname.startsWith('/api/itineraries/region/'))return route.fulfill({json:countries.canada.countryNames});
         if(url.pathname.startsWith('/api/itineraries/browse/')){
             const country=NORTH_AMERICA_DESTINATIONS.find(d=>d.country===decodeURIComponent(url.pathname.split('/').at(-1)));
-            if(country)return route.fulfill({json:countries[country.id].items});
+            // Prerendered browse items omit city; story-map anchors match on it, so take it from each itinerary's own prerender.
+            if(country)return route.fulfill({json:countries[country.id].items.map(item=>({...item,city:bootstrap(`dist/itinerary/${item.slug}/index.html`).detail.city}))});
         }
         if(url.pathname.startsWith('/api/itineraries/slug/'))return route.fulfill({json:bootstrap(`dist/itinerary/${url.pathname.split('/').at(-1)}/index.html`).detail});
         return url.origin===new URL(origin).origin?route.continue():route.abort();
@@ -231,14 +232,28 @@ async function checkNorthAmericaNavigation(browser,origin,width){
         if(width<768){
             await link.tap();assert.equal(await link.getAttribute('data-revealed'),'true');
             await page.locator('.atlas-caption').tap();assert.equal(await link.getAttribute('data-revealed'),'false');
-            await link.tap();
-            await Promise.all([page.waitForURL('**/browse/'+d.id),link.tap()]);
-        }else await Promise.all([page.waitForURL('**/browse/'+d.id),page.keyboard.press('Enter')]);
-        await page.getByRole('heading',{name:new RegExp(d.country+'$')}).waitFor();
-        assert.ok(await page.locator('a[href^="/itinerary/"]').count()>0,'real country itineraries render');
+            await link.tap();await link.tap();
+        }else await page.keyboard.press('Enter');
+        // The country opens its approved story map (Europe/Asia pattern), not the browse listing.
+        await page.locator(`.atlas-stage[data-atlas-scene="${d.id}"][data-atlas-transition="idle"]`).waitFor({timeout:15000});
+        assert.equal(new URL(page.url()).pathname,'/','country selection stays in the Atlas');
+        const itineraries=page.locator('.atlas-itinerary');
+        const slugs=(await itineraries.evaluateAll(els=>els.map(el=>el.getAttribute('href')))).sort();
+        assert.deepEqual(slugs,countries[d.id].items.map(item=>'/itinerary/'+item.slug).sort(),'story map links match the real country inventory');
+        if(d.id==='canada'){
+            await page.locator('.atlas-back').click();
+            await page.locator('.atlas-stage[data-atlas-scene="north-america"][data-atlas-transition="idle"]').waitFor();
+            await page.waitForFunction(id=>document.activeElement?.dataset.country===id,d.id);
+            await link.focus();await page.keyboard.press('Enter');
+            await page.locator(`.atlas-stage[data-atlas-scene="${d.id}"][data-atlas-transition="idle"]`).waitFor({timeout:15000});
+        }
+        const first=itineraries.first(),href=await first.getAttribute('href');
+        if(width<768){await first.tap();await Promise.all([page.waitForURL('**'+href),first.tap()]);}
+        else await Promise.all([page.waitForURL('**'+href),first.click()]);
+        await page.locator('h1').first().waitFor();
     }
     assert.deepEqual(errors,[]);
-    console.log(width+': North America keyboard/native navigation, touch arm/outside disarm, reduced motion and real country inventories passed');
+    console.log(width+': North America country story maps, Back, keyboard/touch selection, reduced motion and real itinerary navigation passed');
     await context.close();
 }
 

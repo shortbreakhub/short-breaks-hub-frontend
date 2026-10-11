@@ -1,16 +1,14 @@
 import React, { useId, useState } from "react";
-import getCurrencyCode from "../utils/countryToCurrency.js";
+import {getCurrencyBaseCode} from "../utils/countryToCurrency.js";
 import { useTranslation } from "react-i18next";
 
 export default function CurrencyConverter({ data, defaultOpen = false,fromAmount,userCurrency,userCurrencyValue,convertRate }) {
     const [open, setOpen] = useState(defaultOpen);
     const contentId = useId();
     const { t } = useTranslation();
-
-    function unslug(s) {
-        return s.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
-    }
-
+    // No converter (rather than "undefined") when the itinerary country has no known currency.
+    const localCurrency = getCurrencyBaseCode(data?.country);
+    if (!localCurrency) return null;
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white">
@@ -56,7 +54,7 @@ export default function CurrencyConverter({ data, defaultOpen = false,fromAmount
 
                             <div className="space-y-3">
                                 <label className="block text-xs text-gray-500">
-                                    {t("currencyConverter.from")} ({getCurrencyCode(unslug(data.region), data.country)["Base Code"]})
+                                    {t("currencyConverter.from")} ({localCurrency})
                                     <div className="mt-1 flex items-center gap-2">
                                         <input
                                             type="number"
@@ -84,7 +82,7 @@ export default function CurrencyConverter({ data, defaultOpen = false,fromAmount
                                 </label>
 
                                 <p className="text-[11px] text-gray-400">
-                                    {t("currencyConverter.usingRate")}: 1 {getCurrencyCode(unslug(data.region), data.country)["Base Code"]} ≈ {convertRate} {userCurrency}
+                                    {t("currencyConverter.usingRate")}: 1 {localCurrency} ≈ {convertRate} {userCurrency}
                                 </p>
                             </div>
                         </section>

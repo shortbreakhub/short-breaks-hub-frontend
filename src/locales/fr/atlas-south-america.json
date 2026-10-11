@@ -1,0 +1,59 @@
+{
+  "brazilMapLabel": "Carte illustrée — Brésil",
+  "brazilPreviewAlt": "Carte aquarelle — Brésil",
+  "brazilCaption": "Brésil",
+  "brazilStory": "Choisissez votre prochaine histoire.",
+  "brazilDestinations": "Itinéraires — Brésil",
+  "brazilPlaces": {
+    "rio": "Rio de Janeiro",
+    "sao-paulo": "São Paulo",
+    "salvador": "Salvador",
+    "lencois": "Lençóis Maranhenses",
+    "amazon": "Amazonie"
+  },
+  "argentinaMapLabel": "Carte illustrée — Argentine",
+  "argentinaPreviewAlt": "Carte aquarelle — Argentine",
+  "argentinaCaption": "Argentine",
+  "argentinaStory": "Choisissez votre prochaine histoire.",
+  "argentinaDestinations": "Itinéraires — Argentine",
+  "argentinaPlaces": {
+    "buenos-aires": "Buenos Aires",
+    "mendoza": "Mendoza",
+    "patagonia": "Patagonie",
+    "iguazu": "Chutes d’Iguazú"
+  },
+  "peruMapLabel": "Carte illustrée — Pérou",
+  "peruPreviewAlt": "Carte aquarelle — Pérou",
+  "peruCaption": "Pérou",
+  "peruStory": "Choisissez votre prochaine histoire.",
+  "peruDestinations": "Itinéraires — Pérou",
+  "peruPlaces": {
+    "lima": "Lima",
+    "cusco": "Cusco",
+    "sacred-valley": "Vallée sacrée",
+    "machu-picchu": "Machu Picchu",
+    "arequipa": "Arequipa"
+  },
+  "colombiaMapLabel": "Carte illustrée — Colombie",
+  "colombiaPreviewAlt": "Carte aquarelle — Colombie",
+  "colombiaCaption": "Colombie",
+  "colombiaStory": "Choisissez votre prochaine histoire.",
+  "colombiaDestinations": "Itinéraires — Colombie",
+  "colombiaPlaces": {
+    "bogota": "Bogotá",
+    "medellin": "Medellín",
+    "cartagena": "Carthagène",
+    "coffee-region": "Région du café"
+  },
+  "chileMapLabel": "Carte illustrée — Chili",
+  "chilePreviewAlt": "Carte aquarelle — Chili",
+  "chileCaption": "Chili",
+  "chileStory": "Choisissez votre prochaine histoire.",
+  "chileDestinations": "Itinéraires — Chili",
+  "chilePlaces": {
+    "santiago": "Santiago",
+    "valparaiso": "Valparaíso",
+    "atacama": "San Pedro de Atacama",
+    "torres-del-paine": "Torres del Paine"
+  }
+}

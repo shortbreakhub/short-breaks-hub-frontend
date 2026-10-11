@@ -135,6 +135,10 @@ const countryToCurrency =
                 "Base Code": "MXN",
                 "Symbol" : "MEX$"
             },
+            "Peru" : {
+                "Base Code": "PEN",
+                "Symbol" : "S/"
+            },
             "United States" : {
                 "Base Code": "USD",
                 "Symbol" : "$"
@@ -200,7 +204,7 @@ const countryToCurrency =
                 "Symbol" : "N$"
             },
             "Rwanda" : {
-                "Base Code": "RBF",
+                "Base Code": "RWF",
                 "Symbol" : "R₣"
             },
             "Senegal" : {
@@ -218,6 +222,16 @@ const countryToCurrency =
         }
     }
 
-export default function getCurrencyCode(regionName,countryName) {
-    return countryToCurrency[regionName][countryName] || "No Code Found";
+// Country names are unique across regions, so currencies resolve by country alone. Itinerary
+// region values are not trusted here: a malformed one must never break the itinerary page.
+const byCountry = Object.fromEntries(Object.values(countryToCurrency).flatMap(countries => Object.entries(countries)));
+
+export function getCurrencyBaseCode(countryName) {
+    const code = Object.hasOwn(byCountry, countryName) ? byCountry[countryName]["Base Code"] : undefined;
+    return /^[A-Z]{3}$/.test(code ?? "") ? code : null;
+}
+
+// regionName is accepted for existing callers and ignored. Unknown countries return null.
+export default function getCurrencyCode(regionName, countryName) {
+    return getCurrencyBaseCode(countryName) ? byCountry[countryName] : null;
 }

@@ -1,0 +1,45 @@
+{
+  "canadaMapLabel": "Carte illustrée — Canada",
+  "canadaPreviewAlt": "Carte aquarelle — Canada",
+  "canadaCaption": "Canada",
+  "canadaStory": "Choisissez votre prochaine histoire.",
+  "canadaDestinations": "Itinéraires — Canada",
+  "canadaPlaces": {
+    "vancouver": "Vancouver",
+    "lake-louise": "Lac Louise",
+    "calgary": "Calgary",
+    "toronto": "Toronto",
+    "ottawa": "Ottawa",
+    "montreal": "Montréal",
+    "quebec-city": "Québec"
+  },
+  "unitedStatesMapLabel": "Carte illustrée — États-Unis",
+  "unitedStatesPreviewAlt": "Carte aquarelle — États-Unis",
+  "unitedStatesCaption": "États-Unis",
+  "unitedStatesStory": "Choisissez votre prochaine histoire.",
+  "unitedStatesDestinations": "Itinéraires — États-Unis",
+  "unitedStatesPlaces": {
+    "seattle": "Seattle",
+    "san-francisco": "San Francisco",
+    "las-vegas": "Las Vegas",
+    "los-angeles": "Los Angeles",
+    "chicago": "Chicago",
+    "boston": "Boston",
+    "new-york-city": "New York",
+    "washington-dc": "Washington",
+    "new-orleans": "La Nouvelle-Orléans"
+  },
+  "mexicoMapLabel": "Carte illustrée — Mexique",
+  "mexicoPreviewAlt": "Carte aquarelle — Mexique",
+  "mexicoCaption": "Mexique",
+  "mexicoStory": "Choisissez votre prochaine histoire.",
+  "mexicoDestinations": "Itinéraires — Mexique",
+  "mexicoPlaces": {
+    "guanajuato": "Guanajuato",
+    "san-miguel": "San Miguel de Allende",
+    "mexico-city": "Mexico",
+    "oaxaca": "Oaxaca",
+    "merida": "Mérida",
+    "tulum": "Tulum"
+  }
+}
