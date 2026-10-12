@@ -66,6 +66,7 @@ export function validateOfficialDetail(slug, data) {
             .filter(key => record[key] !== undefined)
             .map(key => [key, record[key]])));
     }
+    detail.arrival = correctOfficialArrival(detail);
     detail.hotelDestination = projectHotelDestination(data.hotelDestination);
     return detail;
 }
@@ -105,7 +106,31 @@ export function getItineraryPlanning(data) {
     };
 }
 
+// Exact corrections for two legacy API records; do not rewrite other itinerary guidance.
+function correctOfficialArrival(data) {
+    if (!Array.isArray(data.arrival)) return data.arrival;
+    if (data.slug === "3-days-phnom-penh-where-history-speaks-softly") {
+        return data.arrival.map(item => {
+            if (!item.title.includes("Phnom Penh International Airport (PNH)")) return item;
+            return {...item,
+                title: item.title.replace("Phnom Penh International Airport (PNH)", "Techo International Airport (KTI)"),
+                note: item.note.replace(
+                    "Most practical: airport taxi or Grab. Travel time ≈30–45 min depending on traffic. Public transport options are limited for visitors.",
+                    "Airport taxis, ride-hailing and the Airport Express bus connect Techo International Airport with Phnom Penh. Allow for traffic when planning your transfer.",
+                ),
+            };
+        });
+    }
+    if (data.slug === "4-days-palawan-where-water-forgets-the-world") {
+        return data.arrival.map(item => ({...item,
+            title: item.title.replace(/\(LIO\)/g, "(ENI)"),
+            note: item.note.replace(/\(LIO\)/g, "(ENI)"),
+        }));
+    }
+    return data.arrival;
+}
+
 export function getItineraryTransport(data) {
-    return {arrival: data.arrival, gettingAround: data.gettingAround,
+    return {arrival: correctOfficialArrival(data), gettingAround: data.gettingAround,
         dayTrips: data.dayTrips, dayMoves: data.dayMoves, practical: data.practical};
 }

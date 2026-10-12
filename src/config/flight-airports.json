@@ -1,0 +1,1610 @@
+{
+  "argentina--buenos-aires": {
+    "destinationKey": "argentina--buenos-aires",
+    "airportCode": "EZE",
+    "airportName": "Ministro Pistarini International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "argentina--el-calafate-el-chalten": {
+    "destinationKey": "argentina--el-calafate-el-chalten",
+    "airportCode": "EZE",
+    "airportName": "Ministro Pistarini International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "argentina--mendoza": {
+    "destinationKey": "argentina--mendoza",
+    "airportCode": "MDZ",
+    "airportName": "Governor Francisco Gabrielli International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "argentina--puerto-iguazu": {
+    "destinationKey": "argentina--puerto-iguazu",
+    "airportCode": "EZE",
+    "airportName": "Ministro Pistarini International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "australia--brisbane": {
+    "destinationKey": "australia--brisbane",
+    "airportCode": "BNE",
+    "airportName": "Brisbane Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "australia--canberra": {
+    "destinationKey": "australia--canberra",
+    "airportCode": "CBR",
+    "airportName": "Canberra Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "australia--melbourne": {
+    "destinationKey": "australia--melbourne",
+    "airportCode": "MEL",
+    "airportName": "Melbourne Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "australia--perth": {
+    "destinationKey": "australia--perth",
+    "airportCode": "PER",
+    "airportName": "Perth Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "australia--sydney": {
+    "destinationKey": "australia--sydney",
+    "airportCode": "SYD",
+    "airportName": "Sydney Kingsford Smith Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "australia--tasmania": {
+    "destinationKey": "australia--tasmania",
+    "airportCode": "HBA",
+    "airportName": "Hobart Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "brazil--barreirinhas-atins": {
+    "destinationKey": "brazil--barreirinhas-atins",
+    "airportCode": "BSB",
+    "airportName": "Presidente Juscelino Kubitschek International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "brazil--manaus-amazon-rainforest": {
+    "destinationKey": "brazil--manaus-amazon-rainforest",
+    "airportCode": "BSB",
+    "airportName": "Presidente Juscelino Kubitschek International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "brazil--rio-de-janeiro": {
+    "destinationKey": "brazil--rio-de-janeiro",
+    "airportCode": "GIG",
+    "airportName": "Rio de Janeiro Tom Jobim International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "brazil--salvador": {
+    "destinationKey": "brazil--salvador",
+    "airportCode": "SSA",
+    "airportName": "Salvador Bahia Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "brazil--sao-paulo": {
+    "destinationKey": "brazil--sao-paulo",
+    "airportCode": "GRU",
+    "airportName": "São Paulo/Guarulhos Governador André Franco Montoro International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "cambodia--kampot": {
+    "destinationKey": "cambodia--kampot",
+    "airportCode": "KTI",
+    "airportName": "Techo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "cambodia--mondulkiri": {
+    "destinationKey": "cambodia--mondulkiri",
+    "airportCode": "KTI",
+    "airportName": "Techo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "cambodia--phnom-penh": {
+    "destinationKey": "cambodia--phnom-penh",
+    "airportCode": "KTI",
+    "airportName": "Techo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "cambodia--siem-reap": {
+    "destinationKey": "cambodia--siem-reap",
+    "airportCode": "SAI",
+    "airportName": "Siem Reap Angkor International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--calgary": {
+    "destinationKey": "canada--calgary",
+    "airportCode": "YYC",
+    "airportName": "Calgary International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--lake-louise": {
+    "destinationKey": "canada--lake-louise",
+    "airportCode": "YYC",
+    "airportName": "Calgary International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "canada--montreal": {
+    "destinationKey": "canada--montreal",
+    "airportCode": "YUL",
+    "airportName": "Montréal-Pierre Elliott Trudeau International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--ottawa": {
+    "destinationKey": "canada--ottawa",
+    "airportCode": "YOW",
+    "airportName": "Ottawa Macdonald-Cartier International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--quebec-city": {
+    "destinationKey": "canada--quebec-city",
+    "airportCode": "YQB",
+    "airportName": "Québec City Jean Lesage International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--toronto": {
+    "destinationKey": "canada--toronto",
+    "airportCode": "YYZ",
+    "airportName": "Toronto Pearson International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "canada--vancouver": {
+    "destinationKey": "canada--vancouver",
+    "airportCode": "YVR",
+    "airportName": "Vancouver International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "chile--san-pedro-de-atacama": {
+    "destinationKey": "chile--san-pedro-de-atacama",
+    "airportCode": "SCL",
+    "airportName": "Arturo Merino Benítez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "chile--santiago": {
+    "destinationKey": "chile--santiago",
+    "airportCode": "SCL",
+    "airportName": "Arturo Merino Benítez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "chile--torres-del-paine-national-park": {
+    "destinationKey": "chile--torres-del-paine-national-park",
+    "airportCode": "SCL",
+    "airportName": "Arturo Merino Benítez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "chile--valparaiso": {
+    "destinationKey": "chile--valparaiso",
+    "airportCode": "SCL",
+    "airportName": "Arturo Merino Benítez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "china--beijing": {
+    "destinationKey": "china--beijing",
+    "airportCode": "PEK",
+    "airportName": "Beijing Capital International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--changzhou": {
+    "destinationKey": "china--changzhou",
+    "airportCode": "PEK",
+    "airportName": "Beijing Capital International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "china--chengdu": {
+    "destinationKey": "china--chengdu",
+    "airportCode": "TFU",
+    "airportName": "Chengdu Tianfu International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--dengfeng": {
+    "destinationKey": "china--dengfeng",
+    "airportCode": "PEK",
+    "airportName": "Beijing Capital International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "china--guangzhou": {
+    "destinationKey": "china--guangzhou",
+    "airportCode": "CAN",
+    "airportName": "Guangzhou Baiyun International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--guilin": {
+    "destinationKey": "china--guilin",
+    "airportCode": "KWL",
+    "airportName": "Guilin Liangjiang International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--hangzhou": {
+    "destinationKey": "china--hangzhou",
+    "airportCode": "HGH",
+    "airportName": "Hangzhou Xiaoshan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--shanghai": {
+    "destinationKey": "china--shanghai",
+    "airportCode": "PVG",
+    "airportName": "Shanghai Pudong International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "china--xi-an": {
+    "destinationKey": "china--xi-an",
+    "airportCode": "XIY",
+    "airportName": "Xi'an Xianyang International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "colombia--bogota": {
+    "destinationKey": "colombia--bogota",
+    "airportCode": "BOG",
+    "airportName": "El Dorado International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "colombia--cartagena": {
+    "destinationKey": "colombia--cartagena",
+    "airportCode": "CTG",
+    "airportName": "Rafael Núñez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "colombia--medellin": {
+    "destinationKey": "colombia--medellin",
+    "airportCode": "MDE",
+    "airportName": "José María Córdova International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "colombia--salento-cocora-valley": {
+    "destinationKey": "colombia--salento-cocora-valley",
+    "airportCode": "BOG",
+    "airportName": "El Dorado International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "costa-rica--la-fortuna-arenal": {
+    "destinationKey": "costa-rica--la-fortuna-arenal",
+    "airportCode": "SJO",
+    "airportName": "Juan Santamaría International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "costa-rica--manuel-antonio": {
+    "destinationKey": "costa-rica--manuel-antonio",
+    "airportCode": "SJO",
+    "airportName": "Juan Santamaría International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "costa-rica--monteverde": {
+    "destinationKey": "costa-rica--monteverde",
+    "airportCode": "SJO",
+    "airportName": "Juan Santamaría International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "costa-rica--nicoya-peninsula": {
+    "destinationKey": "costa-rica--nicoya-peninsula",
+    "airportCode": "SJO",
+    "airportName": "Juan Santamaría International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "costa-rica--tortuguero": {
+    "destinationKey": "costa-rica--tortuguero",
+    "airportCode": "SJO",
+    "airportName": "Juan Santamaría International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "egypt--cairo-giza-nile-corridor": {
+    "destinationKey": "egypt--cairo-giza-nile-corridor",
+    "airportCode": "CAI",
+    "airportName": "Cairo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "fiji--fiji-islands": {
+    "destinationKey": "fiji--fiji-islands",
+    "airportCode": "NAN",
+    "airportName": "Nadi International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "france--bordeaux": {
+    "destinationKey": "france--bordeaux",
+    "airportCode": "BOD",
+    "airportName": "Bordeaux-Mérignac Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "france--lyon": {
+    "destinationKey": "france--lyon",
+    "airportCode": "LYS",
+    "airportName": "Lyon-Saint Exupéry Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "france--marseille": {
+    "destinationKey": "france--marseille",
+    "airportCode": "MRS",
+    "airportName": "Marseille Provence Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "france--nice": {
+    "destinationKey": "france--nice",
+    "airportCode": "NCE",
+    "airportName": "Nice Côte d'Azur Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "france--paris": {
+    "destinationKey": "france--paris",
+    "airportCode": "CDG",
+    "airportName": "Paris Charles de Gaulle Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "france--strasbourg": {
+    "destinationKey": "france--strasbourg",
+    "airportCode": "SXB",
+    "airportName": "Strasbourg Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "french-polynesia--tahiti-bora-bora": {
+    "destinationKey": "french-polynesia--tahiti-bora-bora",
+    "airportCode": "PPT",
+    "airportName": "Tahiti-Faa'a International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "germany--berlin": {
+    "destinationKey": "germany--berlin",
+    "airportCode": "BER",
+    "airportName": "Berlin Brandenburg Airport Willy Brandt",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "germany--cologne": {
+    "destinationKey": "germany--cologne",
+    "airportCode": "CGN",
+    "airportName": "Cologne Bonn Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "germany--dresden": {
+    "destinationKey": "germany--dresden",
+    "airportCode": "DRS",
+    "airportName": "Dresden Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "germany--hamburg": {
+    "destinationKey": "germany--hamburg",
+    "airportCode": "HAM",
+    "airportName": "Hamburg Airport Helmut Schmidt",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "germany--heidelberg": {
+    "destinationKey": "germany--heidelberg",
+    "airportCode": "FRA",
+    "airportName": "Frankfurt Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "germany--munich": {
+    "destinationKey": "germany--munich",
+    "airportCode": "MUC",
+    "airportName": "Munich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "ghana--accra-cape-coast-inland-communities": {
+    "destinationKey": "ghana--accra-cape-coast-inland-communities",
+    "airportCode": "ACC",
+    "airportName": "Accra International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "greece--athens": {
+    "destinationKey": "greece--athens",
+    "airportCode": "ATH",
+    "airportName": "Athens International Airport Eleftherios Venizelos",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "greece--crete-chania": {
+    "destinationKey": "greece--crete-chania",
+    "airportCode": "CHQ",
+    "airportName": "Chania International Airport Ioannis Daskalogiannis",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "greece--rhodes": {
+    "destinationKey": "greece--rhodes",
+    "airportCode": "RHO",
+    "airportName": "Rhodes International Airport Diagoras",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "greece--santorini": {
+    "destinationKey": "greece--santorini",
+    "airportCode": "JTR",
+    "airportName": "Santorini Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "greece--thessaloniki": {
+    "destinationKey": "greece--thessaloniki",
+    "airportCode": "SKG",
+    "airportName": "Thessaloniki Airport Makedonia",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "hong-kong--hong-kong": {
+    "destinationKey": "hong-kong--hong-kong",
+    "airportCode": "HKG",
+    "airportName": "Hong Kong International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "indonesia--bali": {
+    "destinationKey": "indonesia--bali",
+    "airportCode": "DPS",
+    "airportName": "I Gusti Ngurah Rai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "indonesia--bandung": {
+    "destinationKey": "indonesia--bandung",
+    "airportCode": "CGK",
+    "airportName": "Soekarno-Hatta International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "indonesia--jakarta": {
+    "destinationKey": "indonesia--jakarta",
+    "airportCode": "CGK",
+    "airportName": "Soekarno-Hatta International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "indonesia--yogyakarta": {
+    "destinationKey": "indonesia--yogyakarta",
+    "airportCode": "YIA",
+    "airportName": "Yogyakarta International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "italy--florence": {
+    "destinationKey": "italy--florence",
+    "airportCode": "FLR",
+    "airportName": "Florence Airport Amerigo Vespucci",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "italy--milan": {
+    "destinationKey": "italy--milan",
+    "airportCode": "MXP",
+    "airportName": "Milan Malpensa Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "italy--naples": {
+    "destinationKey": "italy--naples",
+    "airportCode": "NAP",
+    "airportName": "Naples International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "italy--rome": {
+    "destinationKey": "italy--rome",
+    "airportCode": "FCO",
+    "airportName": "Rome Fiumicino Leonardo da Vinci Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "italy--sicily-palermo": {
+    "destinationKey": "italy--sicily-palermo",
+    "airportCode": "FCO",
+    "airportName": "Rome Fiumicino Leonardo da Vinci Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "italy--venice": {
+    "destinationKey": "italy--venice",
+    "airportCode": "VCE",
+    "airportName": "Venice Marco Polo Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "japan--fujiyoshida": {
+    "destinationKey": "japan--fujiyoshida",
+    "airportCode": "HND",
+    "airportName": "Tokyo International Airport Haneda",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "japan--fukuoka": {
+    "destinationKey": "japan--fukuoka",
+    "airportCode": "FUK",
+    "airportName": "Fukuoka Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "japan--hakone": {
+    "destinationKey": "japan--hakone",
+    "airportCode": "HND",
+    "airportName": "Tokyo International Airport Haneda",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "japan--hiroshima": {
+    "destinationKey": "japan--hiroshima",
+    "airportCode": "HIJ",
+    "airportName": "Hiroshima Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "japan--kanazawa": {
+    "destinationKey": "japan--kanazawa",
+    "airportCode": "KMQ",
+    "airportName": "Komatsu Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "japan--kyoto": {
+    "destinationKey": "japan--kyoto",
+    "airportCode": "KIX",
+    "airportName": "Kansai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "japan--nara": {
+    "destinationKey": "japan--nara",
+    "airportCode": "KIX",
+    "airportName": "Kansai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "japan--osaka": {
+    "destinationKey": "japan--osaka",
+    "airportCode": "KIX",
+    "airportName": "Kansai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "japan--tokyo": {
+    "destinationKey": "japan--tokyo",
+    "airportCode": "HND",
+    "airportName": "Tokyo International Airport Haneda",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "kenya--nairobi-rift-valley-maasai-mara": {
+    "destinationKey": "kenya--nairobi-rift-valley-maasai-mara",
+    "airportCode": "NBO",
+    "airportName": "Jomo Kenyatta International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "laos--luang-prabang": {
+    "destinationKey": "laos--luang-prabang",
+    "airportCode": "LPQ",
+    "airportName": "Luang Prabang International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "laos--vang-vieng": {
+    "destinationKey": "laos--vang-vieng",
+    "airportCode": "VTE",
+    "airportName": "Wattay International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "laos--vientiane": {
+    "destinationKey": "laos--vientiane",
+    "airportCode": "VTE",
+    "airportName": "Wattay International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "macau--macau": {
+    "destinationKey": "macau--macau",
+    "airportCode": "MFM",
+    "airportName": "Macau International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "malaysia--george-town": {
+    "destinationKey": "malaysia--george-town",
+    "airportCode": "PEN",
+    "airportName": "Penang International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "malaysia--ipoh": {
+    "destinationKey": "malaysia--ipoh",
+    "airportCode": "KUL",
+    "airportName": "Kuala Lumpur International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "malaysia--johor-bahru": {
+    "destinationKey": "malaysia--johor-bahru",
+    "airportCode": "JHB",
+    "airportName": "Senai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "malaysia--kuala-lumpur": {
+    "destinationKey": "malaysia--kuala-lumpur",
+    "airportCode": "KUL",
+    "airportName": "Kuala Lumpur International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "malaysia--langkawi": {
+    "destinationKey": "malaysia--langkawi",
+    "airportCode": "KUL",
+    "airportName": "Kuala Lumpur International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "malaysia--malacca": {
+    "destinationKey": "malaysia--malacca",
+    "airportCode": "KUL",
+    "airportName": "Kuala Lumpur International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mexico--guanajuato": {
+    "destinationKey": "mexico--guanajuato",
+    "airportCode": "MEX",
+    "airportName": "Benito Juárez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mexico--merida": {
+    "destinationKey": "mexico--merida",
+    "airportCode": "MID",
+    "airportName": "Manuel Crescencio Rejón International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "mexico--mexico-city": {
+    "destinationKey": "mexico--mexico-city",
+    "airportCode": "MEX",
+    "airportName": "Benito Juárez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "mexico--oaxaca": {
+    "destinationKey": "mexico--oaxaca",
+    "airportCode": "OAX",
+    "airportName": "Xoxocotlán International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "mexico--san-miguel-de-allende": {
+    "destinationKey": "mexico--san-miguel-de-allende",
+    "airportCode": "MEX",
+    "airportName": "Benito Juárez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mexico--tulum": {
+    "destinationKey": "mexico--tulum",
+    "airportCode": "MEX",
+    "airportName": "Benito Juárez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mongolia--gorkhi-terelj-national-park": {
+    "destinationKey": "mongolia--gorkhi-terelj-national-park",
+    "airportCode": "UBN",
+    "airportName": "Chinggis Khaan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mongolia--karakorum": {
+    "destinationKey": "mongolia--karakorum",
+    "airportCode": "UBN",
+    "airportName": "Chinggis Khaan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "mongolia--ulaanbaatar": {
+    "destinationKey": "mongolia--ulaanbaatar",
+    "airportCode": "UBN",
+    "airportName": "Chinggis Khaan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "morocco--marrakech": {
+    "destinationKey": "morocco--marrakech",
+    "airportCode": "RAK",
+    "airportName": "Marrakech Menara Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "myanmar--bagan": {
+    "destinationKey": "myanmar--bagan",
+    "airportCode": "RGN",
+    "airportName": "Yangon International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "REVIEW_REQUIRED"
+  },
+  "myanmar--mandalay": {
+    "destinationKey": "myanmar--mandalay",
+    "airportCode": "MDL",
+    "airportName": "Mandalay International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "REVIEW_REQUIRED"
+  },
+  "myanmar--yangon": {
+    "destinationKey": "myanmar--yangon",
+    "airportCode": "RGN",
+    "airportName": "Yangon International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "REVIEW_REQUIRED"
+  },
+  "namibia--windhoek-sossusvlei-namib-desert": {
+    "destinationKey": "namibia--windhoek-sossusvlei-namib-desert",
+    "airportCode": "WDH",
+    "airportName": "Hosea Kutako International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "netherlands--amsterdam": {
+    "destinationKey": "netherlands--amsterdam",
+    "airportCode": "AMS",
+    "airportName": "Amsterdam Airport Schiphol",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "netherlands--haarlem": {
+    "destinationKey": "netherlands--haarlem",
+    "airportCode": "AMS",
+    "airportName": "Amsterdam Airport Schiphol",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "netherlands--rotterdam": {
+    "destinationKey": "netherlands--rotterdam",
+    "airportCode": "AMS",
+    "airportName": "Amsterdam Airport Schiphol",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "netherlands--the-hague": {
+    "destinationKey": "netherlands--the-hague",
+    "airportCode": "AMS",
+    "airportName": "Amsterdam Airport Schiphol",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "netherlands--utrecht": {
+    "destinationKey": "netherlands--utrecht",
+    "airportCode": "AMS",
+    "airportName": "Amsterdam Airport Schiphol",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "new-caledonia--noumea-outer-lagoons": {
+    "destinationKey": "new-caledonia--noumea-outer-lagoons",
+    "airportCode": "NOU",
+    "airportName": "La Tontouta International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "new-zealand--auckland": {
+    "destinationKey": "new-zealand--auckland",
+    "airportCode": "AKL",
+    "airportName": "Auckland Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "new-zealand--christchurch": {
+    "destinationKey": "new-zealand--christchurch",
+    "airportCode": "CHC",
+    "airportName": "Christchurch Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "new-zealand--fiordland": {
+    "destinationKey": "new-zealand--fiordland",
+    "airportCode": "ZQN",
+    "airportName": "Queenstown Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "new-zealand--queenstown": {
+    "destinationKey": "new-zealand--queenstown",
+    "airportCode": "ZQN",
+    "airportName": "Queenstown Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "new-zealand--rotorua": {
+    "destinationKey": "new-zealand--rotorua",
+    "airportCode": "WLG",
+    "airportName": "Wellington Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "new-zealand--south-island": {
+    "destinationKey": "new-zealand--south-island",
+    "airportCode": "CHC",
+    "airportName": "Christchurch Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "new-zealand--wellington": {
+    "destinationKey": "new-zealand--wellington",
+    "airportCode": "WLG",
+    "airportName": "Wellington Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "papua-new-guinea--port-moresby-highlands": {
+    "destinationKey": "papua-new-guinea--port-moresby-highlands",
+    "airportCode": "POM",
+    "airportName": "Jacksons International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "peru--arequipa": {
+    "destinationKey": "peru--arequipa",
+    "airportCode": "LIM",
+    "airportName": "Jorge Chávez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "peru--cusco": {
+    "destinationKey": "peru--cusco",
+    "airportCode": "CUZ",
+    "airportName": "Alejandro Velasco Astete International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "peru--lima": {
+    "destinationKey": "peru--lima",
+    "airportCode": "LIM",
+    "airportName": "Jorge Chávez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "peru--machu-picchu": {
+    "destinationKey": "peru--machu-picchu",
+    "airportCode": "LIM",
+    "airportName": "Jorge Chávez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "peru--sacred-valley-pisac-ollantaytambo-moray": {
+    "destinationKey": "peru--sacred-valley-pisac-ollantaytambo-moray",
+    "airportCode": "LIM",
+    "airportName": "Jorge Chávez International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "philippines--bohol": {
+    "destinationKey": "philippines--bohol",
+    "airportCode": "TAG",
+    "airportName": "Bohol-Panglao International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "philippines--cebu": {
+    "destinationKey": "philippines--cebu",
+    "airportCode": "CEB",
+    "airportName": "Mactan-Cebu International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "philippines--manila": {
+    "destinationKey": "philippines--manila",
+    "airportCode": "MNL",
+    "airportName": "Ninoy Aquino International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "philippines--palawan": {
+    "destinationKey": "philippines--palawan",
+    "airportCode": "MNL",
+    "airportName": "Ninoy Aquino International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "portugal--faro": {
+    "destinationKey": "portugal--faro",
+    "airportCode": "FAO",
+    "airportName": "Gago Coutinho Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "portugal--lagos": {
+    "destinationKey": "portugal--lagos",
+    "airportCode": "FAO",
+    "airportName": "Gago Coutinho Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "portugal--lisbon": {
+    "destinationKey": "portugal--lisbon",
+    "airportCode": "LIS",
+    "airportName": "Humberto Delgado Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "portugal--porto": {
+    "destinationKey": "portugal--porto",
+    "airportCode": "OPO",
+    "airportName": "Francisco Sá Carneiro Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "portugal--sintra": {
+    "destinationKey": "portugal--sintra",
+    "airportCode": "LIS",
+    "airportName": "Humberto Delgado Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "rwanda--kigali-northern-highlands": {
+    "destinationKey": "rwanda--kigali-northern-highlands",
+    "airportCode": "KGL",
+    "airportName": "Kigali International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "samoa--upolu-savai-i": {
+    "destinationKey": "samoa--upolu-savai-i",
+    "airportCode": "APW",
+    "airportName": "Faleolo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "senegal--dakar-goree": {
+    "destinationKey": "senegal--dakar-goree",
+    "airportCode": "DSS",
+    "airportName": "Blaise Diagne International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "singapore--singapore": {
+    "destinationKey": "singapore--singapore",
+    "airportCode": "SIN",
+    "airportName": "Singapore Changi Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "south-africa--cape-town-winelands-cape-peninsula": {
+    "destinationKey": "south-africa--cape-town-winelands-cape-peninsula",
+    "airportCode": "JNB",
+    "airportName": "O.R. Tambo International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "south-korea--busan": {
+    "destinationKey": "south-korea--busan",
+    "airportCode": "PUS",
+    "airportName": "Gimhae International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "south-korea--gyeongju": {
+    "destinationKey": "south-korea--gyeongju",
+    "airportCode": "ICN",
+    "airportName": "Incheon International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "south-korea--jeonju": {
+    "destinationKey": "south-korea--jeonju",
+    "airportCode": "ICN",
+    "airportName": "Incheon International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "south-korea--seoul": {
+    "destinationKey": "south-korea--seoul",
+    "airportCode": "ICN",
+    "airportName": "Incheon International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "spain--barcelona": {
+    "destinationKey": "spain--barcelona",
+    "airportCode": "BCN",
+    "airportName": "Josep Tarradellas Barcelona-El Prat Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "spain--cordoba": {
+    "destinationKey": "spain--cordoba",
+    "airportCode": "SVQ",
+    "airportName": "Seville Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "spain--granada": {
+    "destinationKey": "spain--granada",
+    "airportCode": "MAD",
+    "airportName": "Adolfo Suárez Madrid-Barajas Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "spain--madrid": {
+    "destinationKey": "spain--madrid",
+    "airportCode": "MAD",
+    "airportName": "Adolfo Suárez Madrid-Barajas Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "spain--malaga": {
+    "destinationKey": "spain--malaga",
+    "airportCode": "AGP",
+    "airportName": "Málaga-Costa del Sol Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "spain--seville": {
+    "destinationKey": "spain--seville",
+    "airportCode": "SVQ",
+    "airportName": "Seville Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "spain--valencia": {
+    "destinationKey": "spain--valencia",
+    "airportCode": "VLC",
+    "airportName": "Valencia Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "switzerland--bern": {
+    "destinationKey": "switzerland--bern",
+    "airportCode": "ZRH",
+    "airportName": "Zurich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "switzerland--geneva": {
+    "destinationKey": "switzerland--geneva",
+    "airportCode": "GVA",
+    "airportName": "Geneva Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "switzerland--interlaken": {
+    "destinationKey": "switzerland--interlaken",
+    "airportCode": "ZRH",
+    "airportName": "Zurich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "switzerland--lucerne": {
+    "destinationKey": "switzerland--lucerne",
+    "airportCode": "ZRH",
+    "airportName": "Zurich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "switzerland--zermatt": {
+    "destinationKey": "switzerland--zermatt",
+    "airportCode": "ZRH",
+    "airportName": "Zurich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "switzerland--zurich": {
+    "destinationKey": "switzerland--zurich",
+    "airportCode": "ZRH",
+    "airportName": "Zurich Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "taiwan--hualien": {
+    "destinationKey": "taiwan--hualien",
+    "airportCode": "TPE",
+    "airportName": "Taiwan Taoyuan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "taiwan--kaohsiung": {
+    "destinationKey": "taiwan--kaohsiung",
+    "airportCode": "KHH",
+    "airportName": "Kaohsiung International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "taiwan--taichung": {
+    "destinationKey": "taiwan--taichung",
+    "airportCode": "TPE",
+    "airportName": "Taiwan Taoyuan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "taiwan--tainan": {
+    "destinationKey": "taiwan--tainan",
+    "airportCode": "TPE",
+    "airportName": "Taiwan Taoyuan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "taiwan--taipei": {
+    "destinationKey": "taiwan--taipei",
+    "airportCode": "TPE",
+    "airportName": "Taiwan Taoyuan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "tanzania--arusha-serengeti-ngorongoro": {
+    "destinationKey": "tanzania--arusha-serengeti-ngorongoro",
+    "airportCode": "DAR",
+    "airportName": "Julius Nyerere International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "thailand--bangkok": {
+    "destinationKey": "thailand--bangkok",
+    "airportCode": "BKK",
+    "airportName": "Suvarnabhumi Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "thailand--chiang-mai": {
+    "destinationKey": "thailand--chiang-mai",
+    "airportCode": "CNX",
+    "airportName": "Chiang Mai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "thailand--chiang-rai": {
+    "destinationKey": "thailand--chiang-rai",
+    "airportCode": "CEI",
+    "airportName": "Mae Fah Luang-Chiang Rai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "thailand--pai": {
+    "destinationKey": "thailand--pai",
+    "airportCode": "CNX",
+    "airportName": "Chiang Mai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "thailand--pattaya": {
+    "destinationKey": "thailand--pattaya",
+    "airportCode": "BKK",
+    "airportName": "Suvarnabhumi Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "thailand--sukhothai": {
+    "destinationKey": "thailand--sukhothai",
+    "airportCode": "BKK",
+    "airportName": "Suvarnabhumi Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "tonga--tongatapu-outer-islands": {
+    "destinationKey": "tonga--tongatapu-outer-islands",
+    "airportCode": "TBU",
+    "airportName": "Fua'amotu International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--bath": {
+    "destinationKey": "united-kingdom--bath",
+    "airportCode": "BRS",
+    "airportName": "Bristol Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--bristol": {
+    "destinationKey": "united-kingdom--bristol",
+    "airportCode": "BRS",
+    "airportName": "Bristol Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--cambridge": {
+    "destinationKey": "united-kingdom--cambridge",
+    "airportCode": "STN",
+    "airportName": "London Stansted Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--edinburgh": {
+    "destinationKey": "united-kingdom--edinburgh",
+    "airportCode": "EDI",
+    "airportName": "Edinburgh Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--glasgow": {
+    "destinationKey": "united-kingdom--glasgow",
+    "airportCode": "GLA",
+    "airportName": "Glasgow Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--lake-district": {
+    "destinationKey": "united-kingdom--lake-district",
+    "airportCode": "LHR",
+    "airportName": "Heathrow Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--london": {
+    "destinationKey": "united-kingdom--london",
+    "airportCode": "LHR",
+    "airportName": "Heathrow Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--oxford": {
+    "destinationKey": "united-kingdom--oxford",
+    "airportCode": "LHR",
+    "airportName": "Heathrow Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-kingdom--york": {
+    "destinationKey": "united-kingdom--york",
+    "airportCode": "MAN",
+    "airportName": "Manchester Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "united-states--boston": {
+    "destinationKey": "united-states--boston",
+    "airportCode": "BOS",
+    "airportName": "Boston Logan International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--chicago": {
+    "destinationKey": "united-states--chicago",
+    "airportCode": "ORD",
+    "airportName": "Chicago O'Hare International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--las-vegas": {
+    "destinationKey": "united-states--las-vegas",
+    "airportCode": "LAS",
+    "airportName": "Harry Reid International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--los-angeles": {
+    "destinationKey": "united-states--los-angeles",
+    "airportCode": "LAX",
+    "airportName": "Los Angeles International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--new-orleans": {
+    "destinationKey": "united-states--new-orleans",
+    "airportCode": "MSY",
+    "airportName": "Louis Armstrong New Orleans International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--new-york-city": {
+    "destinationKey": "united-states--new-york-city",
+    "airportCode": "JFK",
+    "airportName": "John F. Kennedy International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--san-francisco": {
+    "destinationKey": "united-states--san-francisco",
+    "airportCode": "SFO",
+    "airportName": "San Francisco International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--seattle": {
+    "destinationKey": "united-states--seattle",
+    "airportCode": "SEA",
+    "airportName": "Seattle-Tacoma International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "united-states--washington-d-c": {
+    "destinationKey": "united-states--washington-d-c",
+    "airportCode": "IAD",
+    "airportName": "Washington Dulles International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "vanuatu--efate-tanna": {
+    "destinationKey": "vanuatu--efate-tanna",
+    "airportCode": "VLI",
+    "airportName": "Bauerfield International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "vietnam--ha-long-bay": {
+    "destinationKey": "vietnam--ha-long-bay",
+    "airportCode": "HAN",
+    "airportName": "Noi Bai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "vietnam--hanoi": {
+    "destinationKey": "vietnam--hanoi",
+    "airportCode": "HAN",
+    "airportName": "Noi Bai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "vietnam--ho-chi-minh-city": {
+    "destinationKey": "vietnam--ho-chi-minh-city",
+    "airportCode": "SGN",
+    "airportName": "Tan Son Nhat International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "DIRECT",
+    "status": "VERIFIED"
+  },
+  "vietnam--hoi-an": {
+    "destinationKey": "vietnam--hoi-an",
+    "airportCode": "DAD",
+    "airportName": "Da Nang International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  },
+  "vietnam--hue": {
+    "destinationKey": "vietnam--hue",
+    "airportCode": "HAN",
+    "airportName": "Noi Bai International Airport",
+    "locationType": "AIRPORT",
+    "mappingType": "GATEWAY",
+    "status": "VERIFIED"
+  }
+}

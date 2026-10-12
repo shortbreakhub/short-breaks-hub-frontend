@@ -9,9 +9,10 @@ import {getOfficialItineraryPath, getRegionPath} from "../utils/publicNavigation
 import stories from "../content/homepage.json";
 import {homepageImages} from "../utils/homepageImages.js";
 import {optimizedImages} from "../utils/optimizedImages.js";
-import {Action, Container, EditorialSurface, Media, Metadata, SectionHeader} from "../components/ui/EditorialUI.jsx";
+import {Container, EditorialSurface, Media, Metadata, SectionHeader} from "../components/ui/EditorialUI.jsx";
 import AtlasStage from "../components/home/AtlasStage.jsx";
 import TravelJournalChapters from "../components/home/TravelJournalChapters.jsx";
+import HomePlanningCTA from "../components/home/HomePlanningCTA.jsx";
 import HomeDiscovery from "../components/home/HomeDiscovery.jsx";
 import useHomeScroll from "../hooks/useHomeScroll.js";
 import "../styles/homepage.css";
@@ -82,7 +83,7 @@ export default function HomePage() {
             <section className="home-planning" aria-labelledby="planning-title">
                 <Container><div className="home-planning-layout"><div><p className="sbh-kicker">{t("homeMagazine.planning.eyebrow")}</p>
                     <h2 id="planning-title">{t("homeMagazine.planning.title")}</h2><p>{t("homeMagazine.planning.description")}</p>
-                    <Action to={getOfficialItineraryPath(stories[0].slug)}>{t("homeMagazine.planning.action")} <span aria-hidden="true">→</span></Action>
+                    <HomePlanningCTA fallback={stories[0]} />
                 </div><ol>{["discover", "plan", "stay"].map((key, index) => <li key={key}><span aria-hidden="true">0{index + 1}</span><div><h3>{t(`homeMagazine.planning.${key}.title`)}</h3><p>{t(`homeMagazine.planning.${key}.description`)}</p></div></li>)}</ol></div></Container>
             </section>
         </main>

@@ -1,6 +1,10 @@
+import {FLIGHT_ORIGIN_SUGGESTIONS} from "../utils/flightOrigins.js";
+import {flightAirportLabel} from "../utils/flightBooking.js";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {HOTEL_CHILD_AGE_OPTIONS, MAX_HOTEL_CHILDREN, resizeHotelChildAges, validateHotelChildAges, getHotelDefaults, addCalendarDays} from "../utils/hotelBooking.js";
+
+import {getFlightDefaults, validateFlightSearch} from "../utils/flightDates.js";
 
 function ProgressBar({ done, total }) {
     const pct = total === 0 ? 0 : Math.round((done / total) * 100);
@@ -108,10 +112,13 @@ function Field({ field, value, onChange }) {
                     type="text"
                     value={value ?? ""}
                     placeholder={field.placeholder ?? ""}
+                    list={field.suggestions ? "flight-origin-suggestions" : undefined}
                     onChange={(e) => onChange(field.key, e.target.value)}
                     className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-gray-400"
                 />
             )}
+
+            {field.suggestions && <datalist id="flight-origin-suggestions">{field.suggestions.map(value => <option key={value} value={value} />)}</datalist>}
 
             {field.type === "date" && (
                 <input
@@ -193,6 +200,7 @@ function Drawer({ open, title, onClose, children, footer }) {
 
 
 export default function TripPrepRail({
+                                         itinerarySlug,
                                          city,
                                          country,
                                          days,
@@ -215,6 +223,16 @@ export default function TripPrepRail({
     const [activeKey, setActiveKey] = useState(null); // "hotel" | "flights" | ...
     const [filtersByKey, setFiltersByKey] = useState({});
     const [hotelError, setHotelError] = useState(null);
+    const [flightSession, setFlightSession] = useState(null);
+    const [flightError, setFlightError] = useState(null);
+    const flightCity = flightAirportLabel(hotelDestination?.destinationKey) || city;
+    const flightIdentity = itinerarySlug ?? JSON.stringify([country, city, days]);
+    // Discard only Flights state when the itinerary changes, before reusing any values.
+    if (flightSession && flightSession.identity !== flightIdentity) {
+        setFlightSession(null);
+        setFlightError(null);
+        if (activeKey === "flights") setDrawerOpen(false);
+    }
     const { t } = useTranslation();
 
     const FILTER_SCHEMAS = {
@@ -234,30 +252,11 @@ export default function TripPrepRail({
         flights: {
             title: t("tripPrepRail.flights.title"),
             fields: [
-                { key: "from", label: t("tripPrepRail.flights.from"), type: "text", placeholder: t("tripPrepRail.flights.fromPlaceholder") },
+                { key: "from", label: t("tripPrepRail.flights.from"), type: "text", suggestions: FLIGHT_ORIGIN_SUGGESTIONS, placeholder: t("tripPrepRail.flights.fromPlaceholder") },
                 { key: "to", label: t("tripPrepRail.flights.to"), type: "text", placeholder: t("tripPrepRail.flights.toPlaceholder") },
                 { key: "depart", label: t("tripPrepRail.flights.depart"), type: "date" },
                 { key: "return", label: t("tripPrepRail.flights.return"), type: "date" },
-                {
-                    key: "cabin",
-                    label: t("tripPrepRail.flights.cabin"),
-                    type: "select",
-                    options: [
-                        { label: t("tripPrepRail.flights.economy"), value: "economy" },
-                        { label: t("tripPrepRail.flights.premium"), value: "premium" },
-                        { label: t("tripPrepRail.flights.business"), value: "business" },
-                        { label: t("tripPrepRail.flights.first"), value: "first" },
-                    ],
-                },
-                {
-                    key: "bags",
-                    label: t("tripPrepRail.flights.bags"),
-                    type: "select",
-                    options: [
-                        { label: t("tripPrepRail.flights.hand"), value: "hand" },
-                        { label: t("tripPrepRail.flights.checked"), value: "checked" },
-                    ],
-                },
+                { key: "nonstopOnly", label: t("tripPrepRail.flights.directOnly"), type: "toggle" },
             ],
         },
         insurance: {
@@ -292,7 +291,6 @@ export default function TripPrepRail({
                     options: [
                         { label: t("tripPrepRail.parking.parking"), value: "parking" },
                         { label: t("tripPrepRail.parking.transfer"), value: "transfer" },
-                        { label: t("tripPrepRail.parking.shuttle"), value: "shuttle" },
                     ],
                 },
             ],
@@ -321,10 +319,9 @@ export default function TripPrepRail({
         const base = filtersByKey[key] ?? {};
 
         if (key === "flights") {
-            return {
-                ...base,
-                to: base.to ?? city ?? "",
-            };
+            return flightSession?.identity === flightIdentity
+                ? {...flightSession.values, to: flightSession.values.to ?? flightCity ?? ""}
+                : getFlightDefaults({city: flightCity, days});
         }
         if (key === "insurance") {
             return {
@@ -348,7 +345,10 @@ export default function TripPrepRail({
     function openFilters(key) {
         setHotelError(null);
         setActiveKey(key);
-        if (key === "hotel" && onHotelOpen) {
+        setFlightError(null);
+        if (key === "flights") {
+            setFlightSession({identity: flightIdentity, values: getDefaultFilters(key)});
+        } else if (key === "hotel" && onHotelOpen) {
             onHotelOpen();
         } else {
             setFiltersByKey((prev) => ({
@@ -365,6 +365,12 @@ export default function TripPrepRail({
 
     function changeFilter(key, fieldKey, value) {
         setHotelError(null);
+        if (key === "flights") {
+            setFlightError(null);
+            setFlightSession(previous => ({identity: flightIdentity,
+                values: {...(previous?.identity === flightIdentity ? previous.values : getFlightDefaults({city: flightCity, days})), [fieldKey]: value}}));
+            return;
+        }
         if (key === "hotel" && onHotelChange) {
             onHotelChange(fieldKey, value);
             return;
@@ -384,6 +390,11 @@ export default function TripPrepRail({
 
     function resetFilters(key) {
         setHotelError(null);
+        if (key === "flights") {
+            setFlightError(null);
+            setFlightSession({identity: flightIdentity, values: {nonstopOnly: false}});
+            return;
+        }
         if (key === "hotel" && onHotelReset) {
             onHotelReset();
             return;
@@ -402,11 +413,20 @@ export default function TripPrepRail({
     };
 
     const activeSchema = activeKey ? FILTER_SCHEMAS[activeKey] : null;
-    const activeFilters = activeKey === "hotel" && hotelBooking
-        ? hotelBooking : activeKey ? (filtersByKey[activeKey] ?? {}) : {};
+    const activeFilters = activeKey === "flights"
+        ? (flightSession?.identity === flightIdentity ? flightSession.values : {})
+        : activeKey === "hotel" && hotelBooking
+            ? hotelBooking : activeKey ? (filtersByKey[activeKey] ?? {}) : {};
 
     function handleSearch() {
         if (!activeKey) return;
+        if (activeKey === "flights") {
+            const error = validateFlightSearch(activeFilters);
+            if (error) {
+                setFlightError(error);
+                return;
+            }
+        }
         if (activeKey === "hotel") {
             const error = validateHotelChildAges(activeFilters);
             if (error) {
@@ -425,6 +445,10 @@ export default function TripPrepRail({
 
         const result = item?.onSearch
             ? item.onSearch(activeFilters, context) : item?.onFind?.(activeFilters, context);
+        if (activeKey === "flights" && typeof result === "string") {
+            setFlightError(result);
+            return;
+        }
         if (activeKey === "hotel" && typeof result === "string") {
             setHotelError(result);
             return;
@@ -616,6 +640,10 @@ export default function TripPrepRail({
                                     ))}
                             </React.Fragment>
                         ))}
+                        {activeKey === "flights" && <p className="text-sm text-gray-600">{t("tripPrepRail.flights.experimental")}</p>}
+                        {activeKey === "flights" && flightError && (
+                            <p role="alert" className="text-sm text-red-600">{t(flightError)}</p>
+                        )}
                         {activeKey === "hotel" && hotelError && (
                             <p role="alert" className="text-sm text-red-600">{t(hotelError)}</p>
                         )}

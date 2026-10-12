@@ -67,3 +67,41 @@ test("fetch failure identifies itinerary and never silently omits it", async () 
     await assert.rejects(fetchOfficialPages(["broken-city"], async () => {throw new Error("API unavailable");}), /broken-city.*API unavailable/);
     await assert.rejects(fetchOfficialPages(["wrong-city"], async () => fixture("other-city")), /wrong-city.*slug/);
 });
+
+
+test("legacy Phnom Penh arrival uses KTI and verified transport in bootstrap and live projection", () => {
+    const raw = fixture("3-days-phnom-penh-where-history-speaks-softly");
+    raw.arrival = [{title: "Phnom Penh International Airport (PNH) → City centre",
+        note: "Most practical: airport taxi or Grab. Travel time ≈30–45 min depending on traffic. Public transport options are limited for visitors."}];
+    const snapshot = structuredClone(raw);
+    const detail = validateOfficialDetail(raw.slug, raw);
+    assert.equal(detail.arrival[0].title, "Techo International Airport (KTI) → City centre");
+    assert.match(detail.arrival[0].note, /Airport Express bus/);
+    assert.doesNotMatch(detail.arrival[0].note, /30–45|limited/);
+    assert.deepEqual(getItineraryTransport(raw).arrival, detail.arrival);
+    assert.deepEqual(validateOfficialDetail(detail.slug, detail).arrival, detail.arrival, "correction is idempotent");
+    assert.deepEqual(raw, snapshot, "API data is not mutated");
+});
+
+test("Palawan corrects explicit IATA only and preserves island and local transfer instructions", () => {
+    const raw = fixture("4-days-palawan-where-water-forgets-the-world");
+    raw.arrival = [{title: "Lio Airport transfer",
+        note: "Fly into El Nido Airport (LIO) or Busuanga Airport (USU – Coron). From airport to town: El Nido ≈15–30 min by van; Coron ≈30–45 min by van. Flights are the only practical long-distance access."}];
+    const snapshot = structuredClone(raw);
+    const expected = raw.arrival[0].note.replace("(LIO)", "(ENI)");
+    assert.equal(validateOfficialDetail(raw.slug, raw).arrival[0].note, expected);
+    assert.equal(getItineraryTransport(raw).arrival[0].note, expected);
+    assert.equal(getItineraryTransport(raw).arrival[0].title, "Lio Airport transfer", "Lio remains a valid local airport name");
+    assert.deepEqual(raw, snapshot);
+});
+
+test("arrival corrections leave unrelated itineraries and already-current source records unchanged", () => {
+    const raw = fixture();
+    raw.arrival = [{title: "Phnom Penh International Airport (PNH)", note: "El Nido Airport (LIO)"}];
+    assert.deepEqual(validateOfficialDetail(raw.slug, raw).arrival, raw.arrival);
+    assert.equal(getItineraryTransport(raw).arrival, raw.arrival);
+    const current = fixture("3-days-phnom-penh-where-history-speaks-softly");
+    current.arrival = [{title: "Techo International Airport (KTI)", note: "Current source transfer guidance."}];
+    assert.deepEqual(validateOfficialDetail(current.slug, current).arrival, current.arrival);
+    assert.deepEqual(getItineraryTransport(current).arrival, current.arrival);
+});

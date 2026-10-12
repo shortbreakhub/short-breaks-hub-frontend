@@ -144,6 +144,7 @@ export default function ItineraryStoryPage({
 
                     <aside className="itinerary-story__rail" aria-label={t("tripPrepRail.mainFrame.tripPrep")}>
                         <TripPrepRail
+                            itinerarySlug={data.slug}
                             city={city}
                             country={data.country}
                             days={data.days}
