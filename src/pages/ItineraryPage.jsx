@@ -1,3 +1,4 @@
+import {buildTripComAttractionsUrl} from "../utils/attractionsBooking.js";
 import {TRIP_COM_AIRPORT_TRANSFER_URL} from "../utils/airportTransfer.js";
 import {buildTripComCarUrl, validateCarBooking} from "../utils/carBooking.js";
 import {buildTripComFlightUrl, validateFlightBooking} from "../utils/flightBooking.js";
@@ -241,6 +242,19 @@ export default function ItineraryPage() {
                 done: prepDone.localTransport,
                 optional: true,
                 onFind: () => window.open(TRIP_COM_AIRPORT_TRANSFER_URL, "_blank", "noopener,noreferrer"),
+            },
+            {
+                id: "attractions",
+                title: t("itineraryPage.attractions"),
+                hint: t(buildTripComAttractionsUrl(data.hotelDestination) ? "itineraryPage.attractionsHint" : "itineraryPage.attractionsUnavailable"),
+                ctaLabel: t("itineraryPage.exploreAttractions"),
+                optional: true,
+                disabled: !buildTripComAttractionsUrl(data.hotelDestination),
+                done: false,
+                onFind: () => {
+                    const url = buildTripComAttractionsUrl(data.hotelDestination);
+                    if (url) window.open(url, "_blank", "noopener,noreferrer");
+                },
             },
             {
                 id: "docs",

@@ -613,6 +613,10 @@
     "airportTransferHint": "Optional airport transfer booking.",
     "airportTransfer": "Airport transfer",
     "findAirportTransfer": "Find airport transfer",
+    "attractions": "Attractions & Tours",
+    "exploreAttractions": "Explore attractions",
+    "attractionsHint": "Explore attractions and tours for this destination.",
+    "attractionsUnavailable": "Destination-specific attractions are unavailable because this itinerary has no verified Trip.com city mapping.",
     "docsHint":"Passport/ID, bookings, visas, and entry requirements.",
     "checkRequirements":"Check requirements"
   },

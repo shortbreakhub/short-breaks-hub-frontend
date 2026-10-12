@@ -613,6 +613,10 @@
     "airportTransferHint": "Réservation facultative d’un transfert aéroport.",
     "airportTransfer": "Transfert aéroport",
     "findAirportTransfer": "Trouver un transfert aéroport",
+    "attractions": "Activités et visites",
+    "exploreAttractions": "Découvrir les activités",
+    "attractionsHint": "Découvrez les activités et visites de cette destination.",
+    "attractionsUnavailable": "Les activités de cette destination sont indisponibles : aucun lieu Trip.com vérifié pour cet itinéraire.",
     "docsHint": "Vérifiez votre passeport ou votre pièce d’identité, vos réservations, vos visas et les conditions d’entrée.",
     "checkRequirements": "Vérifier les formalités"
   },
