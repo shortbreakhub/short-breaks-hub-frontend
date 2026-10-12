@@ -1,3 +1,4 @@
+import {TRIP_COM_AIRPORT_TRANSFER_URL} from "../utils/airportTransfer.js";
 import {buildTripComCarUrl, validateCarBooking} from "../utils/carBooking.js";
 import {buildTripComFlightUrl, validateFlightBooking} from "../utils/flightBooking.js";
 import { useParams } from "react-router-dom";
@@ -234,11 +235,12 @@ export default function ItineraryPage() {
 
             {
                 id: "localTransport",
-                title:  t("itineraryPage.planTransport"),
-                hint:  t("itineraryPage.localTransportHint"),
-                ctaLabel:  t("itineraryPage.planTransport"),
+                title:  t("itineraryPage.airportTransfer"),
+                hint:  t("itineraryPage.airportTransferHint"),
+                ctaLabel:  t("itineraryPage.findAirportTransfer"),
                 done: prepDone.localTransport,
-                onFind: () => console.log("affiliate: local transport", { city }),
+                optional: true,
+                onFind: () => window.open(TRIP_COM_AIRPORT_TRANSFER_URL, "_blank", "noopener,noreferrer"),
             },
             {
                 id: "docs",

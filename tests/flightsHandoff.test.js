@@ -105,8 +105,21 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
             assert.deepEqual([...dialog().querySelectorAll("input")].map(input=>input.value), ["2026-11-12T10:00", "2026-11-16T10:00"]);
             await click(i18n.t("tripPrepRail.drawer.close"));
             await click(i18n.t("itineraryPage.findParking"));
-            assert.deepEqual([...dialog().querySelector("select").options].map(option => option.value), ["", "parking", "transfer"]);
+            assert.deepEqual([...dialog().querySelector("select").options].map(option => option.value), ["", "parking"]);
             assert.equal(dialog().querySelector('[role="alert"]'), null);
+            await click(i18n.t("tripPrepRail.drawer.close"));
+            const transferCard = [...document.querySelectorAll(".itinerary-prep-rail__task")].find(card => card.textContent.includes(i18n.t("itineraryPage.airportTransfer")));
+            assert.ok(transferCard);
+            assert.equal(transferCard.querySelector(".itinerary-prep-rail__status").textContent.trim(), i18n.t("tripPrepRail.statusPill.optional"));
+            await click(i18n.t("itineraryPage.findAirportTransfer"));
+            assert.equal(dialog(), null, "Airport Transfer opens no booking drawer");
+            assert.deepEqual(opened.at(-1), ["https://www.trip.com/airport-transfers/?Allianceid=9927800&SID=327885881&trip_sub1=&trip_sub3=D20194372", "_blank", "noopener,noreferrer"]);
+            await click(i18n.t("tripPrepRail.mainFrame.markAllDone"));
+            assert.ok(document.querySelector(".itinerary-prep-rail__overview").textContent.includes("6/6"));
+            assert.ok(document.querySelector(".itinerary-prep-rail__next").textContent.includes(i18n.t("tripPrepRail.mainFrame.goodToGo")));
+            const progress = JSON.parse(localStorage.getItem(`tripPrep:v1:${slug}`));
+            assert.equal(progress.done.localTransport, false);
+            assert.equal(transferCard.querySelector(".itinerary-prep-rail__status").textContent.trim(), i18n.t("tripPrepRail.statusPill.optional"));
             await React.act(async () => root.unmount());
             root = null;
         }
