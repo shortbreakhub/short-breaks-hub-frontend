@@ -569,6 +569,7 @@ export default function TripPrepRail({
                                     <div className="mt-3 flex gap-2">
                                         <PrimaryButton
                                             className="flex-1"
+                                            disabled={item.disabled}
                                             onClick={() => {
                                                 const schemaKey = idToSchemaKey[item.id];
                                                 if (schemaKey) openFilters(schemaKey);

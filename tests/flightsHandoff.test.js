@@ -114,6 +114,14 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
             await click(i18n.t("itineraryPage.findAirportTransfer"));
             assert.equal(dialog(), null, "Airport Transfer opens no booking drawer");
             assert.deepEqual(opened.at(-1), ["https://www.trip.com/airport-transfers/?Allianceid=9927800&SID=327885881&trip_sub1=&trip_sub3=D20194372", "_blank", "noopener,noreferrer"]);
+            const attractionsCard = [...document.querySelectorAll(".itinerary-prep-rail__task")].find(card => card.textContent.includes(i18n.t("itineraryPage.attractions")));
+            assert.equal(attractionsCard.querySelector(".itinerary-prep-rail__status").textContent.trim(), i18n.t("tripPrepRail.statusPill.optional"));
+            await click(i18n.t("itineraryPage.exploreAttractions"));
+            assert.equal(dialog(), null);
+            const attractionsUrl = new URL(opened.at(-1)[0]);
+            assert.equal(attractionsUrl.searchParams.get("keyword"), fixture.detail.hotelDestination.name);
+            assert.equal(attractionsUrl.searchParams.get("trip_sub3"), "D20194372");
+            assert.deepEqual(opened.at(-1).slice(1), ["_blank", "noopener,noreferrer"]);
             await click(i18n.t("tripPrepRail.mainFrame.markAllDone"));
             assert.ok(document.querySelector(".itinerary-prep-rail__overview").textContent.includes("6/6"));
             assert.ok(document.querySelector(".itinerary-prep-rail__next").textContent.includes(i18n.t("tripPrepRail.mainFrame.goodToGo")));
