@@ -46,6 +46,7 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
         api.api.defaults.adapter = async () => {throw new Error("Unexpected private request");};
         axios.defaults.adapter = async config => ({data: {conversion_rates: {USD: 1}}, status: 200, headers: {}, config});
         for (const language of ["en", "fr"]) {
+            const openedBefore = opened.length;
             await i18n.changeLanguage(language);
             root = createRoot(document.getElementById("root"));
             const tree = React.createElement(MemoryRouter, {initialEntries: [`/itinerary/${slug}`]},
@@ -65,7 +66,7 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
             });
             await click(i18n.t("tripPrepRail.mainFrame.search"));
             assert.equal(dialog().querySelector('[role="alert"]').textContent, i18n.t("tripPrepRail.flights.invalidOrigin"));
-            assert.equal(opened.length, language === "en" ? 0 : 1);
+            assert.equal(opened.length, openedBefore);
             assert.equal(dialog().querySelector('input[type="text"]').value, "Unknown City");
             assert.deepEqual([...dialog().querySelectorAll('datalist option')].map(option => option.value), ["London", "Manchester", "Birmingham", "Paris"]);
             await React.act(async () => {
@@ -87,10 +88,21 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
             assert.equal(dialog().querySelector('input[type="text"]').value, "london", "readable input survives handoff and reopening");
             await click(i18n.t("tripPrepRail.drawer.close"));
             await click(i18n.t("itineraryPage.findCarRentals"));
-            assert.equal(dialog().querySelectorAll('input[type="date"]').length, 2);
-            assert.equal(dialog().querySelectorAll('input[type="number"]').length, 1);
-            assert.deepEqual([...dialog().querySelector("select").options].map(option => option.value), ["", "auto", "manual"]);
-            assert.equal(dialog().querySelector('[role="alert"]'), null, "Flights blocker does not leak into Car Rental");
+            assert.equal(dialog().querySelectorAll('input[type="datetime-local"]').length, 2);
+            assert.equal(dialog().querySelectorAll("input").length, 2);
+            assert.equal(dialog().querySelector("select"), null);
+            assert.ok(dialog().textContent.includes("Shanghai Pudong International Airport (PVG)"));
+            assert.equal(dialog().querySelector('[role="alert"]'), null, "Flights errors do not leak into Car Rental");
+            await click(i18n.t("tripPrepRail.mainFrame.search"));
+            const carUrl = new URL(opened.at(-1)[0]);
+            assert.equal(carUrl.pathname, "/carhire/online/list/");
+            assert.equal(carUrl.searchParams.get("pcode"), "PVG");
+            assert.equal(carUrl.searchParams.get("ptime"), "2026/11/12 10:00");
+            assert.equal(carUrl.searchParams.get("rtime"), "2026/11/16 10:00");
+            assert.equal(carUrl.searchParams.get("trip_sub3"), "D20194372");
+            assert.deepEqual(opened.at(-1).slice(1), ["_blank", "noopener,noreferrer"]);
+            await click(i18n.t("itineraryPage.findCarRentals"));
+            assert.deepEqual([...dialog().querySelectorAll("input")].map(input=>input.value), ["2026-11-12T10:00", "2026-11-16T10:00"]);
             await click(i18n.t("tripPrepRail.drawer.close"));
             await click(i18n.t("itineraryPage.findParking"));
             assert.deepEqual([...dialog().querySelector("select").options].map(option => option.value), ["", "parking", "transfer"]);
