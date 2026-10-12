@@ -421,7 +421,7 @@
       "eyebrow": "From a spark to a plan",
       "title": "Make the story yours.",
       "description": "Discover an itinerary, make room for the unexpected, and find a place to stay. We’ll help with the practical part.",
-      "action": "Plan a Shanghai short break",
+      "action": "Plan a {{destination}} short break",
       "discover": {
         "title": "Find your inspiration",
         "description": "Explore destinations and choose an itinerary that feels like you."
@@ -606,7 +606,7 @@
     "findFlights":"Find flights",
     "insuranceHint":"Especially important for non-refundable bookings.",
     "compareInsurance":"Compare insurance",
-    "airportHint":"Parking, shuttle, or pickup — plan ahead.",
+    "airportHint":"Parking or pickup — plan ahead.",
     "findParking":"Find parking/transfer",
     "carHint":"Pick-up location, dates, and transmission type.",
     "findCarRentals":"Find car rentals",
@@ -776,19 +776,23 @@
     "flights": {
       "title": "Find flights",
       "from":"From (airport/city)",
-      "fromPlaceholder": "e.g. London (LHR)",
+      "fromPlaceholder": "e.g. London or Manchester",
       "to": "To (airport/city)",
       "toPlaceholder": "auto: destination city",
       "depart": "Departure date",
+      "invalidDeparture": "Enter a valid departure date.",
+      "pastDeparture": "Departure date cannot be in the past.",
+      "invalidReturn": "Enter a valid return date.",
+      "returnAfterDeparture": "Return date must be at least one day after departure.",
+      "directOnly": "Direct flights only",
+      "missingOrigin": "Enter a departure airport or city.",
+      "missingDestination": "Enter a destination airport or city.",
+      "handoffUnavailable": "Flight booking is not available yet. Your search details remain in this form.",
       "return": "Return date",
-      "cabin": "Cabin class",
-      "economy": "Economy" ,
-      "premiumEconomy": "Premium Economy" ,
-      "business": "Business",
-      "first": "First",
-      "bags": "Baggage",
-      "hand": "Hand luggage only",
-      "checked": "Checked bag included"
+      "invalidOrigin": "We couldn't find this city or airport. Please check the name and try again.",
+      "destinationUnavailable": "No verified destination airport is available for this itinerary.",
+      "destinationMismatch": "Use the mapped destination airport shown when opening this form.",
+      "experimental": "Experimental booking link: check your route, dates and direct-flight filter on Trip.com. Affiliate attribution is not yet confirmed."
     },
     "insurance": {
       "title": "Compare travel insurance",
@@ -809,8 +813,7 @@
       "returnTime": "Return time",
       "type": "Type",
       "parking": "Parking" ,
-      "transfer": "Transfer" ,
-      "shuttle": "Shuttle"
+      "transfer": "Transfer"
     },
     "car": {
       "title": "Find car rentals",

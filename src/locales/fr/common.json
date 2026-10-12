@@ -421,7 +421,7 @@
       "eyebrow": "De l’inspiration au départ",
       "title": "À vous d’écrire l’histoire.",
       "description": "Découvrez un itinéraire, gardez une place pour l’imprévu et trouvez où séjourner. Nous vous aidons à préparer le reste.",
-      "action": "Préparer une escapade à Shanghai",
+      "action": "Préparer une escapade à {{destination}}",
       "discover": {
         "title": "Trouvez l’inspiration",
         "description": "Explorez les destinations et choisissez un itinéraire qui vous ressemble."
@@ -606,7 +606,7 @@
     "findFlights": "Trouver un vol",
     "insuranceHint": "Particulièrement important pour les réservations non remboursables.",
     "compareInsurance": "Comparer les assurances voyage",
-    "airportHint": "Parking, navette ou transfert — mieux vaut tout organiser à l’avance.",
+    "airportHint": "Parking ou transfert — mieux vaut tout organiser à l’avance.",
     "findParking": "Trouver un parking / transfert",
     "carHint": "Choisissez le lieu de prise en charge, les dates et le type de transmission.",
     "findCarRentals": "Trouver une voiture de location",
@@ -776,19 +776,23 @@
     "flights": {
       "title": "Trouver un vol",
       "from": "Départ (aéroport/ville)",
-      "fromPlaceholder": "Ex. : Londres (LHR)",
+      "fromPlaceholder": "Ex. : Londres ou Paris",
       "to": "Destination (aéroport/ville)",
       "toPlaceholder": "Automatique : ville de destination",
       "depart": "Date de départ",
+      "invalidDeparture": "Saisissez une date de départ valide.",
+      "pastDeparture": "La date de départ ne peut pas être dans le passé.",
+      "invalidReturn": "Saisissez une date de retour valide.",
+      "returnAfterDeparture": "La date de retour doit être au moins un jour après le départ.",
+      "directOnly": "Vols directs uniquement",
+      "missingOrigin": "Saisissez un aéroport ou une ville de départ.",
+      "missingDestination": "Saisissez un aéroport ou une ville de destination.",
+      "handoffUnavailable": "La réservation de vols n’est pas encore disponible. Vos critères restent dans ce formulaire.",
       "return": "Date de retour",
-      "cabin": "Classe",
-      "economy": "Économique",
-      "premiumEconomy": "Économique Premium",
-      "business": "Affaires",
-      "first": "Première",
-      "bags": "Bagages",
-      "hand": "Bagage cabine uniquement",
-      "checked": "Bagage en soute inclus"
+      "invalidOrigin": "Nous n'avons pas trouvé cette ville ou cet aéroport. Vérifiez le nom et réessayez.",
+      "destinationUnavailable": "Aucun aéroport de destination vérifié pour cet itinéraire.",
+      "destinationMismatch": "Utilisez l’aéroport proposé à l’ouverture du formulaire.",
+      "experimental": "Lien de réservation expérimental : vérifiez le trajet, les dates et le filtre de vols directs sur Trip.com. L’attribution affiliée n’est pas encore confirmée."
     },
     "insurance": {
       "title": "Comparer les assurances voyage",
@@ -809,8 +813,7 @@
       "returnTime": "Heure de retour",
       "type": "Type",
       "parking": "Parking",
-      "transfer": "Transfert",
-      "shuttle": "Navette"
+      "transfer": "Transfert"
     },
     "car": {
       "title": "Trouver une voiture de location",

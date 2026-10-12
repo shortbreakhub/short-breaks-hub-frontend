@@ -1,3 +1,4 @@
+import {getHomePlanningDestinations, HOME_PLANNING_DATA_ID} from "../src/utils/homePlanning.js";
 import {mkdir, readFile, readdir, writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -101,21 +102,22 @@ function splitRenderedMarkup(markup, manifest) {
     };
 }
 
-function makeRouteHtml(template, renderedMarkup, manifest, initialData) {
+function makeRouteHtml(template, renderedMarkup, manifest, initialData, planningDestinations) {
     const {headMarkup, pageMarkup} = splitRenderedMarkup(renderedMarkup, manifest);
     const cleanHead = cleanStaticRouteHead(template);
     const htmlWithHead = cleanHead.replace("</head>", `    ${headMarkup}\n  </head>`);
     const rootMarkup = `<div id="root" data-prerendered="true">${pageMarkup}</div>`;
+    const planningScript = `<script id="${HOME_PLANNING_DATA_ID}" type="application/json">${escapeJsonForHtml(planningDestinations)}</script>`;
     const withRoot = htmlWithHead.replace('<div id="root"></div>', rootMarkup);
 
     if (!withRoot.includes(rootMarkup)) {
         throw new Error("Pre-render failed: unable to locate the Vite application root in dist/index.html.");
     }
 
-    if (!initialData) return withRoot;
+    if (!initialData) return withRoot.replace("</body>", `  ${planningScript}\n  </body>`);
 
     const dataScript = `<script id="shortbreakhub-prerender-data" type="application/json">${escapeJsonForHtml(initialData)}</script>`;
-    return withRoot.replace("</body>", `  ${dataScript}\n  </body>`);
+    return withRoot.replace("</body>", `  ${dataScript}\n  ${planningScript}\n  </body>`);
 }
 
 try {
@@ -140,6 +142,7 @@ try {
     const countryPages = buildCountryPages(regionData);
     const officialSlugs = getOfficialInventory(regionData);
     const officialPages = await fetchOfficialPages(officialSlugs, api.getItineraryBySlug, 4);
+    const planningDestinations = getHomePlanningDestinations(officialPages);
     const officialRoutes = officialPages.map(initialData => ({
         pathname: `/itinerary/${initialData.slug}`,
         outputPath: resolve(distRoot, "itinerary", initialData.slug, "index.html"),
@@ -194,7 +197,7 @@ try {
         } catch (error) {
             throw new Error(`Route ${route.pathname}: rendering failed: ${error.message}`, {cause: error});
         }
-        const html = makeRouteHtml(template, rendered.markup, manifest, route.initialData);
+        const html = makeRouteHtml(template, rendered.markup, manifest, route.initialData, planningDestinations);
         if (route.initialData?.type === "official-itinerary") {
             const page = splitRenderedMarkup(rendered.markup, manifest).pageMarkup;
             if (/\/src\/assets\/|url\(undefined\)/.test(page)) {

@@ -1,3 +1,4 @@
+import {buildTripComFlightUrl, validateFlightBooking} from "../utils/flightBooking.js";
 import { useParams } from "react-router-dom";
 import React, {useState, useMemo, useEffect, useContext, useRef} from "react";
 import {getItineraryBySlug, getFavoritesCount, getFavoritesMe, postFavorite, deleteFavorite, getMe} from "../api.js";
@@ -191,7 +192,13 @@ export default function ItineraryPage() {
                 hint: t("itineraryPage.flightsHint"),
                 ctaLabel:  t("itineraryPage.findFlights"),
                 done: prepDone.flights,
-                onFind: () => console.log("affiliate: flights", { city, checkIn, checkOut }),
+                onSearch: filters => {
+                    const key = data.hotelDestination?.destinationKey;
+                    const now = new Date();
+                    const error = validateFlightBooking(key, filters, now);
+                    if (error) return error;
+                    window.open(buildTripComFlightUrl(key, filters, now), "_blank", "noopener,noreferrer");
+                },
             },
             {
                 id: "insurance",
