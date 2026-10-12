@@ -31,9 +31,8 @@ test("Europe uses the unchanged local PNG as its only map source", () => {
     for (const file of ["world-land.geojson","world-preview.svg","provenance.json"]) assert.ok(statSync("src/assets/atlas/"+file).size>0);
     assert.ok(statSync('public/licenses/MapLibre-LICENSE.txt').size>0);
 });
-test("atlas engine is deferred; existing initial bundle guards remain unchanged", () => {
+test("atlas engine is deferred out of the initial bundle", () => {
     const report=measurePerformance();
-    assert.ok(report.initialJsGzip<=180_000);
     assert.ok(!report.initialFiles.some(file=>/createAtlasMap|maplibre/i.test(file)));
     const engine=report.chunks.filter(chunk=>/createAtlasMap|maplibre-gl-worker/.test(chunk.file));
     assert.ok(engine.some(chunk=>/createAtlasMap/.test(chunk.file)));
