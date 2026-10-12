@@ -608,7 +608,7 @@
     "compareInsurance": "Comparer les assurances voyage",
     "airportHint": "Parking ou transfert — mieux vaut tout organiser à l’avance.",
     "findParking": "Trouver un parking / transfert",
-    "carHint": "Choisissez le lieu de prise en charge, les dates et le type de transmission.",
+    "carHint": "Prenez et restituez votre voiture à l’aéroport indiqué.",
     "findCarRentals": "Trouver une voiture de location",
     "localTransportHint": "Préparez vos déplacements : métro, taxis, VTC ou itinéraires à pied.",
     "planTransport": "Planifier les transports",
@@ -818,13 +818,13 @@
     "car": {
       "title": "Trouver une voiture de location",
       "pickup": "Lieu de prise en charge",
-      "pickupPlaceholder": "Ex. : Aéroport / Centre-ville",
-      "pickupDate": "Date de prise en charge",
-      "dropOffDate": "Date de restitution",
-      "transmission": "Transmission",
-      "auto": "Automatique",
-      "manual": "Manuelle",
-      "driverAge": "Âge du conducteur"
+      "pickupDate": "Date et heure de prise en charge",
+      "dropOffDate": "Date et heure de restitution",
+      "sameAirport": "La prise en charge et la restitution se font au même aéroport.",
+      "unavailable": "La location est indisponible : aucun aéroport vérifié pour cet itinéraire.",
+      "invalidPickup": "Saisissez une date et une heure de prise en charge valides.",
+      "invalidReturn": "Saisissez une date et une heure de restitution valides.",
+      "returnAfterPickup": "La restitution doit être postérieure à la prise en charge."
     },
     "progressBar": {
       "done": "terminé"

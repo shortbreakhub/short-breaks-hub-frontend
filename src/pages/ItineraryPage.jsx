@@ -1,3 +1,4 @@
+import {buildTripComCarUrl, validateCarBooking} from "../utils/carBooking.js";
 import {buildTripComFlightUrl, validateFlightBooking} from "../utils/flightBooking.js";
 import { useParams } from "react-router-dom";
 import React, {useState, useMemo, useEffect, useContext, useRef} from "react";
@@ -223,7 +224,12 @@ export default function ItineraryPage() {
                 hint: t("itineraryPage.carHint"),
                 ctaLabel:  t("itineraryPage.findCarRentals"),
                 done: prepDone.car,
-                onFind: () => console.log("affiliate: car rental", { city, checkIn, checkOut }),
+                onSearch: filters => {
+                    const key = data.hotelDestination?.destinationKey;
+                    const error = validateCarBooking(key, filters);
+                    if (error) return error;
+                    window.open(buildTripComCarUrl(key, filters), "_blank", "noopener,noreferrer");
+                },
             },
 
             {

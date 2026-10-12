@@ -1,3 +1,5 @@
+import {getCarDefaults, validateCarBooking} from "../utils/carBooking.js";
+import {getFlightAirport} from "../utils/flightAirports.js";
 import {FLIGHT_ORIGIN_SUGGESTIONS} from "../utils/flightOrigins.js";
 import {flightAirportLabel} from "../utils/flightBooking.js";
 import React, { useMemo, useState } from "react";
@@ -120,9 +122,9 @@ function Field({ field, value, onChange }) {
 
             {field.suggestions && <datalist id="flight-origin-suggestions">{field.suggestions.map(value => <option key={value} value={value} />)}</datalist>}
 
-            {field.type === "date" && (
+            {(field.type === "date" || field.type === "datetime-local") && (
                 <input
-                    type="date"
+                    type={field.type}
                     value={value ?? ""}
                     onChange={(e) => onChange(field.key, e.target.value)}
                     className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-gray-400"
@@ -224,6 +226,9 @@ export default function TripPrepRail({
     const [filtersByKey, setFiltersByKey] = useState({});
     const [hotelError, setHotelError] = useState(null);
     const [flightSession, setFlightSession] = useState(null);
+    const [carSession, setCarSession] = useState(null);
+    const [carError, setCarError] = useState(null);
+    const carAirport = getFlightAirport(hotelDestination?.destinationKey);
     const [flightError, setFlightError] = useState(null);
     const flightCity = flightAirportLabel(hotelDestination?.destinationKey) || city;
     const flightIdentity = itinerarySlug ?? JSON.stringify([country, city, days]);
@@ -234,6 +239,12 @@ export default function TripPrepRail({
         if (activeKey === "flights") setDrawerOpen(false);
     }
     const { t } = useTranslation();
+
+    if (carSession && carSession.identity !== flightIdentity) {
+        setCarSession(null);
+        setCarError(null);
+        if (activeKey === "car") setDrawerOpen(false);
+    }
 
     const FILTER_SCHEMAS = {
         hotel: {
@@ -298,19 +309,8 @@ export default function TripPrepRail({
         car: {
             title: t("tripPrepRail.car.title"),
             fields: [
-                { key: "pickup", label: t("tripPrepRail.car.pickup"), type: "text", placeholder: t("tripPrepRail.car.pickupPlaceholder") },
-                { key: "pickupDate", label: t("tripPrepRail.car.pickupDate"), type: "date" },
-                { key: "dropoffDate", label: t("tripPrepRail.car.dropOffDate"), type: "date" },
-                {
-                    key: "transmission",
-                    label: t("tripPrepRail.car.transmission"),
-                    type: "select",
-                    options: [
-                        { label: t("tripPrepRail.car.auto"), value: "auto" },
-                        { label: t("tripPrepRail.car.manual"), value: "manual" },
-                    ],
-                },
-                { key: "driverAge", label: t("tripPrepRail.car.driverAge"), type: "number", min: 18, max: 80, placeholder: "30" },
+                {key: "pickupTime", label: t("tripPrepRail.car.pickupDate"), type: "datetime-local"},
+                {key: "returnTime", label: t("tripPrepRail.car.dropOffDate"), type: "datetime-local"},
             ],
         },
     };
@@ -318,6 +318,7 @@ export default function TripPrepRail({
     function getDefaultFilters(key) {
         const base = filtersByKey[key] ?? {};
 
+        if (key === "car") return carSession?.identity === flightIdentity ? carSession.values : getCarDefaults();
         if (key === "flights") {
             return flightSession?.identity === flightIdentity
                 ? {...flightSession.values, to: flightSession.values.to ?? flightCity ?? ""}
@@ -344,9 +345,12 @@ export default function TripPrepRail({
 
     function openFilters(key) {
         setHotelError(null);
+        setCarError(null);
         setActiveKey(key);
         setFlightError(null);
-        if (key === "flights") {
+        if (key === "car") {
+            setCarSession({identity: flightIdentity, values: getDefaultFilters(key)});
+        } else if (key === "flights") {
             setFlightSession({identity: flightIdentity, values: getDefaultFilters(key)});
         } else if (key === "hotel" && onHotelOpen) {
             onHotelOpen();
@@ -364,6 +368,12 @@ export default function TripPrepRail({
     }
 
     function changeFilter(key, fieldKey, value) {
+        if (key === "car") {
+            setCarError(null);
+            setCarSession(previous => ({identity: flightIdentity,
+                values: {...(previous?.identity === flightIdentity ? previous.values : getCarDefaults()), [fieldKey]: value}}));
+            return;
+        }
         setHotelError(null);
         if (key === "flights") {
             setFlightError(null);
@@ -389,6 +399,11 @@ export default function TripPrepRail({
     }
 
     function resetFilters(key) {
+        if (key === "car") {
+            setCarError(null);
+            setCarSession({identity: flightIdentity, values: getCarDefaults()});
+            return;
+        }
         setHotelError(null);
         if (key === "flights") {
             setFlightError(null);
@@ -413,13 +428,19 @@ export default function TripPrepRail({
     };
 
     const activeSchema = activeKey ? FILTER_SCHEMAS[activeKey] : null;
-    const activeFilters = activeKey === "flights"
+    const activeFilters = activeKey === "car"
+        ? (carSession?.identity === flightIdentity ? carSession.values : {})
+        : activeKey === "flights"
         ? (flightSession?.identity === flightIdentity ? flightSession.values : {})
         : activeKey === "hotel" && hotelBooking
             ? hotelBooking : activeKey ? (filtersByKey[activeKey] ?? {}) : {};
 
     function handleSearch() {
         if (!activeKey) return;
+        if (activeKey === "car") {
+            const error = validateCarBooking(hotelDestination?.destinationKey, activeFilters);
+            if (error) {setCarError(error); return;}
+        }
         if (activeKey === "flights") {
             const error = validateFlightSearch(activeFilters);
             if (error) {
@@ -445,6 +466,7 @@ export default function TripPrepRail({
 
         const result = item?.onSearch
             ? item.onSearch(activeFilters, context) : item?.onFind?.(activeFilters, context);
+        if (activeKey === "car" && typeof result === "string") {setCarError(result); return;}
         if (activeKey === "flights" && typeof result === "string") {
             setFlightError(result);
             return;
@@ -590,7 +612,7 @@ export default function TripPrepRail({
                             <SecondaryButton className="flex-1" onClick={() => resetFilters(activeKey)}>
                                 {t("tripPrepRail.mainFrame.resetFilters")}
                             </SecondaryButton>
-                            <PrimaryButton className="flex-1" onClick={handleSearch}>
+                            <PrimaryButton className="flex-1" onClick={handleSearch} disabled={activeKey === "car" && !carAirport}>
                                 {t("tripPrepRail.mainFrame.search")}
                             </PrimaryButton>
                         </div>
@@ -609,6 +631,11 @@ export default function TripPrepRail({
                             </p>
                         </div>
 
+                        {activeKey === "car" && <div>
+                            <p className="text-sm font-medium">{t("tripPrepRail.car.pickup")}</p>
+                            <p className="text-sm text-gray-700">{carAirport ? `${carAirport.airportName} (${carAirport.airportCode})` : t("tripPrepRail.car.unavailable")}</p>
+                            {carAirport && <p className="text-xs text-gray-600">{t("tripPrepRail.car.sameAirport")}</p>}
+                        </div>}
                         {activeSchema.fields.map((field) => (
                             <React.Fragment key={field.key}>
                                 <Field
@@ -640,6 +667,7 @@ export default function TripPrepRail({
                                     ))}
                             </React.Fragment>
                         ))}
+                        {activeKey === "car" && carError && <p role="alert" className="text-sm text-red-600">{t(carError)}</p>}
                         {activeKey === "flights" && <p className="text-sm text-gray-600">{t("tripPrepRail.flights.experimental")}</p>}
                         {activeKey === "flights" && flightError && (
                             <p role="alert" className="text-sm text-red-600">{t(flightError)}</p>

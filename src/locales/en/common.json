@@ -608,7 +608,7 @@
     "compareInsurance":"Compare insurance",
     "airportHint":"Parking or pickup — plan ahead.",
     "findParking":"Find parking/transfer",
-    "carHint":"Pick-up location, dates, and transmission type.",
+    "carHint":"Pick up and return your rental car at the mapped airport.",
     "findCarRentals":"Find car rentals",
     "localTransportHint":"Metro passes, taxis, ride-hailing, or walking routes.",
     "planTransport":"Plan transport",
@@ -818,13 +818,13 @@
     "car": {
       "title": "Find car rentals",
       "pickup": "Pick-up location",
-      "pickupPlaceholder": "e.g. Airport / Downtown" ,
-      "pickupDate": "Pick-up date",
-      "dropOffDate": "Drop-off date",
-      "transmission": "Transmission",
-      "auto":"Automatic",
-      "manual": "Manual",
-      "driverAge": "Driver age"
+      "pickupDate": "Pick-up date and time",
+      "dropOffDate": "Drop-off date and time",
+      "sameAirport": "Pick-up and drop-off are at the same airport.",
+      "unavailable": "Car rental is unavailable because this itinerary has no verified airport mapping.",
+      "invalidPickup": "Enter a valid pick-up date and time.",
+      "invalidReturn": "Enter a valid drop-off date and time.",
+      "returnAfterPickup": "Drop-off must be later than pick-up."
     },
     "progressBar": {
       "done": "done"
