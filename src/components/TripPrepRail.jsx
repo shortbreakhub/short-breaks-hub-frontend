@@ -318,7 +318,7 @@ export default function TripPrepRail({
     function getDefaultFilters(key) {
         const base = filtersByKey[key] ?? {};
 
-        if (key === "car") return carSession?.identity === flightIdentity ? carSession.values : getCarDefaults();
+        if (key === "car") return carSession?.identity === flightIdentity ? carSession.values : getCarDefaults({days});
         if (key === "flights") {
             return flightSession?.identity === flightIdentity
                 ? {...flightSession.values, to: flightSession.values.to ?? flightCity ?? ""}
@@ -371,7 +371,7 @@ export default function TripPrepRail({
         if (key === "car") {
             setCarError(null);
             setCarSession(previous => ({identity: flightIdentity,
-                values: {...(previous?.identity === flightIdentity ? previous.values : getCarDefaults()), [fieldKey]: value}}));
+                values: {...(previous?.identity === flightIdentity ? previous.values : getCarDefaults({days})), [fieldKey]: value}}));
             return;
         }
         setHotelError(null);
@@ -401,7 +401,7 @@ export default function TripPrepRail({
     function resetFilters(key) {
         if (key === "car") {
             setCarError(null);
-            setCarSession({identity: flightIdentity, values: getCarDefaults()});
+            setCarSession({identity: flightIdentity, values: getCarDefaults({days})});
             return;
         }
         setHotelError(null);

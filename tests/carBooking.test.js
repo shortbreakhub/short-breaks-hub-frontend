@@ -3,9 +3,14 @@ import assert from "node:assert/strict";
 import {getCarDefaults, validateCarBooking, buildTripComCarUrl, TRIP_COM_CAR_AFFILIATE_URL} from "../src/utils/carBooking.js";
 const key="china--shanghai";
 const values={pickupTime:"2026-10-19T10:00",returnTime:"2026-10-26T10:00"};
-test("car defaults use local calendar days and 10:00 across month/year boundaries",()=>{
- assert.deepEqual(getCarDefaults(new Date(2026,9,12,23)),values);
- assert.deepEqual(getCarDefaults(new Date(2026,11,28,23)),{pickupTime:"2027-01-04T10:00",returnTime:"2027-01-11T10:00"});
+test("car defaults reuse the Flights month-ahead convention and actual itinerary duration",()=>{
+ for(const days of [2,4,7]) assert.deepEqual(getCarDefaults({days},new Date(2026,9,12,23)),{
+  pickupTime:"2026-11-12T10:00",returnTime:`2026-11-${12+days}T10:00`,
+ });
+ assert.deepEqual(getCarDefaults({days:4},new Date(2026,11,28,23)),{pickupTime:"2027-01-28T10:00",returnTime:"2027-02-01T10:00"});
+ assert.deepEqual(getCarDefaults({days:2},new Date(2026,0,31,23)),{pickupTime:"2026-02-28T10:00",returnTime:"2026-03-02T10:00"});
+ assert.deepEqual(getCarDefaults({days:7},new Date(2024,0,31,23)),{pickupTime:"2024-02-29T10:00",returnTime:"2024-03-07T10:00"});
+ assert.equal(getCarDefaults({days:undefined},new Date(2026,9,12)).returnTime,"");
 });
 test("car URL reuses verified airport and retains every supplied tracking parameter",()=>{
  const url=new URL(buildTripComCarUrl(key,values));const base=new URL(TRIP_COM_CAR_AFFILIATE_URL);

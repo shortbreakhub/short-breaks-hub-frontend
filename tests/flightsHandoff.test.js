@@ -97,12 +97,12 @@ test("experimental Flights preserves inputs and tracking IDs through safe extern
             const carUrl = new URL(opened.at(-1)[0]);
             assert.equal(carUrl.pathname, "/carhire/online/list/");
             assert.equal(carUrl.searchParams.get("pcode"), "PVG");
-            assert.equal(carUrl.searchParams.get("ptime"), "2026/10/19 10:00");
-            assert.equal(carUrl.searchParams.get("rtime"), "2026/10/26 10:00");
+            assert.equal(carUrl.searchParams.get("ptime"), "2026/11/12 10:00");
+            assert.equal(carUrl.searchParams.get("rtime"), "2026/11/16 10:00");
             assert.equal(carUrl.searchParams.get("trip_sub3"), "D20194372");
             assert.deepEqual(opened.at(-1).slice(1), ["_blank", "noopener,noreferrer"]);
             await click(i18n.t("itineraryPage.findCarRentals"));
-            assert.deepEqual([...dialog().querySelectorAll("input")].map(input=>input.value), ["2026-10-19T10:00", "2026-10-26T10:00"]);
+            assert.deepEqual([...dialog().querySelectorAll("input")].map(input=>input.value), ["2026-11-12T10:00", "2026-11-16T10:00"]);
             await click(i18n.t("tripPrepRail.drawer.close"));
             await click(i18n.t("itineraryPage.findParking"));
             assert.deepEqual([...dialog().querySelector("select").options].map(option => option.value), ["", "parking", "transfer"]);

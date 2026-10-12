@@ -1,12 +1,11 @@
 import {getFlightAirport} from "./flightAirports.js";
-import {localCalendarDate} from "./hotelBooking.js";
+import {getFlightDefaults} from "./flightDates.js";
 
 export const TRIP_COM_CAR_AFFILIATE_URL = "https://www.trip.com/carhire/online/list/?serverRoute=1&pcode=PEN&Allianceid=9927800&SID=327885881&trip_sub1=&trip_sub3=D20194372";
 
-export function getCarDefaults(now = new Date()) {
-    const pickup = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 10);
-    const returning = new Date(pickup.getFullYear(), pickup.getMonth(), pickup.getDate() + 7, 10);
-    return {pickupTime: `${localCalendarDate(pickup)}T10:00`, returnTime: `${localCalendarDate(returning)}T10:00`};
+export function getCarDefaults({days}, now = new Date()) {
+    const dates = getFlightDefaults({days}, now);
+    return {pickupTime: `${dates.depart}T10:00`, returnTime: dates.return ? `${dates.return}T10:00` : ""};
 }
 function parseLocalDateTime(value) {
     if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return null;
