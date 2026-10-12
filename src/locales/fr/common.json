@@ -606,12 +606,13 @@
     "findFlights": "Trouver un vol",
     "insuranceHint": "Particulièrement important pour les réservations non remboursables.",
     "compareInsurance": "Comparer les assurances voyage",
-    "airportHint": "Parking ou transfert — mieux vaut tout organiser à l’avance.",
-    "findParking": "Trouver un parking / transfert",
+    "airportHint": "Organisez votre parking à l’aéroport avant le départ.",
+    "findParking": "Trouver un parking",
     "carHint": "Prenez et restituez votre voiture à l’aéroport indiqué.",
     "findCarRentals": "Trouver une voiture de location",
-    "localTransportHint": "Préparez vos déplacements : métro, taxis, VTC ou itinéraires à pied.",
-    "planTransport": "Planifier les transports",
+    "airportTransferHint": "Réservation facultative d’un transfert aéroport.",
+    "airportTransfer": "Transfert aéroport",
+    "findAirportTransfer": "Trouver un transfert aéroport",
     "docsHint": "Vérifiez votre passeport ou votre pièce d’identité, vos réservations, vos visas et les conditions d’entrée.",
     "checkRequirements": "Vérifier les formalités"
   },
@@ -806,14 +807,13 @@
       "medical": "Antécédents médicaux"
     },
     "parking": {
-      "title": "Parking / transfert aéroport",
+      "title": "Parking à l’aéroport",
       "airport": "Aéroport",
       "airportPlaceholder": "Ex. : Heathrow T5",
       "departTime": "Heure de départ",
       "returnTime": "Heure de retour",
       "type": "Type",
-      "parking": "Parking",
-      "transfer": "Transfert"
+      "parking": "Parking"
     },
     "car": {
       "title": "Trouver une voiture de location",
@@ -831,7 +831,8 @@
     },
     "statusPill": {
       "done": "Terminé",
-      "pending": "En attente"
+      "pending": "En attente",
+      "optional": "Facultatif"
     },
     "drawer": {
       "adjustFilters": "Ajustez les filtres avant de lancer la recherche.",

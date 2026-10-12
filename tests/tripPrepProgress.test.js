@@ -3,7 +3,7 @@ import test from "node:test";
 import React from "react";
 import {createRoot} from "react-dom/client";
 import {JSDOM} from "jsdom";
-import useTripPrepProgress, {tripPrepKey, TRIP_PREP_TASKS, TRIP_PREP_RETENTION} from "../src/hooks/useTripPrepProgress.js";
+import useTripPrepProgress, {tripPrepKey, TRIP_PREP_TASKS, TRIP_PREP_REQUIRED_TASKS, TRIP_PREP_RETENTION} from "../src/hooks/useTripPrepProgress.js";
 
 const blank = () => Object.fromEntries(TRIP_PREP_TASKS.map(id => [id, false]));
 const record = (updatedAt, ids = []) => ({version: 1, updatedAt, done: {...blank(), ...Object.fromEntries(ids.map(id => [id, true]))}});
@@ -39,11 +39,13 @@ test("Bali/Kyoto route reuse, return and refresh isolate all seven tasks and sta
     assert.equal(h.storage.getItem(tripPrepKey("bali")), bali);
     await h.change(v => v.markAllPrepDone());
     assert.deepEqual(Object.keys(h.value.prepDone), TRIP_PREP_TASKS);
-    assert.ok(TRIP_PREP_TASKS.every(id => h.value.prepDone[id]));
+    assert.ok(TRIP_PREP_REQUIRED_TASKS.every(id => h.value.prepDone[id]));
+    assert.equal(h.value.prepDone.localTransport, false);
     await h.mount("bali"); assert.equal(h.value.prepDone.hotel, true); assert.equal(h.value.prepDone.car, false);
     await h.unmount(); await h.mount("bali"); assert.equal(h.value.prepDone.hotel, true);
     await h.change(v => v.resetPrep()); assert.deepEqual(h.value.prepDone, blank());
-    await h.mount("kyoto"); assert.ok(TRIP_PREP_TASKS.every(id => h.value.prepDone[id]));
+    await h.mount("kyoto"); assert.ok(TRIP_PREP_REQUIRED_TASKS.every(id => h.value.prepDone[id]));
+    assert.equal(h.value.prepDone.localTransport, false);
     await h.change(v => v.resetPrep()); assert.deepEqual(h.value.prepDone, blank(), "reset includes car");
 }));
 
@@ -149,4 +151,18 @@ test("cross-tab deletion of an inactive itinerary clears its unsaved fallback", 
     await h.change(() => window.dispatchEvent(new window.StorageEvent("storage", {key: tripPrepKey("bali"), newValue: null, storageArea: h.storage})));
     await h.mount("bali");
     assert.deepEqual(h.value.prepDone, blank());
+}));
+
+
+test("optional airport transfer never creates required completion or storage writes", () => harness(async h => {
+    await h.mount();
+    await h.change(v => v.markPrepDone("localTransport"));
+    assert.equal(h.storage.length, 0);
+    await h.change(v => v.markAllPrepDone());
+    assert.equal(TRIP_PREP_REQUIRED_TASKS.length, 6);
+    assert.ok(TRIP_PREP_REQUIRED_TASKS.every(id => h.value.prepDone[id]));
+    assert.equal(h.value.prepDone.localTransport, false);
+    const previous = h.storage.getItem(tripPrepKey("bali"));
+    await h.change(v => v.markPrepDone("localTransport"));
+    assert.equal(h.storage.getItem(tripPrepKey("bali")), previous);
 }));

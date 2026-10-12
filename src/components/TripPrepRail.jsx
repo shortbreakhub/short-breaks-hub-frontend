@@ -29,22 +29,22 @@ function ProgressBar({ done, total }) {
     );
 }
 
-function StatusPill({ done }) {
+function StatusPill({ done, optional = false }) {
     const { t } = useTranslation();
     return (
         <span
             className={`itinerary-prep-rail__status inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
-                done ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
+                optional ? "bg-gray-100 text-gray-700" : done ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"
             }`}
 
         >
       <span
           className={[
               "h-1.5 w-1.5 rounded-full",
-              done ? "bg-green-600" : "bg-amber-600",
+              optional ? "bg-gray-500" : done ? "bg-green-600" : "bg-amber-600",
           ].join(" ")}
       />
-            {done ? t("tripPrepRail.statusPill.done") : t("tripPrepRail.statusPill.pending")}
+            {optional ? t("tripPrepRail.statusPill.optional") : done ? t("tripPrepRail.statusPill.done") : t("tripPrepRail.statusPill.pending")}
     </span>
     );
 }
@@ -216,10 +216,10 @@ export default function TripPrepRail({
                                          onReset,
                                          onMarkAllDone,
                                      }) {
-    const total = items.length;
-    const doneCount = useMemo(() => items.filter((i) => i.done).length, [items]);
+    const total = items.filter(item => !item.optional).length;
+    const doneCount = useMemo(() => items.filter((i) => !i.optional && i.done).length, [items]);
     const remaining = total - doneCount;
-    const nextUp = useMemo(() => items.find((i) => !i.done) || null, [items]);
+    const nextUp = useMemo(() => items.find((i) => !i.optional && !i.done) || null, [items]);
 
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeKey, setActiveKey] = useState(null); // "hotel" | "flights" | ...
@@ -301,7 +301,6 @@ export default function TripPrepRail({
                     type: "select",
                     options: [
                         { label: t("tripPrepRail.parking.parking"), value: "parking" },
-                        { label: t("tripPrepRail.parking.transfer"), value: "transfer" },
                     ],
                 },
             ],
@@ -562,7 +561,7 @@ export default function TripPrepRail({
                                 <div key={item.id} data-done={item.done ? "true" : "false"} className={`itinerary-prep-rail__task rounded-lg border p-3 ${cardStyle}`}>
                                     <div className="flex items-center gap-2">
                                         <p className="font-medium text-gray-900">{item.title}</p>
-                                        <StatusPill done={item.done} />
+                                        <StatusPill done={item.done} optional={item.optional} />
                                     </div>
 
                                     <p className="mt-1 text-sm text-gray-700">{item.hint}</p>
@@ -582,7 +581,7 @@ export default function TripPrepRail({
                                         <SecondaryButton
                                             className="flex-1"
                                             onClick={() => onMarkDone(item.id)}
-                                            disabled={item.done}
+                                            disabled={item.done || item.optional}
                                         >
                                             {t("tripPrepRail.mainFrame.markDone")}
                                         </SecondaryButton>

@@ -5,7 +5,7 @@ import {JSDOM} from "jsdom";
 import {createServer} from "vite";
 import i18n from "i18next";
 
-test("Airport booking removes Shuttle but preserves Parking and Transfers in English and French", async () => {
+test("Parking booking removes Transfer and Shuttle while preserving independent Parking in EN/FR", async () => {
     const vite = await createServer({appType: "custom", logLevel: "error",
         server: {middlewareMode: true, hmr: false, ws: false},
         optimizeDeps: {noDiscovery: true, include: []},
@@ -30,18 +30,18 @@ test("Airport booking removes Shuttle but preserves Parking and Transfers in Eng
             await React.act(async () => buttons().find(b => b.textContent === "Open Airport").click());
             const dialog = document.querySelector('[role="dialog"]');
             const select = dialog.querySelector("select");
-            assert.deepEqual([...select.options].map(o => o.value), ["", "parking", "transfer"]);
-            assert.ok(dialog.textContent.includes(i18n.t("tripPrepRail.parking.transfer")));
+            assert.deepEqual([...select.options].map(o => o.value), ["", "parking"]);
+            assert.ok(dialog.textContent.includes(i18n.t("tripPrepRail.parking.parking")));
             assert.doesNotMatch(document.body.textContent, /Shuttle|Navette|navette|shuttle/);
             assert.equal(dialog.querySelectorAll('input[type="text"]').length, 3);
-            for (const type of ["parking", "transfer"]) {
+            for (const type of ["parking"]) {
                 await React.act(async () => {
                     select.value = type;
                     select.dispatchEvent(new dom.window.Event("change", {bubbles: true}));
                 });
             }
             await React.act(async () => buttons().find(b => b.textContent === i18n.t("tripPrepRail.mainFrame.search")).click());
-            assert.deepEqual(searches, [{type: "transfer"}], "the separate Transfer choice still submits");
+            assert.deepEqual(searches, [{type: "parking"}], "Parking still submits its existing options");
             await React.act(async () => root.unmount());
             root = null;
         }

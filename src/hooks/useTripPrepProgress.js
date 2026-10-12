@@ -1,6 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 
 export const TRIP_PREP_TASKS = Object.freeze(["hotel", "flights", "insurance", "airport", "car", "localTransport", "docs"]);
+// Retain the legacy localTransport field for storage compatibility; transfer is optional.
+export const TRIP_PREP_REQUIRED_TASKS = Object.freeze(TRIP_PREP_TASKS.filter(id => id !== "localTransport"));
 export const TRIP_PREP_RETENTION = 60 * 24 * 60 * 60 * 1000;
 const emptyProgress = () => Object.fromEntries(TRIP_PREP_TASKS.map(id => [id, false]));
 export function tripPrepKey(slug) {
@@ -110,8 +112,8 @@ export default function useTripPrepProgress(slug) {
     }
     return {
         prepDone: record?.done ?? emptyProgress(),
-        markPrepDone(id) {if (TRIP_PREP_TASKS.includes(id)) update(done => ({...done, [id]: true}));},
+        markPrepDone(id) {if (TRIP_PREP_REQUIRED_TASKS.includes(id)) update(done => ({...done, [id]: true}));},
         resetPrep() {update(emptyProgress);},
-        markAllPrepDone() {update(() => Object.fromEntries(TRIP_PREP_TASKS.map(id => [id, true])));},
+        markAllPrepDone() {update(done => ({...done, ...Object.fromEntries(TRIP_PREP_REQUIRED_TASKS.map(id => [id, true]))}));},
     };
 }

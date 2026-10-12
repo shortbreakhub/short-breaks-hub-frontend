@@ -606,12 +606,13 @@
     "findFlights":"Find flights",
     "insuranceHint":"Especially important for non-refundable bookings.",
     "compareInsurance":"Compare insurance",
-    "airportHint":"Parking or pickup — plan ahead.",
-    "findParking":"Find parking/transfer",
+    "airportHint":"Arrange airport parking before departure.",
+    "findParking":"Find parking",
     "carHint":"Pick up and return your rental car at the mapped airport.",
     "findCarRentals":"Find car rentals",
-    "localTransportHint":"Metro passes, taxis, ride-hailing, or walking routes.",
-    "planTransport":"Plan transport",
+    "airportTransferHint": "Optional airport transfer booking.",
+    "airportTransfer": "Airport transfer",
+    "findAirportTransfer": "Find airport transfer",
     "docsHint":"Passport/ID, bookings, visas, and entry requirements.",
     "checkRequirements":"Check requirements"
   },
@@ -806,14 +807,13 @@
       "medical": "Pre-existing medical"
     },
     "parking": {
-      "title": "Airport parking / transfer",
+      "title": "Airport parking",
       "airport": "Airport",
       "airportPlaceholder": "e.g. Heathrow T5" ,
       "departTime":"Depart time",
       "returnTime": "Return time",
       "type": "Type",
-      "parking": "Parking" ,
-      "transfer": "Transfer"
+      "parking": "Parking"
     },
     "car": {
       "title": "Find car rentals",
@@ -831,7 +831,8 @@
     },
     "statusPill": {
       "done": "done",
-      "pending": "Pending"
+      "pending": "Pending",
+      "optional": "Optional"
     },
     "drawer": {
       "adjustFilters":"Adjust filters before searching.",
