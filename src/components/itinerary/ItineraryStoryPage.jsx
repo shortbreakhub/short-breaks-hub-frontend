@@ -1,3 +1,4 @@
+import {getItineraryDayImages} from "../../content/itineraryDayImages.js";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Container, EditorialSurface, Media, SectionHeader} from "../ui/EditorialUI.jsx";
@@ -115,7 +116,7 @@ export default function ItineraryStoryPage({
 
                         <section className="itinerary-story__section itinerary-story__days" aria-labelledby="itinerary-story-days">
                             <SectionHeader title={t("itineraryPage.dayByDay")} id="itinerary-story-days" />
-                            <ItineraryDayTimeline schedule={data.schedule} />
+                            <ItineraryDayTimeline key={data.slug} schedule={data.schedule} dayImages={getItineraryDayImages(data.slug)} />
                         </section>
 
                         <section className="itinerary-story__section itinerary-story__practical" aria-labelledby="itinerary-story-practical">

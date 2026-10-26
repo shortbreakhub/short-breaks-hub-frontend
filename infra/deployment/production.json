@@ -1,0 +1,42 @@
+{
+  "reviewed": false,
+  "account": "919693204623",
+  "region": "eu-west-2",
+  "bucket": "shortbreakhub.com",
+  "distribution": "E323A73D49XQ0O",
+  "originPath": "",
+  "distributionConfigSha256": "c30048c904f5d217a282bcd34f1894129ed7d18d47d9806b417fef226031c837",
+  "objectTagsAbsent": true,
+  "ownedPrefixes": [
+    "assets/",
+    "browse/",
+    "itinerary/"
+  ],
+  "ownedKeys": [
+    "Oceania/index.html",
+    "africa/index.html",
+    "americas/index.html",
+    "app-shell.html",
+    "contact/index.html",
+    "east-asia/index.html",
+    "europe/index.html",
+    "favicon.png",
+    "index.html",
+    "licenses/Cormorant-Garamond-OFL.txt",
+    "licenses/MapLibre-LICENSE.txt",
+    "licenses/MapLibre-dependencies-NOTICES.txt",
+    "og-cover.png",
+    "robots.txt",
+    "southeast-asia/index.html",
+    "vite.svg"
+  ],
+  "cacheControl": {
+    "assets": "public, max-age=31536000, immutable",
+    "public": "public, max-age=300, must-revalidate",
+    "html": "public, max-age=0, s-maxage=1, must-revalidate"
+  },
+  "invalidationPaths": [
+    "/*"
+  ],
+  "distributionIdentifierConfirmed": true
+}

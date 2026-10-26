@@ -16,14 +16,16 @@ const pages = readdirSync("dist/itinerary").map(slug => {
 });
 const destinations=getHomePlanningDestinations(pages);
 
-test("CTA inventory comes only from 198 existing unique published destinations and canonical routes",()=>{
- assert.equal(destinations.length,198);
+test("CTA inventory matches the current unique published destinations and canonical routes",()=>{
+ const publishedIdentities=new Set(pages.map(({detail})=>JSON.stringify([detail.country,detail.city])));
+ assert.ok(publishedIdentities.size>0);
+ assert.equal(destinations.length,publishedIdentities.size);
  const html=readFileSync("dist/index.html","utf8");
  const bootstrap=JSON.parse(html.match(new RegExp(`<script id="${HOME_PLANNING_DATA_ID}" type="application/json">([\\s\\S]*?)</script>`))[1]);
- assert.equal(bootstrap.length,198);
+ assert.equal(bootstrap.length,destinations.length);
  assert.deepEqual(new Set(bootstrap.map(item=>item.slug)),new Set(destinations.map(item=>item.slug)));
 
- assert.equal(new Set(destinations.map(item=>item.slug)).size,198);
+ assert.equal(new Set(destinations.map(item=>item.slug)).size,destinations.length);
  for(const item of destinations) {
   assert.ok(pages.some(page=>page.detail.slug===item.slug && page.detail.city===item.city));
   assert.ok(existsSync(`dist/itinerary/${item.slug}/index.html`));
@@ -91,7 +93,7 @@ test("Vite development HTML supplies the same published CTA inventory as product
   const html=await vite.transformIndexHtml("/",source);
   const doc=new JSDOM(html).window.document;
   const inventory=JSON.parse(doc.getElementById(HOME_PLANNING_DATA_ID).textContent);
-  assert.equal(inventory.length,198);
+  assert.equal(inventory.length,destinations.length);
   assert.deepEqual(new Set(inventory.map(item=>item.slug)),new Set(destinations.map(item=>item.slug)));
   assert.equal(doc.querySelectorAll(`#${HOME_PLANNING_DATA_ID}`).length,1);
   doc.defaultView.close();

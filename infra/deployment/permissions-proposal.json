@@ -1,0 +1,51 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": "arn:aws:s3:::shortbreakhub.com"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectTagging",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::shortbreakhub.com/Oceania/index.html",
+        "arn:aws:s3:::shortbreakhub.com/africa/index.html",
+        "arn:aws:s3:::shortbreakhub.com/americas/index.html",
+        "arn:aws:s3:::shortbreakhub.com/app-shell.html",
+        "arn:aws:s3:::shortbreakhub.com/contact/index.html",
+        "arn:aws:s3:::shortbreakhub.com/east-asia/index.html",
+        "arn:aws:s3:::shortbreakhub.com/europe/index.html",
+        "arn:aws:s3:::shortbreakhub.com/favicon.png",
+        "arn:aws:s3:::shortbreakhub.com/index.html",
+        "arn:aws:s3:::shortbreakhub.com/licenses/Cormorant-Garamond-OFL.txt",
+        "arn:aws:s3:::shortbreakhub.com/licenses/MapLibre-LICENSE.txt",
+        "arn:aws:s3:::shortbreakhub.com/licenses/MapLibre-dependencies-NOTICES.txt",
+        "arn:aws:s3:::shortbreakhub.com/og-cover.png",
+        "arn:aws:s3:::shortbreakhub.com/robots.txt",
+        "arn:aws:s3:::shortbreakhub.com/southeast-asia/index.html",
+        "arn:aws:s3:::shortbreakhub.com/vite.svg",
+        "arn:aws:s3:::shortbreakhub.com/assets/*",
+        "arn:aws:s3:::shortbreakhub.com/browse/*",
+        "arn:aws:s3:::shortbreakhub.com/itinerary/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:GetDistribution",
+        "cloudfront:CreateInvalidation",
+        "cloudfront:GetInvalidation"
+      ],
+      "Resource": "arn:aws:cloudfront::919693204623:distribution/E323A73D49XQ0O"
+    }
+  ]
+}
