@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import os
+from contextlib import chdir
 from pathlib import Path
 import tempfile
 import shutil
@@ -103,11 +104,24 @@ class DeploymentSafety(unittest.TestCase):
                 path.write_bytes(b'content')
                 entries.append({'key':key,'phase':phase,'contentType':'text/plain','size':7,'sha256':deploy.digest(b'content')})
             (root/'manifest.json').write_text(json.dumps({'version':1,'commit':'current','files':entries}))
-            (root/'baseline.json').write_text(json.dumps({'forCommit':'current','manifestSha256':deploy.digest((root/'manifest.json').read_bytes()),'target':{'account':deploy.ACCOUNT,'bucket':deploy.BUCKET,'originPath':''},'files':[{'key':'index.html'}]}))
+            point={'runId':'42','attempt':1,'artifact':'frontend-baseline-42-1'}
+            (root/'.deployment').mkdir()
+            recovery=root/'.deployment/recovery-point.json'
+            recovery.write_text(json.dumps({'recoveryPoint':point}))
+            (root/'baseline.json').write_text(json.dumps({'forCommit':'current','manifestSha256':deploy.digest((root/'manifest.json').read_bytes()),'target':{'account':deploy.ACCOUNT,'bucket':deploy.BUCKET,'originPath':''},'recoveryPoint':point,'files':[{'key':'index.html'}]}))
             order = []
-            with patch.object(deploy,'preflight',return_value=self.config()), patch.object(deploy,'assert_current'), patch.dict(os.environ,{'GITHUB_SHA':'current'}), patch.object(deploy,'asset',side_effect=lambda c,e,r: order.append(e['key'])), patch.object(deploy,'put',side_effect=lambda c,e,r: order.append(e['key'])):
+            with chdir(root), patch.object(deploy,'preflight',return_value=self.config()), patch.object(deploy,'assert_current'), patch.dict(os.environ,{'GITHUB_SHA':'current','GITHUB_RUN_ID':'42','GITHUB_RUN_ATTEMPT':'1'}), patch.object(deploy,'asset',side_effect=lambda c,e,r: order.append(e['key'])), patch.object(deploy,'put',side_effect=lambda c,e,r: order.append(e['key'])):
                 deploy.deploy(root/'manifest.json',root,root/'baseline.json')
-            self.assertEqual(order,['assets/photo.png','robots.txt','itinerary/demo/index.html','app-shell.html','index.html'])
+                self.assertEqual(order,['assets/photo.png','robots.txt','itinerary/demo/index.html','app-shell.html','index.html'])
+                order.clear()
+                recovery.write_text(json.dumps({'recoveryPoint':{**point,'attempt':2}}))
+                with self.assertRaisesRegex(ValueError,'recovery point reference changed'):
+                    deploy.deploy(root/'manifest.json',root,root/'baseline.json')
+                self.assertEqual(order,[],'changed recovery point must block all uploads')
+                recovery.unlink()
+                with self.assertRaises(FileNotFoundError):
+                    deploy.deploy(root/'manifest.json',root,root/'baseline.json')
+                self.assertEqual(order,[],'missing recovery point must block all uploads')
 
     def test_cli_uses_only_expected_account_target_and_file_body(self):
         with tempfile.TemporaryDirectory() as temp:
