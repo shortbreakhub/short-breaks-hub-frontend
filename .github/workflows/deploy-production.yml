@@ -38,6 +38,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Install Chromium for the existing Playwright tests
+        run: npx playwright install --with-deps chromium
       - run: node scripts/ci/validate-env.mjs
       - run: npm run build
       - run: npm test
@@ -94,6 +96,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Install Chromium for tests and production verification
+        run: npx playwright install --with-deps chromium
       - name: Validate every required production build variable
         run: node scripts/ci/validate-env.mjs
       - run: npm run build
@@ -116,9 +120,6 @@ jobs:
       - name: Verify current production commit
         run: |
           test "$(git ls-remote origin refs/heads/master | cut -f1)" = "$GITHUB_SHA"
-      - name: Install production verification browser
-        if: env.DEPLOY_ENABLED == 'true'
-        run: npx playwright install --with-deps chromium
       - name: Preserve the original recovery point across reruns
         if: env.DEPLOY_ENABLED == 'true'
         env:
