@@ -28,6 +28,15 @@ def aws(service, operation, arguments=None, outfile=None, missing_ok=False, body
     if PROFILE:
         command += ['--profile', PROFILE]
     command += [service, operation, '--output', 'json']
+    # S3 streaming commands (notably GetObject) validate required CLI options
+    # before merging --cli-input-json. Keep object identity explicit for every
+    # S3 call, including upload/restore, and leave structured metadata in JSON.
+    arguments = dict(arguments or {})
+    if service == 's3api':
+        for field, option in [('Bucket', '--bucket'), ('Key', '--key'),
+                              ('ExpectedBucketOwner', '--expected-bucket-owner')]:
+            if field in arguments:
+                command += [option, arguments.pop(field)]
     if arguments:
         command += ['--cli-input-json', json.dumps(arguments)]
     if outfile is not None:

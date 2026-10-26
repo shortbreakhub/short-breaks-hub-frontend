@@ -123,18 +123,100 @@ class DeploymentSafety(unittest.TestCase):
                     deploy.deploy(root/'manifest.json',root,root/'baseline.json')
                 self.assertEqual(order,[],'missing recovery point must block all uploads')
 
-    def test_cli_uses_only_expected_account_target_and_file_body(self):
-        with tempfile.TemporaryDirectory() as temp:
+    def command_request(self, command):
+        self.assertEqual(command.count('--bucket'), 1)
+        self.assertEqual(command[command.index('--bucket') + 1], deploy.BUCKET)
+        self.assertEqual(command.count('--key'), 1)
+        self.assertEqual(command[command.index('--key') + 1], 'index.html')
+        self.assertEqual(command[command.index('--expected-bucket-owner') + 1], deploy.ACCOUNT)
+        request = json.loads(command[command.index('--cli-input-json') + 1]) if '--cli-input-json' in command else {}
+        self.assertTrue({'Bucket', 'Key', 'ExpectedBucketOwner'}.isdisjoint(request))
+        return request
+
+    def test_get_head_and_tagging_emit_explicit_object_arguments(self):
+        args = deploy.s3_args(self.config(), 'index.html')
+        original = dict(args)
+        result = types.SimpleNamespace(returncode=0, stdout='{}', stderr='')
+        for operation in ['get-object', 'head-object', 'get-object-tagging']:
+            with self.subTest(operation=operation), patch.object(deploy.subprocess, 'run', return_value=result) as run, patch.object(deploy, 'PROFILE', 'read-only-profile'):
+                outfile = Path('directory with spaces/download.html') if operation == 'get-object' else None
+                deploy.aws('s3api', operation, args, outfile=outfile)
+                command = run.call_args.args[0]
+                self.assertEqual(command[:8], ['aws', '--region', deploy.REGION, '--no-cli-pager', '--profile', 'read-only-profile', 's3api', operation])
+                self.assertEqual(self.command_request(command), {})
+                self.assertNotIn('--body', command)
+                if outfile:
+                    self.assertEqual(command[-1], str(outfile))
+                self.assertEqual(args, original, 'CLI construction must not mutate caller arguments')
+                self.assertNotIn('shell', run.call_args.kwargs)
+
+    def test_put_and_rollback_emit_file_body_and_preserve_metadata(self):
+        result = types.SimpleNamespace(returncode=0, stdout='{}', stderr='')
+        metadata = {'ContentType':'text/html', 'CacheControl':'original-header',
+                    'ContentEncoding':'gzip', 'ContentLanguage':'en',
+                    'ContentDisposition':'inline', 'Expires':'2030-01-01T00:00:00Z',
+                    'WebsiteRedirectLocation':'/original', 'Metadata':{'custom':'original'},
+                    'ServerSideEncryption':'AES256', 'BucketKeyEnabled':False}
+        with tempfile.TemporaryDirectory(prefix='sbh body ') as temp:
             path = Path(temp)/'index.html'
             path.write_bytes(b'content')
-            with patch.object(deploy,'aws') as aws:
-                deploy.put(self.config(),{'key':'index.html','sha256':deploy.digest(b'content'),'phase':'html','contentType':'text/html'},temp)
-            args,kwargs = aws.call_args
-            self.assertEqual(args[:2],('s3api','put-object'))
-            self.assertEqual(args[2]['Bucket'],deploy.BUCKET)
-            self.assertEqual(args[2]['ExpectedBucketOwner'],deploy.ACCOUNT)
-            self.assertEqual(kwargs['body'],path)
-            self.assertNotIn('ACL',args[2])
+            entry = {'key':'index.html','sha256':deploy.digest(b'content'),'phase':'html','contentType':'text/html'}
+            for restoring in [False, True]:
+                with self.subTest(restoring=restoring), patch.object(deploy.subprocess, 'run', return_value=result) as run:
+                    deploy.put(self.config(), entry, temp, restore_metadata=metadata if restoring else None, create_only=not restoring)
+                    command = run.call_args.args[0]
+                    self.assertIn('put-object', command)
+                    request = self.command_request(command)
+                    self.assertEqual(command[command.index('--body') + 1], str(path))
+                    self.assertNotIn('Body', request)
+                    self.assertNotIn('ACL', request)
+                    self.assertEqual(request['ChecksumSHA256'], deploy.base64.b64encode(bytes.fromhex(entry['sha256'])).decode())
+                    if restoring:
+                        self.assertEqual({key:request[key] for key in metadata}, metadata)
+                        self.assertNotIn('IfNoneMatch', request)
+                    else:
+                        self.assertEqual(request['IfNoneMatch'], '*')
+                        self.assertEqual(request['ContentType'], 'text/html')
+                        self.assertEqual(request['CacheControl'], self.config()['cacheControl']['html'])
+                        self.assertEqual(request['Metadata'], {'sbh-sha256':entry['sha256']})
+
+    @unittest.skipUnless(shutil.which('aws'), 'AWS CLI is not installed')
+    def test_real_cli_validates_upload_and_restore_without_api_requests(self):
+        real_run = deploy.subprocess.run
+        def validate_only(command, **kwargs):
+            self.assertIn('put-object', command)
+            # Output skeleton validates real CLI inputs and never sends an API request.
+            # GetObject's custom streaming parser does not support this option;
+            # its explicit required options are covered by the argv regression above.
+            return real_run(command + ['--generate-cli-skeleton', 'output', '--no-sign-request'], **kwargs)
+        with tempfile.TemporaryDirectory(prefix='sbh cli ') as temp:
+            path = Path(temp)/'index.html'
+            path.write_bytes(b'content')
+            entry = {'key':'index.html','sha256':deploy.digest(b'content'),'phase':'html','contentType':'text/html'}
+            with patch.object(deploy, 'PROFILE', None), patch.object(deploy.subprocess, 'run', side_effect=validate_only):
+                deploy.put(self.config(), entry, temp, create_only=True)
+                deploy.put(self.config(), entry, temp, restore_metadata={
+                    'ContentType':'text/html', 'CacheControl':'public,max-age=0',
+                    'Metadata':{'original':'value'}, 'ServerSideEncryption':'AES256'})
+
+    def test_cli_missing_object_and_other_errors_remain_distinct(self):
+        for message, missing in [('(NoSuchKey)', True), ('(AccessDenied)', False)]:
+            result = types.SimpleNamespace(returncode=1, stdout='', stderr=message)
+            with self.subTest(message=message), patch.object(deploy.subprocess, 'run', return_value=result):
+                if missing:
+                    self.assertIsNone(deploy.aws('s3api', 'get-object', deploy.s3_args(self.config(), 'index.html'), outfile='unused', missing_ok=True))
+                else:
+                    with self.assertRaisesRegex(RuntimeError, 'AccessDenied'):
+                        deploy.aws('s3api', 'get-object', deploy.s3_args(self.config(), 'index.html'), outfile='unused', missing_ok=True)
+
+    def test_non_s3_structured_requests_are_unchanged(self):
+        request = {'DistributionId':deploy.DISTRIBUTION, 'Id':'invalidation-id'}
+        result = types.SimpleNamespace(returncode=0, stdout='{}', stderr='')
+        with patch.object(deploy.subprocess, 'run', return_value=result) as run:
+            deploy.aws('cloudfront', 'get-invalidation', request)
+        command = run.call_args.args[0]
+        self.assertEqual(json.loads(command[command.index('--cli-input-json') + 1]), request)
+        self.assertNotIn('--bucket', command)
 
     def test_entire_baseline_is_checked_before_restoration_writes(self):
         with tempfile.TemporaryDirectory() as temp:
