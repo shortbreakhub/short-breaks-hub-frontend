@@ -1,0 +1,191 @@
+name: Production frontend
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('shortbreakhub-build-only-{0}', github.event.pull_request.number) || 'shortbreakhub-production' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-only:
+    if: github.repository == 'shortbreakhub/short-breaks-hub-frontend' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      DEPLOY_ENABLED: 'false'
+      VITE_API_BASE: ${{ vars.VITE_API_BASE }}
+      VITE_GOOGLE_MAP_GEOCODING_API_KEY: ${{ secrets.VITE_GOOGLE_MAP_GEOCODING_API_KEY }}
+      VITE_GOOGLE_MAP_MAP_ID: ${{ vars.VITE_GOOGLE_MAP_MAP_ID }}
+      VITE_ABSTRACT_GEOLOCATION_API_KEY: ${{ secrets.VITE_ABSTRACT_GEOLOCATION_API_KEY }}
+      VITE_EXCHANGERATE_API_KEY: ${{ secrets.VITE_EXCHANGERATE_API_KEY }}
+      VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium for the existing Playwright tests
+        run: npx playwright install --with-deps chromium
+      - run: node scripts/ci/validate-env.mjs
+      - run: npm run build
+      - run: npm test
+        timeout-minutes: 12
+      - run: python3 -m unittest discover -s tests/ci -v
+      - name: Validate build and S3 allowlist locally
+        run: |
+          node scripts/ci/validate-build.mjs
+          python3 scripts/ci/deploy.py plan
+      - name: Retain build-only release record
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-build-only-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .deployment/release/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Build-only result
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "Build-only CI: $JOB_STATUS"
+            echo "Commit: $GITHUB_SHA"
+            echo "Deployment enabled: false"
+            echo "No AWS authentication, production upload or CloudFront invalidation is part of this job."
+          } >> "$GITHUB_STEP_SUMMARY"
+  production:
+    if: github.repository == 'shortbreakhub/short-breaks-hub-frontend' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      AWS_REGION: eu-west-2
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_PAGER: ''
+      DEPLOY_ENABLED: ${{ vars.PRODUCTION_DEPLOYMENT_ENABLED }}
+      VITE_API_BASE: ${{ vars.VITE_API_BASE }}
+      VITE_GOOGLE_MAP_GEOCODING_API_KEY: ${{ secrets.VITE_GOOGLE_MAP_GEOCODING_API_KEY }}
+      VITE_GOOGLE_MAP_MAP_ID: ${{ vars.VITE_GOOGLE_MAP_MAP_ID }}
+      VITE_ABSTRACT_GEOLOCATION_API_KEY: ${{ secrets.VITE_ABSTRACT_GEOLOCATION_API_KEY }}
+      VITE_EXCHANGERATE_API_KEY: ${{ secrets.VITE_EXCHANGERATE_API_KEY }}
+      VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium for tests and production verification
+        run: npx playwright install --with-deps chromium
+      - name: Validate every required production build variable
+        run: node scripts/ci/validate-env.mjs
+      - run: npm run build
+      - run: npm test
+        timeout-minutes: 12
+      - name: Test deployment guards without AWS
+        run: python3 -m unittest discover -s tests/ci -v
+      - name: Validate build and prepare compact release record
+        run: |
+          node scripts/ci/validate-build.mjs
+          python3 scripts/ci/deploy.py plan
+      - name: Retain compact release record
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .deployment/release/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Verify current production commit
+        run: |
+          test "$(git ls-remote origin refs/heads/master | cut -f1)" = "$GITHUB_SHA"
+      - name: Preserve the original recovery point across reruns
+        if: env.DEPLOY_ENABLED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/ci/deploy.py recovery-point
+      - name: Authenticate to the production AWS account
+        if: env.DEPLOY_ENABLED == 'true'
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+          allowed-account-ids: '919693204623'
+          role-session-name: sbh-frontend-${{ github.run_id }}
+          role-duration-seconds: 3600
+          mask-aws-account-id: true
+      - name: Verify account, bucket and reviewed distribution
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/deploy.py preflight
+      - name: Capture recoverable production baseline
+        id: baseline
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/deploy.py capture
+      - name: Persist baseline before any production upload
+        if: env.DEPLOY_ENABLED == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          overwrite: false
+          path: .deployment/baseline/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Deploy assets first and HTML last; never delete
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/deploy.py deploy
+      - name: Invalidate reviewed paths and wait
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/deploy.py invalidate
+      - name: Verify release and daily PNGs in production
+        if: env.DEPLOY_ENABLED == 'true'
+        run: node scripts/ci/verify-production.mjs
+      - name: Retain verification report
+        if: always() && env.DEPLOY_ENABLED == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .deployment/verification.json
+            .deployment/invalidation.json
+            .deployment/recovery-point.json
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Deployment result
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          BASELINE_STATUS: ${{ steps.baseline.outcome }}
+        run: |
+          {
+            echo "Production frontend: $JOB_STATUS"
+            echo "Commit: $GITHUB_SHA"
+            echo "Deployment enabled: ${DEPLOY_ENABLED:-false}"
+            echo "Baseline capture: ${BASELINE_STATUS:-skipped}"
+            if test -f .deployment/recovery-point.json; then cat .deployment/recovery-point.json; fi
+            if test -f .deployment/invalidation.json; then cat .deployment/invalidation.json; fi
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "If an upload or verification failed, stop further releases and follow docs/frontend-deployment.md. No automatic rollback or deletion occurred."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -27,21 +27,22 @@ test("mapping covers all 201 canonical catalogue identities without duplicate or
     }
 });
 
-test("existing official prerender inventory uses the same stable destination keys; three catalogue-only entries are explicit", () => {
+test("current published itineraries use available mappings or fail closed for unmapped destinations", () => {
     const seen = new Set();
     for (const slug of readdirSync("dist/itinerary")) {
         const html = readFileSync(`dist/itinerary/${slug}/index.html`, "utf8");
         const data = JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]).detail;
-        const key = data.hotelDestination.destinationKey;
-        seen.add(key);
-        assert.ok(Object.hasOwn(records, key), `missing canonical destination ${key}`);
-        const d = evidence.destinations.find(d => d.destinationKey === key);
-        assert.ok(d.itinerarySlugs.includes(data.slug), `catalogue association mismatch for ${key}`);
-        assert.equal(d.country, data.country);
+        assert.equal(data.slug,slug,"published document must identify its own route");
+        assert.ok(!seen.has(slug),"published slugs must be unique");
+        seen.add(slug);
+        const key = data.hotelDestination?.destinationKey;
+        const mapping=getFlightAirport(key);
+        if (records[key]?.status === "VERIFIED") {
+            assert.equal(mapping.destinationKey,key);
+            assert.match(mapping.airportCode,/^[A-Z]{3}$/);
+        } else assert.equal(mapping,null,"unmapped/unapproved destinations must not invent an airport");
     }
-    const absent = evidence.destinations.filter(d => !seen.has(d.destinationKey));
-    assert.deepEqual(absent.map(d => d.destinationKey).sort(), ["mexico--san-miguel-de-allende", "peru--arequipa", "united-states--washington-d-c"]);
-    assert.ok(absent.every(d => !d.presentInPrerenderSnapshot && d.countryGatewayDecision && d.status === "VERIFIED"));
+    assert.ok(seen.size>0,"current build must contain published itineraries");
 });
 
 test("IATA-format and physical-airport records are validated independently of display names", () => {

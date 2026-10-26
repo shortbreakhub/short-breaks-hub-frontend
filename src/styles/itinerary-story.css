@@ -770,3 +770,30 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.itinerary-day-timeline__image {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.itinerary-day-timeline__thumbnail {
+  display: none;
+  width: 6rem;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+@media (min-width: 480px) {
+  .itinerary-day-timeline__summary:has(.itinerary-day-timeline__thumbnail) {
+    grid-template-columns: 2.6rem minmax(0, 1fr) 6rem 2.25rem;
+  }
+
+  .itinerary-day-timeline__thumbnail {
+    display: block;
+  }
+}

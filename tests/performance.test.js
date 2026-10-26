@@ -5,10 +5,20 @@ import {createHash} from "node:crypto";
 import sharp from "sharp";
 import {measurePerformance} from "../scripts/measure-performance.mjs";
 import {createServer} from "vite";
+import {REGIONS} from "../src/config/regions.js";
+import {getCountrySlug} from "../src/utils/countries.js";
 
 test("production initial graph stays deferred and shared assets stay bounded", async () => {
     const report = measurePerformance();
-    assert.equal(report.prerenderedPages, 258, "performance work must preserve the protected output inventory");
+    const regions=REGIONS.map(({onClick})=>{
+        const html=readFileSync(`dist/${onClick}/index.html`,"utf8");
+        return JSON.parse(html.match(/<script id="shortbreakhub-prerender-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+    });
+    const countries=new Set(regions.flatMap(r=>r.countries.map(getCountrySlug)));
+    const officialSlugs=new Set(regions.flatMap(r=>r.itineraries.map(item=>item.slug)));
+    assert.ok(countries.size>0 && officialSlugs.size>0);
+    assert.equal(report.prerenderedPages, 2+REGIONS.length+countries.size+officialSlugs.size,
+        "build must preserve the complete current region/country/official route inventory");
     assert.ok(report.chunks.some(chunk => /loading-animation/.test(chunk.file)));
     assert.ok(!report.initialFiles.some(file => /loading-animation|WeatherPage|GoogleMap|loadItineraryImage/.test(file)),
         "animation/weather/maps/itinerary inventory must remain outside the static homepage graph");

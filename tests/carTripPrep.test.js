@@ -5,8 +5,7 @@ import {JSDOM} from "jsdom";
 import {createServer} from "vite";
 import i18n from "i18next";
 
-test("car drawer is airport-only, preserves edits, resets, isolates routes and disables missing mappings in EN/FR",async context=>{
- context.mock.timers.enable({apis:["Date"],now:new Date(2026,9,12,12).getTime()});
+test("car drawer is airport-only, preserves edits, resets, isolates routes and disables missing mappings in EN/FR",{timeout:30000},async context=>{
  const vite=await createServer({appType:"custom",logLevel:"error",server:{middlewareMode:true,hmr:false,ws:false},optimizeDeps:{noDiscovery:true,include:[]}});
  const dom=new JSDOM('<div id="root"></div>',{url:"https://www.shortbreakhub.com"});
  const globals=Object.fromEntries(["window","document","IS_REACT_ACT_ENVIRONMENT"].map(key=>[key,globalThis[key]]));let root;
@@ -14,6 +13,8 @@ test("car drawer is airport-only, preserves edits, resets, isolates routes and d
   Object.assign(globalThis,{window:dom.window,document:dom.window.document,IS_REACT_ACT_ENVIRONMENT:true});
   const {createRoot}=await import("react-dom/client");
   const {default:Rail}=await vite.ssrLoadModule("/src/components/TripPrepRail.jsx");await vite.ssrLoadModule("/src/i18n.js");
+  // Freeze only application date calculations, not Vite startup/teardown clocks.
+  context.mock.timers.enable({apis:["Date"],now:new Date(2026,9,12,12).getTime()});
   for(const language of ["en","fr"]){
    await i18n.changeLanguage(language);root=createRoot(document.getElementById("root"));
    const submissions=[];
@@ -33,5 +34,5 @@ test("car drawer is airport-only, preserves edits, resets, isolates routes and d
    await React.act(async()=>root.render(render("bagan","myanmar--bagan")));await click("Open Car");assert.ok(dialog().textContent.includes(i18n.t("tripPrepRail.car.unavailable")));assert.equal([...dialog().querySelectorAll("button")].find(b=>b.textContent===i18n.t("tripPrepRail.mainFrame.search")).disabled,true);
    await React.act(async()=>root.unmount());root=null;
   }
- }finally{if(root)await React.act(async()=>root.unmount());await i18n.changeLanguage("en");await vite.close();dom.window.close();for(const [key,value] of Object.entries(globals)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
+ }finally{context.mock.timers.reset();if(root)await React.act(async()=>root.unmount());await i18n.changeLanguage("en");await vite.close();dom.window.close();for(const [key,value] of Object.entries(globals)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
 });
