@@ -122,6 +122,8 @@ test('production PNGs remain byte-identical and Sydney prerender includes only t
 const mapped = [
     {label: 'Vanuatu', slug: '4-days-vanuatu-fire-water-and-everyday-earth', folder: 'vanuatu',
         names: ['day-1-efate-island-coast', 'day-2-efate-blue-lagoon', 'day-3-mount-yasur-volcano', 'day-4-tanna-village-morning']},
+    {label: 'Haarlem', slug: '2-days-haarlem-where-craft-feels-enough', folder: 'netherlands/haarlem',
+        names: ['day-1-grote-markt', 'day-2-molen-de-adriaan']},
     {label: 'Rotterdam', slug: '3-days-rotterdam-where-the-city-decided-to-start-again', folder: 'netherlands/rotterdam',
         names: ['day-1-erasmus-bridge', 'day-2-rotterdam-harbour', 'day-3-rotterdam-neighbourhood-streets']},
 ];
