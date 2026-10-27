@@ -36,6 +36,17 @@ const images = {
                 fr: "Villageois cuisinant sur un feu de bois près de cases au toit de chaume, un matin à Tanna"}},
         },
     },
+    "2-days-haarlem-where-craft-feels-enough": {
+        folder: "itineraries/netherlands/haarlem",
+        days: {
+            1: {name: "day-1-grote-markt", alt: {
+                en: "Grote Markt in Haarlem with the Grote Kerk, café terraces and historic buildings",
+                fr: "La Grote Markt de Haarlem avec la Grote Kerk, des terrasses de café et des bâtiments historiques"}},
+            2: {name: "day-2-molen-de-adriaan", alt: {
+                en: "De Adriaan windmill beside the Spaarne river in Haarlem",
+                fr: "Le moulin De Adriaan au bord de la Spaarne à Haarlem"}},
+        },
+    },
     "3-days-rotterdam-where-the-city-decided-to-start-again": {
         folder: "itineraries/netherlands/rotterdam",
         days: {
