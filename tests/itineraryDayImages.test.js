@@ -126,6 +126,10 @@ const mapped = [
         names: ['day-1-grote-markt', 'day-2-molen-de-adriaan']},
     {label: 'Rotterdam', slug: '3-days-rotterdam-where-the-city-decided-to-start-again', folder: 'netherlands/rotterdam',
         names: ['day-1-erasmus-bridge', 'day-2-rotterdam-harbour', 'day-3-rotterdam-neighbourhood-streets']},
+    {label: 'Shanghai', slug: '4-days-shanghai-where-the-future-never-waits', folder: 'china/shanghai',
+        names: ['day-1-bund-river-light', 'day-2-french-concession-streets', 'day-3-lujiazui-skyscrapers', 'day-4-shanghai-morning-street-life']},
+    {label: 'Papua New Guinea', slug: '4-days-papua-new-guinea-land-ancestry-and-presence', folder: 'papua-new-guinea',
+        names: ['day-1-port-moresby', 'day-2-papua-new-guinea-highlands', 'day-3-highlands-cultural-traditions', 'day-4-highlands-farewell-journey']},
 ];
 
 for (const {label, slug, folder, names} of mapped) {

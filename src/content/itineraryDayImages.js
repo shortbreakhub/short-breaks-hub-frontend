@@ -61,6 +61,40 @@ const images = {
                 fr: "Terrasse de café bordée d’arbres le long d’un canal de Rotterdam, avec bateaux amarrés, vélos et moulin à vent"}},
         },
     },
+    "4-days-shanghai-where-the-future-never-waits": {
+        folder: "itineraries/china/shanghai",
+        days: {
+            1: {name: "day-1-bund-river-light", alt: {
+                en: "Crowds along the Bund promenade at dusk, facing the lit Lujiazui skyline across the Huangpu River",
+                fr: "Promeneurs sur le Bund au crépuscule, face aux tours illuminées de Lujiazui de l’autre côté du Huangpu"}},
+            2: {name: "day-2-french-concession-streets", alt: {
+                en: "Plane-tree-lined street with a corner café and historic buildings in the former French Concession",
+                fr: "Rue bordée de platanes avec un café d’angle et des bâtiments historiques dans l’ancienne Concession française"}},
+            3: {name: "day-3-lujiazui-skyscrapers", alt: {
+                en: "Looking up at Shanghai Tower, the World Financial Center and Jin Mao Tower in Lujiazui",
+                fr: "Vue en contre-plongée de la Shanghai Tower, du World Financial Center et de la tour Jin Mao à Lujiazui"}},
+            4: {name: "day-4-shanghai-morning-street-life", alt: {
+                en: "Morning breakfast stalls serving dumplings beside a plane-tree-lined Shanghai street",
+                fr: "Échoppes de petit-déjeuner servant des raviolis le matin, le long d’une rue de Shanghai bordée de platanes"}},
+        },
+    },
+    "4-days-papua-new-guinea-land-ancestry-and-presence": {
+        folder: "itineraries/papua-new-guinea",
+        days: {
+            1: {name: "day-1-port-moresby", alt: {
+                en: "Port Moresby’s waterfront and harbour seen from a green hillside, with ships and distant hills",
+                fr: "Le front de mer et le port de Port Moresby vus d’une colline verdoyante, avec des navires et des collines au loin"}},
+            2: {name: "day-2-papua-new-guinea-highlands", alt: {
+                en: "Highland valley with low cloud, gardens and tin-roofed houses below forested mountains",
+                fr: "Vallée des Hautes-Terres sous les nuages bas, avec jardins et maisons au toit de tôle au pied des montagnes boisées"}},
+            3: {name: "day-3-highlands-cultural-traditions", alt: {
+                en: "Highlands villagers in feathered headdresses weaving grass beside thatched houses",
+                fr: "Villageois des Hautes-Terres coiffés de plumes tressant de l’herbe près de maisons au toit de chaume"}},
+            4: {name: "day-4-highlands-farewell-journey", alt: {
+                en: "Four-wheel drive on a mountain dirt road above cloud-filled highland valleys at sunset",
+                fr: "Un 4x4 sur une piste de montagne surplombant des vallées des Hautes-Terres noyées de nuages au coucher du soleil"}},
+        },
+    },
 };
 
 export function getItineraryDayImages(slug) {
