@@ -131,7 +131,8 @@ function handler(event) {
         if (decoded === null || decoded === scope) break;
         scope = decoded;
     }
-    if (/(^|\/)itinerary(?:\/|$)/i.test(scope)) return itineraryRequest(request);
+    if (/(^|\/)itinerary(?:\/|$)/i.test(scope)
+        && !/^\/(?:user-itinerary|community-itineraries)\//i.test(request.uri)) return itineraryRequest(request);
     var uri = request.uri;
     var path = uri.length > 1 ? uri.replace(/\/+$/, "") || "/" : uri;
     var canonical = canonicalPath(path);

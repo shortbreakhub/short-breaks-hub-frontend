@@ -34,7 +34,7 @@ test('every generated public itinerary is delivered as initial HTTP HTML, along 
 test('legacy redirects and non-itinerary rewrites match the captured LIVE function',async()=>{
     const before=edgeHandler(await readFile('tests/fixtures/viewer-request-live-2026-10-30.js','utf8'));
     const after=edgeHandler(code);
-    for(const uri of ['/','/contact','/europe','/Oceania','/oceania','/america','/north_america','/south_america','/anz','/north-africa','/browse/Spain','/browse/New%20Zealand','/browse/Ghana/','/browse/spain','/user-itinerary/draft','/profile','/login','/privacy','/terms','/random-missing']) {
+    for(const uri of ['/','/contact','/europe','/Oceania','/oceania','/america','/north_america','/south_america','/anz','/north-africa','/browse/Spain','/browse/New%20Zealand','/browse/Ghana/','/browse/spain','/user-itinerary/draft','/user-itinerary/itinerary','/community-itineraries/region/itinerary','/user-itinerary/../itinerary/retired/index.html','/profile','/login','/privacy','/terms','/random-missing']) {
         const req=request(uri,{q:{value:'a%20b',multiValue:[{value:'a%20b'},{value:'c%2Fd'}]}});
         assert.equal(JSON.stringify(after(req)),JSON.stringify(before(req)),uri);
     }

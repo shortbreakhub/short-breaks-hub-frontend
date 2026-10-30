@@ -23,7 +23,10 @@ NAME = 'shortbreakhub-route-rewrite'
 
 def call(operation, args, outfile=None):
     args = dict(args)
-    command = ['aws', '--region', deploy.REGION, '--no-cli-pager', 'cloudfront', operation, '--name', NAME]
+    command = ['aws', '--region', deploy.REGION, '--no-cli-pager', '--output', 'json']
+    if deploy.PROFILE:
+        command += ['--profile', deploy.PROFILE]
+    command += ['cloudfront', operation, '--name', NAME]
     for key, option in [('IfMatch', '--if-match'), ('FunctionConfig', '--function-config')]:
         if key in args:
             value = args.pop(key)
@@ -194,6 +197,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=['capture', 'publish', 'restore'])
     parser.add_argument('--baseline', default=str(BASELINE))
+    parser.add_argument('--profile')
     args = parser.parse_args()
+    deploy.PROFILE = args.profile
     if args.command == 'restore': restore(args.baseline)
     else: (capture if args.command == 'capture' else publish)()

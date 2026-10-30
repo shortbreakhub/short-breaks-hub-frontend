@@ -7,11 +7,11 @@ import {chromium} from 'playwright';
 import {sitemapItineraries} from '../build-edge-routing.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-export async function checkFile(origin, entry, pathname = '/' + entry.key, attempts = 4, delayMs = 3000) {
+export async function checkFile(origin, entry, pathname = '/' + entry.key, attempts = 4, delayMs = 3000, requestTimeoutMs = 30000) {
   let last;
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
-      const response = await fetch(origin + pathname, {signal:AbortSignal.timeout(30000),redirect:'error'});
+      const response = await fetch(origin + pathname, {signal:AbortSignal.timeout(requestTimeoutMs),redirect:'error'});
       if (response.status !== 200) throw new Error(`${pathname}: HTTP ${response.status}`);
       if (response.headers.get('content-type')?.split(';')[0].trim() !== entry.contentType.split(';')[0]) throw new Error(`${pathname}: incorrect content type`);
       const bytes=Buffer.from(await response.arrayBuffer());
@@ -21,6 +21,42 @@ export async function checkFile(origin, entry, pathname = '/' + entry.key, attem
     if (attempt < attempts - 1) await new Promise(r => setTimeout(r, Math.min(20000, delayMs * (attempt + 1))));
   }
   throw last;
+}
+
+export async function checkItineraryResponses(origin, pathname, requestTimeoutMs = 30000, deadline = Infinity) {
+  const signal=()=>{
+    const remaining=Math.min(requestTimeoutMs,deadline-Date.now());
+    if(remaining<=0) throw new Error('Itinerary propagation deadline reached');
+    return AbortSignal.timeout(remaining);
+  };
+  for (const missing of ['/itinerary/seo-verification-nonexistent-route', '/itinerary/seo-verification-nonexistent-route/index.html', '/%69tinerary/seo-verification-nonexistent-route/index.html']) {
+    const response=await fetch(origin+missing,{redirect:'manual',signal:signal()});
+    await response.arrayBuffer();
+    if (response.status!==404 || !response.headers.get('x-robots-tag')?.includes('noindex')) throw new Error(`${missing}: expected noindex HTTP 404`);
+  }
+  const response=await fetch(origin+pathname+'/index.html?q=a%20b',{redirect:'manual',signal:signal()});
+  await response.arrayBuffer();
+  if (response.status!==301 || new URL(response.headers.get('location'),origin).href!==origin+pathname+'?q=a%20b') throw new Error('Known itinerary alias redirect/query changed');
+}
+
+export async function waitForItineraryRouting(origin, entry, {timeoutMs=600000, intervalMs=10000} = {}) {
+  const started=Date.now();
+  const deadline=started+timeoutMs;
+  const pathname='/'+entry.key.replace(/\/index\.html$/,'');
+  let last;
+  let attempts=0;
+  do {
+    attempts++;
+    try {
+      const remaining=()=>Math.max(1,Math.min(30000,deadline-Date.now()));
+      await checkFile(origin,entry,pathname,1,0,remaining());
+      await checkItineraryResponses(origin,pathname,remaining(),deadline);
+      return {origin,pathname,attempts,elapsedMs:Date.now()-started};
+    } catch(error) {last=error;}
+    if(Date.now()>=deadline) break;
+    await new Promise(done=>setTimeout(done,Math.min(intervalMs,deadline-Date.now())));
+  } while(Date.now()<deadline);
+  throw new Error(`Itinerary routing did not converge within ${timeoutMs}ms: ${last?.message}`,{cause:last});
 }
 
 export function verifyInitialHtml(html, pathname) {
@@ -47,7 +83,12 @@ export async function verifyProduction({origins = ['https://www.shortbreakhub.co
   catch (error) { if (error.code!=='ENOENT') throw error; }
   const pending = invalidation && invalidation.status !== 'Completed';
   const verifyFile = (origin,entry,path) => checkFile(origin,entry,path,pending?16:4,pending?10000:3000);
-  const report = {commit:manifest.commit,invalidation,verified:[],discrepancies:[]};
+  const report = {commit:manifest.commit,invalidation,verified:[],functionPropagation:[]};
+  const canary=manifest.files.find(f=>f.key.startsWith('itinerary/')&&f.key.endsWith('/index.html'));
+  if(!canary) throw new Error('No itinerary routing verification target');
+  // Invalidation completion predates function publication; it cannot prove propagation.
+  const propagationDeadline=Date.now()+600000;
+  for(const origin of origins) report.functionPropagation.push(await waitForItineraryRouting(origin,canary,{timeoutMs:Math.max(1,propagationDeadline-Date.now())}));
   for (const origin of origins) {
     await verifyFile(origin,byKey.get('index.html'),'/');
     report.verified.push(origin + '/');
@@ -66,8 +107,7 @@ export async function verifyProduction({origins = ['https://www.shortbreakhub.co
   const inventory=JSON.parse(await readFile('.deployment/release/edge/inventory.json'));
   const sitemap=await fetch(origins[0]+'/sitemap.xml',{redirect:'error',signal:AbortSignal.timeout(30000)});
   if (sitemap.status!==200 || JSON.stringify(sitemapItineraries(await sitemap.text()))!==JSON.stringify(inventory.slugs)) throw new Error('Production sitemap differs from released public itinerary inventory');
-  const missing=await fetch(origins[0]+'/itinerary/seo-verification-nonexistent-route',{redirect:'manual',signal:AbortSignal.timeout(30000)});
-  if (missing.status!==404 || !missing.headers.get('x-robots-tag')?.includes('noindex')) throw new Error('Invalid itinerary must return noindex HTTP 404');
+  await checkItineraryResponses(origins[0],'/'+canary.key.replace(/\/index\.html$/,''));
   for (const [source,target] of [['/browse/Spain','/browse/spain'],['/browse/New%20Zealand','/browse/new-zealand'],['/america','/americas']]) {
     const response=await fetch(origins[0]+source,{redirect:'manual',signal:AbortSignal.timeout(30000)});
     if(response.status!==301 || new URL(response.headers.get('location'),origins[0]).href!==origins[0]+target) throw new Error(`Legacy redirect changed: ${source}`);
@@ -139,6 +179,6 @@ export async function verifyProduction({origins = ['https://www.shortbreakhub.co
   } finally { await browser.close(); }
   await writeFile('.deployment/verification.json',JSON.stringify(report,null,2)+'\n');
   if (pending) console.log('::warning::Checked release content is verified, but CloudFront still reports invalidation pending. Retain the invalidation ID and monitor completion; other edge locations may still be converging.');
-  console.log(`Verified release ${manifest.commit}: ${report.verified.length} targets; ${report.discrepancies.length} separately reported HTML routing discrepancies.`);
+  console.log(`Verified release ${manifest.commit}: ${report.verified.length} targets; initial HTML, itinerary routing, 404s and hydration passed.`);
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await verifyProduction();

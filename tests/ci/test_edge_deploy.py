@@ -119,6 +119,22 @@ class EdgeReleaseSafety(unittest.TestCase):
             self.assertTrue(command[command.index('--function-code')+1].startswith('fileb://'))
             self.assertNotIn('shell',run.call_args.kwargs)
 
+    def test_recovery_profile_and_json_output_apply_to_edge_and_shared_preflight(self):
+        result=types.SimpleNamespace(returncode=0,stdout='{"ETag":"updated"}',stderr='')
+        with patch.object(edge.deploy,'PROFILE','AUTHORIZED_RECOVERY_PROFILE'), patch.object(edge.subprocess,'run',return_value=result) as run:
+            response=edge.call('update-function',{'IfMatch':'etag','FunctionConfig':{'Runtime':'cloudfront-js-2.0'},'FunctionCode':Path('function.js')})
+            command=run.call_args.args[0]
+            self.assertEqual(command[command.index('--profile')+1],'AUTHORIZED_RECOVERY_PROFILE')
+            self.assertEqual(command[command.index('--output')+1],'json')
+            self.assertEqual(response,{'ETag':'updated'})
+
+    def test_default_oidc_calls_do_not_select_a_named_profile(self):
+        with patch.object(edge.deploy,'PROFILE',None), patch.object(edge.subprocess,'run',return_value=types.SimpleNamespace(returncode=0,stdout='{}',stderr='')) as run:
+            edge.call('describe-function',{'Stage':'LIVE'})
+            command=run.call_args.args[0]
+            self.assertNotIn('--profile',command)
+            self.assertEqual(command[command.index('--output')+1],'json')
+
     def recovery(self, attempt='1'):
         for stage in ['live','development']:
             (edge.BASELINE/(stage+'.js')).write_bytes(b'original code')

@@ -53,10 +53,10 @@ the generated function and inventory separately from S3 public objects.
 
 The function uses the first 132 bits of SHA-256, encoded as 22 base64url
 characters, for public slug membership. This avoids a new datastore under the
-CloudFront 10 KB code limit. Current output is **9,415/10,240 bytes**. Builds
+CloudFront 10 KB code limit. Current output is **9,486/10,240 bytes**. Builds
 check collisions within the catalogue and fail if the function exceeds the
 limit. Membership has a cryptographic collision bound; it is not authentication
-or authorization for private data. At this template size, roughly 35 additional
+or authorization for private data. At this template size, roughly 32 additional
 same-length digest entries fit before a release must be redesigned or reduced.
 
 The official backend table currently has no draft/private status field. Its
@@ -68,6 +68,24 @@ until a new successful frontend build and function publication. If immediate
 withdrawal of official content is required, it needs coordinated publication
 or a separate runtime revocation design; this patch does not promise real-time
 privacy enforcement over static content.
+
+New official slugs also require a frontend release: until its inventory is
+published they return no-store 404s even if the live backend sitemap already
+lists them. Coordinate publication by merging any required assets first,
+publishing the backend record second, then promptly dispatching the separately
+approved frontend release and verifying the new canonical URL before promoting
+it. This addition window cannot be eliminated by a build that needs the record
+to exist first; backend publication does not currently trigger this workflow.
+Private/community routes keep their existing SPA handling, including a community
+slug literally named `itinerary`; that namespace never selects static official
+itinerary keys.
+
+`initialLiveSha256` is the explicitly reviewed migration baseline. Inventory-only
+releases also accept the same function template with different public hashes.
+If the template logic changes after a successful release, review the currently
+deployed source and update this baseline fingerprint as part of that change;
+capture deliberately fails rather than automatically trusting a different
+template. The current initial fingerprint remains unchanged in this PR.
 
 ## Before and proposed after
 
@@ -145,8 +163,8 @@ git diff --check
 
 - Production build: **261 prerendered routes**, including **201 full public
   itineraries**, 52 countries, six regions, homepage and Contact.
-- Full frontend suite: **958 passed, zero failures/skips**.
-- Deployment safety suite: **35 passed**.
+- Full frontend suite after Opus review fixes: **961 passed, zero failures/skips**.
+- Deployment safety suite after Opus review fixes: **37 passed**.
 - Local initial HTTP checks: homepage, Contact, all regions, all countries and
   every public itinerary, checking meaningful content and metadata without JS.
 - Chromium: cold hydration of three itineraries including Senegal and Shanghai,
@@ -167,9 +185,9 @@ git diff --check
   again sequentially. No tests were disabled to obtain a passing result.
 - Existing optional food-image, bundle-size and Browserslist warnings remain.
 
-Independent review identified and verified fixes for encoded namespace bypasses,
+Before the Opus review, a separate independent review identified fixes for encoded namespace bypasses,
 the AWS test-output wrapper, the absence of ETag in PublishFunction's response,
-and recovery generation matching. The reviewer independently passed all 35
+and recovery generation matching. At baseline `67de528`, that reviewer independently passed all 35
 Python safety tests and four targeted edge/legacy/privacy/sitemap tests and
 reported no remaining blocking findings. CloudFront runtime/publication and
 production delivery verification remain release gates.
@@ -227,18 +245,23 @@ snapshot. Recovery rejects intermediate rerun snapshots, mismatched S3/edge
 generations, tampered source and unrelated current function changes.
 
 For an owner-approved recovery using that original artifact and the failed
-release's code/release manifest in the existing authorized recovery runner:
+release's approved code/release manifest in the authorized manual recovery
+session described in [the deployment runbook](frontend-deployment.md#failure-recovery--rollback):
 
 ```sh
-python3 scripts/ci/edge-deploy.py restore --baseline .deployment/original-baseline/edge
-python3 scripts/ci/deploy.py restore --output .deployment/original-baseline
-python3 scripts/ci/deploy.py invalidate
+python3 scripts/ci/edge-deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --baseline .deployment/original-baseline/edge
+python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --output .deployment/original-baseline
+python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
 ```
 
 Use the actual downloaded original artifact path; on the original attempt it
 may be `.deployment/baseline`. Retain the original release SHA/run context and
-approved production gate. The edge recovery command intentionally permits the
-original SHA to differ from today's master but still checks the production
+the failed release's already-approved edge configuration. Set the recovery
+context locally without changing the disabled GitHub
+gate; the primary runbook lists the exact environment variables. There is no
+automated recovery runner. Use the compact release artifact from the attempt
+that actually published, not a later rebuild with a potentially changed inventory.
+Edge recovery permits the original SHA to differ from today's master but checks the production
 repository/branch, approved account/distribution and original release hashes.
 Restore the edge inventory first, then its paired HTML snapshot. This prevents
 newly retained S3 keys from staying accessible through a newer inventory. Old
@@ -250,3 +273,30 @@ deliberately stop on DEVELOPMENT/LIVE differences rather than overwriting them.
 After recovery, verify behavior against the restored baseline, not the failed
 release manifest. Restoring the initial baseline also restores the original
 empty-shell limitation; it is a recovery action, not a successful SEO release.
+
+## Independent Claude Opus High review
+
+Claude Opus 5.5 (`claude-opus-5-5`) reviewed the actual PR diff at `67de528`
+with high effort and read-only tools. It found no P0/P1 issues and identified
+activation/recovery improvements. Its full initial report is recorded in
+[PR #112](https://github.com/shortbreakhub/short-breaks-hub-frontend/pull/112#issuecomment-6533680262).
+
+The follow-up changes address those findings:
+
+- P2-1: bounded function-routing propagation wait on both hosts, independent
+  of invalidation completion; exact canary bytes, noindex 404s and alias/query
+  behavior must converge before bulk verification.
+- P2-2/P2-3: the primary Actions-linked runbook now contains the edge-first
+  paired recovery and DEVELOPMENT-only case, actual manual-session setup and
+  correct artifact selection. The CLI accepts `--profile` consistently for
+  edge and shared preflight and forces JSON output.
+- P2-4: document the new-slug 404 window and coordinated backend/frontend
+  publication sequence as well as the existing withdrawal limitation.
+- P3 advisories: preserve community slugs named `itinerary`, add direct-index
+  and encoded 404 plus known-alias production probes, document baseline-hash
+  rollover, clarify historical inspection scope and remove obsolete warning/
+  discrepancy wording.
+
+The independent review is static, not an AWS runtime test or production sign-off.
+The final follow-up verdict and CI results are recorded separately in the PR.
+Both release gates remain disabled pending explicit owner approval.

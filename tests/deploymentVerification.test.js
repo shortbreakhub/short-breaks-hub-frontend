@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {checkFile} from '../scripts/ci/verify-production.mjs';
+import {checkFile, checkItineraryResponses, waitForItineraryRouting} from '../scripts/ci/verify-production.mjs';
 import {sha256, safeKey} from '../scripts/ci/validate-build.mjs';
 import {readFileSync} from 'node:fs';
 
@@ -14,6 +14,47 @@ test('HTTP 200 alone cannot pass release verification', async () => {
   } finally {
     await new Promise(resolve => server.close(resolve));
   }
+});
+
+test('function propagation retries old HTTP 200 shells until release bytes and new route behavior converge',async()=>{
+  const entry={key:'itinerary/example/index.html',contentType:'text/html',sha256:sha256(Buffer.from('release'))};
+  let requests=0;
+  const server=createServer((req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    if(req.url==='/itinerary/example') return res.end(++requests===1?'old shell':'release');
+    if(req.url.startsWith('/itinerary/example/index.html')) {res.writeHead(301,{location:'/itinerary/example?q=a%20b'});return res.end();}
+    res.writeHead(404,{'x-robots-tag':'noindex,follow'});res.end('not found');
+  });
+  await new Promise(done=>server.listen(0,'127.0.0.1',done));
+  try {
+    const result=await waitForItineraryRouting(`http://127.0.0.1:${server.address().port}`,entry,{timeoutMs:2000,intervalMs:1});
+    assert.equal(result.attempts,2);
+    assert.equal(requests,2);
+  } finally {await new Promise(done=>server.close(done));}
+});
+
+test('function propagation timeout fails closed when the old shell persists',async()=>{
+  const entry={key:'itinerary/example/index.html',contentType:'text/html',sha256:sha256(Buffer.from('release'))};
+  const server=createServer((req,res)=>{res.setHeader('Content-Type','text/html');res.end('old shell');});
+  await new Promise(done=>server.listen(0,'127.0.0.1',done));
+  try {
+    await assert.rejects(waitForItineraryRouting(`http://127.0.0.1:${server.address().port}`,entry,{timeoutMs:50,intervalMs:1}),/did not converge/);
+  } finally {await new Promise(done=>server.close(done));}
+});
+
+test('production route probes reject encoded bypasses, missing noindex and lost alias queries',async()=>{
+  let defect;
+  const server=createServer((req,res)=>{
+    if(req.url.startsWith('/itinerary/example/index.html')) {
+      res.writeHead(301,{location:defect==='query'?'/itinerary/example':'/itinerary/example?q=a%20b'});return res.end();
+    }
+    if(defect==='encoded'&&req.url.startsWith('/%69')) {res.writeHead(200);return res.end('old retained document');}
+    res.writeHead(404,defect==='noindex'?{}:{'x-robots-tag':'noindex,follow'});res.end('not found');
+  });
+  await new Promise(done=>server.listen(0,'127.0.0.1',done));
+  try {
+    for(defect of ['encoded','noindex','query']) await assert.rejects(checkItineraryResponses(`http://127.0.0.1:${server.address().port}`,'/itinerary/example'),defect==='query'?/redirect\/query changed/:/noindex HTTP 404/);
+  } finally {await new Promise(done=>server.close(done));}
 });
 
 test('build keys cannot escape the upload root or publish hidden files', () => {
