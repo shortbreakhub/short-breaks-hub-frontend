@@ -53,7 +53,7 @@ the generated function and inventory separately from S3 public objects.
 
 The function uses the first 132 bits of SHA-256, encoded as 22 base64url
 characters, for public slug membership. This avoids a new datastore under the
-CloudFront 10 KB code limit. Current output is **9,486/10,240 bytes**. Builds
+CloudFront 10 KB code limit. Current output is **9,496/10,240 bytes**. Builds
 check collisions within the catalogue and fail if the function exceeds the
 limit. Membership has a cryptographic collision bound; it is not authentication
 or authorization for private data. At this template size, roughly 32 additional
@@ -163,8 +163,8 @@ git diff --check
 
 - Production build: **261 prerendered routes**, including **201 full public
   itineraries**, 52 countries, six regions, homepage and Contact.
-- Full frontend suite after Opus review fixes: **961 passed, zero failures/skips**.
-- Deployment safety suite after Opus review fixes: **37 passed**.
+- Full frontend suite after Opus review fixes: **963 passed, zero failures/skips**.
+- Deployment safety suite after Opus review fixes: **39 passed**.
 - Local initial HTTP checks: homepage, Contact, all regions, all countries and
   every public itinerary, checking meaningful content and metadata without JS.
 - Chromium: cold hydration of three itineraries including Senegal and Shanghai,
@@ -251,7 +251,7 @@ session described in [the deployment runbook](frontend-deployment.md#failure-rec
 ```sh
 python3 scripts/ci/edge-deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --baseline .deployment/original-baseline/edge
 python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --output .deployment/original-baseline
-python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
+env -u GITHUB_RUN_ID python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
 ```
 
 Use the actual downloaded original artifact path; on the original attempt it
@@ -285,11 +285,14 @@ The follow-up changes address those findings:
 
 - P2-1: bounded function-routing propagation wait on both hosts, independent
   of invalidation completion; exact canary bytes, noindex 404s and alias/query
-  behavior must converge before bulk verification.
+  behavior must converge before bulk verification. Every itinerary document,
+  including newly added slugs, retries against the same shared deadline even
+  when the prior function already passes the canary.
 - P2-2/P2-3: the primary Actions-linked runbook now contains the edge-first
   paired recovery and DEVELOPMENT-only case, actual manual-session setup and
   correct artifact selection. The CLI accepts `--profile` consistently for
-  edge and shared preflight and forces JSON output.
+  edge and shared preflight and forces JSON output. Recovery invalidation
+  explicitly drops the old run ID to create a fresh manual invalidation.
 - P2-4: document the new-slug 404 window and coordinated backend/frontend
   publication sequence as well as the existing withdrawal limitation.
 - P3 advisories: preserve community slugs named `itinerary`, add direct-index

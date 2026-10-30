@@ -44,6 +44,10 @@ test('legacy redirects and non-itinerary rewrites match the captured LIVE functi
 });
 
 test('unknown, unpublished and retained old itinerary objects cannot bypass noindex 404s',async()=>{
+    const route=edgeHandler(code);
+    for(const uri of ['/community-itineraries/../itinerary/private-draft/index.html','/community-itineraries/x/itinerary']) {
+        assert.equal(route(request(uri)).statusCode,404,'non-SPA prefixes must not bypass public itinerary checks');
+    }
     const temp=await mkdtemp(join(tmpdir(),'sbh-retired-'));
     const reads=[];
     await mkdir(join(temp,'itinerary','private-draft'),{recursive:true});

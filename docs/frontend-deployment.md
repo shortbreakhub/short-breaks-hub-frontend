@@ -317,7 +317,7 @@ HTML, then invalidate:
 ```sh
 python3 scripts/ci/edge-deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --baseline .deployment/recovery/edge
 python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --output .deployment/recovery
-python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
+env -u GITHUB_RUN_ID python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
 ```
 
 Edge recovery verifies the original capture attempt, release/run, both source
@@ -327,6 +327,10 @@ resetting DEVELOPMENT without an unnecessary LIVE publication. After LIVE
 publication the original function is restored first, so newly retained S3 keys
 are not still exposed through a newer inventory. A mismatched/expired artifact
 requires recovery review, not bypassing these checks.
+
+The invalidation command unsets the run ID for that process only, selecting a
+fresh manual caller reference. Reusing the failed Actions run's reference could
+return its already-completed invalidation instead of purging restored content.
 
 Restoration verifies baseline file hashes and restores metadata (including prior
 cache directives and encryption) to the same approved keys, HTML last. Previously
@@ -341,7 +345,7 @@ successful SEO release. The detailed rationale is in
 For an older release, use the retained compact release artifact, construct a
 reviewed restoration inventory with its content types/cache metadata and verify
 all referenced immutable assets still exist; the immediate pre-deployment baseline
-is the primary supported one-command rollback. Do not rebuild an old commit as a
+is the primary supported paired rollback. Do not rebuild an old commit as a
 substitute: live backend data can differ.
 
 Artifacts retain thirty days by default; download the initial baseline for longer

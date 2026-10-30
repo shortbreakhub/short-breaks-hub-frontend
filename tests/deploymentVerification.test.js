@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {checkFile, checkItineraryResponses, waitForItineraryRouting} from '../scripts/ci/verify-production.mjs';
+import {checkFile, checkItineraryResponses, waitForItineraryRouting, waitForReleaseFile} from '../scripts/ci/verify-production.mjs';
 import {sha256, safeKey} from '../scripts/ci/validate-build.mjs';
 import {readFileSync} from 'node:fs';
 
@@ -39,6 +39,36 @@ test('function propagation timeout fails closed when the old shell persists',asy
   await new Promise(done=>server.listen(0,'127.0.0.1',done));
   try {
     await assert.rejects(waitForItineraryRouting(`http://127.0.0.1:${server.address().port}`,entry,{timeoutMs:50,intervalMs:1}),/did not converge/);
+  } finally {await new Promise(done=>server.close(done));}
+});
+
+test('inventory-only propagation retries a new slug even when the old canary already passes',async()=>{
+  const entry={key:'itinerary/new-slug/index.html',contentType:'text/html',sha256:sha256(Buffer.from('release'))};
+  let requests=0;
+  const server=createServer((req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    if(req.url==='/itinerary/old-slug') return res.end('release');
+    if(req.url==='/itinerary/new-slug') {
+      if(++requests<3) {res.writeHead(404);return res.end('not published on this edge yet');}
+      return res.end('release');
+    }
+    if(req.url.startsWith('/itinerary/old-slug/index.html')) {res.writeHead(301,{location:'/itinerary/old-slug?q=a%20b'});return res.end();}
+    res.writeHead(404,{'x-robots-tag':'noindex,follow'});res.end('not found');
+  });
+  await new Promise(done=>server.listen(0,'127.0.0.1',done));
+  const origin=`http://127.0.0.1:${server.address().port}`;
+  try {
+    assert.equal((await waitForItineraryRouting(origin,{...entry,key:'itinerary/old-slug/index.html'},{timeoutMs:2000,intervalMs:1})).attempts,1);
+    assert.equal((await waitForReleaseFile(origin,entry,'/itinerary/new-slug',{deadline:Date.now()+2000,intervalMs:1})).toString(),'release');
+    assert.equal(requests,3);
+  } finally {await new Promise(done=>server.close(done));}
+});
+
+test('new inventory routes still fail when the shared propagation deadline expires',async()=>{
+  const server=createServer((req,res)=>{res.writeHead(404);res.end('missing');});
+  await new Promise(done=>server.listen(0,'127.0.0.1',done));
+  try {
+    await assert.rejects(waitForReleaseFile(`http://127.0.0.1:${server.address().port}`,{key:'itinerary/new/index.html',contentType:'text/html',sha256:sha256(Buffer.from('release'))},'/itinerary/new',{deadline:Date.now()+50,intervalMs:1}),/propagation deadline/);
   } finally {await new Promise(done=>server.close(done));}
 });
 

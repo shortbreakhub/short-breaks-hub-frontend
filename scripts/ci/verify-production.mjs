@@ -39,6 +39,17 @@ export async function checkItineraryResponses(origin, pathname, requestTimeoutMs
   if (response.status!==301 || new URL(response.headers.get('location'),origin).href!==origin+pathname+'?q=a%20b') throw new Error('Known itinerary alias redirect/query changed');
 }
 
+export async function waitForReleaseFile(origin, entry, pathname, {deadline=Date.now()+600000, intervalMs=10000} = {}) {
+  let last;
+  do {
+    try {return await checkFile(origin,entry,pathname,1,0,Math.max(1,Math.min(30000,deadline-Date.now())));}
+    catch(error) {last=error;}
+    if(Date.now()>=deadline) break;
+    await new Promise(done=>setTimeout(done,Math.min(intervalMs,deadline-Date.now())));
+  } while(Date.now()<deadline);
+  throw new Error(`${pathname}: release bytes did not converge before the propagation deadline: ${last?.message}`,{cause:last});
+}
+
 export async function waitForItineraryRouting(origin, entry, {timeoutMs=600000, intervalMs=10000} = {}) {
   const started=Date.now();
   const deadline=started+timeoutMs;
@@ -99,7 +110,9 @@ export async function verifyProduction({origins = ['https://www.shortbreakhub.co
     while(next<publicDocuments.length) {
       const entry=publicDocuments[next++];
       const pathname=entry.key==='index.html'?'/':'/'+entry.key.replace(/\/index\.html$/,'');
-      const html=await verifyFile(origins[0],entry,pathname);
+      const html=entry.key.startsWith('itinerary/')
+        ? await waitForReleaseFile(origins[0],entry,pathname,{deadline:propagationDeadline})
+        : await verifyFile(origins[0],entry,pathname);
       verifyInitialHtml(html.toString(),pathname);
       report.verified.push(pathname);
     }

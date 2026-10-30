@@ -193,7 +193,7 @@ def restore(directory):
     print('Original edge function restored; restore the paired S3 baseline and invalidate using the existing recovery procedure')
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=['capture', 'publish', 'restore'])
     parser.add_argument('--baseline', default=str(BASELINE))
@@ -202,3 +202,7 @@ if __name__ == '__main__':
     deploy.PROFILE = args.profile
     if args.command == 'restore': restore(args.baseline)
     else: (capture if args.command == 'capture' else publish)()
+
+
+if __name__ == '__main__':
+    main()
