@@ -235,12 +235,17 @@ emitted assets upload first, public files next, HTML last, entry documents last
 within HTML. There are no delete APIs. Unrelated paths are rejected rather than
 overwritten. There is no automatic old-asset cleanup.
 
-Production verification compares exact homepage bytes on both domains, JS/CSS
-content types and hashes, every daily PNG's bytes/type, and mapped itinerary
-images in Chromium by opening each schedule day. HTTP 200 alone does not pass.
-Verification performs no form submission or writes. The known discrepancy where
-itinerary URLs may serve a generic shell is reported as an explicit warning; the
-browser must still display the new daily images, otherwise verification fails.
+Production verification first waits for the published function's routing to
+converge, with a shared ten-minute budget for both hosts. It checks a real
+itinerary's exact release bytes, unknown/direct-index/encoded route noindex 404s,
+and a known itinerary alias's 301 with its query intact. Invalidation completes
+before function publication and is not evidence that the function propagated.
+The wait is bounded and fails closed; it does not prove worldwide convergence.
+Verification then checks exact initial HTML, WWW canonicals and meaningful content
+for every generated public document, live sitemap inventory, homepage bytes on
+both hosts, JS/CSS and daily PNG hashes/types, and mapped itinerary images and
+hydration in Chromium. HTTP 200 or an app shell cannot pass. Verification performs
+no form submission or production writes.
 No deployment metadata marker is injected into public HTML or assets.
 
 Invalidation creation uses a stable per-run/attempt caller reference so transient
@@ -278,25 +283,69 @@ python3 scripts/ci/deploy.py check-baseline --output .deployment/recovery
 That command verifies files/ownership without AWS calls or activation approval.
 Obtain the approved role via
 an authorized recovery session/profile; never store long-lived keys in GitHub.
-Then, after approval:
+For SEO Phase 2, S3-only recovery is insufficient after function publication.
+Download both the **original paired baseline** and the compact release artifact
+from the attempt that actually published the function. Put the baseline in
+`.deployment/recovery` (with its `edge/` subdirectory) and that attempt's release
+artifact in `.deployment/release`. Use the failed release's approved source
+checkout. Do not rebuild it against today's backend, use a later attempt's
+release manifest, or substitute a later baseline: inventory may have changed.
+
+There is no automated recovery runner/job. Use an explicitly authorized manual
+recovery session/profile. Keep GitHub `PRODUCTION_DEPLOYMENT_ENABLED=false` and
+wait for active Actions runs to finish. In that session only, replace the two
+uppercase placeholders with the failed release commit/run from the artifacts:
 
 ```sh
-python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --output .deployment/recovery
-python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
+export GITHUB_REPOSITORY=shortbreakhub/short-breaks-hub-frontend
+export GITHUB_REF=refs/heads/master
+export GITHUB_SHA=FAILED_RELEASE_COMMIT_SHA
+export GITHUB_RUN_ID=FAILED_RUN_ID
+export DEPLOY_ENABLED=true
 ```
+
+These are local recovery-process context variables, not changes to GitHub gates.
+The failed release checkout must already contain the separately approved edge
+configuration (`reviewed:true`); this PR intentionally keeps it false. Never
+enable a gate or apply IAM merely to rehearse recovery without write approval.
+The named profile is used for both edge API calls and shared account/distribution
+preflight, and JSON output is explicitly selected regardless of profile defaults.
+
+After explicit recovery approval, restore the edge inventory **before** its paired
+HTML, then invalidate:
+
+```sh
+python3 scripts/ci/edge-deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --baseline .deployment/recovery/edge
+python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE restore --output .deployment/recovery
+env -u GITHUB_RUN_ID python3 scripts/ci/deploy.py --profile AUTHORIZED_RECOVERY_PROFILE invalidate
+```
+
+Edge recovery verifies the original capture attempt, release/run, both source
+hashes, paired S3 generation and current function state before any update. It
+refuses unrelated changes. A failed DEVELOPMENT smoke test is recovered by
+resetting DEVELOPMENT without an unnecessary LIVE publication. After LIVE
+publication the original function is restored first, so newly retained S3 keys
+are not still exposed through a newer inventory. A mismatched/expired artifact
+requires recovery review, not bypassing these checks.
+
+The invalidation command unsets the run ID for that process only, selecting a
+fresh manual caller reference. Reusing the failed Actions run's reference could
+return its already-completed invalidation instead of purging restored content.
 
 Restoration verifies baseline file hashes and restores metadata (including prior
 cache directives and encryption) to the same approved keys, HTML last. Previously
 referenced fingerprinted assets remain in S3. New route objects remain; their
 removal needs separate approval. Baseline records list them explicitly.
-Do not run recovery concurrently with Actions: set deployment enabled false and
-wait for any active workflow to finish before acquiring the recovery session.
 Recheck production homepage against baseline checksum and verify representative
 itineraries and their retained asset URLs before re-enabling automatic deployment.
+Unset the local recovery context after the session. Restoring the original SEO
+baseline restores its old app-shell limitation; successful rollback is not a
+successful SEO release. The detailed rationale is in
+[the itinerary SEO report](seo-itinerary-delivery.md#failure-handling-and-paired-recovery).
 For an older release, use the retained compact release artifact, construct a
 reviewed restoration inventory with its content types/cache metadata and verify
 all referenced immutable assets still exist; the immediate pre-deployment baseline
-is the primary supported one-command rollback. Do not rebuild an old commit as a
+is the primary supported paired rollback. Do not rebuild an old commit as a
 substitute: live backend data can differ.
 
 Artifacts retain thirty days by default; download the initial baseline for longer
@@ -350,10 +399,14 @@ https://aws.amazon.com/s3/pricing/
 https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/eu-west-2/index.json
 https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PayingForInvalidation.html
 
-## Separate observed issue (out of scope)
+## Historical itinerary delivery issue and SEO Phase 2
 
 Prior read-only checks found some public itinerary URLs serve app-shell HTML even
 though the build generates itinerary documents. Missing URLs also returned S3 403.
-This implementation changes neither behavior: no prerender, sitemap, robots,
-canonical, metadata, structured-data, React route, backend or edge function edits.
-The excluded local routing/404 commit remains outside this integration branch.
+The original CI/CD integration did not change that behavior and excluded the
+local routing/404 commit. PR #112 now proposes a separately gated update to the
+existing associated function, generated public itinerary inventory, noindex 404s,
+strict initial-HTML verification and paired edge/S3 recovery. See
+[the investigation/release report](seo-itinerary-delivery.md). This extends the
+same pipeline; no SSR framework, distribution association or IAM change has been
+applied merely by preparing the PR.

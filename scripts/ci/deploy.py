@@ -437,7 +437,8 @@ def policy(output):
     document = {'Version':'2012-10-17','Statement':[
         {'Effect':'Allow','Action':['s3:ListBucket','s3:GetBucketLocation'],'Resource':f'arn:aws:s3:::{BUCKET}'},
         {'Effect':'Allow','Action':['s3:GetObject','s3:GetObjectTagging','s3:PutObject'],'Resource':resources},
-        {'Effect':'Allow','Action':['cloudfront:GetDistribution','cloudfront:CreateInvalidation','cloudfront:GetInvalidation'],'Resource':f'arn:aws:cloudfront::{ACCOUNT}:distribution/{DISTRIBUTION}'}]}
+        {'Effect':'Allow','Action':['cloudfront:GetDistribution','cloudfront:CreateInvalidation','cloudfront:GetInvalidation'],'Resource':f'arn:aws:cloudfront::{ACCOUNT}:distribution/{DISTRIBUTION}'},
+        {'Effect':'Allow','Action':['cloudfront:GetFunction','cloudfront:DescribeFunction','cloudfront:UpdateFunction','cloudfront:TestFunction','cloudfront:PublishFunction'],'Resource':f'arn:aws:cloudfront::{ACCOUNT}:function/shortbreakhub-route-rewrite'}]}
     Path(output).parent.mkdir(parents=True,exist_ok=True)
     Path(output).write_text(json.dumps(document,indent=2)+'\n')
     print('Wrote proposed permission policy locally; no AWS calls or IAM changes')

@@ -1,5 +1,11 @@
 # Read-only AWS production verification
 
+This is the historical 26 October inspection record. References below to an
+unchanged function or the original workflow's scope describe that baseline.
+SEO Phase 2 (PR #112) proposes separately gated function publication and paired
+recovery; use [the current deployment runbook](frontend-deployment.md) for that
+release. This historical record is not evidence that the proposed fix is live.
+
 Inspection date: 2026-10-26. All AWS operations were read-only API requests,
 object downloads or policy validation. No credentials, profiles, IAM resources,
 bucket settings, S3 objects, distributions, functions or GitHub settings changed.

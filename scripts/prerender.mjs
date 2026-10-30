@@ -6,6 +6,7 @@ import {createServer, loadEnv} from "vite";
 import {buildCountryPages} from "../src/utils/countries.js";
 import {getOfficialInventory, fetchOfficialPages} from "../src/utils/officialItineraries.js";
 import {REGIONS} from "../src/config/regions.js";
+import {buildEdgeRouting} from "./build-edge-routing.mjs";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const distRoot = resolve(projectRoot, "dist");
@@ -217,6 +218,7 @@ try {
         await writeFile(route.outputPath, route.html, "utf8");
     }
     await writeFile(resolve(distRoot, "app-shell.html"), template, "utf8");
+    await buildEdgeRouting({dist: distRoot});
 
     const outputFiles = await readdir(distRoot);
     console.log(`Pre-rendered ${renderedRoutes.length} routes: ${routeSpecs.map(({pathname}) => pathname).join(", ")}`);

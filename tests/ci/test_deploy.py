@@ -15,6 +15,13 @@ spec.loader.exec_module(deploy)
 
 
 class DeploymentSafety(unittest.TestCase):
+    def test_manual_recovery_invalidation_does_not_reuse_an_actions_caller_reference(self):
+        with tempfile.TemporaryDirectory() as temp, chdir(temp), patch.dict(os.environ,{},clear=True), patch.object(deploy,'preflight',return_value={'invalidationPaths':['/*']}), patch.object(deploy.time,'time_ns',side_effect=[100,101]), patch.object(deploy,'wait_invalidation',return_value={'status':'Completed'}), patch.object(deploy,'aws',return_value={'Invalidation':{'Id':'id','Status':'InProgress'}}) as aws:
+            deploy.invalidate()
+            deploy.invalidate()
+            references=[call.args[2]['InvalidationBatch']['CallerReference'] for call in aws.call_args_list]
+            self.assertEqual(references,['sbh-manual-100-1-v1','sbh-manual-101-1-v1'])
+
     def config(self):
         return {'originPath': '', 'ownedPrefixes': ['assets/', 'itinerary/'], 'ownedKeys': ['index.html','app-shell.html','robots.txt'], 'cacheControl': {'assets':'public,max-age=31536000,immutable','public':'public,max-age=300','html':'public,max-age=0,must-revalidate'}}
 

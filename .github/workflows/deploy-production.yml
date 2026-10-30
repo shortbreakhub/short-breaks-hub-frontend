@@ -142,6 +142,9 @@ jobs:
         id: baseline
         if: env.DEPLOY_ENABLED == 'true'
         run: python3 scripts/ci/deploy.py capture
+      - name: Capture and validate existing edge function before any upload
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/edge-deploy.py capture
       - name: Persist baseline before any production upload
         if: env.DEPLOY_ENABLED == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -158,6 +161,9 @@ jobs:
       - name: Invalidate reviewed paths and wait
         if: env.DEPLOY_ENABLED == 'true'
         run: python3 scripts/ci/deploy.py invalidate
+      - name: Test and publish reviewed itinerary routing after HTML upload
+        if: env.DEPLOY_ENABLED == 'true'
+        run: python3 scripts/ci/edge-deploy.py publish
       - name: Verify release and daily PNGs in production
         if: env.DEPLOY_ENABLED == 'true'
         run: node scripts/ci/verify-production.mjs
@@ -170,6 +176,7 @@ jobs:
             .deployment/verification.json
             .deployment/invalidation.json
             .deployment/recovery-point.json
+            .deployment/edge-published.json
           include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 30

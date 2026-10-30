@@ -46,6 +46,17 @@
         "cloudfront:GetInvalidation"
       ],
       "Resource": "arn:aws:cloudfront::919693204623:distribution/E323A73D49XQ0O"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:GetFunction",
+        "cloudfront:DescribeFunction",
+        "cloudfront:UpdateFunction",
+        "cloudfront:TestFunction",
+        "cloudfront:PublishFunction"
+      ],
+      "Resource": "arn:aws:cloudfront::919693204623:function/shortbreakhub-route-rewrite"
     }
   ]
 }
