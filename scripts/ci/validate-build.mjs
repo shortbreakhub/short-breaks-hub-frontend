@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {JSDOM} from 'jsdom';
 import {createServer} from 'vite';
 import {REGIONS} from '../../src/config/regions.js';
+import {generateEdgeCode} from '../build-edge-routing.mjs';
 
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export function safeKey(key) {
@@ -74,8 +75,16 @@ export async function validateBuild(root = 'dist', output = '.deployment/release
     }
   } finally { await ssr.close(); }
   if (!dailyPngs.size) throw new Error('No daily itinerary PNGs emitted');
-  const manifest = {version:1,commit:process.env.GITHUB_SHA || execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),createdAt:new Date().toISOString(),files,dailyPngs:[...dailyPngs].sort()};
+  const inventory=JSON.parse(await readFile('.deployment/edge/inventory.json','utf8'));
+  const edgeCode=await readFile('.deployment/edge/function.js');
+  const builtSlugs=files.filter(f=>f.key.startsWith('itinerary/')&&f.key.endsWith('/index.html')).map(f=>f.key.split('/')[1]).sort();
+  const edgeTemplate=await readFile('infra/cloudfront/viewer-request.js','utf8');
+  if (JSON.stringify(inventory.slugs)!==JSON.stringify(builtSlugs) || sha256(edgeCode)!==inventory.codeSha256 || edgeCode.toString()!==generateEdgeCode(edgeTemplate,builtSlugs)) throw new Error('Stale/tampered edge release');
+  const manifest = {version:1,commit:process.env.GITHUB_SHA || execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),createdAt:new Date().toISOString(),files,dailyPngs:[...dailyPngs].sort(),edgeCodeSha256:inventory.codeSha256};
   await mkdir(output,{recursive:true});
+  // Edge inventory is a release artifact, never an S3 public object.
+  await mkdir(resolve(output,'edge'),{recursive:true});
+  for (const name of ['function.js','inventory.json']) await copyFile(resolve('.deployment/edge',name),resolve(output,'edge',name));
   await writeFile(resolve(output,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
   console.log(`Validated ${files.length} files and ${dailyPngs.size} mapped daily PNGs. Internal Vite metadata excluded.`);
   return manifest;

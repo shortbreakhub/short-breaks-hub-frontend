@@ -32,6 +32,7 @@ test("official bootstrap renders without browser storage/network; hydration, res
     try {
         const {default: ItineraryPage} = await vite.ssrLoadModule("/src/pages/ItineraryPage.jsx");
         const {PrerenderDataProvider} = await vite.ssrLoadModule("/src/context/PrerenderDataContext.jsx");
+        const {default: RouteRobots} = await vite.ssrLoadModule("/src/components/RouteRobots.jsx");
         const api = await vite.ssrLoadModule("/src/api.js");
         await vite.ssrLoadModule("/src/i18n.js");
         await i18n.changeLanguage("en");
@@ -44,6 +45,7 @@ test("official bootstrap renders without browser storage/network; hydration, res
             let data;
             if (config.url.startsWith("/itineraries/slug/")) {
                 const slug = config.url.slice("/itineraries/slug/".length);
+                if (slug === "missing-itinerary") throw {response: {status: 404}};
                 if (slug === slugs[1]) await new Promise(resolve => {resolveSlow = resolve;});
                 data = {...bootstrap(slug).detail};
                 if (config.params.lang === "fr") data.title += " FR";
@@ -63,7 +65,7 @@ test("official bootstrap renders without browser storage/network; hydration, res
             React.createElement("div", {id: "page"},
                 React.createElement(MemoryRouter, {initialEntries: [`/itinerary/${slugs[0]}`]},
                     React.createElement(PrerenderDataProvider, {initialData: initial},
-                        React.createElement(Capture), React.createElement(Routes, null,
+                        React.createElement(Capture), React.createElement(RouteRobots), React.createElement(Routes, null,
                             React.createElement(Route, {path: "/itinerary/:slug", element: React.createElement(ItineraryPage)}))))));
         const markup = renderToString(tree);
         assert.equal(requests.length, 0, "server rendering must make no enrichment/detail requests");
@@ -118,6 +120,13 @@ test("official bootstrap renders without browser storage/network; hydration, res
         assert.equal(head.querySelector('link[rel="canonical"]').getAttribute("href"), `https://www.shortbreakhub.com/itinerary/${slugs[2]}`);
         for (const key of ["og:title", "og:description", "og:url"]) assert.equal(head.querySelectorAll(`meta[property="${key}"]`).length, 1);
         assert.ok(head.querySelector('meta[property="og:title"]').content.includes(" FR"));
+        await React.act(async () => navigate('/itinerary/missing-itinerary'));
+        await settle();
+        assert.ok([...head.querySelectorAll('meta[name="robots"]')].some(tag => tag.content === 'noindex,follow'));
+        await React.act(async () => navigate(`/itinerary/${slugs[2]}`));
+        await settle();
+        assert.equal(head.querySelectorAll('meta[name="robots"]').length, 1);
+        assert.ok(head.querySelector('meta[name="robots"]').content.startsWith('index,follow'), 'successful navigation must remove the error noindex');
     } finally {
         if (root) await React.act(async () => root.unmount());
         await i18n.changeLanguage("en");

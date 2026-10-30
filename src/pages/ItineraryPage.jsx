@@ -14,6 +14,7 @@ import axios from "axios";
 import ItineraryStoryPage from "../components/itinerary/ItineraryStoryPage.jsx";
 import { useTranslation } from "react-i18next";
 import PageCanonical from "../components/PageCanonical.jsx";
+import {Helmet} from "react-helmet-async";
 import useItineraryScroll from "../hooks/useItineraryScroll.js";
 import PageMetadata from "../components/PageMetadata.jsx";
 import {getItineraryPageMetadata} from "../utils/pageMetadata.js";
@@ -284,6 +285,7 @@ export default function ItineraryPage() {
     if (loadError) {
         return (
             <div className="max-w-screen-lg mx-auto px-4 py-16">
+                <Helmet><meta name="robots" content="noindex,follow" /></Helmet>
                 <PageCanonical segments={["itinerary", slug]} />
                 <PageMetadata canonicalSegments={["itinerary", slug]} {...pageMetadata} />
                 <h1 role="alert" className="text-2xl font-bold mb-4">{t(`itineraryLoad.${loadError}`)}</h1>
