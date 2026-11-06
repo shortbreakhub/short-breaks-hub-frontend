@@ -119,6 +119,17 @@ class EdgeReleaseSafety(unittest.TestCase):
             self.assertTrue(command[command.index('--function-code')+1].startswith('fileb://'))
             self.assertNotIn('shell',run.call_args.kwargs)
 
+    def test_get_function_uses_stage_option_and_positional_output_file(self):
+        result=types.SimpleNamespace(returncode=0,stdout='{"ETag":"live-etag"}',stderr='')
+        outfile=Path('.deployment/baseline/edge/live.js')
+        with patch.object(edge.subprocess,'run',return_value=result) as run:
+            response=edge.call('get-function',{'Stage':'LIVE'},outfile)
+            command=run.call_args.args[0]
+        self.assertEqual(command[command.index('--stage')+1],'LIVE')
+        self.assertEqual(command[-1],str(outfile))
+        self.assertNotIn('--cli-input-json',command)
+        self.assertEqual(response,{'ETag':'live-etag'})
+
     def test_named_profile_and_json_output_apply_to_edge_calls(self):
         result=types.SimpleNamespace(returncode=0,stdout='{"ETag":"updated"}',stderr='')
         with patch.object(edge.deploy,'PROFILE','AUTHORIZED_RECOVERY_PROFILE'), patch.object(edge.subprocess,'run',return_value=result) as run:
