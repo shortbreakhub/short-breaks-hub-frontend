@@ -95,6 +95,20 @@ const images = {
                 fr: "Un 4x4 sur une piste de montagne surplombant des vallées des Hautes-Terres noyées de nuages au coucher du soleil"}},
         },
     },
+    "3-days-tainan-where-time-stays-to-eat-and-remember": {
+        folder: "itineraries/taiwan/tainan",
+        days: {
+            1: {name: "tainan-day-1-confucius-temple", alt: {
+                en: "Confucius Temple in Tainan",
+                fr: "Temple de Confucius à Tainan"}},
+            2: {name: "tainan-day-2-anping-old-fort", alt: {
+                en: "Anping Old Fort in Tainan",
+                fr: "Vieux fort d’Anping à Tainan"}},
+            3: {name: "tainan-day-3-old-town-morning-life", alt: {
+                en: "Morning life in Tainan’s old town",
+                fr: "La vie matinale dans la vieille ville de Tainan"}},
+        },
+    },
 };
 
 export function getItineraryDayImages(slug) {
