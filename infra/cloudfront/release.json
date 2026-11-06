@@ -1,5 +1,5 @@
 {
-  "reviewed": false,
+  "reviewed": true,
   "name": "shortbreakhub-route-rewrite",
   "runtime": "cloudfront-js-2.0",
   "initialLiveSha256": "04404ed494490ff6273db841ff2210dcb9a4550dd33ca68e8df52f796692fe4a"
