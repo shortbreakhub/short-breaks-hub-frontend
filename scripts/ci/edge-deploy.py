@@ -31,6 +31,8 @@ def call(operation, args, outfile=None):
         if key in args:
             value = args.pop(key)
             command += [option, json.dumps(value) if isinstance(value, dict) else value]
+    if 'Stage' in args:
+        command += ['--stage', args.pop('Stage')]
     for key, option in [('FunctionCode', '--function-code'), ('EventObject', '--event-object')]:
         if key in args:
             command += [option, 'fileb://' + str(Path(args.pop(key)).resolve())]
