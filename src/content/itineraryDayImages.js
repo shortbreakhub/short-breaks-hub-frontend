@@ -2,6 +2,25 @@ import {loadSubFolderImages} from "../utils/loadItineraryImage.js";
 
 // Frontend presentation metadata; schedule content and hero images remain independent.
 const images = {
+    "4-days-berlin-where-history-refuses-to-stay-silent": {
+        folder: "itineraries/germany/berlin",
+        width: 1536,
+        height: 1024,
+        days: {
+            1: {name: "berlin-day-1-brandenburg-gate", alt: {
+                en: "Brandenburg Gate in Berlin",
+                fr: "La porte de Brandebourg à Berlin"}},
+            2: {name: "berlin-day-2-east-side-gallery", alt: {
+                en: "East Side Gallery murals along the Berlin Wall",
+                fr: "Les fresques de l’East Side Gallery le long du mur de Berlin"}},
+            3: {name: "berlin-day-3-bode-museum", alt: {
+                en: "Bode Museum on Berlin’s Museum Island",
+                fr: "Le musée Bode sur l’île aux Musées de Berlin"}},
+            4: {name: "berlin-day-4-neighbourhood-cafe", alt: {
+                en: "A neighbourhood café showing everyday local life in Berlin",
+                fr: "Un café de quartier au cœur de la vie quotidienne à Berlin"}},
+        },
+    },
     "4-days-sydney-light-water-and-open-living": {
         folder: "itineraries/australia/sydney",
         days: {
@@ -115,7 +134,7 @@ export function getItineraryDayImages(slug) {
     return Object.fromEntries(Object.entries(images[slug]?.days || {}).map(([day, image]) => [day, {
         src: loadSubFolderImages(images[slug].folder, image.name),
         alt: image.alt,
-        width: 1672,
-        height: 941,
+        width: images[slug].width || 1672,
+        height: images[slug].height || 941,
     }]));
 }
