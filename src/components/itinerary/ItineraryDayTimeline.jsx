@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Media} from "../ui/EditorialUI.jsx";
 import {useTranslation} from "react-i18next";
 
@@ -6,9 +6,16 @@ import {useTranslation} from "react-i18next";
 function TimelineDay({day, initialOpen, image, showThumbnail}) {
     const {t, i18n} = useTranslation();
     const [open, setOpen] = useState(initialOpen);
+    const detailsRef = useRef(null);
     const alt = image && (image.alt[i18n.resolvedLanguage?.split("-")[0]] || image.alt.en);
+
+    useEffect(() => {
+        const details = detailsRef.current;
+        if (details && details.open !== open) setOpen(details.open);
+    }, [open]);
+
     return <li className="itinerary-day-timeline__item">
-        <details className="itinerary-day-timeline__disclosure" open={open}
+        <details ref={detailsRef} className="itinerary-day-timeline__disclosure" open={open}
             onToggle={event => setOpen(event.currentTarget.open)}>
             <summary className="itinerary-day-timeline__summary">
                 <span className="itinerary-day-timeline__number" aria-hidden="true">{day.day}</span>
