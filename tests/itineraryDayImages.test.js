@@ -120,6 +120,9 @@ test('production PNGs remain byte-identical and Sydney prerender includes only t
 });
 
 const mapped = [
+    {label: 'Berlin', slug: '4-days-berlin-where-history-refuses-to-stay-silent', folder: 'germany/berlin',
+        names: ['berlin-day-1-brandenburg-gate', 'berlin-day-2-east-side-gallery', 'berlin-day-3-bode-museum',
+            'berlin-day-4-neighbourhood-cafe']},
     {label: 'Vanuatu', slug: '4-days-vanuatu-fire-water-and-everyday-earth', folder: 'vanuatu',
         names: ['day-1-efate-island-coast', 'day-2-efate-blue-lagoon', 'day-3-mount-yasur-volcano', 'day-4-tanna-village-morning']},
     {label: 'Haarlem', slug: '2-days-haarlem-where-craft-feels-enough', folder: 'netherlands/haarlem',
